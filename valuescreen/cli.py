@@ -5,7 +5,9 @@
   python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4100,silver=52
   python -m valuescreen run --etf URNM
   python -m valuescreen run --list portfolio --live
-  python -m valuescreen validate
+  python -m valuescreen run --list nifty50          # a list with `folder: nifty50` uses data/nifty50/companies
+  python -m valuescreen run --folder nifty50 --all  # the same folder without a list
+  python -m valuescreen validate                    # every company folder
 """
 from __future__ import annotations
 
@@ -35,20 +37,25 @@ def main(argv=None):
     g.add_argument("--all", action="store_true", help="every company file")
     g.add_argument("--tickers", help="comma-separated tickers, e.g. AEM,NEM,HL")
     g.add_argument("--list", help="a list in data/lists, e.g. watchlist or portfolio")
+    r.add_argument("--folder", help="company folder: data/<folder>/companies, results in output/<folder> "
+                                    "(default: the list's own `folder:`, else data/companies and output/)")
     r.add_argument("--etf", action="append", default=[], help="ETF look-through, e.g. URNM (repeatable)")
     r.add_argument("--live", action="store_true", help="fetch live share and metal prices (needs yfinance)")
     r.add_argument("--spot", help="override spot, e.g. gold=4100,silver=52,uranium=95")
     r.add_argument("--asof", help="date for stale checks (default: config as_of, or today with --live)")
-    r.add_argument("--out", default=str(loader.ROOT / "output"), help="output folder")
+    r.add_argument("--out", help="output folder (default: output/, or output/<folder>)")
     r.add_argument("--config", help="path to config.yaml")
     sub.add_parser("validate", help="check every company file")
     a = ap.parse_args(argv)
 
     cfg = loader.load_config(Path(a.config) if getattr(a, "config", None) else None)
-    companies = loader.load_companies()
     if a.cmd == "validate":
-        print(f"{len(companies)} company files valid: {', '.join(sorted(companies))}")
+        for label, path in loader.company_folders().items():
+            found = loader.load_companies(path)
+            print(f"{len(found)} company files valid in {label}: {', '.join(sorted(found))}")
         return 0
+    folder = a.folder or (loader.list_folder(a.list) if a.list else None)
+    companies = loader.load_companies(loader.companies_folder(folder))
 
     log = []
     if a.asof:
@@ -68,7 +75,8 @@ def main(argv=None):
         tickers += [h["ticker"].upper() for h in e["holdings"] if h["ticker"].upper() in companies and h["ticker"].upper() not in tickers]
     missing = [t for t in tickers if t not in companies]
     if missing:
-        log.append(f"no company file for: {', '.join(missing)} – skipped (add data/companies/<ticker>.yaml)")
+        where = loader.companies_folder(folder).relative_to(loader.ROOT)
+        log.append(f"no company file for: {', '.join(missing)} – skipped (add {where}/<ticker>.yaml)")
         tickers = [t for t in tickers if t in companies]
     if a.live:
         log += prices.refresh_spot(cfg)
@@ -77,7 +85,8 @@ def main(argv=None):
 
     results = run(companies, tickers, cfg)
     vals, grow = ranked(results)
-    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    out = Path(a.out) if a.out else loader.output_folder(folder)
+    out.mkdir(parents=True, exist_ok=True)
     report.write_csv(vals, grow, out / "ranked.csv")
     heat = report.make_heatmaps(vals, grow, cfg, out)
     lts = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]

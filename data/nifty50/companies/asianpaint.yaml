@@ -1,0 +1,27 @@
+ticker: ASIANPAINT
+yahoo: ASIANPAINT.NS
+name: Asian Paints Ltd.
+sector: Consumer Durables
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 43253.5
+shares_m: 958.464572
+balance:
+  cash: 86016.4
+  debt: 39289.3
+price:
+  value: 2523.8
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance ASIANPAINT.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

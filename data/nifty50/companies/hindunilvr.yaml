@@ -1,0 +1,27 @@
+ticker: HINDUNILVR
+yahoo: HINDUNILVR.NS
+name: Hindustan Unilever Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 150400.0
+shares_m: 2349.591262
+balance:
+  cash: 84090.0
+  debt: 14780.0
+price:
+  value: 1982.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance HINDUNILVR.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

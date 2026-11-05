@@ -1,0 +1,27 @@
+ticker: ONGC
+yahoo: ONGC.NS
+name: Oil & Natural Gas Corporation Ltd.
+sector: Oil Gas & Consumable Fuels
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 414243.82
+shares_m: 12580.279206
+balance:
+  cash: 363920.98
+  debt: 1742991.33
+price:
+  value: 230.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance ONGC.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

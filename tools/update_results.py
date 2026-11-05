@@ -4,13 +4,14 @@
     python tools/update_results.py --all --dry-run           # ask Claude about the due ones, write nothing
     python tools/update_results.py --all                     # same, and approve each update with y
     python tools/update_results.py --tickers AEM --force     # ask Claude even if the check says nothing is due
+    python tools/update_results.py --folder nifty50 --check  # a separate company folder, data/nifty50/companies
 
 Claude is only called for companies whose results are due, using dates that cost nothing to look up: `next_report` in
 the company file, then Yahoo's earnings calendar (needs lxml), then the time since the period ended. See check_due().
 
 Calling Claude needs ANTHROPIC_API_KEY and `pip install anthropic`. It searches the web and proposes a new file, which
 is only saved after you have read the diff and typed y. Numbers from the web can still be wrong: check them against the
-filing. The previous version of each saved file is copied to output/backups/.
+filing. The previous version of each saved file is copied to output/backups/ (output/<folder>/backups/ with --folder).
 """
 import argparse
 import copy
@@ -27,10 +28,11 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+from valuescreen import loader  # noqa: E402
 from valuescreen.loader import ValidationError, validate_company  # noqa: E402
 
-COMPANIES = ROOT / "data" / "companies"
-BACKUPS = ROOT / "output" / "backups"
+COMPANIES = loader.companies_folder()
+BACKUPS = loader.output_folder() / "backups"  # main() points both at output/<folder> for a --folder run
 MODEL = "claude-opus-5-5"
 BETAS = ["server-side-fallback-2026-07-01"]  # re-runs a declined request on another model instead of failing
 MAX_RESUMES = 5  # how many times a paused web research turn may continue
@@ -50,6 +52,9 @@ File conventions:
 - Keep the definitions the existing file uses. If it uses adjusted net income, use the company's adjusted figure.
   If it uses a full fiscal year, keep using a full fiscal year. Read its `sources`, `assumptions` and `notes` for how
   its numbers were chosen.
+- One exception: an assumption that starts with DRAFT marks a placeholder built from Yahoo's annual figures. Replace
+  it with the most recent reported quarter (single-quarter figures, `per_year: 4`, adjusted net income if the company
+  reports it), and remove the DRAFT assumption.
 
 Data rules:
 - Use the company's own results release or regulatory filing. Never use analyst estimates or forecasts.
@@ -335,9 +340,15 @@ def main():
     which.add_argument("--all", action="store_true", help="every company file")
     ap.add_argument("--check", action="store_true", help="only list which companies are due; never calls Claude")
     ap.add_argument("--force", action="store_true", help="ask Claude even if the check says nothing is due")
+    ap.add_argument("--folder", help="company folder, e.g. nifty50 for data/nifty50/companies (default: data/companies)")
     ap.add_argument("--dry-run", action="store_true", help="show the proposed updates without saving")
     args = ap.parse_args()
 
+    global COMPANIES, BACKUPS
+    try:
+        COMPANIES, BACKUPS = loader.companies_folder(args.folder), loader.output_folder(args.folder) / "backups"
+    except ValidationError as e:
+        ap.error(str(e))
     paths = sorted(COMPANIES.glob("*.yaml"))
     if args.tickers:
         wanted = [t.strip().lower() for t in args.tickers.split(",")]

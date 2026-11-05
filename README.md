@@ -29,7 +29,7 @@ python -m valuescreen run --list watchlist             # data/lists/watchlist.ya
 python -m valuescreen run --list portfolio --live      # your holdings, live prices (yfinance)
 python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4200,silver=55
 python -m valuescreen run --list tech
-python -m pytest -q                                    # 108 tests, incl. reproducing the Nov 2026 reports
+python -m pytest -q                                    # 151 tests, incl. reproducing the Nov 2026 reports
 ```
 
 The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`, so updating the live files in
@@ -38,6 +38,55 @@ The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`
 Outputs (in `output/`): `report.html` (ranked tables, heatmaps, every company's assumptions and sources),
 `ranked.csv`, `heatmap_metals.png`, `heatmap_growth.png`, and `signals_log.csv` (appended every run – use it after
 4–6 quarters to see whether the BUY zone actually beat GDX/SIL).
+
+## Screening a big list first (NIFTY 50 and other NSE indexes)
+
+Most companies in a big list are not worth a full valuation. Screen them all from free Yahoo data, then do the careful
+work only on the shortlist.
+
+```bash
+python tools/make_nse_list.py nifty50          # download the constituents into data/lists/nifty50.yaml (also nifty500, niftynext50, ...)
+python tools/screen_universe.py nifty50        # rank all of them (about 20 seconds for 50)
+python tools/screen_universe.py nifty50 --promote        # also write draft company files for the BUY / WATCH ones
+python tools/screen_universe.py nifty50 --promote-all    # ... or for every valued company, flagged ones included
+python -m valuescreen validate                 # checks every company folder
+python tools/update_results.py --folder nifty50 --tickers ITC,TCS --force --dry-run   # Claude replaces each draft with the latest quarter
+python tools/update_prices.py --folder nifty50 # fresh share prices for that folder
+python -m valuescreen run --list nifty50       # values the companies that have files
+```
+
+**A list keeps its own folders.** The `folder: nifty50` line in `data/lists/nifty50.yaml` means its company files live
+in `data/nifty50/companies/` and everything it produces in `output/nifty50/`, apart from your metals and tech
+companies in `data/companies/` and `output/`:
+
+| | Metals / tech (default) | NIFTY 50 |
+|---|---|---|
+| Company files | `data/companies/` | `data/nifty50/companies/` |
+| Run results (`report.html`, `ranked.csv`, `signals_log.csv`, heatmaps) | `output/` | `output/nifty50/` |
+| Screen table and cached Yahoo data | | `output/nifty50/screen_nifty50.csv`, `output/nifty50/screen_cache/` |
+| Backups from `update_results.py` | `output/backups/` | `output/nifty50/backups/` |
+
+Commands that take company files also take `--folder nifty50` (`valuescreen run`, `update_prices.py`,
+`update_results.py`). A new index list made with `make_nse_list.py` gets its own folder the same way, named after the list.
+
+The screen uses the same growth model as the tech stocks: the no-growth value from the last full year's net income and
+net cash, and the growth the share price already assumes. It is deliberately rough:
+
+- **Annual and unadjusted:** Yahoo's last full fiscal year (FY26 to March 2026), not the latest quarter, and total capex
+  rather than sustaining capex. Check the FCF yield column: a negative one means capex is eating the earnings.
+- **Banks and other financials are skipped.** Owner earnings and net cash don't mean the same thing there, so compare
+  P/E and P/B by hand.
+- **Suspicious figures are flagged, not shortlisted.** If the year's EPS is far from Yahoo's trailing EPS (a demerger or
+  a one-off, like TMPV), the company is listed under "Flagged" for you to check against the filing.
+- **Yahoo mislabels some currencies.** Infosys reports in US dollars and is converted; HCLTECH is labelled USD but is
+  really rupees and is left alone. The check compares EPS with Yahoo's trailing EPS.
+- **Drafts are placeholders.** `--promote` never overwrites a file you already have, marks each draft as unverified, and
+  a flagged company's draft starts with a CHECK note (the run table does not show the flag, so read the file or
+  `report.html`); your stale-data rule shows it as STALE until `update_results.py` replaces it with a reported quarter. Expect a
+  "moved -75%" warning there, because a quarter is about a quarter of a year.
+
+Yahoo is the only source used because it is free and needs no account. For checking the shortlist by hand, Screener.in
+has 10 years of financials per company, and the NSE / BSE results filings are the authority.
 
 ## Keeping the data current
 

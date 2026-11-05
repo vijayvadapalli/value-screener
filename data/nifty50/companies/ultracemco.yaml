@@ -1,0 +1,27 @@
+ticker: ULTRACEMCO
+yahoo: ULTRACEMCO.NS
+name: UltraTech Cement Ltd.
+sector: Construction Materials
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 81656.4
+shares_m: 294.064622
+balance:
+  cash: 52338.0
+  debt: 237550.9
+price:
+  value: 12250.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance ULTRACEMCO.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

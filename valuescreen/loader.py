@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import re
 from pathlib import Path
 
 import yaml
@@ -68,6 +69,34 @@ def validate_company(c: dict, src: str = "") -> dict:
     c.setdefault("notes", [])
     c.setdefault("yahoo", c["ticker"])
     return c
+
+
+def _folder_name(folder: str) -> str:
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", folder):
+        raise ValidationError(f"folder name must be letters, digits, '-' or '_', got {folder!r}")
+    return folder
+
+
+def companies_folder(folder: str | None = None) -> Path:
+    """Where company files live: data/companies, or data/<folder>/companies for a separate universe such as nifty50."""
+    return ROOT / "data" / _folder_name(folder) / "companies" if folder else ROOT / "data" / "companies"
+
+
+def output_folder(folder: str | None = None) -> Path:
+    """Where results go: output/, or output/<folder>/."""
+    return ROOT / "output" / _folder_name(folder) if folder else ROOT / "output"
+
+
+def company_folders() -> dict[str, Path]:
+    """Every folder holding company files, keyed by its path relative to the project."""
+    found = [ROOT / "data" / "companies"] + sorted((ROOT / "data").glob("*/companies"))
+    return {str(p.relative_to(ROOT)): p for p in found if p.is_dir()}
+
+
+def list_folder(name: str, folder: Path | None = None) -> str | None:
+    """The `folder:` a list file asks for, if any."""
+    folder = folder or ROOT / "data" / "lists"
+    return yaml.safe_load(open(folder / f"{name.lower()}.yaml")).get("folder")
 
 
 def load_companies(folder: Path | None = None) -> dict[str, dict]:

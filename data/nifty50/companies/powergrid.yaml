@@ -1,0 +1,27 @@
+ticker: POWERGRID
+yahoo: POWERGRID.NS
+name: Power Grid Corporation of India Ltd.
+sector: Power
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 159279.5
+shares_m: 9300.603819
+balance:
+  cash: 49333.1
+  debt: 1515581.0
+price:
+  value: 261.15
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance POWERGRID.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

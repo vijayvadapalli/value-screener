@@ -1,0 +1,27 @@
+ticker: APOLLOHOSP
+yahoo: APOLLOHOSP.NS
+name: Apollo Hospitals Enterprise Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 19417.0
+shares_m: 143.784657
+balance:
+  cash: 18559.0
+  debt: 84929.0
+price:
+  value: 8371.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance APOLLOHOSP.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

@@ -1,0 +1,27 @@
+ticker: COALINDIA
+yahoo: COALINDIA.NS
+name: Coal India Ltd.
+sector: Oil Gas & Consumable Fuels
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 310942.9
+shares_m: 6162.728327
+balance:
+  cash: 601489.4
+  debt: 140721.8
+price:
+  value: 394.3
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance COALINDIA.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

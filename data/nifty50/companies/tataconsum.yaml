@@ -1,0 +1,27 @@
+ticker: TATACONSUM
+yahoo: TATACONSUM.NS
+name: Tata Consumer Products Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 15423.0
+shares_m: 989.698573
+balance:
+  cash: 43199.2
+  debt: 28195.1
+price:
+  value: 1077.7
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance TATACONSUM.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

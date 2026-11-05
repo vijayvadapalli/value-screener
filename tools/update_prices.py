@@ -3,6 +3,7 @@
     python tools/update_prices.py --dry-run           # show the changes, write nothing
     python tools/update_prices.py                     # update every company file
     python tools/update_prices.py --tickers CCJ,AEM   # update only these
+    python tools/update_prices.py --folder nifty50     # a separate company folder, data/nifty50/companies
 
 Only the value, date and source lines of each file's price block change. A company is skipped, and its file left
 alone, if Yahoo has no price, quotes a different currency, or the price moved more than MAX_MOVE from the stored one.
@@ -17,7 +18,9 @@ from pathlib import Path
 import yaml
 import yfinance as yf
 
-COMPANIES = Path(__file__).resolve().parent.parent / "data" / "companies"
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from valuescreen import loader  # noqa: E402
 MAX_MOVE = 0.5  # a bigger move is more likely a bad quote than a real one, so it needs a look by hand
 MINOR_UNITS = {"GBp": ("GBP", 100), "GBX": ("GBP", 100)}  # London shares are often quoted in pence
 
@@ -81,11 +84,16 @@ def update_file(path, wanted, dry_run):
 def main():
     ap = argparse.ArgumentParser(description="Save the latest share prices into data/companies/*.yaml")
     ap.add_argument("--tickers", help="comma-separated tickers, e.g. CCJ,AEM (default: every company file)")
+    ap.add_argument("--folder", help="company folder, e.g. nifty50 for data/nifty50/companies (default: data/companies)")
     ap.add_argument("--dry-run", action="store_true", help="show the changes without writing any file")
     args = ap.parse_args()
+    try:
+        companies = loader.companies_folder(args.folder)
+    except loader.ValidationError as e:
+        ap.error(str(e))
     wanted = {t.strip().upper() for t in args.tickers.split(",")} if args.tickers else None
 
-    results = [r for r in (update_file(p, wanted, args.dry_run) for p in sorted(COMPANIES.glob("*.yaml"))) if r]
+    results = [r for r in (update_file(p, wanted, args.dry_run) for p in sorted(companies.glob("*.yaml"))) if r]
     for ticker, status, message in results:
         print(f"{status:8} {ticker:6} {message}")
     for ticker in sorted((wanted or set()) - {r[0] for r in results}):

@@ -1,0 +1,27 @@
+ticker: SUNPHARMA
+yahoo: SUNPHARMA.NS
+name: Sun Pharmaceutical Industries Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 114794.2
+shares_m: 2399.33497
+balance:
+  cash: 337814.6
+  debt: 46273.2
+price:
+  value: 1829.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance SUNPHARMA.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

@@ -1,0 +1,204 @@
+# Written by tools/make_nse_list.py from niftyindices.com. Re-run it to refresh the constituents.
+name: NIFTY50 constituents
+folder: nifty50
+tickers:
+- ticker: ADANIENT
+  yahoo: ADANIENT.NS
+  name: Adani Enterprises Ltd.
+  industry: Metals & Mining
+- ticker: ADANIPORTS
+  yahoo: ADANIPORTS.NS
+  name: Adani Ports and Special Economic Zone Ltd.
+  industry: Services
+- ticker: APOLLOHOSP
+  yahoo: APOLLOHOSP.NS
+  name: Apollo Hospitals Enterprise Ltd.
+  industry: Healthcare
+- ticker: ASIANPAINT
+  yahoo: ASIANPAINT.NS
+  name: Asian Paints Ltd.
+  industry: Consumer Durables
+- ticker: AXISBANK
+  yahoo: AXISBANK.NS
+  name: Axis Bank Ltd.
+  industry: Financial Services
+- ticker: BSE
+  yahoo: BSE.NS
+  name: BSE Ltd.
+  industry: Financial Services
+- ticker: BAJAJ-AUTO
+  yahoo: BAJAJ-AUTO.NS
+  name: Bajaj Auto Ltd.
+  industry: Automobile and Auto Components
+- ticker: BAJFINANCE
+  yahoo: BAJFINANCE.NS
+  name: Bajaj Finance Ltd.
+  industry: Financial Services
+- ticker: BAJAJFINSV
+  yahoo: BAJAJFINSV.NS
+  name: Bajaj Finserv Ltd.
+  industry: Financial Services
+- ticker: BEL
+  yahoo: BEL.NS
+  name: Bharat Electronics Ltd.
+  industry: Capital Goods
+- ticker: BHARTIARTL
+  yahoo: BHARTIARTL.NS
+  name: Bharti Airtel Ltd.
+  industry: Telecommunication
+- ticker: CIPLA
+  yahoo: CIPLA.NS
+  name: Cipla Ltd.
+  industry: Healthcare
+- ticker: COALINDIA
+  yahoo: COALINDIA.NS
+  name: Coal India Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: DRREDDY
+  yahoo: DRREDDY.NS
+  name: Dr. Reddy's Laboratories Ltd.
+  industry: Healthcare
+- ticker: EICHERMOT
+  yahoo: EICHERMOT.NS
+  name: Eicher Motors Ltd.
+  industry: Automobile and Auto Components
+- ticker: ETERNAL
+  yahoo: ETERNAL.NS
+  name: Eternal Ltd.
+  industry: Consumer Services
+- ticker: GRASIM
+  yahoo: GRASIM.NS
+  name: Grasim Industries Ltd.
+  industry: Construction Materials
+- ticker: HCLTECH
+  yahoo: HCLTECH.NS
+  name: HCL Technologies Ltd.
+  industry: Information Technology
+- ticker: HDFCBANK
+  yahoo: HDFCBANK.NS
+  name: HDFC Bank Ltd.
+  industry: Financial Services
+- ticker: HDFCLIFE
+  yahoo: HDFCLIFE.NS
+  name: HDFC Life Insurance Company Ltd.
+  industry: Financial Services
+- ticker: HINDALCO
+  yahoo: HINDALCO.NS
+  name: Hindalco Industries Ltd.
+  industry: Metals & Mining
+- ticker: HINDUNILVR
+  yahoo: HINDUNILVR.NS
+  name: Hindustan Unilever Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: ICICIBANK
+  yahoo: ICICIBANK.NS
+  name: ICICI Bank Ltd.
+  industry: Financial Services
+- ticker: ITC
+  yahoo: ITC.NS
+  name: ITC Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: INFY
+  yahoo: INFY.NS
+  name: Infosys Ltd.
+  industry: Information Technology
+- ticker: INDIGO
+  yahoo: INDIGO.NS
+  name: InterGlobe Aviation Ltd.
+  industry: Services
+- ticker: JSWSTEEL
+  yahoo: JSWSTEEL.NS
+  name: JSW Steel Ltd.
+  industry: Metals & Mining
+- ticker: JIOFIN
+  yahoo: JIOFIN.NS
+  name: Jio Financial Services Ltd.
+  industry: Financial Services
+- ticker: KOTAKBANK
+  yahoo: KOTAKBANK.NS
+  name: Kotak Mahindra Bank Ltd.
+  industry: Financial Services
+- ticker: LT
+  yahoo: LT.NS
+  name: Larsen & Toubro Ltd.
+  industry: Construction
+- ticker: M&M
+  yahoo: M&M.NS
+  name: Mahindra & Mahindra Ltd.
+  industry: Automobile and Auto Components
+- ticker: MARUTI
+  yahoo: MARUTI.NS
+  name: Maruti Suzuki India Ltd.
+  industry: Automobile and Auto Components
+- ticker: MAXHEALTH
+  yahoo: MAXHEALTH.NS
+  name: Max Healthcare Institute Ltd.
+  industry: Healthcare
+- ticker: NTPC
+  yahoo: NTPC.NS
+  name: NTPC Ltd.
+  industry: Power
+- ticker: NESTLEIND
+  yahoo: NESTLEIND.NS
+  name: Nestle India Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: ONGC
+  yahoo: ONGC.NS
+  name: Oil & Natural Gas Corporation Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: POWERGRID
+  yahoo: POWERGRID.NS
+  name: Power Grid Corporation of India Ltd.
+  industry: Power
+- ticker: RELIANCE
+  yahoo: RELIANCE.NS
+  name: Reliance Industries Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: SBILIFE
+  yahoo: SBILIFE.NS
+  name: SBI Life Insurance Company Ltd.
+  industry: Financial Services
+- ticker: SHRIRAMFIN
+  yahoo: SHRIRAMFIN.NS
+  name: Shriram Finance Ltd.
+  industry: Financial Services
+- ticker: SBIN
+  yahoo: SBIN.NS
+  name: State Bank of India
+  industry: Financial Services
+- ticker: SUNPHARMA
+  yahoo: SUNPHARMA.NS
+  name: Sun Pharmaceutical Industries Ltd.
+  industry: Healthcare
+- ticker: TCS
+  yahoo: TCS.NS
+  name: Tata Consultancy Services Ltd.
+  industry: Information Technology
+- ticker: TATACONSUM
+  yahoo: TATACONSUM.NS
+  name: Tata Consumer Products Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: TMPV
+  yahoo: TMPV.NS
+  name: Tata Motors Passenger Vehicles Ltd.
+  industry: Automobile and Auto Components
+- ticker: TATASTEEL
+  yahoo: TATASTEEL.NS
+  name: Tata Steel Ltd.
+  industry: Metals & Mining
+- ticker: TECHM
+  yahoo: TECHM.NS
+  name: Tech Mahindra Ltd.
+  industry: Information Technology
+- ticker: TITAN
+  yahoo: TITAN.NS
+  name: Titan Company Ltd.
+  industry: Consumer Durables
+- ticker: TRENT
+  yahoo: TRENT.NS
+  name: Trent Ltd.
+  industry: Consumer Services
+- ticker: ULTRACEMCO
+  yahoo: ULTRACEMCO.NS
+  name: UltraTech Cement Ltd.
+  industry: Construction Materials

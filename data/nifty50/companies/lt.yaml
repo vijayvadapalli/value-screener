@@ -1,0 +1,27 @@
+ticker: LT
+yahoo: LT.NS
+name: Larsen & Toubro Ltd.
+sector: Construction
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 160839.9
+shares_m: 1375.887184
+balance:
+  cash: 766249.0
+  debt: 1254970.4
+price:
+  value: 4050.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance LT.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

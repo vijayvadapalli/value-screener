@@ -1,0 +1,27 @@
+ticker: DRREDDY
+yahoo: DRREDDY.NS
+name: Dr. Reddy's Laboratories Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 42850.0
+shares_m: 833.66412
+balance:
+  cash: 87814.0
+  debt: 77341.0
+price:
+  value: 1366.0
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance DRREDDY.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

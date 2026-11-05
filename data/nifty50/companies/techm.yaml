@@ -1,0 +1,27 @@
+ticker: TECHM
+yahoo: TECHM.NS
+name: Tech Mahindra Ltd.
+sector: Information Technology
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 48109.0
+shares_m: 980.20504
+balance:
+  cash: 84255.0
+  debt: 21862.0
+price:
+  value: 1822.7
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance TECHM.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

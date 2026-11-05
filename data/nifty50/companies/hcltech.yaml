@@ -1,0 +1,28 @@
+ticker: HCLTECH
+yahoo: HCLTECH.NS
+name: HCL Technologies Ltd.
+sector: Information Technology
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 166420.0
+shares_m: 2706.625485
+balance:
+  cash: 306150.0
+  debt: 52150.0
+price:
+  value: 1430.5
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance HCLTECH.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes:
+- Yahoo labels the statements USD but the figures look like INR, so they were not converted

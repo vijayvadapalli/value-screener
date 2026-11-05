@@ -1,0 +1,27 @@
+ticker: M&M
+yahoo: M&M.NS
+name: Mahindra & Mahindra Ltd.
+sector: Automobile and Auto Components
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 170988.5
+shares_m: 1200.762264
+balance:
+  cash: 513403.7
+  debt: 1339631.5
+price:
+  value: 3127.5
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance M&M.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

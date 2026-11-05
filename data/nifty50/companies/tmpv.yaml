@@ -1,0 +1,28 @@
+ticker: TMPV
+yahoo: TMPV.NS
+name: Tata Motors Passenger Vehicles Ltd.
+sector: Automobile and Auto Components
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 823900.0
+shares_m: 3682.99214
+balance:
+  cash: 478280.0
+  debt: 813950.0
+price:
+  value: 293.7
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance TMPV.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- 'CHECK before relying on it: year''s EPS 223.7 vs Yahoo trailing EPS -9.2: a one-off or corporate action? check the filing'
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []

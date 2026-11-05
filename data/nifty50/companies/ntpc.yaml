@@ -1,0 +1,27 @@
+ticker: NTPC
+yahoo: NTPC.NS
+name: NTPC Ltd.
+sector: Power
+model: growth
+currency: INR
+period:
+  label: FY26 (Mar)
+  end: '2026-03-31'
+  per_year: 1
+earnings:
+  net_income: 270525.2
+shares_m: 9696.666134
+balance:
+  cash: 64496.8
+  debt: 2710045.8
+price:
+  value: 316.7
+  currency: INR
+  date: '2026-11-05'
+  source: yfinance NTPC.NS
+sources:
+- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
+- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+notes: []
