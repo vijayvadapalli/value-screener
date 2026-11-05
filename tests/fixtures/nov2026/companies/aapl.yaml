@@ -1,0 +1,28 @@
+ticker: AAPL
+name: Apple
+sector: tech
+model: growth
+currency: USD
+period:
+  label: FY26 (Sep)
+  end: '2026-09-26'
+  per_year: 1
+  reported: '2026-10-30'
+earnings:
+  net_income: 132175
+shares_m: 14720.306
+balance:
+  cash: 136935
+  debt: 80111
+price:
+  value: 331.9
+  currency: USD
+  date: '2026-11-03'
+  source: see report
+sources:
+- Apple FY26 Q4 consolidated financial statements
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- Full fiscal year used – December quarter is seasonally largest
+notes: []
+shares_m_balance: 14630.318

@@ -1,0 +1,32 @@
+ticker: RGLD
+name: Royal Gold
+sector: royalty
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-04'
+earnings:
+  adj_net_income: 218.2
+shares_m: 85.052
+balance:
+  cash: 182.5
+  debt: 400.0
+metals:
+- metal: gold
+  units: 0.1
+  realised: 4506
+tax_rate: 0.197
+price:
+  value: 234.11
+  currency: USD
+  date: '2026-10-26'
+  source: StockAnalysis
+sources:
+- Royal Gold Q2-2026 results, Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- 400k GEOs a year re-priced with gold only – silver/copper exposure ignored (slightly generous)

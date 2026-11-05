@@ -1,0 +1,43 @@
+ticker: DNN
+name: Denison Mines
+sector: uranium
+model: developer
+currency: CAD
+period:
+  label: Phoenix capex update / Q2-2026
+  end: '2026-06-30'
+  per_year: 1
+  reported: '2026-08-12'
+npv_curve:
+  metal: uranium
+  currency: CAD
+  ownership: 0.9
+  points:
+  - - 73.625
+    - 1570
+  - - 86
+    - 1940
+holdings:
+  metal: uranium
+  units: 1.1
+shares_m: 907.4
+balance:
+- label: cash
+  amount: 465
+  currency: CAD
+- label: 4.25% convertible notes 2031
+  amount: -345
+  currency: USD
+price:
+  value: 2.105
+  currency: USD
+  date: '2026-11-03'
+  source: MarketBeat
+sources:
+- Denison Phoenix construction & capex update, 2 Jan 2026 (NPV 8%)
+- Denison Q2-2026 results
+- URNM look-through analysis, 4 Nov 2026
+assumptions:
+- NPV extrapolated from the company's two price cases to spot
+- 90% Phoenix JV share
+- Gryphon, McClean Lake and other assets excluded

@@ -1,0 +1,39 @@
+ticker: IAG
+name: IAMGOLD
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-05'
+earnings:
+  adj_net_income: 241.6
+  da: 117.15
+  sustaining_capex: 96.3
+shares_m: 578.0
+balance:
+  net_cash: 52.2
+metals:
+- metal: gold
+  units: 0.1802
+  realised: 4384
+  royalty: 0.13
+  aisc: 2271
+tax_rate: 0.3
+price:
+  value: 15.85
+  currency: USD
+  date: '2026-11-03'
+  source: StockAnalysis
+sources:
+- IAMGOLD Q2-2026 results, SEC Ex 99.1, 6 Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Tax rate 30% ASSUMED (Q2 tax $109.3m broadly supports it)
+- D&A = H1 $234.3m ÷ 2
+- Burkina Faso royalty falls ~$13/oz per $100 gold move (company table)
+notes:
+- Essakane (Burkina Faso) ~47% of output; $100–200m cash held in-country

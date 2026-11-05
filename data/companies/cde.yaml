@@ -1,0 +1,39 @@
+ticker: CDE
+name: Coeur Mining
+sector: silver
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-04'
+earnings:
+  adj_net_income: 122.6
+  addbacks: 103.44
+  da: 256.0
+  sustaining_capex: 104.331
+shares_m: 1028.536
+balance:
+  cash: 1052.3
+  debt: 705.3
+metals:
+- metal: gold
+  units: 0.167877
+  realised: 4140
+- metal: silver
+  units: 4.518263
+  realised: 71.18
+tax_rate: 0.431881
+price:
+  value: 14.58
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance CDE
+sources:
+- Coeur Q2-2026 results, SEC Ex 99.1, 5 Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Add-back = non-cash Rainy River inventory charge ($0.10/share)
+- Sustaining capex = 83% of $125.7m

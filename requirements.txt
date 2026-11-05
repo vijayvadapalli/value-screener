@@ -1,0 +1,12 @@
+pyyaml>=6.0
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+pytest>=7.0
+# for docs/build_design_doc.py; newer releases need Python 3.10+:
+reportlab>=4.0,<4.3
+# optional, for --live prices:
+# yfinance>=0.2.40
+# optional, for tools/update_results.py (lxml lets yfinance read the earnings calendar):
+# anthropic>=0.125
+# lxml>=5.0

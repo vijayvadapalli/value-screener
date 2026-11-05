@@ -1,0 +1,27 @@
+ticker: SLB
+name: SLB
+sector: energy
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-23'
+earnings:
+  adj_net_income: 958.08
+  da: 698
+  sustaining_capex: 682
+shares_m: 1497
+balance:
+  net_cash: -9249
+price:
+  value: 51.56
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance SLB
+sources:
+- SLB Q3-2026 results, 23 Oct 2026
+- Value vs Price – main report (Q3 results), 4 Nov 2026
+assumptions:
+- Adjusted EPS $0.64 × 1,497m shares; all capital investment treated as sustaining

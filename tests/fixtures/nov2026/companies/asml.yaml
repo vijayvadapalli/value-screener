@@ -1,0 +1,28 @@
+ticker: ASML
+name: ASML (ADR)
+sector: tech
+model: growth
+currency: EUR
+period:
+  label: Q3-26
+  end: '2026-09-28'
+  per_year: 4
+  reported: '2026-10-14'
+earnings:
+  eps_per_period: 12.93
+  eps_currency: EUR
+shares_m: 383.5
+balance:
+  cash: 12735.099999999999
+  debt: 1963.0
+price:
+  value: 1565.9
+  currency: USD
+  date: '2026-10-30'
+  source: see report
+sources:
+- ASML Q3-2026 financial statements
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- EUR at $1.117 (27 Oct)
+notes: []

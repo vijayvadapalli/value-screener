@@ -1,0 +1,40 @@
+ticker: ABRA
+yahoo: ABRA.V
+name: AbraSilver Resource
+sector: silver
+model: developer
+currency: USD
+period:
+  label: DFS-2026
+  end: '2026-06-30'
+  per_year: 1
+  reported: '2026-06-22'
+npv_curve:
+  metal: silver
+  currency: USD
+  ownership: 1.0
+  points:
+  - - 40
+    - 1359
+  - - 50
+    - 2223
+  - - 60
+    - 3083
+  - - 70.69
+    - 3623
+shares_m: 165.49
+balance:
+- label: cash and equivalents
+  amount: 75.563
+  currency: CAD
+price:
+  value: 11.77
+  currency: CAD
+  date: '2026-10-23'
+  source: StockAnalysis
+sources:
+- Diablillos Definitive Feasibility Study, 22 Jun 2026 (after-tax NPV 8%)
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Gold moves with silver as in the study's price cases
+- Study NPV before construction, financing and country risk

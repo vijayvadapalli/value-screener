@@ -1,0 +1,31 @@
+ticker: GOOGL
+name: Alphabet
+sector: tech
+model: growth
+currency: USD
+period:
+  label: Q3-26
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-28'
+earnings:
+  net_income: 26468
+  adjustments:
+  - label: loss on equity securities added back
+    amount: 8664
+    tax_rate: 0.21
+shares_m: 12368
+balance:
+  cash: 265098
+  debt: 125102
+price:
+  value: 278.99
+  currency: USD
+  date: '2026-11-02'
+  source: see report
+sources:
+- Alphabet Q3-2026 release
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- Equity-securities loss stripped at an ASSUMED 21% tax
+notes: []

@@ -1,0 +1,26 @@
+ticker: SPUT
+yahoo: U-U.TO
+name: Sprott Physical Uranium Trust
+sector: uranium
+model: physical
+currency: USD
+period:
+  label: NAV 3 Nov 2026
+  end: '2026-11-03'
+  per_year: 4
+  reported: '2026-11-03'
+holdings:
+  metal: uranium
+  units: 81.7
+other_net_assets: 0.0
+nav_ref:
+  value: 22.22
+  spot: 93.6
+price:
+  value: 18.91
+  currency: USD
+  date: '2026-11-03'
+  source: Yellowcake Analytics
+sources:
+- Sprott Physical Uranium Trust NAV via yellowcakeanalytics.com, 3 Nov 2026
+- URNM look-through analysis, 4 Nov 2026

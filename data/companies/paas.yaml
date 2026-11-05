@@ -1,0 +1,35 @@
+ticker: PAAS
+name: Pan American Silver
+sector: silver
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-04'
+earnings:
+  adj_net_income: 308
+  da: 120
+  sustaining_capex: 74
+shares_m: 417.074
+balance:
+  cash: 1705.0
+  debt: 717.0
+metals:
+- metal: gold
+  units: 0.1656
+  realised: 4402
+- metal: silver
+  units: 5.33
+  realised: 70.97
+tax_rate: 0.369835
+price:
+  value: 41.49
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance PAAS
+sources:
+- Pan American Q2-2026 results, Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026

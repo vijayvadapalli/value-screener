@@ -1,0 +1,6 @@
+# Your holdings – replace with what you actually own. Quantities are optional and only shown for reference.
+name: My portfolio
+tickers:
+  - {ticker: WPM}
+  - {ticker: PAAS}
+  - {ticker: CDE}

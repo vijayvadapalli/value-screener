@@ -1,0 +1,25 @@
+ticker: CGN
+yahoo: 1164.HK
+name: CGN Mining
+sector: uranium
+model: producer
+currency: HKD
+period:
+  label: FY-2025
+  end: '2025-12-31'
+  per_year: 1
+  reported: '2026-03-26'
+earnings:
+  owner_earnings: 453.0
+shares_m: 7600.6826
+price:
+  value: 2.15
+  currency: HKD
+  date: '2026-11-05'
+  source: yfinance 1164.HK
+sources:
+- CGN Mining FY2025 results, 26 Mar 2026
+- URNM look-through analysis, 4 Nov 2026
+assumptions:
+- FY2025 EPS used; 1H-2026 was a small loss
+- Net cash not included (not retrieved)

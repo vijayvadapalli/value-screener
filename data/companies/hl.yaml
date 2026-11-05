@@ -1,0 +1,41 @@
+ticker: HL
+name: Hecla Mining
+sector: silver
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-11-03'
+earnings:
+  adj_net_income: 149.5
+  da: 39.2
+  sustaining_capex: 36.875
+  adjustments:
+  - label: fair-value gains on investments removed (pre-tax, cautious)
+    amount: -26.7
+    tax_rate: 0.0
+shares_m: 676.9
+balance:
+  net_cash: 692.0
+metals:
+- metal: silver
+  units: 4.094203
+  realised: 63.62
+  aisc: 14.34
+- metal: gold
+  units: 0.012706
+  realised: 4279
+tax_rate: 0.213046
+price:
+  value: 14.95
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance HL
+sources:
+- Hecla Q3-2026 results, 3 Nov 2026
+- Value vs Price – Hecla, First Majestic, Discovery report, 4 Nov 2026
+assumptions:
+- Sustaining capex = ¼ of FY guidance midpoint ($142–153m); Q3 split not published
+- Lead and zinc not re-priced

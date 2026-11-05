@@ -1,0 +1,27 @@
+ticker: QCOM
+name: Qualcomm
+sector: tech
+model: growth
+currency: USD
+period:
+  label: FQ3-26 (Jun)
+  end: '2026-06-28'
+  per_year: 4
+  reported: '2026-07-29'
+  next_report: '2026-11-04'
+earnings:
+  net_income: 2002
+shares_m: 1069
+balance:
+  cash: 8304
+  debt: 15270
+price:
+  value: 162.08
+  currency: USD
+  date: '2026-11-02'
+  source: see report
+sources:
+- Qualcomm FQ3-2026 release
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions: []
+notes: []

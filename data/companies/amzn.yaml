@@ -1,0 +1,27 @@
+ticker: AMZN
+name: Amazon
+sector: tech
+model: growth
+currency: USD
+period:
+  label: Q3-26
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-29'
+earnings:
+  net_income: 20690
+shares_m: 10947.09
+balance:
+  cash: 114200
+  debt: 180300
+price:
+  value: 266.03
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance AMZN
+sources:
+- Amazon Q3-2026 release; 10-Q analysis (sec-api)
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- Diluted shares derived as net income ÷ EPS $1.89
+notes: []

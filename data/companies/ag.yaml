@@ -1,0 +1,39 @@
+ticker: AG
+name: First Majestic Silver
+sector: silver
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-07-30'
+  next_report: '2026-11-05'
+earnings:
+  adj_net_income: 101.6
+shares_m: 493.335
+balance:
+  cash: 1093.3
+  debt: 302.754
+metals:
+- metal: silver
+  units: 3.799823
+  realised: 63.98
+  aisc: 25.68
+- metal: gold
+  units: 0.03466
+  realised: 4347
+tax_rate: 0.350933
+price:
+  value: 15.39
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance AG
+sources:
+- First Majestic Q2-2026 release and interim statements (SEC 6-K)
+- Value vs Price – Hecla, First Majestic, Discovery report, 4 Nov 2026
+assumptions:
+- Owner earnings = adjusted net earnings (sustaining capex not split out; assumed ≈ D&A $48.4m)
+- Restricted cash $159m excluded
+notes:
+- Q3 output 3.44 Moz Ag (San Dimas 12-day labour dispute)

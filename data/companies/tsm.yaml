@@ -1,0 +1,30 @@
+ticker: TSM
+name: TSMC (ADR)
+sector: tech
+model: growth
+currency: TWD
+period:
+  label: Q3-26
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-16'
+earnings:
+  eps_per_period: 29.43
+  eps_currency: TWD
+  adr_ratio: 5
+shares_m: 5186.4
+balance:
+  cash: 4016980.0
+  debt: 1031580.0
+price:
+  value: 395.75
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance TSM
+sources:
+- TSMC 3Q26 Management Report
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- 1 ADR = 5 shares; NT$31.98/US$ (TSMC's Q3 average)
+- shares_m expressed in ADR equivalents
+notes: []

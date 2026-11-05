@@ -1,0 +1,35 @@
+ticker: FNV
+name: Franco-Nevada
+sector: royalty
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-11'
+earnings:
+  adj_net_income: 349.2
+shares_m: 193.3
+balance:
+  net_cash: 1014.2
+metals:
+- metal: gold
+  units: 0.091224
+  realised: 4417.6971
+- metal: silver
+  units: 1.14149
+  realised: 73.15
+tax_rate: 0.22859
+price:
+  value: 242.14
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance FNV
+sources:
+- Franco-Nevada Q2-2026 results, Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Silver realised price = Q2 average from Royal Gold's release ($73.15); FNV did not publish it
+- Energy, PGM and iron-ore revenue held at Q2 levels

@@ -1,0 +1,27 @@
+ticker: CCJ
+name: Cameco
+sector: uranium
+model: producer
+currency: CAD
+period:
+  label: 9M-2026
+  end: '2026-09-30'
+  per_year: 1.3333333333333333
+  reported: '2026-10-30'
+earnings:
+  adj_net_income: 279.0
+shares_m: 435.53
+balance:
+  cash: 860
+  debt: 1000
+price:
+  value: 72.26
+  currency: USD
+  date: '2026-11-03'
+  source: CoinGlass
+sources:
+- Cameco Q3-2026 results, 30 Oct 2026
+- Value vs Price – main report (Q3 results), 4 Nov 2026
+assumptions:
+- Nine-month adjusted net earnings annualised (× 4/3); cash-flow lines not fully retrievable – earnings proxy
+- Westinghouse (49%) counted only through reported earnings

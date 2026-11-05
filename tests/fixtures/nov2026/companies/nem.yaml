@@ -1,0 +1,40 @@
+ticker: NEM
+name: Newmont
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-22'
+earnings:
+  adj_net_income: 2309
+  da: 632
+  sustaining_capex: 525
+shares_m: 1051
+balance:
+  net_cash: 1293.0
+metals:
+- metal: gold
+  units: 1.19086
+  realised: 4317
+- metal: silver
+  units: 6.25
+  realised: 50.5
+- metal: copper
+  units: 60.126
+  realised: 6.91
+tax_rate: 0.33
+price:
+  value: 109.09
+  currency: USD
+  date: '2026-11-02'
+  source: StockTitan
+sources:
+- NEM Q3-2026 results and 2026 guidance sensitivities, 22 Oct 2026
+- Value vs Price – main report (Q3 results), 4 Nov 2026
+assumptions:
+- Gold units = company sensitivity ($505m per $100/oz less royalty effect) ÷ 400, i.e. ounces-equivalent
+- Silver and copper from company sensitivities ($25m per $1/oz Ag; $60m per $0.25/lb Cu)
+- Net cash after the committed $1,950m Barrick payment

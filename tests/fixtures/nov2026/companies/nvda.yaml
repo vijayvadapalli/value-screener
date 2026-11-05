@@ -1,0 +1,33 @@
+ticker: NVDA
+name: Nvidia
+sector: tech
+model: growth
+currency: USD
+period:
+  label: Q2-FY27 (Jul)
+  end: '2026-07-26'
+  per_year: 4
+  reported: '2026-08-26'
+  next_report: '2026-11-19'
+earnings:
+  net_income: 59688
+  adjustments:
+  - label: gains on equity securities removed
+    amount: -7771
+    tax_rate: 0.21
+shares_m: 24285
+balance:
+  cash: 56586
+  debt: 33366
+price:
+  value: 206.69
+  currency: USD
+  date: '2026-11-03'
+  source: see report
+sources:
+- Nvidia Q2 FY2027 release
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- Equity gains stripped at an ASSUMED 21% tax
+- $42.8bn of marketable equity stakes not counted as cash
+notes: []

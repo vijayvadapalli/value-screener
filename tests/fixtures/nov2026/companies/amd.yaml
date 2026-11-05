@@ -1,0 +1,27 @@
+ticker: AMD
+name: AMD
+sector: tech
+model: growth
+currency: USD
+period:
+  label: Q3-26
+  end: '2026-09-26'
+  per_year: 4
+  reported: '2026-11-03'
+earnings:
+  eps_per_period: 1.46
+shares_m: 1661
+balance:
+  cash: 15776
+  debt: 7079
+price:
+  value: 466.84
+  currency: USD
+  date: '2026-11-02'
+  source: see report
+sources:
+- AMD Q3-2026 release
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- GAAP EPS keeps Xilinx amortisation as a cost
+notes: []

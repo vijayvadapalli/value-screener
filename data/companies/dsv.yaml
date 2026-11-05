@@ -1,0 +1,43 @@
+ticker: DSV
+yahoo: DSV.TO
+name: Discovery Mining
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-13'
+earnings:
+  adj_net_income: 92.3
+  da: 40.6
+  sustaining_capex: 36.5
+shares_m: 818.1
+balance:
+- label: cash
+  amount: 364.3
+- label: Newmont deferred payments ($37.5m/yr from Dec 2027)
+  amount: -150.0
+metals:
+- metal: gold
+  units: 0.064685
+  realised: 4474
+  aisc: 2154
+tax_rate: 0.36291
+price:
+  value: 11.09
+  currency: CAD
+  date: '2026-11-04'
+  source: yfinance DSV.TO
+projects:
+- name: Cordero silver project (after-tax study NPV)
+  npv: 1200
+  currency: USD
+sources:
+- Discovery Q2-2026 results, 13 Aug 2026
+- Newmont Porcupine sale terms, 25 Jan 2025
+- Value vs Price – Hecla, First Majestic, Discovery report, 4 Nov 2026
+assumptions:
+- Tax excludes $19.7m one-off deferred tax
+- Cash ounces exclude 2,813 oz delivered in kind to Franco-Nevada

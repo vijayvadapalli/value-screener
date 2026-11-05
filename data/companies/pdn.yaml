@@ -1,0 +1,36 @@
+ticker: PDN
+yahoo: PDN.AX
+name: Paladin Energy
+sector: uranium
+model: producer
+currency: USD
+period:
+  label: FY27 guidance / Q1-FY27
+  end: '2026-09-30'
+  per_year: 1
+  reported: '2026-10-13'
+earnings:
+  owner_earnings: 70.82
+shares_m: 301.51
+balance:
+- label: cash
+  amount: 209
+- label: term loan
+  amount: -28
+- label: 400k lb product loan at $92
+  amount: -36.8
+price:
+  value: 7.57
+  currency: AUD
+  date: '2026-11-05'
+  source: yfinance PDN.AX
+sources:
+- Paladin September 2026 quarterly; FY2026 results
+- URNM look-through analysis, 4 Nov 2026
+assumptions:
+- 'Owner earnings estimated from FY27 guidance: (Q1 realised $79.4 − cost midpoint $46) × 5.35 Mlb − sustaining capex, × 75% LHM, × (1 − 37.5%
+  Namibian tax)'
+- Corporate costs and Patterson Lake South not included
+- Shares derived from market cap ÷ price
+notes:
+- Lost $9.1m in FY2026

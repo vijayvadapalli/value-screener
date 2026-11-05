@@ -1,0 +1,52 @@
+# Value Screener configuration. Everything a judgement call lives here, not in the code.
+
+as_of: 2026-11-04            # "today" for stale checks; override with --asof
+
+spot:                        # USD per oz (gold, silver) or per lb (uranium U3O8, copper, zinc, lead)
+  gold: 3930.0
+  silver: 50.0
+  uranium: 92.0
+  copper: 6.40
+  zinc: 1.35
+  lead: 0.90
+
+# Metals that move in the "metal price" scenarios. By-products stay at spot.
+scenario_metals: [gold, silver, uranium, platinum, palladium]
+metal_scenarios: [-0.25, -0.10, 0.0, 0.15, 0.30]
+growth_scenarios: [-0.10, 0.0, 0.05, 0.10, 0.15, 0.20, 0.25]
+
+fx_usd_per_unit:             # USD per 1 unit of currency
+  USD: 1.0
+  CAD: 0.7159                # 3 Nov 2026
+  EUR: 1.1170                # 27 Oct 2026
+  AUD: 0.7029                # 26 Oct 2026
+  TWD: 0.0312695             # 1 / 31.98, TSMC's Q3 average
+  KZT: 0.00204082            # 1 / 490, Kazatomprom 2026 guidance rate
+  # GBP and HKD are not needed while those companies' inputs and prices share a currency.
+
+multiples:                   # owner-earnings multiples [cautious, fair]
+  producer: [12, 15]
+  cashflow: [10, 13]
+  sell: 25                   # price at or above this multiple of owner earnings = SELL zone
+  fair_band: [15, 20]        # shown for reference
+
+growth_dcf:
+  discount_rate: 0.10
+  exit_multiple: 15.0
+  years: 5
+
+zones:
+  buy_margin_of_safety: 0.20     # producers: (value@12x - price) / value@12x
+  max_cost_ratio: 0.60           # AISC / spot must be at or below this for BUY
+  developer_buy_pnav: 0.80       # price / NAV
+  developer_sell_pnav: 1.50
+  physical_buy_pnav: 0.85
+  physical_sell_pnav: 1.10
+  growth_buy: 0.05               # implied growth at or below = BUY
+  growth_watch: 0.10
+  growth_sell: 0.25
+
+stale_days:                      # days after period end before a file is treated as stale
+  default: 100
+  developer: 200
+  physical: 45

@@ -1,0 +1,33 @@
+ticker: AEM
+name: Agnico Eagle Mines
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-28'
+earnings:
+  adj_net_income: 1324.349
+  da: 457.447
+  sustaining_capex: 296.173
+shares_m: 505.546481
+balance:
+  net_cash: 3416.023
+metals:
+- metal: gold
+  units: 0.825084
+  realised: 4264
+  aisc: 1648
+tax_rate: 0.35
+price:
+  value: 167.21
+  currency: USD
+  date: '2026-11-03'
+  source: Upstox
+sources:
+- AEM Q3-2026 results, SEC Ex 99.1, 28 Oct 2026
+- Value vs Price – main report (Q3 results), 4 Nov 2026
+notes:
+- Barnat pit (Malartic) cuts output 60–80koz H2-26 and up to 150koz/yr in 2027–28

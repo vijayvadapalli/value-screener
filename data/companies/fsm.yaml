@@ -1,0 +1,34 @@
+ticker: FSM
+name: Fortuna Mining
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-04'
+earnings:
+  adj_net_income: 75.5
+  da: 44.0
+  sustaining_capex: 45.5
+shares_m: 301.707
+balance:
+  net_cash: 434.2
+metals:
+- metal: gold
+  units: 0.062081
+  realised: 4447
+- metal: silver
+  units: 0.281433
+  realised: 75.33
+tax_rate: 0.46
+price:
+  value: 9.59
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance FSM
+sources:
+- Fortuna Q2-2026 results, SEC Ex 99.5, 5 Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026

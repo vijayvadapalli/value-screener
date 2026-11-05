@@ -1,0 +1,44 @@
+ticker: NXE
+name: NexGen Energy
+sector: uranium
+model: developer
+currency: CAD
+period:
+  label: FS-2024 / Q2-2026 balance
+  end: '2026-06-30'
+  per_year: 1
+  reported: '2026-08-01'
+npv_curve:
+  metal: uranium
+  currency: CAD
+  ownership: 1.0
+  points:
+  - - 50
+    - 2100
+  - - 80
+    - 4890
+  - - 95
+    - 6320
+  - - 100
+    - 6790
+  - - 150
+    - 11520
+shares_m: 670.506
+balance:
+- label: cash
+  amount: 756.173
+  currency: CAD
+- label: investments
+  amount: 214.08
+  currency: CAD
+- label: convertible debentures
+  amount: -360
+  currency: USD
+price:
+  value: 7.96
+  currency: USD
+  date: '2026-11-03'
+  source: ChartRow
+sources:
+- Rook I updated FS economics, 1 Aug 2024 (2023 dollars, after-tax NPV 8%)
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026

@@ -1,0 +1,27 @@
+ticker: ORCL
+name: Oracle
+sector: tech
+model: growth
+currency: USD
+period:
+  label: FQ1-27 (Aug)
+  end: '2026-08-31'
+  per_year: 4
+  reported: '2026-09-09'
+earnings:
+  eps_per_period: 1.56
+shares_m: 3000
+balance:
+  cash: 37080
+  debt: 125340
+price:
+  value: 119.22
+  currency: USD
+  date: '2026-11-02'
+  source: see report
+sources:
+- Oracle FQ1-2027 release
+- Value vs Price – tech, chips & energy report, 4 Nov 2026
+assumptions:
+- Excludes the $20bn stock + notes raise priced 3 Nov 2026
+notes: []

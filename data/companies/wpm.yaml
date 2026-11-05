@@ -1,0 +1,38 @@
+ticker: WPM
+name: Wheaton Precious Metals
+sector: royalty
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+  next_report: '2026-11-05'
+earnings:
+  adj_net_income: 542.542
+shares_m: 454.991
+balance:
+  cash: 100.192
+  debt: 1969.282
+metals:
+- metal: gold
+  units: 0.10375
+  realised: 4452
+- metal: silver
+  units: 7.0
+  realised: 73.41
+tax_rate: 0.0
+price:
+  value: 131.5
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance WPM
+sources:
+- Wheaton Q2-2026 results and 2026 guidance midpoints, Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Tax ~0% ASSUMED (low-tax structure)
+- Volumes = 2026 guidance midpoints (415koz Au, 28Moz Ag a year)
+notes:
+- 'CHECK on refresh: balance carried as $1,969m debt vs $100m cash from the companion report – Wheaton is usually debt-free'

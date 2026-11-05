@@ -1,0 +1,31 @@
+ticker: MTA
+name: Metalla Royalty
+sector: royalty
+model: producer
+currency: USD
+period:
+  label: Q2-2026
+  end: '2026-06-30'
+  per_year: 4
+  reported: '2026-08-06'
+earnings:
+  adj_net_income: 1.223
+shares_m: 93.496
+balance:
+  cash: 10.7
+  debt: 13.1
+metals:
+- metal: gold
+  units: 0.001173
+  realised: 4504
+tax_rate: 0.0
+price:
+  value: 7.29
+  currency: USD
+  date: '2026-10-23'
+  source: Robinhood
+sources:
+- Metalla Q2-2026 results, Aug 2026
+- Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Net income used – no adjusted figure published

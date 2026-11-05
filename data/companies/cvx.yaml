@@ -1,0 +1,37 @@
+ticker: CVX
+name: Chevron
+sector: energy
+model: cashflow
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-30'
+earnings:
+  cfo_ex_wc: 16552
+  capex: 4011
+  shares_m: 1951
+earnings_normalised:
+  cfo_ex_wc: 9940
+  capex: 4444
+  shares_m: 1946
+rank_on_normalised: true
+shares_m: 1951
+balance:
+  net_cash: -20730
+multiples:
+- 10
+- 13
+cyclical: true
+price:
+  value: 216.96
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance CVX
+sources:
+- Chevron Q3-2026 earnings, 30 Oct 2026; Q3-2025 for normal-oil basis
+- Value vs Price – main report (Q3 results), 4 Nov 2026
+assumptions:
+- Valued on 'normal oil' (Q3-2025, Brent ~$69) because Q3-2026 includes a war-driven spike
+- 10x/13x multiples for a depleting, cyclical oil major

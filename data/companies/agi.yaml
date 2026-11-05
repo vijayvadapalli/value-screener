@@ -1,0 +1,31 @@
+ticker: AGI
+name: Alamos Gold
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-28'
+earnings:
+  adj_net_income: 184.0
+  da: 44.2
+  sustaining_capex: 52.9
+shares_m: 418.572
+balance:
+  cash: 597.4
+  debt: 200.0
+metals:
+- metal: gold
+  units: 0.118361
+  realised: 4258
+tax_rate: 0.361
+price:
+  value: 30.0
+  currency: USD
+  date: '2026-11-04'
+  source: yfinance AGI
+sources:
+- AGI Q3-2026 results, 28 Oct 2026
+- Value vs Price – main report (Q3 results), 4 Nov 2026

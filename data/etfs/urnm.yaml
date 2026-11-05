@@ -1,0 +1,16 @@
+ticker: URNM
+name: Sprott Uranium Miners ETF
+price: {value: 41.79, currency: USD, date: 2026-10-23, source: StockAnalysis}
+holdings_date: 2026-11-03
+holdings_source: TipRanks (UCITS version, top 10 of 44) – US fund holds nearly the same names
+holdings:
+  - {ticker: KAP,  name: Kazatomprom, weight: 16.34}
+  - {ticker: CCJ,  name: Cameco, weight: 14.41}
+  - {ticker: SPUT, name: Sprott Physical Uranium Trust, weight: 14.03}
+  - {ticker: CGN,  name: CGN Mining, weight: 5.51}
+  - {ticker: NXE,  name: NexGen Energy, weight: 4.70}
+  - {ticker: PDN,  name: Paladin Energy, weight: 4.39}
+  - {ticker: YCA,  name: Yellow Cake, weight: 4.37}
+  - {ticker: DNN,  name: Denison Mines, weight: 4.22}
+  - {ticker: UEC,  name: Uranium Energy, weight: 4.17}
+  - {ticker: UUUU, name: Energy Fuels, weight: 3.52}
