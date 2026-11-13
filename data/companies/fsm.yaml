@@ -4,31 +4,37 @@ sector: gold
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: '2026-09-30'
   per_year: 4
-  reported: '2026-08-06'
-  next_report: '2026-11-04'
+  reported: '2026-11-04'
 earnings:
-  adj_net_income: 75.5
-  da: 44.0
-  sustaining_capex: 45.5
+  adj_net_income: 51.2
+  da: 58.8
+  sustaining_capex: 29.8
 shares_m: 301.707
 balance:
-  net_cash: 434.2
+  net_cash: 259.9
 metals:
 - metal: gold
-  units: 0.062081
-  realised: 4447
+  units: 0.059398
+  realised: 4281
 - metal: silver
-  units: 0.281433
-  realised: 75.33
-tax_rate: 0.46
+  units: 0.231022
+  realised: 62.7
+tax_rate: 0.468
 price:
   value: 9.11
   currency: USD
   date: '2026-11-12'
   source: yfinance FSM
 sources:
-- Fortuna Q2-2026 results, SEC Ex 99.5, 5 Aug 2026
+- Fortuna Q3-2026 results release, 4 Nov 2026
 - Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- 'Sustaining capex = sustaining $20.1m + sustaining leases $9.7m (same basis as Q2: $36.6m + leases = $45.5m)'
+- Gold units = Séguéla 33,718 oz + Lindero 25,680 oz sold
+- Tax rate = income tax $46.0m ÷ (net income $52.3m + tax), derived
+- Shares not disclosed in the release - Q2 count kept
+notes:
+- Net cash fell from $434m after the $200m cash payment for Bambadji (Aug 2026)

@@ -3,6 +3,7 @@
     python tools/update_results.py --all --check             # free: list which companies have new results due
     python tools/update_results.py --all --dry-run           # ask Claude about the due ones, write nothing
     python tools/update_results.py --all                     # same, and approve each update with y
+    python tools/update_results.py --sector gold,silver --check  # only companies in these sectors
     python tools/update_results.py --tickers AEM --force     # ask even if the check says nothing is due
     python tools/update_results.py --provider gemini --tickers AEM --dry-run   # Gemini instead of Claude (free tier)
     python tools/update_results.py --folder nifty50 --check  # a separate company folder, data/nifty50/companies
@@ -479,6 +480,7 @@ def main():
     which = ap.add_mutually_exclusive_group(required=True)
     which.add_argument("--tickers", help="comma-separated tickers, e.g. AEM,NEM")
     which.add_argument("--all", action="store_true", help="every company file")
+    which.add_argument("--sector", help="comma-separated sectors as written in the company files, e.g. gold,silver,uranium")
     ap.add_argument("--check", action="store_true", help="only list which companies are due; never calls an AI")
     ap.add_argument("--force", action="store_true", help="ask the AI even if the check says nothing is due")
     ap.add_argument("--provider", choices=sorted(PROVIDERS), default="claude", help="which AI does the research (default: claude)")
@@ -499,6 +501,13 @@ def main():
         if missing:
             ap.error(f"no company file for: {', '.join(missing)}")
         paths = [COMPANIES / f"{t}.yaml" for t in wanted]
+    elif args.sector:
+        wanted = {s.strip().lower() for s in args.sector.split(",")}
+        sectors = {p: str(yaml.safe_load(p.read_text(encoding="utf-8")).get("sector", "")).lower() for p in paths}
+        unknown = wanted - set(sectors.values())
+        if unknown:
+            ap.error(f"no company in sector: {', '.join(sorted(unknown))} (sectors: {', '.join(sorted(set(sectors.values())))})")
+        paths = [p for p in paths if sectors[p] in wanted]
 
     outcomes = {}
     due_paths = []

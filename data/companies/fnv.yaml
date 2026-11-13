@@ -4,32 +4,33 @@ sector: royalty
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: '2026-09-30'
   per_year: 4
-  reported: '2026-08-06'
-  next_report: '2026-11-11'
+  reported: '2026-11-11'
 earnings:
-  adj_net_income: 349.2
+  adj_net_income: 364.5
 shares_m: 193.3
 balance:
-  net_cash: 1014.2
+  net_cash: 1232.2
 metals:
 - metal: gold
-  units: 0.091224
-  realised: 4417.6971
+  units: 0.090083
+  realised: 4252.7447
 - metal: silver
-  units: 1.14149
-  realised: 73.15
-tax_rate: 0.22859
+  units: 1.09123
+  realised: 62.59
+tax_rate: 0.1302
 price:
   value: 247.72
   currency: USD
   date: '2026-11-12'
   source: yfinance FNV
 sources:
-- Franco-Nevada Q2-2026 results, Aug 2026
+- Franco-Nevada Q3-2026 results, SEC 6-K Ex 99.1, 11 Nov 2026
 - Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
 assumptions:
-- Silver realised price = Q2 average from Royal Gold's release ($73.15); FNV did not publish it
-- Energy, PGM and iron-ore revenue held at Q2 levels
+- Gold realised = Q3 gold revenue $383.1m ÷ 90,083 oz sold; FNV does not publish a realised price
+- Silver realised = Q3 average from Royal Gold's release ($62.59); silver oz = $68.3m silver revenue ÷ that price
+- Tax rate = Q3 income tax $59.2m ÷ income before tax $454.7m (13.0%, down from ~23% in Q2)
+- Energy, PGM and iron-ore revenue held at Q3 levels

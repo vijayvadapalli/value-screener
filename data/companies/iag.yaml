@@ -4,24 +4,23 @@ sector: gold
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: '2026-09-30'
   per_year: 4
-  reported: '2026-08-06'
-  next_report: '2026-11-05'
+  reported: '2026-11-05'
 earnings:
-  adj_net_income: 241.6
-  da: 117.15
-  sustaining_capex: 96.3
-shares_m: 578.0
+  adj_net_income: 237.0
+  da: 126.5
+  sustaining_capex: 86.3
+shares_m: 570.4
 balance:
-  net_cash: 52.2
+  net_cash: 213.9
 metals:
 - metal: gold
-  units: 0.1802
-  realised: 4384
+  units: 0.1831
+  realised: 4277
   royalty: 0.13
-  aisc: 2271
+  aisc: 2184
 tax_rate: 0.3
 price:
   value: 17.14
@@ -29,11 +28,11 @@ price:
   date: '2026-11-12'
   source: yfinance IAG
 sources:
-- IAMGOLD Q2-2026 results, SEC Ex 99.1, 6 Aug 2026
+- IAMGOLD Q3-2026 results, 5 Nov 2026
 - Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
 assumptions:
-- Tax rate 30% ASSUMED (Q2 tax $109.3m broadly supports it)
-- D&A = H1 $234.3m ÷ 2
+- Tax rate 30% ASSUMED (Q3 tax $127.5m on pre-tax $453.6m = 28.1% broadly supports it)
+- Net cash = company's net cash including leases ($213.9m); $317.6m excluding leases and letters of credit
 - Burkina Faso royalty falls ~$13/oz per $100 gold move (company table)
 notes:
 - Essakane (Burkina Faso) ~47% of output; $100–200m cash held in-country

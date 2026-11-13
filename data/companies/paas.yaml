@@ -4,32 +4,37 @@ sector: silver
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: '2026-09-30'
   per_year: 4
-  reported: '2026-08-06'
-  next_report: '2026-11-04'
+  reported: '2026-11-04'
 earnings:
-  adj_net_income: 308
+  adj_net_income: 287
   da: 120
-  sustaining_capex: 74
-shares_m: 417.074
+  sustaining_capex: 85
+shares_m: 412.322
 balance:
-  cash: 1705.0
-  debt: 717.0
+  cash: 1566.0
+  debt: 720.0
 metals:
 - metal: gold
-  units: 0.1656
-  realised: 4402
+  units: 0.1679
+  realised: 4267
 - metal: silver
-  units: 5.33
-  realised: 70.97
-tax_rate: 0.369835
+  units: 6.07
+  realised: 63.74
+tax_rate: 0.227273
 price:
   value: 37.72
   currency: USD
   date: '2026-11-12'
   source: yfinance PAAS
 sources:
-- Pan American Q2-2026 results, Aug 2026
+- Pan American Q3-2026 results and MD&A, SEC 6-K Ex 99.2/99.5, 4 Nov 2026
 - Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
+assumptions:
+- Cash = cash $1,510m + short-term investments $56m (excludes equity securities); debt = senior notes $718m + construction loan $2m, excludes
+  $124m leases
+- Metal units = Q3 attributable production (167.9 koz Au, 6.07 Moz Ag); sold ounces are not given on an attributable basis
+- Tax rate = Q3 tax $105m ÷ (net earnings $357m + tax $105m), derived
+- D&A not disclosed for Q3 - Q2 value ($120m) kept

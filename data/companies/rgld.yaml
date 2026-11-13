@@ -4,29 +4,30 @@ sector: royalty
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: '2026-09-30'
   per_year: 4
-  reported: '2026-08-06'
-  next_report: '2026-11-04'
+  reported: '2026-11-04'
 earnings:
-  adj_net_income: 218.2
-shares_m: 85.052
+  adj_net_income: 238.3
+shares_m: 84.892
 balance:
-  cash: 182.5
-  debt: 400.0
+  cash: 184.5
+  debt: 150.0
 metals:
 - metal: gold
-  units: 0.1
-  realised: 4506
-tax_rate: 0.197
+  units: 0.109
+  realised: 4262
+tax_rate: 0.202
 price:
   value: 255.34
   currency: USD
   date: '2026-11-12'
   source: yfinance RGLD
 sources:
-- Royal Gold Q2-2026 results, Aug 2026
+- Royal Gold Q3-2026 earnings release, 4 Nov 2026
 - Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026
 assumptions:
-- 400k GEOs a year re-priced with gold only – silver/copper exposure ignored (slightly generous)
+- Q3 sales of 109,000 GEOs re-priced with gold only - silver/copper exposure ignored (slightly generous)
+notes:
+- Remaining $150m revolver repaid 19 Oct 2026 - now debt-free
