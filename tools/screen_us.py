@@ -20,10 +20,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from valuescreen import factsdb, growth_data, loader, sec, us_universe  # noqa: E402
+from valuescreen import factsdb, loader, sec, us_universe  # noqa: E402
 from valuescreen import miner_screen  # noqa: E402
 from valuescreen import us_screen as us  # noqa: E402
-from valuescreen.us_fundamentals import problem, summarize, wanted_tags  # noqa: E402
+from valuescreen.us_fundamentals import wanted_tags  # noqa: E402
 
 OUT = loader.output_folder("us")
 DB = OUT / "us_facts.sqlite"
@@ -73,20 +73,6 @@ def load_prices(con, entries, log=print):
     con.commit()
 
 
-def price_info(con, symbol):
-    rows = factsdb.closes(con, symbol)
-    if not rows:
-        return None
-    last_day, last = rows[-1]
-
-    def on(day):
-        earlier = [c for d, c in rows if d <= day]
-        return earlier[-1] if earlier else None
-    year_ago = on((dt.date.fromisoformat(last_day) - dt.timedelta(days=365)).isoformat())
-    return {"price": last, "date": last_day, "change_1y": last / year_ago - 1 if year_ago else None, "on": on,
-            "split_since": lambda day: factsdb.split_factor_since(con, symbol, day)}
-
-
 def main():
     ap = argparse.ArgumentParser(description="Quick screen of the S&P 500 and Nasdaq-100 from SEC figures")
     ap.add_argument("--refresh", action="store_true", help="download the SEC bulk file again now")
@@ -102,32 +88,7 @@ def main():
     print(f"SEC figures: {'loaded for ' + str(loaded) + ' companies' if loaded else 'up to date'}")
     load_prices(con, entries)
 
-    rows, notes, via_yahoo = [], [], [e for e in entries if e["foreign"]]
-    for e in entries:
-        if e["foreign"]:
-            continue
-        facts = factsdb.load_facts(con, e["cik"])
-        if "us-gaap" not in facts["facts"]:   # a foreign filer (20-F, IFRS) – use Yahoo's figures
-            via_yahoo.append(e)
-            continue
-        px = price_info(con, e["yahoo"])
-        if not px:
-            notes.append(f"{e['ticker']}: no price from Yahoo")
-            continue
-        try:
-            summary = summarize(facts, today)
-        except Exception as err:  # noqa: BLE001 - one odd filer must not stop the screen
-            summary, why = None, f"SEC figures unreadable ({err.__class__.__name__})"
-        else:
-            why = problem(summary, today)
-        if why:                       # gaps in the SEC data – use Yahoo's figures and say so
-            via_yahoo.append({**e, "why": why})
-            continue
-        rows.append(us.evaluate_sec(e, summary, px, cfg))
-    raw = growth_data.collect(via_yahoo, {}, "us", OUT / "screen_cache" / f"foreign-{today}.json", workers=2)
-    rows += [us.evaluate_yahoo(e, raw[e["ticker"]], cfg) for e in via_yahoo if e["ticker"] in raw]
-    notes += [f"{e['ticker']}: no figures from the SEC or Yahoo" for e in via_yahoo if e["ticker"] not in raw]
-    rows.sort(key=us.sort_key)
+    rows, notes = us.rows_from_db(con, entries, cfg, today, OUT / "screen_cache")
     factsdb.save_run(con, today.isoformat(), rows)
     con.commit()
 

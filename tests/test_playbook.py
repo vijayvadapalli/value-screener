@@ -390,7 +390,7 @@ def test_us_screen_values_a_company_and_applies_splits():
     from valuescreen import us_screen as us
     from valuescreen.us_fundamentals import summarize
     entry = {"ticker": "TST", "yahoo": "TST", "name": "Test Inc", "sector": "Information Technology", "industry": "Software",
-             "indexes": ["S&P 500"], "cik": 42}
+             "indexes": [], "cik": 42}   # not an index member: the sample's tiny numbers would trip the index sanity check
     px = {"price": 30.0, "date": "2026-11-12", "change_1y": 0.1, "on": lambda day: 40.0,
           "split_since": lambda day: 2.0 if day < "2025-06-02" else 1.0}
     r = us.evaluate_sec(entry, summarize(_sec_facts()), px, cfg_with())
@@ -422,3 +422,12 @@ def test_split_adjustment_only_when_the_old_figure_is_pre_split():
     assert split_multiplier(50e6, 600e6, 10.0) == 10.0     # 50m before a 10-for-1 split ≈ 500m now: adjust
     assert split_multiplier(520e6, 600e6, 10.0) == 1.0     # already restated: leave it
     assert split_multiplier(500e6, 600e6, 1.0) == 1.0
+
+
+def test_impossible_figures_for_an_index_member_are_held_back():
+    from valuescreen import us_screen as us
+    from valuescreen.us_fundamentals import summarize
+    entry = {"ticker": "FOX", "yahoo": "FOX", "name": "Fox", "sector": "Communication Services", "industry": "", "indexes": ["S&P 500"], "cik": 1}
+    px = {"price": 58.71, "date": "2026-11-12", "change_1y": 0.1, "on": lambda day: 40.0, "split_since": lambda day: 1.0}
+    r = us.evaluate_sec(entry, summarize(_sec_facts()), px, cfg_with())       # 100 shares × $58.71 – not a real index member
+    assert r["signal"] == "grey" and any(f.startswith("data check") for f in r["flags"]) and r not in us.shortlist([r])

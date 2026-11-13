@@ -1,7 +1,8 @@
 # Value Screener
 
 Is a share cheap or expensive right now? Value vs price, the Rick Rule way: each company is valued only from its
-latest filing, re-priced to today's metal prices, and compared with what the market charges.
+latest results – no forecasts, no analyst targets – and that value is compared with today's share price. It covers
+miners, oil and gas, tech and Indian (Nifty) companies; miners are also re-priced to today's metal prices.
 
 Every run writes one HTML report per list: a sortable summary table, then a section per company with its signal, buy
 levels, charts and the full calculation, plus a grade for whether profits have kept up with the share price. A flag

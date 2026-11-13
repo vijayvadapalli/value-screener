@@ -152,6 +152,9 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
         r["flags"].append(f"shares +{r['share_change_3y']*100:.0f}% in 3 years")
     if r["low_cash"]:
         r["flags"].append(f"cash conversion {r['cash_conversion']*100:.0f}%")
+    if r["indexes"] and (r["market_value_bn"] < 0.5 or (r.get("pe") is not None and r["pe"] < 1)):   # an index member cannot be this small or cheap
+        r["flags"].append("data check: share count or earnings look wrong")
+        r["signal"], r["action"] = "grey", "Data check"
     last_year = annual[years[-1]].get("net_income") if years else None
     avg5 = sum(eps_hist) / len(eps_hist) * shares if eps_hist else None
     if ni and last_year and avg5 and last_year > 0 and avg5 > 0 and ni > 2 * last_year and ni > 2 * avg5:
@@ -178,6 +181,39 @@ def evaluate_yahoo(entry: dict, raw: dict, cfg: dict) -> dict:
     p = pvp.evaluate(raw)
     r["grade"], r["pe_change"] = p["grade"], p["pe_change"]
     return r
+
+
+def rows_from_db(con, entries, cfg, today: dt.date, cache_dir: Path, log=print):
+    """Every company's row: SEC figures from the database where they are complete and recent, Yahoo's otherwise
+    (foreign filers and gaps in the SEC data, with the reason in the flags). Returns (rows sorted by growth needed, notes)."""
+    from . import factsdb, growth_data  # noqa: PLC0415
+    from .us_fundamentals import problem, summarize  # noqa: PLC0415
+    rows, notes, via_yahoo = [], [], [e for e in entries if e["foreign"]]
+    for e in entries:
+        if e["foreign"]:
+            continue
+        facts = factsdb.load_facts(con, e["cik"])
+        if "us-gaap" not in facts["facts"]:   # a foreign filer (20-F, IFRS)
+            via_yahoo.append(e)
+            continue
+        px = factsdb.price_info(con, e["yahoo"])
+        if not px:
+            notes.append(f"{e['ticker']}: no price from Yahoo")
+            continue
+        try:
+            summary = summarize(facts, today)
+        except Exception as err:  # noqa: BLE001 - one odd filer must not stop the screen
+            summary, why = None, f"SEC figures unreadable ({err.__class__.__name__})"
+        else:
+            why = problem(summary, today)
+        if why:
+            via_yahoo.append({**e, "why": why})
+            continue
+        rows.append(evaluate_sec(e, summary, px, cfg))
+    raw = growth_data.collect(via_yahoo, {}, "us", cache_dir / f"foreign-{today}.json", workers=2, log=log)
+    rows += [evaluate_yahoo(e, raw[e["ticker"]], cfg) for e in via_yahoo if e["ticker"] in raw]
+    notes += [f"{e['ticker']}: no figures from the SEC or Yahoo" for e in via_yahoo if e["ticker"] not in raw]
+    return sorted(rows, key=sort_key), notes
 
 
 def shortlist(rows):

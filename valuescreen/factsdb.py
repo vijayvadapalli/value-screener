@@ -101,6 +101,30 @@ def split_factor_since(con, ticker: str, day: str) -> float:
     return factor
 
 
+def price_info(con, ticker: str) -> dict | None:
+    """The latest close, its date, the 1-year change, and lookups for an old close and splits since a date."""
+    import datetime as dt  # noqa: PLC0415
+    rows = closes(con, ticker)
+    if not rows:
+        return None
+    last_day, last = rows[-1]
+
+    def on(day):
+        earlier = [c for d, c in rows if d <= day]
+        return earlier[-1] if earlier else None
+    year_ago = on((dt.date.fromisoformat(last_day) - dt.timedelta(days=365)).isoformat())
+    return {"price": last, "date": last_day, "change_1y": last / year_ago - 1 if year_ago else None, "on": on,
+            "split_since": lambda day: split_factor_since(con, ticker, day), "closes": rows}
+
+
+def companies(con) -> list[dict]:
+    """The stored universe, in the shape us_universe.universe() returns."""
+    return [{"cik": cik, "ticker": t, "yahoo": y, "name": n, "sector": sec, "industry": ind, "indexes": idx.split(",") if idx else [],
+             "foreign": bool(f), "isin": None}
+            for cik, t, y, n, sec, ind, idx, f in con.execute("SELECT cik, ticker, yahoo, name, sector, industry, indexes, foreign_filer "
+                                                              "FROM companies ORDER BY ticker")]
+
+
 def save_run(con, run_date: str, rows):
     con.executemany("INSERT OR REPLACE INTO runs VALUES (?, ?, ?, ?, ?, ?, ?)",
                     [(run_date, r["ticker"], r.get("price"), r.get("v0"), r.get("implied_growth"), r.get("signal"), r.get("grade"))
