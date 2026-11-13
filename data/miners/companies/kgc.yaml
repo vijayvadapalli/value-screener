@@ -1,0 +1,43 @@
+ticker: KGC
+yahoo: KGC
+name: Kinross Gold Corporation
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-10-28'
+earnings:
+  adj_net_income: 591.3
+  da: 217.1
+  sustaining_capex: 118.8
+shares_m: 1178.0
+balance:
+  cash: 2638.4
+  debt: 739.2
+metals:
+- metal: gold
+  units: 0.410245
+  realised: 4249
+  royalty: 0.04
+  aisc: 1947
+tax_rate: 0.28
+price:
+  value: 20.71
+  currency: USD
+  date: '2026-11-12'
+  source: yfinance KGC
+sources:
+- Kinross Q3-2026 results, 28 Oct 2026
+- https://www.kinross.com/English/news-and-investors/news-releases/press-release-details/2026/Kinross-reports-2026-third-quarter-results/default.aspx
+assumptions:
+- Units = attributable gold-equivalent ounces sold (410,245); AISC = attributable $1,947/GEO sold
+- Tax rate 28% = Q3 income tax $228.9m on pre-tax $818.3m
+- Royalty 4% ASSUMED (not given in the release)
+- Shares 1,178.0m at the release date; $230m bought back in Q3
+notes:
+- In GDX
+- Return of capital raised to 50% of free cash flow for 2026
+- La Coipa hit by harsh winter weather in Q3

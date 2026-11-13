@@ -1,0 +1,44 @@
+ticker: BTG
+yahoo: BTG
+name: B2Gold Corp.
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-11-04'
+earnings:
+  adj_net_income: 183.0
+  da: 119.0
+  sustaining_capex: 133.3
+shares_m: 1317.2
+balance:
+  cash: 294.0
+  debt: 555.0
+metals:
+- metal: gold
+  units: 0.195018
+  realised: 4289
+  royalty: 0.1
+  aisc: 2602
+tax_rate: 0.3
+price:
+  value: 4.96
+  currency: USD
+  date: '2026-11-12'
+  source: yfinance BTG
+sources:
+- B2Gold Q3-2026 MD&A and results (6-K exhibit 99.2), 4 Nov 2026
+- https://www.sec.gov/Archives/edgar/data/0001429937/000142993726000012/exhibit992-93026.htm
+assumptions:
+- Debt = $460m convertible notes (principal, due Feb 2030) + $95m drawn of the $800m revolver; Wheaton stream deposit ($84m) not counted
+- Ounces sold 195,018 include pre-commercial Goose ounces; D&A ($119m) and sustaining capex ($133.3m) are consolidated
+- Royalty 10% ASSUMED (9-month royalties and production taxes $344m; Fekola has 'a comparatively higher royalty rate')
+- Tax rate 30% ASSUMED (no pre-tax figure in the release); Mali's 20% priority dividend is booked as tax
+- Q3 AISC $2,602/oz is high on low output and Goose sustaining capital; 2026 guidance cut to $2,230–2,410/oz
+notes:
+- In GDX, GDXJ
+- Fekola 80% (State of Mali 20%), Otjikoto 90%; Goose (Canada) ramping up
+- Convertible notes would add ~145m shares if converted

@@ -32,16 +32,18 @@ FRESH_DAYS = 5                    # database closes older than this are fetched 
 
 
 def file_candidates(cfg):
-    companies = loader.load_companies()
+    """Every full company file: data/companies (core, oil, tech lists) and data/miners/companies (promoted from the
+    miners screen)."""
     source = {}
     for name in LISTS:
         for t in loader.load_list(name):
             source.setdefault(t, f"{name} list")
-    results = engine.run(companies, list(companies), cfg)
     out = []
-    for t, r in results.items():
-        r["yahoo"] = companies[t].get("yahoo") or t
-        out.append(mp.from_company_file(r, source.get(t, "company file")))
+    for folder, default in ((None, "company file"), ("miners", "miners list")):
+        companies = loader.load_companies(loader.companies_folder(folder))
+        for t, r in engine.run(companies, list(companies), cfg).items():
+            r["yahoo"] = companies[t].get("yahoo") or t
+            out.append(mp.from_company_file(r, source.get(t, default)))
     return out
 
 

@@ -21,8 +21,11 @@ shows whenever the data is out of date.
 | Core | [core.html](https://vijayvadapalli.github.io/value-screener/reports/core.html) | [core-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/core-profit-vs-price.pdf) |
 | Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
 | Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
+| Miners – full valuations | [miners.html](https://vijayvadapalli.github.io/value-screener/reports/miners.html) | [miners-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/miners-profit-vs-price.pdf) |
 | Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – |
 | S&P 500 + Nasdaq-100 screen | [us-screen.html](https://vijayvadapalli.github.io/value-screener/reports/us-screen.html) | – |
+| Model portfolio – balanced | [model-portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/model-portfolio.html) | – |
+| Model portfolio – resources, value first | [model-resources.html](https://vijayvadapalli.github.io/value-screener/reports/model-resources.html) | – |
 | Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
@@ -234,9 +237,15 @@ python tools/make_etf_list.py miners GDX GDXJ SIL SILJ COPX URNM URNJ   # the un
 python tools/screen_miners.py                  # screen them all (~5 minutes the first time each day, then cached)
 open reports/miners-screen.html                # the report
 python tools/screen_miners.py --promote        # draft company files for the shortlist, in data/miners/companies
+python tools/screen_miners.py --promote BTG,OGC,KGC   # ... or for chosen tickers (existing files are never overwritten)
 python tools/update_results.py --folder miners --tickers BTG,KGC --force --dry-run   # fill in the reported quarter
-python -m valuescreen run --list miners        # full valuations of the companies that have files
+python -m valuescreen run --list miners --live # full valuations of the companies that have files → reports/miners.html
+python tools/model_portfolio.py                # the model portfolios then use the full valuation instead of the quick one
 ```
+
+Promoted so far, filled from their Q3-2026 releases: **BTG**, **KGC** and **OGC**. The full model can differ a lot from the
+quick screen, because it counts sustaining capex and re-prices metal to spot. On 13 Nov 2026 B2Gold went from +54%
+(quick) to −19% (AISC $2,602/oz, 63% of spot), Kinross from +39% to +19%, and OceanaGold from +52% to +42%.
 
 - **Funds:** GDX and GDXJ (VanEck), SIL and COPX (Global X), SILJ (Amplify), URNM and URNJ (Sprott), read from the fund
   companies' own daily holdings files. One entry per company; its US listing when an ETF holds it.
@@ -253,7 +262,8 @@ python -m valuescreen run --list miners        # full valuations of the companie
   and keeps what it has; run it again later and only the missing companies are fetched.
 
 This is a filter, not a verdict – a shortlisted company gets a full company file (metal sold, realised prices, AISC)
-and the proper producer valuation before any decision.
+and the proper producer valuation before any decision. A draft file starts from Yahoo's figures and is marked DRAFT
+until the reported quarter replaces them; any figure the release does not give is written as ASSUMED in `assumptions`.
 
 ## Screening the S&P 500 and Nasdaq-100 (SEC figures)
 
@@ -278,6 +288,39 @@ open reports/us-screen.html
 - **Report:** filters by signal, index and sector; a table of the median growth needed by sector (where the market is
   cheap or stretched); a shortlist (green, grade A or B, cash conversion ≥ 70%, no debt or dilution flags); each ticker
   links to its Yahoo page and its SEC filings.
+
+## Model portfolios (value, quality, momentum)
+
+```bash
+python tools/model_portfolio.py                      # both profiles, from today's screens (a few seconds)
+python tools/model_portfolio.py --profile resources  # just one: balanced | resources
+open reports/model-portfolio.html reports/model-resources.html
+```
+
+Run the screens first (core, oil and tech lists, `screen_us.py`, `screen_miners.py`); the model portfolios read their
+results and fetch only the price history they still need. Educational framework, not investment advice.
+
+| | Balanced | Resources, value first |
+|---|---|---|
+| Sleeves | US quality value 40% · miners & royalties 25% · energy 10% · uranium 5% · defensive 20% | miners & royalties 40% · energy 20% · uranium 10% · US quality value 10% · defensive 20% |
+| Score | 45% value · 35% quality · 20% momentum | 60% value · 25% quality · 15% momentum |
+| Names | at most 15 (11 stocks + ETFs) | at most 15 (11 stocks + ETFs) |
+| Most per name | 10% | 10% |
+| Defensive | gold (IAU) 10% · T-bills (SGOV) 10% | gold 12% · T-bills 8% |
+
+- **Candidates:** full company files first (`data/companies` and the promoted miners in `data/miners/companies`), then the S&P 500 / Nasdaq-100 screen, then the miners quick screen (a company
+  in several keeps its most thorough valuation; quick-screen names are flagged "make a full company file before buying").
+- **Must pass:** a margin of safety on its own model (green; growth stocks needing at most 8% a year), no stale or flagged
+  figures, AISC ≤ 60% of spot, debt ≤ 3× EBITDA and net debt below half the market value, positive free cash flow, no
+  heavy dilution, cash conversion ≥ 70%, grade not D. Developers, explorers, lease plays and tier-C juniors are left out.
+- **Momentum sets the entry:** at or above 95% of the 200-day average with a positive 6-month return = full position;
+  otherwise start a third, the rest waiting in T-bills until the trend turns.
+- **Concentrated:** at most 11 stocks per profile (balanced: US 5, miners 3, energy 2, uranium 1; resources: miners 5,
+  energy 3, uranium 1, US 2), plus the ETFs, so a portfolio holds at most 15 names, at most 10% each.
+- **Sizing:** inverse volatility within each sleeve; a sleeve with too few qualifying names is filled with its ETF
+  (SPY, GDX, XLE, URNM). While momentum is weak, many holdings start with a third and the T-bill line can be large
+  (about 40–50% in Nov 2026). That is the rule keeping capital safe, not a target. The report shows each holding's market value (US$), volatility, worst fall in the past year, buy level and exit rule,
+  the past-year behaviour of today's mix, the next names in line, and why the others were left out.
 
 ## Adding companies by hand (oil and gas)
 
@@ -455,9 +498,10 @@ valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (scr
 valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
 valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures
 valuescreen/miner_screen.py, etf_holdings.py   the miners quick screen and the ETF holdings it starts from
+valuescreen/model_portfolio.py   the model portfolios: candidates from every screen, scoring, sleeves, sizing, report
 valuescreen/us_screen.py, us_universe.py, us_fundamentals.py, sec.py, factsdb.py   the S&P 500 / Nasdaq-100 screen:
                            index lists, SEC download, figures from filings, the SQLite database
-tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us,
+tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us, model_portfolio,
                            screen_universe, make_nse_list
 ```
 

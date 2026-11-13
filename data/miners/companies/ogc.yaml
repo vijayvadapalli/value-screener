@@ -1,0 +1,48 @@
+ticker: OGC
+yahoo: OGC
+name: OceanaGold Corporation
+sector: gold
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-11-04'
+earnings:
+  adj_net_income: 210.8
+  da: 95.0
+  sustaining_capex: 64.0
+shares_m: 224.0
+balance:
+  cash: 728.7
+  debt: 0.0
+metals:
+- metal: gold
+  units: 0.1409
+  realised: 4249
+  royalty: 0.04
+  aisc: 1874
+- metal: copper
+  units: 7.5
+  realised: 6.54
+tax_rate: 0.26
+price:
+  value: 27.24
+  currency: USD
+  date: '2026-11-12'
+  source: yfinance OGC
+sources:
+- OceanaGold Q3-2026 results, 4 Nov 2026
+- https://www.prnewswire.com/apac/news-releases/oceanagold-reports-third-quarter-2026-results-302929890.html
+assumptions:
+- Sustaining capex $64.0m = sustaining capital and leases $36.1m + deferred stripping / capitalised mining $27.9m
+- Copper 3.4 kt sold = 7.50 Mlb
+- Shares 224.0m = Q3 weighted fully diluted (period-end count not in the release)
+- Tax rate 26% ≈ income tax $72.6m on profit before tax ~$276m
+- Royalty 4% ASSUMED (not given in the release)
+- AISC $1,874/oz; 2026 guidance $1,750–1,900/oz, toward the upper end
+notes:
+- In GDX, GDXJ
+- Didipio (Philippines) 80% owned; Haile, Macraes, Waihi 100%
+- No debt; revolver undrawn

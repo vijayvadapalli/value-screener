@@ -85,8 +85,9 @@ def main():
               f"FCF yield {r['fcf_yield']*100:4.1f}%  grade {r['grade']}{'  (in your files)' if r['ticker'] in in_files else ''}")
     if args.promote:
         chosen = short if args.promote == "shortlist" else [r for r in rows if r["ticker"] in {t.strip().upper() for t in args.promote.split(",")}]
-        chosen = [r for r in chosen if r["stage"] == "producer" and r["ticker"] not in in_files]
-        written, kept = ms.write_drafts(chosen, raw, loader.companies_folder(folder), today)
+        chosen = [r for r in chosen if r["stage"] == "producer"]
+        written, kept = ms.write_drafts([r for r in chosen if r["ticker"] not in in_files], raw, loader.companies_folder(folder), today)
+        kept += [r["ticker"] for r in chosen if r["ticker"] in in_files]
         print(f"\nDraft company files written to data/{folder}/companies: {', '.join(written) or 'none'}"
               + (f"; already there: {', '.join(kept)}" if kept else ""))
         if written:

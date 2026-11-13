@@ -17,7 +17,8 @@ Rules (low risk to capital, a margin of safety on every holding):
   defensive 20%, scored 45/35/20; resources, value first – miners & royalties 40% · energy 20% · uranium 10% ·
   US quality value 10% · defensive 20%, scored 60/25/15. A sleeve without enough qualifying names is filled with its ETF
   (SPY, GDX, XLE, URNM).
-- Sizing: within a sleeve, inversely to each holding's volatility, at most 6% (balanced) or 7% (resources) per name.
+- Sizing: within a sleeve, inversely to each holding's volatility, at most 10% per name. 11 stocks at most per
+  profile, so with the ETFs that fill short sleeves and the two defensive ETFs a portfolio holds at most 13–15 names.
 Educational framework, not investment advice.
 """
 from __future__ import annotations
@@ -40,17 +41,17 @@ ETFS = {"SPY": ("SPDR S&P 500", "us"), "GDX": ("VanEck Gold Miners", "mining"),
 PROFILES = {
     "balanced": {
         "title": "Model portfolio – balanced", "file": "model-portfolio",
-        "blurb": "Five sleeves weighted toward US quality value, scored {w['value']*100:.0f}% value, {w['quality']*100:.0f}% quality, {w['momentum']*100:.0f}% momentum.",
-        "sleeves": {"us": (0.40, 9, "SPY"), "mining": (0.25, 6, "GDX"), "energy": (0.10, 3, "XLE"), "uranium": (0.05, 2, "URNM")},
+        "blurb": "Five sleeves weighted toward US quality value (45% value, 35% quality, 20% momentum).",
+        "sleeves": {"us": (0.40, 5, "SPY"), "mining": (0.25, 3, "GDX"), "energy": (0.10, 2, "XLE"), "uranium": (0.05, 1, "URNM")},
         "defensive": {"IAU": 0.10, "SGOV": 0.10},
-        "weights": {"value": 0.45, "quality": 0.35, "momentum": 0.20}, "max_weight": 0.06},
+        "weights": {"value": 0.45, "quality": 0.35, "momentum": 0.20}, "max_weight": 0.10},
     "resources": {
         "title": "Model portfolio – resources, value first", "file": "model-resources",
         "blurb": "Resource-heavy: 70% in miners, royalties, energy and uranium, ranked mostly on margin of safety "
                  "(60% value, 25% quality, 15% momentum).",
-        "sleeves": {"mining": (0.40, 8, "GDX"), "energy": (0.20, 4, "XLE"), "uranium": (0.10, 2, "URNM"), "us": (0.10, 3, "SPY")},
+        "sleeves": {"mining": (0.40, 5, "GDX"), "energy": (0.20, 3, "XLE"), "uranium": (0.10, 1, "URNM"), "us": (0.10, 2, "SPY")},
         "defensive": {"IAU": 0.12, "SGOV": 0.08},
-        "weights": {"value": 0.60, "quality": 0.25, "momentum": 0.15}, "max_weight": 0.07},
+        "weights": {"value": 0.60, "quality": 0.25, "momentum": 0.15}, "max_weight": 0.10},
 }
 GRADE_SCORE = {"A": 1.0, "B": 0.75, "C": 0.5, "n/m": 0.5, "D": 0.0}
 MINING_WORDS = ("gold", "silver", "copper", "metal", "mining", "royalty", "precious")
@@ -76,7 +77,7 @@ def from_company_file(r: dict, source: str) -> dict:
     """A candidate from a full valuation (valuescreen.engine result)."""
     yahoo = r.get("yahoo") or r["ticker"]
     c = {"key": yahoo.upper(), "anchor": r["ticker"], "ticker": r["display_ticker"], "yahoo": yahoo, "name": r["name"],
-         "source": source, "sleeve": _sleeve_for_file(r), "signal": r["signal"], "action": r["action"], "price": r["price"],
+         "source": source, "sleeve": _sleeve_for_file(r), "mcap": r.get("market_value_usd_bn"), "signal": r["signal"], "action": r["action"], "price": r["price"],
          "ccy": r["price_ccy"], "buy_level": r.get("buy_level"), "flags": list(r.get("flags", [])), "tier": r.get("tier")}
     m = r["model"]
     reasons = []
@@ -96,8 +97,9 @@ def from_company_file(r: dict, source: str) -> dict:
         if cost is not None and cost > 0.60:
             reasons.append(f"AISC {cost*100:.0f}% of spot")
         q = [{"A": 1.0, "B": 0.7}.get(r.get("tier"), 0.6)] + ([1 - cost] if cost is not None else [])
-        c["quality_score"], c["quality_text"] = sum(q) / len(q), (f"tier {r['tier']}" if r.get("tier") else "") + (
-            f" · AISC {cost*100:.0f}% of spot" if cost is not None else "")
+        c["quality_score"] = sum(q) / len(q)
+        c["quality_text"] = " · ".join(x for x in (f"tier {r['tier']}" if r.get("tier") else "",
+                                                   f"AISC {cost*100:.0f}% of spot" if cost is not None else "") if x)
         c["exit_rule"] = (f"sell zone from {r['call_level']:,.2f}" if r.get("call_level") else "signal turns red")
     else:   # growth model
         g = r.get("implied_growth")
@@ -116,7 +118,7 @@ def from_us_screen(r: dict) -> dict:
     sleeve = ("energy" if sector == "Energy" else "mining" if sector == "Materials" and any(w in industry for w in MINING_WORDS)
               else "us")
     g = r.get("implied_growth")
-    c = {"key": r["yahoo"].upper(), "ticker": r["ticker"], "yahoo": r["yahoo"], "name": r["name"], "source": "US screen",
+    c = {"key": r["yahoo"].upper(), "ticker": r["ticker"], "yahoo": r["yahoo"], "name": r["name"], "source": "US screen", "mcap": r.get("market_value_bn"),
          "sleeve": sleeve, "signal": r.get("signal"), "action": r.get("action"), "price": r["price"], "ccy": "USD",
          "buy_level": None, "flags": list(r.get("flags", [])), "cik": r.get("cik"),
          "value_text": "–" if g is None else f"needs {S.pct(g, 1)}/yr", "value_score": 0.0 if g is None else clip((0.10 - g) / 0.25),
@@ -128,6 +130,11 @@ def from_us_screen(r: dict) -> dict:
         reasons.append("grade D – price ran ahead of profits")
     if r.get("debt_ebitda") and r["debt_ebitda"] > 3:
         reasons.append("debt > 3× EBITDA")
+    net_debt_share = -r["nc"] / r["price"] if r.get("nc") is not None and r.get("price") else None
+    if net_debt_share is not None and net_debt_share > 0.5:   # catches debt the EBITDA test misses (no operating income tag)
+        reasons.append("net debt above half the market value")
+    if sector != "Financials" and r.get("fcf_yield") is not None and r["fcf_yield"] <= 0:
+        reasons.append("negative free cash flow")
     if (r.get("share_change_3y") or 0) > 0.10:
         reasons.append("diluting shareholders")
     if r.get("low_cash"):
@@ -139,7 +146,8 @@ def from_us_screen(r: dict) -> dict:
         q.append(clip(r["cash_conversion"] / 1.2))
     if r.get("roe") is not None:
         q.append(clip(r["roe"] / 0.20))
-    q.append(1.0 if (r.get("debt_ebitda") or 0) < 1 else 0.6 if (r.get("debt_ebitda") or 0) <= 3 else 0.0)
+    de = r.get("debt_ebitda")
+    q.append(0.6 if de is None else 1.0 if de < 1 else 0.6 if de <= 3 else 0.0)
     c["quality_score"] = sum(q) / len(q)
     c["quality_text"] = " · ".join(x for x in (f"grade {r.get('grade', 'n/m')}",
                                                f"ROE {r['roe']*100:.0f}%" if r.get("roe") is not None else "",
@@ -152,7 +160,7 @@ def from_us_screen(r: dict) -> dict:
 def from_miners_screen(r: dict) -> dict:
     sleeve = "uranium" if "uranium" in r["metals"] else "mining"
     mos = r.get("mos")
-    c = {"key": r["yahoo"].upper(), "ticker": r["ticker"], "yahoo": r["yahoo"], "name": r["name"], "source": "miners screen",
+    c = {"key": r["yahoo"].upper(), "ticker": r["ticker"], "yahoo": r["yahoo"], "name": r["name"], "source": "miners screen", "mcap": r.get("market_value_usd"),
          "sleeve": sleeve, "signal": r["signal"], "action": r["action"], "price": r.get("price"), "ccy": r.get("currency") or "USD",
          "buy_level": 0.8 * r["v12"] if r.get("v12") else None, "flags": list(r["flags"]) + ["quick screen – make a full company file before buying"],
          "value_text": "–" if mos is None else f"margin of safety {S.pct(mos)} (quick)",
@@ -190,12 +198,12 @@ def merge(*groups) -> list[dict]:
     for group in groups:
         for c in group:
             k = c["key"].upper()
-            if k in seen or (c.get("cik") and c["cik"] in ciks):
-                continue
+            duplicate = k in seen or (c.get("cik") and c["cik"] in ciks)
             seen.add(k)
-            if c.get("cik"):
+            if c.get("cik"):   # recorded even for a duplicate, so its other share classes are dropped too
                 ciks.add(c["cik"])
-            out.append(c)
+            if not duplicate:
+                out.append(c)
     return out
 
 
@@ -308,7 +316,7 @@ def portfolio_risk(holdings: list[dict], closes_by_key: dict) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------- report
-SOURCE_LINK = {"core list": "core.html", "oil list": "oil.html", "tech list": "tech.html", "US screen": "us-screen.html",
+SOURCE_LINK = {"miners list": "miners.html", "core list": "core.html", "oil list": "oil.html", "tech list": "tech.html", "US screen": "us-screen.html",
                "miners screen": "miners-screen.html"}
 
 
@@ -324,11 +332,13 @@ def _row(i, c):
     entry = ('<span class="pill green">Full</span>' if c.get("entry") == "full" else
              '<span class="pill blue">Start a third</span>')
     flags = " ".join(f"[{_e(f)}]" for f in c.get("flags", []))
-    why = c.get("why_etf") or f"{c['value_text']} · {c.get('quality_text', '')}"
+    why = c.get("why_etf") or " · ".join(x for x in (c["value_text"], c.get("quality_text")) if x)
     buy = "–" if not c.get("buy_level") else f"≤ {c['buy_level']:,.2f}"
+    m = c.get("mcap")
+    mcap = "–" if not m else f"${m:,.0f}bn" if m >= 10 else f"${m:,.1f}bn"
     return f"""<tr data-sleeve="{c['sleeve']}">
 <td>{i}</td><td><a href="https://finance.yahoo.com/quote/{_e(c['yahoo'])}" target="_blank" rel="noopener"><b>{_e(c['ticker'])}</b></a><br><small>{_e(c['name'])}</small>{f'<br><span class="flags">{flags}</span>' if flags else ''}</td>
-<td>{_e(SLEEVE_NAMES[c['sleeve']])}</td><td class="r"><b>{c['weight']*100:.1f}%</b>{f"<br><small>target {c['target_weight']*100:.1f}%</small>" if abs(c['target_weight'] - c['weight']) > 1e-6 else ''}</td>
+<td>{_e(SLEEVE_NAMES[c['sleeve']])}</td><td class="r">{mcap}</td><td class="r"><b>{c['weight']*100:.1f}%</b>{f"<br><small>target {c['target_weight']*100:.1f}%</small>" if abs(c['target_weight'] - c['weight']) > 1e-6 else ''}</td>
 <td>{entry}</td><td>{_e(why)}</td><td>{_e(c.get('momentum_text', '–'))}</td>
 <td class="r">{'–' if not st else S.pct(st['vol'], 0, signed=False)}</td><td class="r">{'–' if not st else S.pct(st['max_fall'])}</td>
 <td class="r">{c['score']:.2f}</td><td>{buy}</td><td>{_e(c.get('exit_rule', ''))}</td><td>{src}</td></tr>"""
@@ -377,7 +387,7 @@ positive 6-month return = full position, otherwise <b>start a third</b> and keep
 inverse volatility, at most {p['max_weight']*100:.0f}% per name; a sleeve without enough qualifying names is filled with its ETF. Rebalance monthly, or when a
 holding's signal turns red.</p>
 <h3>Sleeves</h3><table class="sl"><tr><th>Sleeve</th><th>Target</th><th>Now</th><th>Names</th></tr>{sleeve_rows}</table>
-<h3>Holdings</h3><div class="wrap"><table class="mp"><tr><th>#</th><th>Holding</th><th>Sleeve</th><th>Weight</th><th>Entry</th>
+<h3>Holdings</h3><div class="wrap"><table class="mp"><tr><th>#</th><th>Holding</th><th>Sleeve</th><th>Market value</th><th>Weight</th><th>Entry</th>
 <th>Why (value · quality)</th><th>Momentum</th><th>Volatility</th><th>Worst fall 1 yr</th><th>Score</th><th>Buy at or below</th><th>Exit</th><th>From</th></tr>
 {''.join(_row(i, c) for i, c in enumerate(h, 1))}</table></div>
 <h3>Next in line</h3><ul class="small">{nxt or '<li>none</li>'}</ul>
