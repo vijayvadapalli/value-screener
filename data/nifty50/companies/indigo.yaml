@@ -9,7 +9,7 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 5569.8999
+  value: 5587.2998
   currency: INR
   date: '2026-11-13'
   source: yfinance INDIGO.NS

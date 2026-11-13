@@ -9,15 +9,16 @@ period:
   end: '2026-06-30'
   per_year: 4
   reported: '2026-07-30'
+  next_report: 2026-11-20
 earnings:
   net_income: 57.0
 shares_m: 166
 balance:
   net_cash: -251
 price:
-  value: 11.96
+  value: 12.05
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance FRHLF
 comment: Oil and gas royalty – reserves deplete, so 10–13x is fairer. Q3 not yet captured.
 sources:
@@ -30,3 +31,4 @@ assumptions:
 - Shares ≈ 166m are derived (FFO ÷ FFO per share), not reported
 - Oil reserves deplete; the table keeps 12/15/25x for comparability with the other royalty companies
 - Net debt C$251m (Q2 2026)
+- 'Next report estimated: Q3 2025 was released 13 Nov 2025; Q3 2026 not out on 13 Nov 2026'

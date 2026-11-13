@@ -13,7 +13,7 @@ balance:
   cash: 86016.4
   debt: 39289.3
 price:
-  value: 2498.3999
+  value: 2550.0
   currency: INR
   date: '2026-11-13'
   source: yfinance ASIANPAINT.NS

@@ -5,34 +5,39 @@ sector: energy
 model: cashflow
 currency: USD
 period:
-  label: FY25
-  end: '2025-12-31'
+  label: TTM Sep 26
+  end: 2026-09-30
   per_year: 1
+  reported: 2026-11-05
+  next_report: 2027-02-25
 earnings:
-  cfo_ex_wc: 10884.0
-  capex: 6594.0
-  shares_m: 518.484
+  cfo_ex_wc: 13832.0
+  capex: 6759.0
+  shares_m: 518.0
 rank_on_normalised: true
-shares_m: 518.484
+shares_m: 518.0
 balance:
   cash: 5747.0
-  debt: 8262.0
+  debt: 7922.0
 multiples:
 - 10
 - 13
 cyclical: true
 price:
-  value: 155.62
+  value: 157.86
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance EOG
 sources:
-- Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)
+- EOG Resources Q3-2026 results, 5 Nov 2026
+- https://finviz.com/news/417814/eog-resources-reports-third-quarter-2026-results-and-raises-regular-dividend-8
 assumptions:
-- DRAFT from Yahoo's statements (FY25; normal basis FY22–FY25), not checked against the filings
+- TTM = 9 months 2026 (adjusted cash flow from operations $11,288m, capex $4,820m, from the Q3 release) + Q4 2025 (FY25 10,884 − 9M25 8,340 =
+  2,544; capex 6,594 − 4,655 = 1,939; FY25 from Yahoo, 9M25 = sum of reported quarters)
 - Owner earnings = operating cash flow excluding working-capital moves − all capex (growth capex included, so conservative)
-- Valued on the 4-year average ('normal' oil and gas prices), not the latest twelve months – prices in 2026 include a spike
-- Balance sheet at 2026-09-30
+- Valued on the 4-year average ('normal' oil and gas prices, FY22–FY25), not the latest twelve months – prices in 2026 include a spike
+- 'Balance sheet at 2026-09-30: cash $5,747m, debt $7,922m; shares = Q3 average basic 518m'
+- Next report date estimated from last year's late-February Q4 release
 earnings_normalised:
   cfo_ex_wc: 11469.5
   capex: 6037.8

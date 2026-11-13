@@ -13,7 +13,7 @@ balance:
   cash: 601489.4
   debt: 140721.8
 price:
-  value: 403.2
+  value: 403.5
   currency: INR
   date: '2026-11-13'
   source: yfinance COALINDIA.NS

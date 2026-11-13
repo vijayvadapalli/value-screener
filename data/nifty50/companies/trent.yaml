@@ -13,7 +13,7 @@ balance:
   cash: 9288.9
   debt: 25612.5
 price:
-  value: 3146.6001
+  value: 3165.2
   currency: INR
   date: '2026-11-13'
   source: yfinance TRENT.NS

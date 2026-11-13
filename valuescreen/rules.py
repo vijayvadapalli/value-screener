@@ -10,14 +10,20 @@ NO_LEVELS = dict(margin_of_safety=None, put_level=None, call_level=None, buy_lev
 FLAG_TEXT = {"conglomerate": "conglomerate / finance arm", "insurer": "insurer: earnings a weak guide"}
 
 
+MAX_WAIT_DAYS = 400   # longest a file can wait for its next report (annual reporters)
+
+
 def stale_check(c, cfg):
     as_of = cfg["as_of"]
     limit = cfg["stale_days"].get(c["model"], cfg["stale_days"]["default"])
     age = (as_of - c["period"]["end"]).days
     reasons = []
-    if age > limit:
-        reasons.append(f"results are {age} days old (limit {limit})")
     nxt = c["period"].get("next_report")
+    # old results are only stale once newer ones exist: with the next report still ahead (half-yearly and annual
+    # reporters, or a quarter not yet out), the file stays current for up to MAX_WAIT_DAYS
+    waiting = bool(nxt and nxt > as_of and age <= MAX_WAIT_DAYS)
+    if age > limit and not waiting:
+        reasons.append(f"results are {age} days old (limit {limit})")
     if nxt and nxt < as_of:
         reasons.append(f"newer results were due {nxt.isoformat()} - refresh the file")
     elif nxt and nxt == as_of:
@@ -108,15 +114,20 @@ def _low_cash_conversion(r, cfg):
     return cc is not None and cc < cfg["zones"].get("min_cash_conversion", 0.70)
 
 
+def _bad_loan_flags(r):
+    return list((r.get("asset_quality") or {}).get("flags", []))
+
+
 def signal(r, cfg):
     """(colour, caps): green = buy / start, blue = watch / hold, red = expensive or no valid value.
-    A cheap cyclical, or cash conversion below 70%, is capped at blue."""
+    A cheap cyclical, cash conversion below 70%, or a lender showing bad-loan warning signs is capped at blue."""
     zn = r["zone"]
     if zn.startswith(("SELL", "NO EARNINGS", "NO VALUE", "NOT VALUED")):
         return RED, []
     if not zn.startswith("BUY"):
         return BLUE, []
-    caps = (["cyclical"] if _is_cyclical(r) else []) + (["cash conversion"] if _low_cash_conversion(r, cfg) else [])
+    caps = ((["cyclical"] if _is_cyclical(r) else []) + (["cash conversion"] if _low_cash_conversion(r, cfg) else [])
+            + (["bad loans"] if _bad_loan_flags(r) else []))
     return (BLUE if caps else GREEN), caps
 
 
@@ -133,6 +144,7 @@ def flags(r, cfg):
         out.append("cyclical")
     if _low_cash_conversion(r, cfg):
         out.append(f"cash conversion {r['cash_conversion']*100:.0f}%")
+    out += _bad_loan_flags(r)
     if "high cost" in r["zone"]:
         out.append("AISC > 60% of spot")
     v2 = r.get("v2") or {}

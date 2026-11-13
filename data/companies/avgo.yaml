@@ -8,6 +8,7 @@ period:
   end: '2026-08-02'
   per_year: 4
   reported: '2026-09-04'
+  next_report: 2026-12-09
 earnings:
   net_income: 13088
 shares_m: 4887
@@ -15,13 +16,14 @@ balance:
   cash: 23975
   debt: 59419
 price:
-  value: 364.36
+  value: 346.07
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance AVGO
 sources:
 - Broadcom FQ3-2026 release
 - Value vs Price – tech, chips & energy report, 4 Nov 2026
 assumptions:
 - GAAP keeps $2.0bn/qtr VMware amortisation as a cost (cautious)
+- 'Next report confirmed: Q4 FY26 results 9 Dec 2026'
 notes: []

@@ -9,6 +9,7 @@ period:
   end: '2026-07-31'
   per_year: 1
   reported: '2026-09-29'
+  next_report: 2026-12-10
 shares_m: 515.3
 liquid_assets:
 - label: Cash (31 Jul 2026)
@@ -20,9 +21,9 @@ holdings:
   units: 1.256
 debt: 0
 price:
-  value: 6.8
+  value: 6.635
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance UEC
 comment: Speculative – most of the price pays for projects.
 sources:
@@ -34,3 +35,4 @@ assumptions:
 - No debt. Uranium in process (359k lb) not counted
 - Shares derived from the market value, not reported
 - Equity securities ≈ $149m are implied from the balance sheet (derived), not a reported line
+- Next report estimated from last year's Q1 release (10 Dec 2025)

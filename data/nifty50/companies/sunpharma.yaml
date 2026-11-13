@@ -13,7 +13,7 @@ balance:
   cash: 337814.6
   debt: 46273.2
 price:
-  value: 1870.4
+  value: 1880.0
   currency: INR
   date: '2026-11-13'
   source: yfinance SUNPHARMA.NS

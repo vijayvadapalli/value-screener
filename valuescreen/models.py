@@ -235,8 +235,11 @@ def _v2_fields(data, worked, price, no_growth_multiple):
                eps_years=data.get("years", []), cfo_annual=data.get("cfo_annual", []), profit_annual=data.get("profit_annual", []))
     if worked["kind"] == "financial" and data.get("book_value_ps"):
         roe = data.get("roe_5y")
-        out["pb"] = price / data["book_value_ps"]
+        book = worked.get("adjusted_book_ps") or data["book_value_ps"]   # book less bad loans not provided for
+        out["pb"] = price / book if book > 0 else None
+        out["pb_reported"] = price / data["book_value_ps"]
         out["fair_pb"] = roe * no_growth_multiple if roe is not None else None
+        out["asset_quality"] = worked.get("asset_quality")
     return out
 
 

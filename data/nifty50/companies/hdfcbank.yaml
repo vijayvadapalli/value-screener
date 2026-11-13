@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 800.95
+  value: 804.0
   currency: INR
   date: '2026-11-13'
   source: yfinance HDFCBANK.NS
-shares_m: 15438.116
+shares_m: 15440.97
 v2:
   eps_quarters:
   - 11.54
@@ -60,12 +60,44 @@ v2:
   - 113506.0
   book_value_ps: 391.0
   roe_5y: 0.15
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 1.42
+    - 1.33
+    - 1.4
+    - 1.24
+    - 1.24
+    - 1.15
+    - 1.17
+    - 1.11
+    net_npa_pct:
+    - 0.46
+    - 0.43
+    - 0.47
+    - 0.42
+    - 0.42
+    - 0.38
+    - 0.41
+    - 0.37
+    loans_cr: 3195566.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/HDFCBANK/
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HDFCBANK/consolidated/'
+- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/HDFCBANK/consolidated/; NPA figures from the standalone
+  page: https://www.screener.in/company/HDFCBANK/'
 assumptions:
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 notes: []

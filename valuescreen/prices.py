@@ -26,8 +26,11 @@ def _last_close(yf, symbol):
         h = ticker.history(period="10d", auto_adjust=False)
     if h is None or h.empty:
         return None
+    closes = h["Close"].dropna()   # Yahoo sometimes adds today's row before the close is in (NaN)
+    if closes.empty:
+        return None
     currency, divisor = MINOR_UNITS.get(ticker.history_metadata.get("currency"), (ticker.history_metadata.get("currency"), 1))
-    return float(h["Close"].iloc[-1]) / divisor, h.index[-1].date(), currency
+    return float(closes.iloc[-1]) / divisor, closes.index[-1].date(), currency
 
 
 def refresh_prices(companies: dict, tickers: list[str]) -> list[str]:

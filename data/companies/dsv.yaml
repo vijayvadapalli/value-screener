@@ -5,39 +5,44 @@ sector: gold
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: 2026-09-30
   per_year: 4
-  reported: '2026-08-13'
+  reported: 2026-11-09
+  next_report: 2027-02-20
 earnings:
-  adj_net_income: 92.3
-  da: 40.6
-  sustaining_capex: 36.5
-shares_m: 818.1
+  adj_net_income: 83.0
+  da: 57.1
+  sustaining_capex: 42.0
+shares_m: 814.2
 balance:
 - label: cash
-  amount: 364.3
+  amount: 450.7
 - label: Newmont deferred payments ($37.5m/yr from Dec 2027)
   amount: -150.0
 metals:
 - metal: gold
-  units: 0.064685
-  realised: 4474
-  aisc: 2154
-tax_rate: 0.36291
+  units: 0.068162
+  realised: 4283
+  aisc: 2293
+tax_rate: 0.4366
 price:
-  value: 9.93
+  value: 9.59
   currency: CAD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance DSV.TO
 projects:
 - name: Cordero silver project (after-tax study NPV)
   npv: 1200
   currency: USD
 sources:
-- Discovery Q2-2026 results, 13 Aug 2026
-- Newmont Porcupine sale terms, 25 Jan 2025
-- Value vs Price – Hecla, First Majestic, Discovery report, 4 Nov 2026
+- Discovery Q3-2026 results, 9 Nov 2026
+- https://s21.q4cdn.com/713783313/files/doc_financials/2026/q3/PRQ3-2026-Post-AC-November-9-2026-FINAL.pdf
 assumptions:
-- Tax excludes $19.7m one-off deferred tax
-- Cash ounces exclude 2,813 oz delivered in kind to Franco-Nevada
+- Gold sold for cash 68,162 oz = 71,200 − 3,038 delivered in kind to Franco-Nevada; realised $4,283/oz; AISC $2,293/oz (all-in, excl. share-based
+  pay)
+- Kidd Operations (acquired 1 Jun 2026; 3,349 t copper, 4,589 t zinc sold in Q3) are inside adjusted earnings but not re-priced – realised base-metal
+  prices not given
+- Tax rate 43.7% = Q3 current + deferred tax $45.3m on pre-tax $103.7m
+- Shares = Q3 weighted basic 814.2m; revolver undrawn (total liquidity $844.2m incl. cash $450.7m)
+- Next report date estimated from last year's February release

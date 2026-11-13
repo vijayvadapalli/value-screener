@@ -15,9 +15,9 @@ balance:
   cash: 136935
   debt: 80111
 price:
-  value: 354.88
+  value: 358.21
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance AAPL
 sources:
 - Apple FY26 Q4 consolidated financial statements

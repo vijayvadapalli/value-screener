@@ -13,7 +13,7 @@ balance:
   cash: 120721.4
   debt: 923816.8
 price:
-  value: 185.93
+  value: 186.68
   currency: INR
   date: '2026-11-13'
   source: yfinance TATASTEEL.NS

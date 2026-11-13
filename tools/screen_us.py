@@ -33,15 +33,18 @@ CHUNK = 100   # tickers per Yahoo price download
 
 def load_facts(con, entries, refreshed: bool):
     """Copies our companies' figures from the SEC bulk file into the database when the file is newer than the last load."""
+    tags = wanted_tags()
     stamp = str(int(BULK.stat().st_mtime))
-    if not refreshed and factsdb.get_meta(con, "facts_from") == stamp:
+    tag_set = str(sum(len(t) for ns in tags.values() for t in ns))   # changes when tags are added, e.g. lenders' loan figures
+    if not refreshed and factsdb.get_meta(con, "facts_from") == stamp and factsdb.get_meta(con, "facts_tags") == tag_set:
         return 0
     ciks = [e["cik"] for e in entries if not e["foreign"]]
     n = 0
     for cik, facts in sec.iter_companyfacts(BULK, ciks):
-        factsdb.save_facts(con, cik, facts, wanted_tags())
+        factsdb.save_facts(con, cik, facts, tags)
         n += 1
     factsdb.set_meta(con, "facts_from", stamp)
+    factsdb.set_meta(con, "facts_tags", tag_set)
     con.commit()
     return n
 

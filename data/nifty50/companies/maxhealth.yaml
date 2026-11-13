@@ -13,7 +13,7 @@ balance:
   cash: 6684.3
   debt: 34783.6
 price:
-  value: 943.35
+  value: 947.1
   currency: INR
   date: '2026-11-13'
   source: yfinance MAXHEALTH.NS

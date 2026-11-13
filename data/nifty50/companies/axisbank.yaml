@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1333.0
+  value: 1331.0
   currency: INR
   date: '2026-11-13'
   source: yfinance AXISBANK.NS
-shares_m: 3114.244
+shares_m: 3125.883
 v2:
   eps_quarters:
   - 21.78
@@ -60,12 +60,44 @@ v2:
   - -8637.0
   book_value_ps: 738.0
   roe_5y: 0.14
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 1.46
+    - 1.28
+    - 1.57
+    - 1.46
+    - 1.4
+    - 1.23
+    - 1.28
+    - 1.16
+    net_npa_pct:
+    - 0.35
+    - 0.33
+    - 0.45
+    - 0.44
+    - 0.42
+    - 0.37
+    - 0.39
+    - 0.35
+    loans_cr: 1373727.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/AXISBANK/
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/AXISBANK/consolidated/'
+- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/AXISBANK/consolidated/; NPA figures from the standalone
+  page: https://www.screener.in/company/AXISBANK/'
 assumptions:
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 notes: []

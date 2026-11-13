@@ -13,7 +13,7 @@ balance:
   cash: 49333.1
   debt: 1515581.0
 price:
-  value: 256.25
+  value: 257.45
   currency: INR
   date: '2026-11-13'
   source: yfinance POWERGRID.NS

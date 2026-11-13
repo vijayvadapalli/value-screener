@@ -1,5 +1,5 @@
 ticker: KAP
-yahoo: KAP.L
+yahoo: KAP.IL
 name: Kazatomprom
 sector: uranium
 model: producer
@@ -9,19 +9,21 @@ period:
   end: '2026-06-30'
   per_year: 1
   reported: '2026-08-21'
+  next_report: 2026-11-30
 earnings:
   owner_earnings: 468901.2
 shares_m: 259.356608
 balance:
   net_cash: 157121
 price:
-  value: 62.5
+  value: 60.3
   currency: USD
-  date: '2026-11-12'
-  source: yfinance KAP.L
+  date: '2026-11-13'
+  source: yfinance KAP.IL
 sources:
 - Kazatomprom 1H2026 financial results, 21 Aug 2026
 - URNM look-through analysis, 4 Nov 2026
 assumptions:
 - Full-year attributable profit ≈ H1 × (2026 revenue guidance midpoint ÷ H1 revenue) – sales are H2-weighted
 - KZT 490/USD (company guidance rate)
+- 'Next report estimated: 3Q consolidated statements came out 28 Nov last year'

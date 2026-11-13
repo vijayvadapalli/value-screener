@@ -13,7 +13,7 @@ balance:
   cash: 85845.2
   debt: 654.6
 price:
-  value: 397.8
+  value: 400.85
   currency: INR
   date: '2026-11-13'
   source: yfinance BEL.NS

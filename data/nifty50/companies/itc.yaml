@@ -13,7 +13,7 @@ balance:
   cash: 234907.7
   debt: 23993.6
 price:
-  value: 283.9
+  value: 285.0
   currency: INR
   date: '2026-11-13'
   source: yfinance ITC.NS

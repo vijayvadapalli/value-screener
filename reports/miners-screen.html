@@ -56,6 +56,19 @@ ol{padding-left:20px;margin:6px 0} ol li{margin:3px 0}
 .pvp{display:flex;gap:18px;align-items:flex-start} .pvp>div:last-child{flex:1} .pvp p{margin:0 0 6px}
 .bigrade{font-size:44px;font-weight:700;line-height:1;min-width:56px;text-align:center}
 footer{color:var(--muted);font-size:12px;margin-top:40px}
+table.gt th{cursor:default} table.gt th:after{content:none}
+.legend{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 4px} .chip{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:3px}
+.notes{font-size:12.5px;color:var(--ink2);max-width:1100px;margin:6px 0}
+.pc{margin:12px 0 4px;border:1px solid var(--line);border-radius:6px;padding:8px 8px 4px}
+.pc-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-bottom:4px}
+.pc-bar button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:2px 9px;cursor:pointer;font:inherit}
+.pc-bar button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)} .pc-bar .sep{width:8px}
+.pc-legend{color:var(--ink2);margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-main{height:380px} .pc-rsi{height:90px;margin-bottom:2px}
+.pc-key{font-size:11.5px;color:var(--muted);margin:4px 2px 2px;display:flex;flex-wrap:wrap;gap:4px 14px}
+.pc-key i{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:middle;margin-right:4px}
+.pc-cap{font-size:12.5px;color:var(--ink2);margin:2px 2px 4px}
+@media (max-width:640px){.pc-main{height:300px} .pc-legend{margin-left:0;width:100%}}
 
 .pill.grey{background:var(--muted)} .tag{font-size:10.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:0 6px;color:var(--ink2)}
 main{max-width:1640px} .tag.held{background:var(--ink);color:var(--bg);border-color:var(--ink)} .flags{font-size:11px;color:var(--muted)} table.sum td{white-space:nowrap} table.sum td:first-child{white-space:normal;min-width:190px}
@@ -84,7 +97,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <div class="wrap"><table class="sum" id="sum"><thead><tr><th>Ticker</th><th>Signal</th><th>Margin of safety</th><th>Metal / ETFs</th><th>Stage</th><th>Price</th><th>Mkt value</th>
 <th>Value 12x–15x</th><th>Price ÷ op. cash</th><th>FCF yield</th><th>EV / EBITDA</th><th>P/B</th><th>Net cash ÷ price</th><th>Grade</th>
 <th>1 yr</th></tr></thead><tbody><tr data-signal="green" data-held="no" data-metal="copper" data-stage="producer" data-text="2899.hk zijin mining group company limited copper copx">
-<td data-v="2899.HK"><a href="https://finance.yahoo.com/quote/2899.HK" target="_blank" rel="noopener"><b>2899.HK</b></a><br><small>Zijin Mining Group Company Limited</small><br><span class="flags">[CNY statements converted at 1.176]</span></td>
+<td data-v="2899.HK"><a href="https://finance.yahoo.com/quote/2899.HK" target="_blank" rel="noopener"><b>2899.HK</b></a> <span class="tag">in your files</span><br><small>Zijin Mining Group Company Limited</small><br><span class="flags">[CNY statements converted at 1.176]</span></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.826842" class="pos">+83%</td>
 <td data-v="copper">copper<br><small>COPX</small></td>
@@ -129,7 +142,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.153741">+15%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="-0.271186">−27%</td></tr><tr data-signal="green" data-held="no" data-metal="gold" data-stage="producer" data-text="6693.hk chifeng jilong gold mining group limited gold gdxj">
-<td data-v="6693.HK"><a href="https://finance.yahoo.com/quote/6693.HK" target="_blank" rel="noopener"><b>6693.HK</b></a><br><small>Chifeng Jilong Gold Mining Group Limited</small><br><span class="flags">[CNY statements converted at 1.176]</span></td>
+<td data-v="6693.HK"><a href="https://finance.yahoo.com/quote/6693.HK" target="_blank" rel="noopener"><b>6693.HK</b></a> <span class="tag">in your files</span><br><small>Chifeng Jilong Gold Mining Group Limited</small><br><span class="flags">[CNY statements converted at 1.176]</span></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.684953" class="pos">+68%</td>
 <td data-v="gold">gold<br><small>GDXJ</small></td>
@@ -384,7 +397,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.0781481">−8%</td>
 <td data-v="3" class="c grade gD">D</td>
 <td data-v="0.442748">+44%</td></tr><tr data-signal="green" data-held="no" data-metal="gold silver" data-stage="producer" data-text="pe&amp;oles.mx industrias peñoles, s.a.b. de c.v. gold silver gdx gdxj sil silj">
-<td data-v="PE&amp;OLES.MX"><a href="https://finance.yahoo.com/quote/PE&amp;OLES.MX" target="_blank" rel="noopener"><b>PE&amp;OLES.MX</b></a><br><small>Industrias Peñoles, S.A.B. de C.V.</small><br><span class="flags">[USD statements converted at 18.59]</span></td>
+<td data-v="PE&amp;OLES.MX"><a href="https://finance.yahoo.com/quote/PE&amp;OLES.MX" target="_blank" rel="noopener"><b>PE&amp;OLES.MX</b></a> <span class="tag">in your files</span><br><small>Industrias Peñoles, S.A.B. de C.V.</small><br><span class="flags">[USD statements converted at 18.59]</span></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.406232" class="pos">+41%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX GDXJ SIL SILJ</small></td>
@@ -594,7 +607,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0955921">+10%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.226055">+23%</td></tr><tr data-signal="green" data-held="no" data-metal="copper" data-stage="producer" data-text="ero.to ero copper corp. copper copx">
-<td data-v="ERO.TO"><a href="https://finance.yahoo.com/quote/ERO.TO" target="_blank" rel="noopener"><b>ERO.TO</b></a><br><small>Ero Copper Corp.</small><br><span class="flags">[USD statements converted at 1.427]</span></td>
+<td data-v="ERO.TO"><a href="https://finance.yahoo.com/quote/ERO.TO" target="_blank" rel="noopener"><b>ERO.TO</b></a> <span class="tag">in your files</span><br><small>Ero Copper Corp.</small><br><span class="flags">[USD statements converted at 1.427]</span></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.281456" class="pos">+28%</td>
 <td data-v="copper">copper<br><small>COPX</small></td>
@@ -1029,7 +1042,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.0079188">−1%</td>
 <td data-v="0" class="c grade gA">A</td>
 <td data-v="0.582437">+58%</td></tr><tr data-signal="blue" data-held="no" data-metal="uranium" data-stage="producer" data-text="kap.il national atomic company kazatomprom jsc uranium urnm">
-<td data-v="KAP.IL"><a href="https://finance.yahoo.com/quote/KAP.IL" target="_blank" rel="noopener"><b>KAP.IL</b></a><br><small>National Atomic Company Kazatomprom JSC</small><br><span class="flags">[KZT statements converted at 0.002248]</span></td>
+<td data-v="KAP.IL"><a href="https://finance.yahoo.com/quote/KAP.IL" target="_blank" rel="noopener"><b>KAP.IL</b></a> <span class="tag">in your files</span><br><small>National Atomic Company Kazatomprom JSC</small><br><span class="flags">[KZT statements converted at 0.002248]</span></td>
 <td data-v="1"><span class="pill blue">Fair</span></td>
 <td data-v="-0.0612322" class="neg">−6%</td>
 <td data-v="uranium">uranium<br><small>URNM</small></td>

@@ -6,7 +6,9 @@
 
 For each company it reads the last 8 quarterly EPS, up to 10 yearly EPS, yearly net profit and cash from operations,
 book value per share, 5-year return on equity, the current price and market value – from the consolidated page, or
-the standalone one when that has no quarterly figures. It writes them into the company file's `v2:` block (see
+the standalone one when that has no quarterly figures. For lenders (financial companies other than insurers) it also
+reads gross and net NPA % for the last 8 quarters – banks fill these on the standalone page only – and the loans they
+apply to (see valuescreen/asset_quality.py). It writes them into the company file's `v2:` block (see
 valuescreen/v2.py) and updates the price, share count and period. Everything else in the file – net cash, notes,
 sources – is kept. Files that do not exist yet are created with net cash 0 and a note to add it.
 
@@ -29,22 +31,46 @@ from valuescreen import loader  # noqa: E402
 from valuescreen import screener  # noqa: E402
 
 
-def fetch(symbol: str) -> tuple[dict, str]:
+def fetch(symbol: str, lender: bool = False) -> tuple[dict, str]:
     """(figures, page URL): the consolidated page, or the standalone one when the consolidated page has no quarterly EPS
-    (some companies, e.g. SBI Life, publish only standalone quarters)."""
+    (some companies, e.g. SBI Life, publish only standalone quarters). For a lender, figures["asset_quality"] too."""
     problem = "no page"
     for consolidated in (True, False):
         page = screener.url(symbol, consolidated)
         try:
-            data = screener.parse_v2(screener.get(page))
+            html = screener.get(page)
+            data = screener.parse_v2(html)
         except ValueError as e:
             problem = str(e)
         else:
             if len(data["eps_quarters"]) >= 4 and None not in data["eps_quarters"]:
+                if lender:
+                    data["asset_quality"] = fetch_asset_quality(symbol, consolidated, html)
                 return data, page
             problem = "fewer than 4 quarters of EPS"
         time.sleep(screener.PAUSE_SECONDS)
     raise ValueError(f"{problem} on the consolidated and standalone pages")
+
+
+def fetch_asset_quality(symbol: str, consolidated: bool, html: str) -> dict | None:
+    """Gross and net NPA % and the loans they apply to: from the page already read, else from the standalone page."""
+    aq = screener.parse_asset_quality(html)
+    if aq is None and consolidated:
+        time.sleep(screener.PAUSE_SECONDS)
+        consolidated = False
+        aq = screener.parse_asset_quality(screener.get(screener.url(symbol, False)))
+    if aq is None:
+        return None
+    time.sleep(screener.PAUSE_SECONDS)
+    loans, basis = screener.loans_cr(aq, consolidated)
+    return {"quarters": aq["quarters"], "gross_npa_pct": aq["gross_npa_pct"], "net_npa_pct": aq["net_npa_pct"],
+            "loans_cr": loans, "loans_basis": basis, "page": screener.url(symbol, consolidated)}
+
+
+def is_lender(entry: dict, cfg: dict) -> bool:
+    rules = cfg.get("nifty_v2", {})
+    return (entry.get("industry") in rules.get("financial_industries", [])
+            and entry["ticker"].upper() not in rules.get("insurers", []))
 
 
 def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, url: str = "") -> dict:
@@ -60,10 +86,15 @@ def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, 
     c["shares_m"] = round(data["market_cap_cr"] * 10 / data["price"], 3)
     c.pop("earnings", None)   # the v2 block replaces the draft's yearly net income
     c["v2"] = {k: data[k] for k in ("eps_quarters", "eps_annual", "years", "profit_annual", "cfo_annual", "book_value_ps", "roe_5y")}
+    if data.get("asset_quality"):
+        c["v2"]["asset_quality"] = data["asset_quality"]
     c.setdefault("balance", {"net_cash": 0.0})
     url = url or screener.url(entry["ticker"])
     page = "consolidated" if "/consolidated/" in url else "standalone"
     source = f"Screener.in {page} page, fetched {today:%d %b %Y}: {url}"
+    aq = data.get("asset_quality")
+    if aq and aq["page"] != url:
+        source += f"; NPA figures from the standalone page: {aq['page']}"
     c["sources"] = [s for s in c.get("sources", []) if not str(s).startswith(("Screener.in", "Yahoo Finance annual"))] + [source]
     assumptions = [a for a in c.get("assumptions", []) if not str(a).startswith(("DRAFT", "Placeholder", "Nifty v2:", "Shares derived"))]
     assumptions += ["Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in",
@@ -88,13 +119,14 @@ def main():
         wanted = {t.strip().upper() for t in args.tickers.split(",")}
         entries = [e for e in entries if e["ticker"].upper() in wanted]
     today = dt.date.today()
+    cfg = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
     done, failed = [], []
     for i, entry in enumerate(entries):
         if i:
             time.sleep(screener.PAUSE_SECONDS)
         path = folder / f"{entry['ticker'].lower()}.yaml"
         try:
-            data, url = fetch(entry["ticker"])
+            data, url = fetch(entry["ticker"], lender=is_lender(entry, cfg))
             existing = yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else None
             new = update_file(existing, entry, data, today, url)
         except Exception as e:  # noqa: BLE001 - one bad page must not stop the run
@@ -104,6 +136,10 @@ def main():
         ttm = sum(data["eps_quarters"][-4:])
         print(f"  {entry['ticker']:11} price ₹{data['price']:,.0f} · TTM EPS {ttm:,.2f} · BV {data['book_value_ps']} · "
               f"ROE 5y {data['roe_5y']}")
+        if data.get("asset_quality"):
+            aq = data["asset_quality"]
+            print(f"  {'':11} gross NPA {aq['gross_npa_pct'][-1]}% · net NPA {aq['net_npa_pct'][-1]}% · "
+                  f"loans ₹{aq['loans_cr'] or 0:,.0f} cr ({aq['loans_basis'] or 'not found'})")
         if not args.dry_run:
             folder.mkdir(parents=True, exist_ok=True)
             path.write_text(yaml.safe_dump(new, sort_keys=False, allow_unicode=True, width=140), encoding="utf-8")

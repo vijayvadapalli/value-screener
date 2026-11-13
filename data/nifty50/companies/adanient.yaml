@@ -13,7 +13,7 @@ balance:
   cash: 100112.3
   debt: 1066217.9
 price:
-  value: 2679.6001
+  value: 2688.0
   currency: INR
   date: '2026-11-13'
   source: yfinance ADANIENT.NS

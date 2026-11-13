@@ -13,7 +13,7 @@ balance:
   cash: 317535.5
   debt: 2278420.5
 price:
-  value: 3085.7
+  value: 3034.0
   currency: INR
   date: '2026-11-13'
   source: yfinance GRASIM.NS

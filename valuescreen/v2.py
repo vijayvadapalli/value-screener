@@ -9,19 +9,23 @@ A company file opts in with a `v2:` block, usually written by tools/fetch_screen
       profit_annual: [...]  cfo_annual: [...]  # net profit and operating cash flow, same years, for cash conversion
       book_value_ps: 57.0
       roe_5y: 0.32                             # average return on equity over 5 years, as a fraction
+      asset_quality: {quarters, gross_npa_pct, net_npa_pct, loans_cr, loans_basis}   # lenders; see asset_quality.py
       flags: [conglomerate, insurer]           # optional, also set from config.yaml lists
 
 Rules:
 - Last 12 months = the latest four quarters, after removing a one-off quarter: one that is more than 2x the median of
   the other seven AND more than 1.6x its neighbours is replaced by its neighbours' average.
 - Cyclicals (oil & gas, metals, cement, power, autos, airlines): average of the 12-month EPS and the 5-year average EPS.
-- Financials: average of the 12-month EPS and book value x 5-year ROE. No net-cash adjustment.
+- Financials: average of the 12-month EPS and book value x 5-year ROE. No net-cash adjustment. For lenders, book value
+  is first cut by the bad loans not yet provided for (net NPA), and NPA warning signs cap the signal at blue.
 - Cash conversion = operating cash flow / net profit over 5 years. Below 70% caps the signal at blue. Not used for
   financials, whose operating cash flow includes deposits and loans.
 """
 from __future__ import annotations
 
 from statistics import median
+
+from . import asset_quality
 
 
 def clean_quarters(q, median_x=2.0, neighbour_x=1.6):
@@ -101,11 +105,14 @@ def base_eps(c, cfg):
         out["eps"] = (ttm + avg5) / 2
         out["how"] = f"cyclical: average of 12-month EPS {ttm:,.2f} and 5-year average {avg5:,.2f}"
     elif kind == "financial" and v.get("book_value_ps") and v.get("roe_5y") is not None:
-        norm = v["book_value_ps"] * v["roe_5y"]
-        out["normal_eps"] = norm
-        out["eps"] = (ttm + norm) / 2
-        out["how"] = (f"financial: average of 12-month EPS {ttm:,.2f} and book value {v['book_value_ps']:,.2f} × "
-                      f"5-year ROE {v['roe_5y']*100:.1f}% = {norm:,.2f}")
+        aq = asset_quality.india(v.get("asset_quality"), c.get("shares_m"), cfg)
+        bad = (aq or {}).get("bad_loans_ps") or 0.0
+        book = v["book_value_ps"] - bad
+        norm = book * v["roe_5y"]
+        out.update(asset_quality=aq, book_value_ps=v["book_value_ps"], adjusted_book_ps=book, normal_eps=norm, eps=(ttm + norm) / 2)
+        book_text = (f"adjusted book {book:,.2f} (book {v['book_value_ps']:,.2f} − bad loans not provided for {bad:,.2f})"
+                     if bad else f"book value {book:,.2f}")
+        out["how"] = f"financial: average of 12-month EPS {ttm:,.2f} and {book_text} × 5-year ROE {v['roe_5y']*100:.1f}% = {norm:,.2f}"
     else:
         out["eps"] = ttm
         out["how"] = f"12-month EPS {ttm:,.2f}"

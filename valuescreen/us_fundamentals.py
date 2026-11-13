@@ -5,7 +5,7 @@ out by subtraction, and Q4 = the year − nine months (or − the three quarters
 most recent data wins. Money in US$ (full units); per-share figures as filed (before later splits).
 
     summarize(facts) → {"ttm": {...}, "ttm_end", "ttm_complete", "annual": {fy_end: {...}}, "balance": {...},
-                        "shares", "shares_date", "latest_filed", "latest_form"}
+                        "shares", "shares_date", "credit": {...} or None, "latest_filed", "latest_form"}
 """
 from __future__ import annotations
 
@@ -30,6 +30,24 @@ INSTANT_TAGS = {
     "short_borrowings": ["ShortTermBorrowings", "CommercialPaper"],
     "equity": ["StockholdersEquity", "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"],
 }
+# Lenders' loan quality (asset_quality.py). Only totals are in the bulk file, and not every bank tags nonaccrual loans.
+CREDIT_FLOW_TAGS = {
+    "nco": ["FinancingReceivableExcludingAccruedInterestAllowanceForCreditLossWriteoffAfterRecovery",
+            "AllowanceForLoanAndLeaseLossesWriteOffsNet"],
+    "writeoffs": ["FinancingReceivableExcludingAccruedInterestAllowanceForCreditLossWriteoff", "FinancingReceivableAllowanceForCreditLossesWriteOffs",
+                  "AllowanceForLoanAndLeaseLossesWriteOffs"],
+    "recoveries": ["FinancingReceivableExcludingAccruedInterestAllowanceForCreditLossRecovery", "FinancingReceivableAllowanceForCreditLossesRecovery",
+                   "AllowanceForLoanAndLeaseLossRecoveriesOfBadDebts"],
+    "provision": ["FinancingReceivableExcludingAccruedInterestCreditLossExpenseReversal", "ProvisionForLoanLeaseAndOtherLosses",
+                  "ProvisionForLoanLossesExpensed", "ProvisionForLoanAndLeaseLosses"],
+}
+CREDIT_INSTANT_TAGS = {
+    "loans": ["FinancingReceivableExcludingAccruedInterestBeforeAllowanceForCreditLoss", "LoansAndLeasesReceivableGrossCarryingAmount",
+              "FinancingReceivableExcludingAccruedInterestAfterAllowanceForCreditLoss", "LoansAndLeasesReceivableNetReportedAmount"],
+    "allowance": ["FinancingReceivableAllowanceForCreditLossExcludingAccruedInterest", "FinancingReceivableAllowanceForCreditLosses",
+                  "LoansAndLeasesReceivableAllowance"],
+    "nonaccrual": ["FinancingReceivableExcludingAccruedInterestNonaccrual", "FinancingReceivableRecordedInvestmentNonaccrualStatus"],
+}
 EPS_TAGS = ["EarningsPerShareDiluted", "EarningsPerShareBasicAndDiluted", "EarningsPerShareBasic"]
 SHARE_TAGS = {"dei": ["EntityCommonStockSharesOutstanding"], "us-gaap": ["WeightedAverageNumberOfDilutedSharesOutstanding",
                                                                          "CommonStockSharesOutstanding"]}
@@ -37,7 +55,8 @@ SHARE_TAGS = {"dei": ["EntityCommonStockSharesOutstanding"], "us-gaap": ["Weight
 
 def wanted_tags() -> dict:
     """{namespace: {tags}} to keep in the database."""
-    gaap = {t for names in list(FLOW_TAGS.values()) + list(INSTANT_TAGS.values()) for t in names} | set(EPS_TAGS)
+    groups = [FLOW_TAGS, INSTANT_TAGS, CREDIT_FLOW_TAGS, CREDIT_INSTANT_TAGS]
+    gaap = {t for g in groups for names in g.values() for t in names} | set(EPS_TAGS)
     return {"us-gaap": gaap | set(SHARE_TAGS["us-gaap"]), "dei": set(SHARE_TAGS["dei"])}
 
 
@@ -156,6 +175,35 @@ def problem(s: dict, as_of: dt.date | None = None) -> str | None:
     return None
 
 
+def credit(facts: dict, ttm_ends: list) -> dict | None:
+    """A lender's loans, allowance and nonaccrual loans (latest balance sheet; nonaccrual only if dated within a quarter of
+    the loans) and net charge-offs and provisions for the last twelve months and the twelve months before. None without
+    a loan figure."""
+    loans = _latest_instant(facts, CREDIT_INSTANT_TAGS["loans"])
+    if not loans or not ttm_ends:
+        return None
+    out = {"loans": loans[1], "date": loans[0]}
+    for k in ("allowance", "nonaccrual"):
+        v = _latest_instant(facts, CREDIT_INSTANT_TAGS[k])
+        out[k] = v[1] if v and abs((_d(v[0]) - _d(loans[0])).days) <= 100 else None
+    q = {k: _best(facts, names, _quarters) for k, names in CREDIT_FLOW_TAGS.items()}
+    nco = dict(q["nco"])
+    for e, w in q["writeoffs"].items():   # net = write-offs − recoveries where the net figure isn't tagged
+        if e not in nco and e in q["recoveries"]:
+            nco[e] = w - q["recoveries"][e]
+    last = ttm_ends[-1]
+    ends_now = [e for e in sorted(nco) if e <= last][-4:]
+    ends_before = [e for e in sorted(nco) if e < (ends_now[0] if ends_now else last)][-4:]
+
+    def twelve(series, ends):
+        ok = len(ends) == 4 and all(e in series for e in ends) and (ends[-1] - ends[0]).days <= 300
+        return sum(series[e] for e in ends) if ok else None
+    out["nco_ttm"] = twelve(nco, ends_now) if ends_now and ends_now[-1] == last else None
+    out["nco_prev_ttm"] = twelve(nco, ends_before) if out["nco_ttm"] is not None else None
+    out["provision_ttm"] = twelve(q["provision"], ttm_ends)
+    return out
+
+
 def summarize(facts: dict, as_of: dt.date | None = None) -> dict:
     quarters = {k: _best(facts, names, _quarters) for k, names in FLOW_TAGS.items()}
     years = {k: _best(facts, names, _years) for k, names in FLOW_TAGS.items()}
@@ -187,5 +235,6 @@ def summarize(facts: dict, as_of: dt.date | None = None) -> dict:
         "balance": {"cash_and_st": bal.get("cash", (0, 0))[1] + bal.get("st_investments", (0, 0))[1], "debt": debt,
                     "equity": bal.get("equity", (None, None))[1], "date": max((v[0] for v in bal.values()), default=None)},
         "shares": shares[1] if shares else None, "shares_date": shares[0] if shares else None,
+        "credit": credit(facts, ends if complete else []),
         "latest_filed": max(filed) if filed else None,
     }

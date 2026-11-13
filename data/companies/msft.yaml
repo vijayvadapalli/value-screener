@@ -15,9 +15,9 @@ balance:
   cash: 64509
   debt: 35481
 price:
-  value: 523.0
+  value: 524.0752
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance MSFT
 sources:
 - Microsoft FY27 Q1 release

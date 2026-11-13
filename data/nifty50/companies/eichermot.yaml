@@ -13,7 +13,7 @@ balance:
   cash: 60797.5
   debt: 5139.5
 price:
-  value: 7589.0
+  value: 7650.0
   currency: INR
   date: '2026-11-13'
   source: yfinance EICHERMOT.NS

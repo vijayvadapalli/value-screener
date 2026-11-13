@@ -23,7 +23,10 @@ fx_usd_per_unit:             # USD per 1 unit of currency
   TWD: 0.0312695             # 1 / 31.98, TSMC's Q3 average
   KZT: 0.00204082            # 1 / 490, Kazatomprom 2026 guidance rate
   INR: 0.0106346             # 1 / 94.033, Yahoo INR=X close 12 Nov 2026 – only for the market-value shade of Indian stocks
-  # GBP and HKD are not needed while those companies' inputs and prices share a currency.
+  CNY: 0.150125               # 1 / 6.6611, Yahoo CNY=X close 13 Nov 2026 (Zijin, Chifeng report in yuan)
+  HKD: 0.127466               # 1 / 7.8452, Yahoo HKD=X close 13 Nov 2026 (their H shares trade in Hong Kong)
+  MXN: 0.053965               # 1 / 18.5305, Yahoo MXN=X close 13 Nov 2026 (Peñoles trades in pesos)
+  # GBP is not needed while those companies' inputs and prices share a currency.
 
 multiples:                   # owner-earnings multiples [cautious, fair]
   producer: [12, 15]
@@ -81,3 +84,15 @@ nifty_v2:                        # per-share rules for Indian companies valued f
   financial_industries: [Financial Services]
   insurers: [HDFCLIFE, SBILIFE, ICICIPRULI, ICICIGI, LICI]
   conglomerates: [LT, M&M, BAJAJ-AUTO, GRASIM]   # flagged: conglomerates and finance arms
+
+# Bad loans at banks and other lenders (valuescreen/asset_quality.py). Book value is cut by bad loans not yet provided
+# for (India: net NPA; US: nonaccrual loans above the allowance). Any of these warning signs flags the company, caps a
+# cheap signal at blue and keeps it off the shortlist.
+asset_quality:
+  max_net_npa: 0.02              # India: net NPA above 2% of loans
+  max_gross_npa: 0.05            # India: gross NPA above 5% of loans
+  min_coverage: 0.60             # India: provisions below 60% of the bad loans (≈ 1 − net NPA % ÷ gross NPA %)
+  max_gross_npa_rise: 0.005      # India: gross NPA up more than 0.5 points over four quarters
+  max_nonaccrual: 0.02           # US: nonaccrual loans above 2% of loans (an allowance below them is flagged too)
+  max_nco_rise: 0.5              # US: net charge-off rate more than 50% above the twelve months before ...
+  min_nco_for_rise: 0.002        # ... and at least 0.2% of loans (so a tiny base doesn't trigger it)

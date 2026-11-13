@@ -4,24 +4,28 @@ sector: tech
 model: growth
 currency: USD
 period:
-  label: FQ3-26 (Jun)
-  end: '2026-06-28'
-  per_year: 4
-  reported: '2026-07-29'
-  next_report: '2026-11-04'
+  label: FY26 (Sep)
+  end: 2026-09-27
+  per_year: 1
+  reported: 2026-11-04
+  next_report: 2027-02-04
 earnings:
-  net_income: 2002
-shares_m: 1069
+  net_income: 7930
+shares_m: 1073
 balance:
-  cash: 8304
-  debt: 15270
+  net_cash: -7430
 price:
-  value: 177.14
+  value: 172.585
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance QCOM
 sources:
-- Qualcomm FQ3-2026 release
-- Value vs Price – tech, chips & energy report, 4 Nov 2026
-assumptions: []
+- Qualcomm Q4 / FY2026 results, 4 Nov 2026 (GAAP net income $13.63bn, EPS $12.70 incl. a $5.7bn tax benefit)
+- https://sec-api.io/insights/qualcomm-qcom-fy2026-and-q4-fy2026-earnings-sec-filing-analysis-apple-modem-exit-and-data-center-ramp
+- https://www.constellationr.com/insights/news/qualcomms-diversification-push-comes-view-q4
+assumptions:
+- Net income = FY2026 GAAP $13.63bn less the one-off $5.7bn tax benefit = $7.93bn (a full year smooths Q4's legal-settlement and other charges)
+- Shares ≈ 1,073m = $13.63bn ÷ GAAP EPS $12.70
+- Net debt $7.43bn as reported (cash and debt not split in the source)
+- Next report date estimated from last year's early-February Q1 release
 notes: []

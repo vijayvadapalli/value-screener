@@ -29,9 +29,9 @@ balance:
   amount: -345
   currency: USD
 price:
-  value: 2.09
+  value: 2.0501
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance DNN
 sources:
 - Denison Phoenix construction & capex update, 2 Jan 2026 (NPV 8%)

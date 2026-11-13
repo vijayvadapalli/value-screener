@@ -28,10 +28,10 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.platypus import (BaseDocTemplate, CondPageBreak, Flowable, Frame, Image, KeepTogether, PageBreak,
                                 PageTemplate, Paragraph, Spacer, Table, TableStyle)
 
-from . import charts
+from . import charts, price_chart
 from . import style as S
 from .wording import (BUY_RULE, MODEL_LABEL, auto_comment, calc_steps, day, esc, flag_text,
-                      has_earnings, headline, key_figures, kpi_cards, money, price_date, worked_example)
+                      has_earnings, headline, key_figures, kpi_cards, money, npa_summary, price_date, worked_example)
 
 PAGE = landscape(A4)
 MARGIN = 12 * mm
@@ -265,7 +265,9 @@ def value_table(rows, st, previous, tech):
 def _quality(r):
     if r.get("pb") is not None and r.get("fair_pb") is not None:
         fair = muted(f"fair {r['fair_pb']:.1f}")
-        return f"P/B {r['pb']:.1f}<br/>{fair}"
+        label = "P/ABV" if (r.get("asset_quality") or {}).get("bad_loans_ps") else "P/B"   # on book less bad loans
+        npa = npa_summary(r).replace(" gross · ", " / ").replace(" net", "")
+        return f"{label} {r['pb']:.1f}<br/>{fair}" + (f"<br/>{muted(npa)}" if npa else "")
     if r.get("cash_conversion") is not None:
         cc = r["cash_conversion"]
         return f"<font color='{S.SIGNAL['red'] if cc < 0.7 else S.INK}'>cash {cc*100:.0f}%</font>"
@@ -324,18 +326,19 @@ METHOD = ("<b>Method.</b> Value from the latest reported numbers only (no target
 RULES_NOTE = ("<b>Rules.</b> Tier A: start at or below the 15x value, add at or below 12x. Tiers B and C: buy only with a 20% "
                   "margin at 12x and AISC ≤ 60% of spot, or ≤ 0.8× NAV (0.85× physical). Red = ≥ 25x, ≥ 1.5× NAV or no valid "
                   "value. Before buying: price vs 200-day average (below = buy in thirds), RSI/MACD; sell puts at 12x. "
-                  "[Flags]: STALE = results > ~100 days old or newer results due; price age. (Previous run.)")
+                  "[Flags]: STALE = results > ~100 days old and newer ones out (or due); price age. (Previous run.)")
 
 
 GROWTH_NOTE = ("<b>Columns.</b> Value per share with no growth, 10% and 20% a year for 5 years (15x exit, discounted at 10% US / "
                "12% India). Growth needed = the growth that makes the value equal the price; previous run in (brackets). Green ≤ 5% "
-               "a year (≤ 10% for tier A), blue 5–25%, red ≥ 25%. Cyclicals and cash conversion below 70% are capped at blue. "
-               "Quality = 5-year cash conversion, or price-to-book against the fair multiple (5-yr ROE × no-growth multiple) for "
-               "financials. Shade = market value.")
+               "a year (≤ 10% for tier A), blue 5–25%, red ≥ 25%. Cyclicals, cash conversion below 70% and lenders with "
+               "bad-loan warning signs are capped at blue. Quality = 5-year cash conversion, or price-to-book against the fair "
+               "multiple (5-yr ROE × no-growth multiple) for financials; P/ABV = on book less bad loans not provided for. "
+               "Shade = market value.")
 
 
 # ------------------------------------------------------------------------------------------------- one company
-def company_section(r, c, cfg, st, chart_dir: Path, tech=None):
+def company_section(r, c, cfg, st, chart_dir: Path, tech=None, pchart=None):
     signal_colour = S.SIGNAL[r["signal"]]
     out = [Bookmark(f"s_{r['ticker']}", f"{r['display_ticker']} – {r['name']}", 1)]
     title = Table([[Paragraph(f"{st.bold(esc(r['display_ticker']))}&nbsp;&nbsp;<font color='{S.INK2}'>{esc(r['name'])}</font>", st.title),
@@ -354,6 +357,13 @@ def company_section(r, c, cfg, st, chart_dir: Path, tech=None):
         path = fn(*args, chart_dir / f"{r['ticker']}_{name}.png")
         return image(path, LEFT_COLUMN - 7 * mm) if path else None
 
+    price = price_chart.static_png(pchart, chart_dir / f"{r['ticker']}_price.png")
+    if price:
+        values = " · ".join(f"{v['label']} {v['price']:,.2f}" for v in pchart["values"])
+        text = (f"<b>Price</b> ({esc(pchart['symbol'])}, {esc(pchart['currency'] or '')}): {esc(price_chart.caption(pchart))} · "
+                + (f"value lines: {esc(values)} · " if values else "")
+                + "dotted: nearest support (green) / resistance (red), auto · blue / purple: trend lines (auto)")
+        out += [image(price, WIDTH), Paragraph(text, st.tiny), Spacer(1, 4)]
     band = charts.band(r, chart_dir / f"{r['ticker']}_band.png", width_mm=WIDTH / mm)
     if band:
         out.append(image(band, WIDTH))
@@ -423,8 +433,8 @@ def new_document(path: Path, title: str, footer: str, st: Styles):
 
 
 def build(results: dict, companies: dict, cfg: dict, path: Path, title: str, previous: dict | None = None,
-          tech: dict | None = None, log_lines=()):
-    previous, tech = previous or {}, tech or {}
+          tech: dict | None = None, log_lines=(), price_charts: dict | None = None):
+    previous, tech, price_charts = previous or {}, tech or {}, price_charts or {}
     st = Styles()
     doc = new_document(path, f"{title} – value vs price", f"{title} · value vs price · {day(cfg['as_of'])}", st)
 
@@ -449,7 +459,8 @@ def build(results: dict, companies: dict, cfg: dict, path: Path, title: str, pre
     story.append(Bookmark("companies", "Companies", 0))
     with tempfile.TemporaryDirectory() as tmp:
         for r in ordered:
-            story += [PageBreak()] + company_section(r, companies[r["ticker"]], cfg, st, Path(tmp), tech.get(r["ticker"]))
+            story += [PageBreak()] + company_section(r, companies[r["ticker"]], cfg, st, Path(tmp), tech.get(r["ticker"]),
+                                                        price_charts.get(r["ticker"]))
         doc.build(story)
     return path
 

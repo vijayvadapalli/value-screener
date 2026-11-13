@@ -5,8 +5,10 @@ For each company (SEC filings; Yahoo for the few foreign filers):
   financials = average of that and book value × 5-year return on equity, no net cash; energy and materials (cyclicals)
   = average of that and the 5-year average; real estate is not valued (its earnings are distorted by depreciation).
 - Value with no growth, and the yearly growth the price needs (5 years, 15x exit, discounted at 10%).
-- Signal: green ≤ 5% a year, blue 5–25%, red ≥ 25% or no positive earnings; cheap cyclicals and cash conversion below
-  70% are capped at blue.
+- Signal: green ≤ 5% a year, blue 5–25%, red ≥ 25% or no positive earnings; cheap cyclicals, cash conversion below
+  70% and lenders with bad-loan warning signs are capped at blue.
+- Lenders (financials with a loan book): book value less nonaccrual loans not covered by the allowance; flags for
+  nonaccrual loans above 2% of loans, an allowance below them, or net charge-offs up by half (asset_quality.py).
 - Quality: free-cash-flow yield, return on equity, 5-year cash conversion, share count change over 3 years (buybacks
   below zero, dilution above), debt ÷ EBITDA; and the profit-vs-price grade (EPS growth vs price growth, about 3 years).
 Shortlist: green, grade A or B, cash conversion at least 70% (or a financial), and no red flags.
@@ -21,6 +23,7 @@ from pathlib import Path
 
 from scipy.optimize import brentq
 
+from . import asset_quality
 from . import profit_vs_price as pvp
 from . import style as S
 from .html_report import CSS as BASE_CSS
@@ -52,7 +55,8 @@ def _signal(r, cfg):
     if g >= z["growth_sell"]:
         return "red", "Expensive"
     if g <= z["growth_buy"]:
-        caps = (["cyclical"] if r["sector"] in CYCLICAL else []) + (["cash conversion"] if r.get("low_cash") else [])
+        caps = ((["cyclical"] if r["sector"] in CYCLICAL else []) + (["cash conversion"] if r.get("low_cash") else [])
+                + (["bad loans"] if (r.get("asset_quality") or {}).get("flags") else []))
         if caps:
             r["caps"] = caps
             return "blue", "Cheap – capped"
@@ -65,9 +69,12 @@ def finish(r: dict, eps_ttm, eps_5y, bvps, roe_5y, nc, cfg):
     price = r["price"]
     eps = eps_ttm
     if r["sector"] in FINANCIAL and bvps and roe_5y is not None and eps_ttm is not None:
-        eps, nc = (eps_ttm + bvps * roe_5y) / 2, 0.0
-        r["pb"], r["fair_pb"] = price / bvps, roe_5y * dcf_factor(0.0, cfg, RATE)
-        r["basis"] = "financial: average of 12-month EPS and book value × 5-year ROE, no net cash"
+        bad = (r.get("asset_quality") or {}).get("bad_loans_ps") or 0.0
+        book = bvps - bad   # less nonaccrual loans the allowance doesn't cover
+        eps, nc = (eps_ttm + book * roe_5y) / 2, 0.0
+        r["pb"], r["fair_pb"] = (price / book if book > 0 else None), roe_5y * dcf_factor(0.0, cfg, RATE)
+        r["basis"] = ("financial: average of 12-month EPS and " + ("adjusted book (less uncovered bad loans)" if bad else "book value")
+                      + " × 5-year ROE, no net cash")
     elif r["sector"] in CYCLICAL and eps_5y is not None and eps_ttm is not None:
         eps = (eps_ttm + eps_5y) / 2
         r["basis"] = "cyclical: average of 12-month and 5-year average EPS"
@@ -128,6 +135,8 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
         r["share_change_3y"] = shares / then - 1
     nc = (bal["cash_and_st"] - bal["debt"]) / shares
     bvps = bal["equity"] / shares if bal.get("equity") else None
+    if r["sector"] in FINANCIAL:
+        r["asset_quality"] = asset_quality.us(s.get("credit"), shares, cfg)
     finish(r, eps_ttm, sum(eps_hist) / len(eps_hist) if eps_hist else None, bvps,
            sum(roes) / len(roes) if roes else None, nc, cfg)
     # profit vs price: diluted EPS about three years back (split-adjusted) against the last twelve months
@@ -152,6 +161,7 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
         r["flags"].append(f"shares +{r['share_change_3y']*100:.0f}% in 3 years")
     if r["low_cash"]:
         r["flags"].append(f"cash conversion {r['cash_conversion']*100:.0f}%")
+    r["flags"] += (r.get("asset_quality") or {}).get("flags", [])
     if r["indexes"] and (r["market_value_bn"] < 0.5 or (r.get("pe") is not None and r["pe"] < 1)):   # an index member cannot be this small or cheap
         r["flags"].append("data check: share count or earnings look wrong")
         r["signal"], r["action"] = "grey", "Data check"
@@ -223,7 +233,8 @@ def shortlist(rows):
     return [r for r in rows if r.get("signal") == "green" and r.get("grade") in ("A", "B")
             and not (r.get("cik") and (r["cik"] in seen or seen.add(r["cik"])))
             and (r["sector"] in FINANCIAL or (r.get("cash_conversion") or 0) >= 0.70 or r["source"] == "Yahoo")
-            and not any(f.startswith(("debt", "shares +", "profit ×")) for f in r["flags"])]
+            and not any(f.startswith(("debt", "shares +", "profit ×")) for f in r["flags"])
+            and not (r.get("asset_quality") or {}).get("flags")]
 
 
 def sort_key(r):
@@ -254,6 +265,11 @@ def _row(r, in_files):
     grade = r.get("grade", "n/m")
     quality = (f"P/B {r['pb']:.1f} · fair {r['fair_pb']:.1f}" if r.get("pb") is not None and r.get("fair_pb") is not None
                else "–" if r.get("cash_conversion") is None else f"cash {r['cash_conversion']*100:.0f}%")
+    aq = r.get("asset_quality") or {}
+    loans = " · ".join(x for x in (f"nonaccrual {S.pct(aq['nonaccrual'], 2, signed=False)}" if aq.get("nonaccrual") is not None else "",
+                                   f"NCO {S.pct(aq['nco_rate'], 2, signed=False)}" if aq.get("nco_rate") is not None else "") if x)
+    if loans:
+        quality += f"<br><small>{loans}</small>"
     return f"""<tr data-signal="{r.get('signal', 'grey')}" data-sector="{_e(r['sector'])}" data-index="{_e(' '.join(r['indexes']))}" data-text="{_e(text)}">
 <td data-v="{_e(r['ticker'])}"><a href="https://finance.yahoo.com/quote/{_e(r['yahoo'])}" target="_blank" rel="noopener"><b>{_e(r['ticker'])}</b></a>{star}{edgar}<br><small>{_e(r['name'])}</small>{f'<br><span class="flags">{flags}</span>' if flags else ''}</td>
 <td data-v="{ {'green': 0, 'blue': 1, 'red': 2}.get(r.get('signal'), 3)}"><span class="pill {r.get('signal', 'grey')}">{_e(r.get('action', ''))}</span></td>
@@ -344,8 +360,10 @@ twelve months' net income ÷ shares, plus net cash. Value with no growth = EPS �
 <b>growth needed</b> = the yearly growth for 5 years (15x exit, 10% return) that makes the value equal the price.
 Green ≤ 5% a year, blue 5–25%, red ≥ 25% or no earnings. Financials use book value × 5-year ROE (no net cash), energy and materials
 average the 12-month and 5-year EPS and are capped at blue, real estate is not valued, and cash conversion below 70% caps at blue.
+Lenders: book value less nonaccrual loans the allowance doesn't cover; nonaccrual loans above 2% of loans, an allowance below
+them, or net charge-offs (NCO) up by half on a year earlier cap at blue.
 Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … D = rose a third+). A filter, not a verdict.</p>
-<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution or one-off flags): {short_html}</div>
+<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution, one-off or bad-loan flags): {short_html}</div>
 <h3>By sector</h3>{sector_table(rows)}
 <div class="controls"><span class="lab">Signal</span>{buttons('signal', [('green', 'Cheap'), ('blue', 'Watch / hold'), ('red', 'Expensive'), ('grey', 'Not valued')])}
 <span class="lab">Index</span>{buttons('index', [('S&P 500', 'S&P 500'), ('Nasdaq-100', 'Nasdaq-100')])}

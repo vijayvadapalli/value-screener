@@ -22,9 +22,9 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 281.18
+  value: 292.48
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance TPL
 sources:
 - Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)

@@ -13,7 +13,7 @@ balance:
   cash: 18559.0
   debt: 84929.0
 price:
-  value: 8535.0
+  value: 8526.0
   currency: INR
   date: '2026-11-13'
   source: yfinance APOLLOHOSP.NS

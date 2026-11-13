@@ -33,9 +33,12 @@ def fetch(symbol):
         hist = ticker.history(period="10d", auto_adjust=False)
     if hist is None or hist.empty:
         return None
+    closes = hist["Close"].dropna()   # today's row can appear before its close does (NaN)
+    if closes.empty:
+        return None
     currency = ticker.history_metadata.get("currency")
     currency, divisor = MINOR_UNITS.get(currency, (currency, 1))
-    return float(hist["Close"].iloc[-1]) / divisor, str(hist.index[-1].date()), currency
+    return float(closes.iloc[-1]) / divisor, str(closes.index[-1].date()), currency
 
 
 def patch_price(text, value, date, source):

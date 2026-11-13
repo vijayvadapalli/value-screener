@@ -24,7 +24,7 @@ cyclical: true
 price:
   value: 41.21
   currency: CAD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance CVE.TO
 sources:
 - Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)

@@ -1,0 +1,46 @@
+ticker: ERO.TO
+yahoo: ERO.TO
+name: Ero Copper Corp.
+sector: copper
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: 2026-09-30
+  per_year: 4
+  reported: 2026-11-02
+  next_report: 2027-03-05
+earnings:
+  adj_net_income: 129.3
+shares_m: 104.35
+balance:
+  cash: 114.1
+  debt: 467.5
+price:
+  value: 41.37
+  currency: CAD
+  date: '2026-11-13'
+  source: yfinance ERO.TO
+sources:
+- Ero Copper Q3-2026 results (SEC 6-K), 2 Nov 2026
+- https://www.sec.gov/Archives/edgar/data/0001853860/000162828026068971/erocopper-pressreleasex202.htm
+assumptions:
+- Owner earnings = adjusted net income attributable US$129.3m (consolidated sustaining capex not reported; assumed ≈ D&A US$43.1m)
+- Copper sold 18,175 t (40.1 Mlb) and gold 24,957 oz; realised prices not reported – Q3 COMEX / LBMA averages ($6.40/lb, $4,262/oz) used
+- Royalty 2% (Brazil CFEM) ASSUMED; tax 17.8% = Q3 tax $25.6m on pre-tax $143.5m
+- Shares = Q3 weighted basic 104.35m; net debt $353.5m (cash $114.1m, debt $467.5m)
+- C1 cash cost $2.51/lb (not AISC – no AISC check)
+- Next report estimated from last year's early-March Q4 release
+notes:
+- Tucumã ramping up (8,958 t Q3)
+- Xavantina gold boosted by historic concentrate stockpiles
+metals:
+- metal: copper
+  units: 40.1
+  realised: 6.3976
+  royalty: 0.02
+- metal: gold
+  units: 0.024957
+  realised: 4262.18
+  royalty: 0.02
+tax_rate: 0.178

@@ -13,7 +13,7 @@ balance:
   cash: 100281.2
   debt: 6137.7
 price:
-  value: 1400.0
+  value: 1391.8
   currency: INR
   date: '2026-11-13'
   source: yfinance CIPLA.NS

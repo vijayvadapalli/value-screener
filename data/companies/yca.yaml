@@ -17,7 +17,7 @@ nav_ref:
   value: 6.65
   spot: 89.85
 price:
-  value: 5.1468
+  value: 5.15
   currency: GBP
   date: '2026-11-13'
   source: yfinance YCA.L

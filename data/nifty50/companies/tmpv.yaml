@@ -13,7 +13,7 @@ balance:
   cash: 478280.0
   debt: 813950.0
 price:
-  value: 288.35
+  value: 287.4
   currency: INR
   date: '2026-11-13'
   source: yfinance TMPV.NS

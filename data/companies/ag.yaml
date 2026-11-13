@@ -4,36 +4,40 @@ sector: silver
 model: producer
 currency: USD
 period:
-  label: Q2-2026
-  end: '2026-06-30'
+  label: Q3-2026
+  end: 2026-09-30
   per_year: 4
-  reported: '2026-07-30'
-  next_report: '2026-11-05'
+  reported: 2026-11-05
+  next_report: 2027-02-19
 earnings:
-  adj_net_income: 101.6
-shares_m: 493.335
+  adj_net_income: 92.5
+shares_m: 497.0
 balance:
-  cash: 1093.3
+  cash: 1070.8
   debt: 302.754
 metals:
 - metal: silver
-  units: 3.799823
-  realised: 63.98
-  aisc: 25.68
+  units: 3.5
+  realised: 61.52
+  aisc: 30.45
 - metal: gold
-  units: 0.03466
-  realised: 4347
-tax_rate: 0.350933
+  units: 0.031934
+  realised: 4195
+tax_rate: 0.4654
 price:
-  value: 13.99
+  value: 13.7799
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance AG
 sources:
-- First Majestic Q2-2026 release and interim statements (SEC 6-K)
-- Value vs Price – Hecla, First Majestic, Discovery report, 4 Nov 2026
+- First Majestic Q3-2026 MD&A and financial results (SEC 6-K), 5 Nov 2026
+- https://www.sec.gov/Archives/edgar/data/0001308648/000162828026070594/ag-2026q3mdaxex992.htm
 assumptions:
-- Owner earnings = adjusted net earnings (sustaining capex not split out; assumed ≈ D&A $48.4m)
-- Restricted cash $159m excluded
+- Owner earnings = adjusted net earnings $92.5m (sustaining capex not split out of $101.9m total capex; assumed ≈ D&A $56.8m)
+- Silver sold 3.5 Moz attributable (rounded in the release); gold 31,934 oz; AISC $30.45 per attributable payable AgEq oz
+- Tax rate 46.5% = Q3 income tax $75.4m on pre-tax $162.0m
+- Shares ≈ 497m derived from Q3 EPS $0.15 on $74.5m attributable earnings (period-end count not in the extract)
+- Debt = 2025 convertible notes carrying amount from Q2 ($302.8m), not restated in the Q3 extract; restricted cash $162.9m excluded
+- Next report date estimated from last year's mid-February Q4 release
 notes:
-- Q3 output 3.44 Moz Ag (San Dimas 12-day labour dispute)
+- Q3 output 3.4 Moz Ag (San Dimas 12-day labour dispute)

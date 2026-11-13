@@ -13,7 +13,7 @@ balance:
   cash: 84090.0
   debt: 14780.0
 price:
-  value: 1973.9
+  value: 1992.9
   currency: INR
   date: '2026-11-13'
   source: yfinance HINDUNILVR.NS

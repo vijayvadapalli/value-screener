@@ -9,7 +9,7 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 587.65
+  value: 592.25
   currency: INR
   date: '2026-11-13'
   source: yfinance HDFCLIFE.NS

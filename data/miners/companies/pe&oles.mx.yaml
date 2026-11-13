@@ -1,0 +1,46 @@
+ticker: PE&OLES.MX
+yahoo: PE&OLES.MX
+name: Industrias Peñoles, S.A.B. de C.V.
+sector: silver
+model: producer
+currency: USD
+period:
+  label: Q3-2026
+  end: 2026-09-30
+  per_year: 4
+  reported: 2026-10-26
+  next_report: 2027-02-10
+earnings:
+  net_income: 331.0
+shares_m: 397.476
+balance:
+  cash: 4396.3
+  debt: 3036.3
+price:
+  value: 753.91
+  currency: MXN
+  date: '2026-11-13'
+  source: yfinance PE&OLES.MX
+sources:
+- Peñoles 3Q26 report, 26 Oct 2026 (controlling net income US$331.0m; sales US$2,364.9m; EBITDA US$1,080.6m; cash US$3,608.4m)
+- https://www.penoles.com.mx/assets/files/reportes/BMV/informe/en/Informe_Director_3T26_Eng.pdf
+assumptions:
+- Owner earnings = net income to Peñoles shareholders US$331.0m (D&A ~US$163m vs capex US$137.9m, so sustaining capex taken ≈ D&A)
+- 'Re-priced on ~75% of mine output (Peñoles owns ~75% of Fresnillo): 14.92 Moz silver and 155,283 oz gold produced; realised = Q3 averages $62.73
+  / $4,262 from the report'
+- Royalty 7.5% (Mexican special mining right, applied to revenue as a proxy) and tax 30% ASSUMED
+- Cash and debt are consolidated (incl. Fresnillo's minority share), from Yahoo converted at the 3Q close MXN 17.84 – not reduced for minorities
+- Next report estimated from last year's February date
+notes:
+- Holds ~75% of Fresnillo plc
+- Q3 refined output down (smelter maintenance)
+metals:
+- metal: silver
+  units: 11.192
+  realised: 62.73
+  royalty: 0.075
+- metal: gold
+  units: 0.1165
+  realised: 4262.18
+  royalty: 0.075
+tax_rate: 0.3

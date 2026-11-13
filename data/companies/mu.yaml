@@ -15,9 +15,9 @@ balance:
   cash: 73480
   debt: 5180
 price:
-  value: 798.44
+  value: 766.26
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance MU
 sources:
 - Micron FQ4-2026 release

@@ -17,9 +17,9 @@ balance:
   cash: 4016980.0
   debt: 1031580.0
 price:
-  value: 405.49
+  value: 397.24
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance TSM
 sources:
 - TSMC 3Q26 Management Report

@@ -165,7 +165,11 @@ def calc_steps(r, c):
             + (", with no net-cash adjustment for a financial." if financial else ", plus net cash."),
             "<b>Growth needed</b> = the yearly growth that makes the value equal the price.",
             f"<b>Rule</b>: green if it needs ≤ {r['growth_buy']*100:.0f}% a year, blue 5–25%, red ≥ 25%. Cyclicals and "
-            "cash conversion below 70% are capped at blue."]
+            "cash conversion below 70% are capped at blue."] \
+        + (["<b>Bad loans</b>: book value is cut by the bad loans not yet provided for (net NPA × loans). Net NPA "
+               "above 2%, gross NPA above 5%, provision coverage below 60% or gross NPA rising by more than half a point "
+               "in a year caps the signal at blue. Capital ratios are not checked – look them up."]
+              if financial and v2.get("asset_quality") else [])
 
 
 def worked_example(r, c):
@@ -275,12 +279,29 @@ def _growth_figures(r):
         rows.append(("P/E (ex net cash)", f"{r['pe']:.1f}", False))
     if r.get("cash_conversion") is not None:
         rows.append(("Cash conversion (5 years)", f"{r['cash_conversion']*100:.0f}%", False))
+    aq = r.get("asset_quality")
+    if aq:
+        rows += [(esc(label), esc(text), False) for label, text in aq["lines"]]
+        if aq.get("bad_loans_ps"):
+            rows.append(("Bad loans not provided for, per share", f"−{money(aq['bad_loans_ps'], ccy)}", False))
     if r.get("pb") is not None:
         fair = f" · fair {r['fair_pb']:.2f}" if r.get("fair_pb") is not None else ""
-        rows.append(("Price ÷ book (fair = 5-yr ROE × no-growth multiple)", f"{r['pb']:.2f}{fair}", False))
+        adjusted = aq and aq.get("bad_loans_ps")
+        label = "Price ÷ adjusted book" if adjusted else "Price ÷ book"
+        reported = f" (reported book {r['pb_reported']:.2f})" if adjusted and r.get("pb_reported") else ""
+        rows.append((f"{label} (fair = 5-yr ROE × no-growth multiple)", f"{r['pb']:.2f}{fair}{reported}", False))
     if r.get("market_value_usd_bn") is not None:
         rows.append(("Market value", f"US${r['market_value_usd_bn']:,.1f}bn", False))
     return rows
+
+
+def npa_summary(r):
+    """One short line for the summary tables: a lender's latest gross and net NPA, '' for anyone else."""
+    aq = r.get("asset_quality") or {}
+    if aq.get("gross_npa") is None and aq.get("net_npa") is None:
+        return ""
+    f = lambda x: "–" if x is None else f"{x*100:.2f}%"  # noqa: E731
+    return f"NPA {f(aq.get('gross_npa'))} gross · {f(aq.get('net_npa'))} net"
 
 
 def key_figures(r):

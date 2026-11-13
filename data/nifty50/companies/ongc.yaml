@@ -13,7 +13,7 @@ balance:
   cash: 363920.98
   debt: 1742991.33
 price:
-  value: 225.98
+  value: 225.0
   currency: INR
   date: '2026-11-13'
   source: yfinance ONGC.NS

@@ -8,7 +8,7 @@ period:
   end: '2026-07-26'
   per_year: 4
   reported: '2026-08-26'
-  next_report: '2026-11-19'
+  next_report: 2026-11-17
 earnings:
   net_income: 59688
   adjustments:
@@ -20,9 +20,9 @@ balance:
   cash: 56586
   debt: 33366
 price:
-  value: 166.19
+  value: 162.4201
   currency: USD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance NVDA
 sources:
 - Nvidia Q2 FY2027 release
@@ -30,4 +30,5 @@ sources:
 assumptions:
 - Equity gains stripped at an ASSUMED 21% tax
 - $42.8bn of marketable equity stakes not counted as cash
+- 'Next report confirmed: Q3 FY27 results 17 Nov 2026'
 notes: []

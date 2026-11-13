@@ -56,6 +56,19 @@ ol{padding-left:20px;margin:6px 0} ol li{margin:3px 0}
 .pvp{display:flex;gap:18px;align-items:flex-start} .pvp>div:last-child{flex:1} .pvp p{margin:0 0 6px}
 .bigrade{font-size:44px;font-weight:700;line-height:1;min-width:56px;text-align:center}
 footer{color:var(--muted);font-size:12px;margin-top:40px}
+table.gt th{cursor:default} table.gt th:after{content:none}
+.legend{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 4px} .chip{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:3px}
+.notes{font-size:12.5px;color:var(--ink2);max-width:1100px;margin:6px 0}
+.pc{margin:12px 0 4px;border:1px solid var(--line);border-radius:6px;padding:8px 8px 4px}
+.pc-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-bottom:4px}
+.pc-bar button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:2px 9px;cursor:pointer;font:inherit}
+.pc-bar button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)} .pc-bar .sep{width:8px}
+.pc-legend{color:var(--ink2);margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-main{height:380px} .pc-rsi{height:90px;margin-bottom:2px}
+.pc-key{font-size:11.5px;color:var(--muted);margin:4px 2px 2px;display:flex;flex-wrap:wrap;gap:4px 14px}
+.pc-key i{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:middle;margin-right:4px}
+.pc-cap{font-size:12.5px;color:var(--ink2);margin:2px 2px 4px}
+@media (max-width:640px){.pc-main{height:300px} .pc-legend{margin-left:0;width:100%}}
 
 main{max-width:1640px} .pill.grey{background:var(--muted)} .flags{font-size:11px;color:var(--muted)}
 .tag{font-size:10.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:0 6px;color:var(--ink2)}
@@ -65,16 +78,18 @@ table.sectors{border-collapse:collapse;font-size:13px;margin:6px 0 14px} table.s
 border-bottom:1px solid var(--line)} table.sectors td:first-child,table.sectors th:first-child{text-align:left}
 </style></head><body><main>
 <h1>S&amp;P 500 and Nasdaq-100 – quick screen</h1>
-<p class="sub">518 companies · run 13 Nov 2026 · <span class="pos">74 cheap</span>, 246 watch / hold,
+<p class="sub">518 companies · run 13 Nov 2026 · <span class="pos">73 cheap</span>, 247 watch / hold,
 <span class="neg">168 expensive or loss-making</span>, 30 not valued</p>
 <p class="method"><b>How it works.</b> Official figures from each company's SEC filings (Yahoo for the few foreign filers): the last
 twelve months' net income ÷ shares, plus net cash. Value with no growth = EPS × 13.1 + net cash;
 <b>growth needed</b> = the yearly growth for 5 years (15x exit, 10% return) that makes the value equal the price.
 Green ≤ 5% a year, blue 5–25%, red ≥ 25% or no earnings. Financials use book value × 5-year ROE (no net cash), energy and materials
 average the 12-month and 5-year EPS and are capped at blue, real estate is not valued, and cash conversion below 70% caps at blue.
+Lenders: book value less nonaccrual loans the allowance doesn't cover; nonaccrual loans above 2% of loans, an allowance below
+them, or net charge-offs (NCO) up by half on a year earlier cap at blue.
 Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … D = rose a third+). A filter, not a verdict.</p>
-<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution or one-off flags): <b>PDD</b> (−30.3%, A), <b>AES</b> (−21.4%, A), <b>SYF</b> (−15.9%, B), <b>LULU</b> (−14.4%, A), <b>GL</b> (−10.6%, B), <b>ALL</b> (−9.0%, A), <b>FSLR</b> (−7.7%, A), <b>DECK</b> (−7.2%, A), <b>HIG</b> (−7.2%, B), <b>TROW</b> (−6.4%, B), <b>MU</b> (−5.7%, A), <b>TSCO</b> (−5.5%, A), <b>CTSH</b> (−4.4%, A), <b>BAC</b> (−3.5%, B), <b>PYPL</b> (−3.2%, A), <b>HON</b> (−2.9%, A), <b>AIG</b> (−2.8%, B), <b>UHS</b> (−2.7%, A), <b>USB</b> (−2.6%, B), <b>PFG</b> (−2.2%, A), <b>AMP</b> (−2.2%, A), <b>KMB</b> (−2.0%, A), <b>ADBE</b> (−0.8%, A), <b>TXT</b> (−0.3%, B), <b>TRV</b> (−0.1%, A), <b>FOX</b> (+0.5%, B), <b>PRU</b> (+0.9%, A), <b>TFC</b> (+1.2%, B), <b>GS</b> (+1.5%, A), <b>IT</b> (+1.6%, A), <b>PGR</b> (+1.6%, A), <b>NVR</b> (+1.8%, B), <b>QCOM</b> (+2.0%, B), <b>STT</b> (+2.2%, B), <b>C</b> (+2.2%, B), <b>CMCSA</b> (+2.8%, A), <b>GOOG</b> (+3.0%, A), <b>LDOS</b> (+3.2%, A), <b>EXPE</b> (+3.3%, A), <b>NTRS</b> (+4.1%, B)</div>
-<h3>By sector</h3><table class="sectors"><tr><th>Sector</th><th>Companies</th><th>Median growth needed</th><th>Cheap (green)</th></tr><tr><td>Financials</td><td>76</td><td>+3.4%</td><td>40</td></tr><tr><td>Energy</td><td>21</td><td>+8.3%</td><td>0</td></tr><tr><td>Communication Services</td><td>23</td><td>+11.9%</td><td>6</td></tr><tr><td>Consumer Discretionary</td><td>48</td><td>+14.3%</td><td>9</td></tr><tr><td>Materials</td><td>24</td><td>+18.2%</td><td>0</td></tr><tr><td>Consumer Staples</td><td>34</td><td>+19.8%</td><td>2</td></tr><tr><td>Industrials</td><td>85</td><td>+20.3%</td><td>4</td></tr><tr><td>Information Technology</td><td>85</td><td>+22.2%</td><td>9</td></tr><tr><td>Health Care</td><td>61</td><td>+22.3%</td><td>3</td></tr><tr><td>Utilities</td><td>31</td><td>+24.9%</td><td>1</td></tr><tr><td>Real Estate</td><td>30</td><td>+27.2%</td><td>0</td></tr></table>
+<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution, one-off or bad-loan flags): <b>PDD</b> (−30.3%, A), <b>AES</b> (−21.4%, A), <b>SYF</b> (−15.9%, B), <b>LULU</b> (−14.4%, A), <b>GL</b> (−10.6%, B), <b>ALL</b> (−9.0%, A), <b>FSLR</b> (−7.7%, A), <b>DECK</b> (−7.2%, A), <b>HIG</b> (−7.2%, B), <b>TROW</b> (−6.4%, B), <b>MU</b> (−5.7%, A), <b>TSCO</b> (−5.5%, A), <b>CTSH</b> (−4.4%, A), <b>BAC</b> (−3.5%, B), <b>PYPL</b> (−3.2%, A), <b>HON</b> (−2.9%, A), <b>AIG</b> (−2.8%, B), <b>UHS</b> (−2.7%, A), <b>USB</b> (−2.6%, B), <b>PFG</b> (−2.2%, A), <b>AMP</b> (−2.2%, A), <b>KMB</b> (−2.0%, A), <b>ADBE</b> (−0.8%, A), <b>TXT</b> (−0.3%, B), <b>TRV</b> (−0.1%, A), <b>FOX</b> (+0.5%, B), <b>PRU</b> (+0.9%, A), <b>TFC</b> (+1.2%, B), <b>GS</b> (+1.5%, A), <b>IT</b> (+1.6%, A), <b>PGR</b> (+1.6%, A), <b>NVR</b> (+1.8%, B), <b>QCOM</b> (+2.0%, B), <b>C</b> (+2.2%, B), <b>CMCSA</b> (+2.8%, A), <b>GOOG</b> (+3.0%, A), <b>LDOS</b> (+3.2%, A), <b>EXPE</b> (+3.3%, A), <b>NTRS</b> (+4.1%, B)</div>
+<h3>By sector</h3><table class="sectors"><tr><th>Sector</th><th>Companies</th><th>Median growth needed</th><th>Cheap (green)</th></tr><tr><td>Financials</td><td>76</td><td>+3.4%</td><td>39</td></tr><tr><td>Energy</td><td>21</td><td>+8.3%</td><td>0</td></tr><tr><td>Communication Services</td><td>23</td><td>+11.9%</td><td>6</td></tr><tr><td>Consumer Discretionary</td><td>48</td><td>+14.3%</td><td>9</td></tr><tr><td>Materials</td><td>24</td><td>+18.2%</td><td>0</td></tr><tr><td>Consumer Staples</td><td>34</td><td>+19.8%</td><td>2</td></tr><tr><td>Industrials</td><td>85</td><td>+20.3%</td><td>4</td></tr><tr><td>Information Technology</td><td>85</td><td>+22.2%</td><td>9</td></tr><tr><td>Health Care</td><td>61</td><td>+22.3%</td><td>3</td></tr><tr><td>Utilities</td><td>31</td><td>+24.9%</td><td>1</td></tr><tr><td>Real Estate</td><td>30</td><td>+27.2%</td><td>0</td></tr></table>
 <div class="controls"><span class="lab">Signal</span><button class="on" data-k="signal" data-v="all">All</button><button data-k="signal" data-v="green">Cheap</button><button data-k="signal" data-v="blue">Watch / hold</button><button data-k="signal" data-v="red">Expensive</button><button data-k="signal" data-v="grey">Not valued</button>
 <span class="lab">Index</span><button class="on" data-k="index" data-v="all">All</button><button data-k="index" data-v="S&amp;P 500">S&amp;P 500</button><button data-k="index" data-v="Nasdaq-100">Nasdaq-100</button>
 <span class="lab">Sector</span><button class="on" data-k="sector" data-v="all">All</button><button data-k="sector" data-v="Communication Services">Communication Services</button><button data-k="sector" data-v="Consumer Discretionary">Consumer Discretionary</button><button data-k="sector" data-v="Consumer Staples">Consumer Staples</button><button data-k="sector" data-v="Energy">Energy</button><button data-k="sector" data-v="Financials">Financials</button><button data-k="sector" data-v="Health Care">Health Care</button><button data-k="sector" data-v="Industrials">Industrials</button><button data-k="sector" data-v="Information Technology">Information Technology</button><button data-k="sector" data-v="Materials">Materials</button><button data-k="sector" data-v="Real Estate">Real Estate</button><button data-k="sector" data-v="Utilities">Utilities</button>
@@ -152,7 +167,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="6.69525">6.7</td>
 <td data-v="0.428182">+42.8%</td>
 <td data-v="0.20139">+20%</td>
-<td data-v="1.34835">P/B 1.3 · fair 3.0</td>
+<td data-v="1.34835">P/B 1.3 · fair 3.0<br><small>NCO 7.66%</small></td>
 <td data-v="-0.264687">−26%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -407,7 +422,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="10.7166">10.7</td>
 <td data-v="0.22544">+22.5%</td>
 <td data-v="0.0991008">+10%</td>
-<td data-v="1.06202">P/B 1.1 · fair 1.4</td>
+<td data-v="1.06202">P/B 1.1 · fair 1.4<br><small>nonaccrual 0.38%</small></td>
 <td data-v="0.568944">+57%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -437,7 +452,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="10.5495">10.5</td>
 <td data-v="0.0372717">+3.7%</td>
 <td data-v="0.128537">+13%</td>
-<td data-v="1.35601">P/B 1.4 · fair 1.6</td>
+<td data-v="1.35601">P/B 1.4 · fair 1.6<br><small>nonaccrual 0.59% · NCO 0.45%</small></td>
 <td data-v="-0.0950455">−10%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -452,7 +467,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="10.4523">10.5</td>
 <td data-v="0.128696">+12.9%</td>
 <td data-v="0.107106">+11%</td>
-<td data-v="1.1195">P/B 1.1 · fair 1.2</td>
+<td data-v="1.1195">P/B 1.1 · fair 1.2<br><small>nonaccrual 0.91% · NCO 0.35%</small></td>
 <td data-v="-0.141121">−14%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -467,7 +482,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="10.8111">10.8</td>
 <td data-v="0.118696">+11.9%</td>
 <td data-v="0.108637">+11%</td>
-<td data-v="1.17449">P/B 1.2 · fair 1.3</td>
+<td data-v="1.17449">P/B 1.2 · fair 1.3<br><small>nonaccrual 0.44% · NCO 0.44%</small></td>
 <td data-v="-0.146067">−15%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -482,7 +497,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="12.7317">12.7</td>
 <td data-v="0.0921076">+9.2%</td>
 <td data-v="0.0773797">+8%</td>
-<td data-v="0.985178">P/B 1.0 · fair 1.3</td>
+<td data-v="0.985178">P/B 1.0 · fair 1.3<br><small>nonaccrual 0.89% · NCO 0.24%</small></td>
 <td data-v="0.372865">+37%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -662,7 +677,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="11.2588">11.3</td>
 <td data-v="0.13731">+13.7%</td>
 <td data-v="0.125992">+13%</td>
-<td data-v="1.41852">P/B 1.4 · fair 1.5</td>
+<td data-v="1.41852">P/B 1.4 · fair 1.5<br><small>NCO 0.51%</small></td>
 <td data-v="0.00985666">+1%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -677,7 +692,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="12.1363">12.1</td>
 <td data-v="0.230696">+23.1%</td>
 <td data-v="0.167303">+17%</td>
-<td data-v="2.03043">P/B 2.0 · fair 2.3</td>
+<td data-v="2.03043">P/B 2.0 · fair 2.3<br><small>nonaccrual 0.26%</small></td>
 <td data-v="-0.13174">−13%</td>
 <td data-v="">–</td>
 <td data-v="0" class="c grade gA">A</td>
@@ -722,7 +737,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="10.6246">10.6</td>
 <td data-v="0.0673058">+6.7%</td>
 <td data-v="0.119041">+12%</td>
-<td data-v="1.26476">P/B 1.3 · fair 1.2</td>
+<td data-v="1.26476">P/B 1.3 · fair 1.2<br><small>NCO 0.36%</small></td>
 <td data-v="0.132104">+13%</td>
 <td data-v="">–</td>
 <td data-v="0" class="c grade gA">A</td>
@@ -767,7 +782,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="11.2066">11.2</td>
 <td data-v="0.112283">+11.2%</td>
 <td data-v="0.130701">+13%</td>
-<td data-v="1.46472">P/B 1.5 · fair 1.4</td>
+<td data-v="1.46472">P/B 1.5 · fair 1.4<br><small>nonaccrual 0.64%</small></td>
 <td data-v="-0.193138">−19%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -872,7 +887,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="11.9881">12.0</td>
 <td data-v="0.0462687">+4.6%</td>
 <td data-v="0.0901359">+9%</td>
-<td data-v="1.08056">P/B 1.1 · fair 1.0</td>
+<td data-v="1.08056">P/B 1.1 · fair 1.0<br><small>nonaccrual 0.99% · NCO 0.38%</small></td>
 <td data-v="-0.120619">−12%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -992,7 +1007,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="11.8866">11.9</td>
 <td data-v="-0.151723">−15.2%</td>
 <td data-v="0.177453">+18%</td>
-<td data-v="2.10931">P/B 2.1 · fair 1.6</td>
+<td data-v="2.10931">P/B 2.1 · fair 1.6<br><small>NCO 0.35%</small></td>
 <td data-v="-0.165892">−17%</td>
 <td data-v="">–</td>
 <td data-v="0" class="c grade gA">A</td>
@@ -1097,22 +1112,22 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="33.6654">33.7</td>
 <td data-v="0.0338155">+3.4%</td>
 <td data-v="-0.458727">−46%</td>
-<td data-v="-15.4432">P/B -15.4 · fair -22.3</td>
+<td data-v="1.25728">cash 126%</td>
 <td data-v="-0.104493">−10%</td>
 <td data-v="3.46899">3.5x</td>
 <td data-v="1" class="c grade gB">B</td>
-<td data-v="0.121784">+12%</td></tr><tr data-signal="green" data-sector="Financials" data-index="S&amp;P 500" data-text="stt state street corporation financials asset management &amp; custody banks">
-<td data-v="STT"><a href="https://finance.yahoo.com/quote/STT" target="_blank" rel="noopener"><b>STT</b></a> · <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=93751&type=10-Q" target="_blank" rel="noopener">filings</a><br><small>State Street Corporation</small></td>
-<td data-v="0"><span class="pill green">Cheap</span></td>
-<td data-v="0.0215928"><b>+2.2%/yr</b></td>
+<td data-v="0.121784">+12%</td></tr><tr data-signal="blue" data-sector="Financials" data-index="S&amp;P 500" data-text="stt state street corporation financials asset management &amp; custody banks">
+<td data-v="STT"><a href="https://finance.yahoo.com/quote/STT" target="_blank" rel="noopener"><b>STT</b></a> · <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=93751&type=10-Q" target="_blank" rel="noopener">filings</a><br><small>State Street Corporation</small><br><span class="flags">[allowance covers 52% of nonaccrual loans]</span></td>
+<td data-v="1"><span class="pill blue">Cheap – capped</span></td>
+<td data-v="0.0220869"><b>+2.2%/yr</b></td>
 <td data-v="Financials">Financials<br><small>S&amp;P 500</small></td>
 <td data-v="173.7">$173.70<br><small>2026-11-12</small></td>
 <td data-v="47.26">$47bn</td>
-<td data-v="158.174">$158.17<br><small>MoS −10%</small></td>
+<td data-v="157.838">$157.84<br><small>MoS −10%</small></td>
 <td data-v="12.825">12.8</td>
 <td data-v="-0.0790098">−7.9%</td>
 <td data-v="0.128352">+13%</td>
-<td data-v="1.64611">P/B 1.6 · fair 1.3</td>
+<td data-v="1.65412">P/B 1.7 · fair 1.3<br><small>nonaccrual 0.59%</small></td>
 <td data-v="-0.166856">−17%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -1157,7 +1172,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="19.0037">19.0</td>
 <td data-v="0.0571997">+5.7%</td>
 <td data-v="0.0769762">+8%</td>
-<td data-v="1.46283">P/B 1.5 · fair 1.6</td>
+<td data-v="1.46283">P/B 1.5 · fair 1.6<br><small>nonaccrual 0.64% · NCO 0.30%</small></td>
 <td data-v="0.314053">+31%</td>
 <td data-v="">–</td>
 <td data-v="3" class="c grade gD">D</td>
@@ -1172,7 +1187,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="13.7983">13.8</td>
 <td data-v="-0.0924422">−9.2%</td>
 <td data-v="0.177188">+18%</td>
-<td data-v="2.44488">P/B 2.4 · fair 2.0</td>
+<td data-v="2.44488">P/B 2.4 · fair 2.0<br><small>NCO 0.63%</small></td>
 <td data-v="-0.0976829">−10%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -1337,7 +1352,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="13.261">13.3</td>
 <td data-v="0.0540256">+5.4%</td>
 <td data-v="0.181592">+18%</td>
-<td data-v="2.4081">P/B 2.4 · fair 1.7</td>
+<td data-v="2.4081">P/B 2.4 · fair 1.7<br><small>nonaccrual 0.13% · NCO 0.03%</small></td>
 <td data-v="-0.127411">−13%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -1352,7 +1367,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="15.3852">15.4</td>
 <td data-v="0.111448">+11.1%</td>
 <td data-v="0.193856">+19%</td>
-<td data-v="2.9825">P/B 3.0 · fair 2.5</td>
+<td data-v="2.9825">P/B 3.0 · fair 2.5<br><small>nonaccrual 0.00%</small></td>
 <td data-v="-0.093749">−9%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -1547,7 +1562,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="14.4559">14.5</td>
 <td data-v="-0.197101">−19.7%</td>
 <td data-v="0.174658">+17%</td>
-<td data-v="2.52484">P/B 2.5 · fair 1.6</td>
+<td data-v="2.52484">P/B 2.5 · fair 1.6<br><small>nonaccrual 0.28%</small></td>
 <td data-v="-0.0503986">−5%</td>
 <td data-v="">–</td>
 <td data-v="1" class="c grade gB">B</td>
@@ -1697,7 +1712,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="14.8731">14.9</td>
 <td data-v="0.0738806">+7.4%</td>
 <td data-v="0.206897">+21%</td>
-<td data-v="3.0772">P/B 3.1 · fair 1.9</td>
+<td data-v="3.0772">P/B 3.1 · fair 1.9<br><small>NCO −0.01%</small></td>
 <td data-v="-0.0573415">−6%</td>
 <td data-v="">–</td>
 <td data-v="0" class="c grade gA">A</td>
@@ -2072,7 +2087,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="15.7109">15.7</td>
 <td data-v="0.0694859">+6.9%</td>
 <td data-v="0.150178">+15%</td>
-<td data-v="2.35943">P/B 2.4 · fair 1.2</td>
+<td data-v="2.35943">P/B 2.4 · fair 1.2<br><small>nonaccrual 0.04%</small></td>
 <td data-v="-0.145849">−15%</td>
 <td data-v="">–</td>
 <td data-v="2" class="c grade gC">C</td>
@@ -3127,7 +3142,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="1.85173">1.9x</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.65234">+65%</td></tr><tr data-signal="blue" data-sector="Financials" data-index="S&amp;P 500" data-text="kkr kkr &amp; co. financials asset management &amp; custody banks">
-<td data-v="KKR"><a href="https://finance.yahoo.com/quote/KKR" target="_blank" rel="noopener"><b>KKR</b></a> · <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=1404912&type=10-Q" target="_blank" rel="noopener">filings</a><br><small>KKR &amp; Co.</small></td>
+<td data-v="KKR"><a href="https://finance.yahoo.com/quote/KKR" target="_blank" rel="noopener"><b>KKR</b></a> · <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=1404912&type=10-Q" target="_blank" rel="noopener">filings</a><br><small>KKR &amp; Co.</small><br><span class="flags">[charge-offs up 0.31% → 0.48%]</span></td>
 <td data-v="1"><span class="pill blue">Hold</span></td>
 <td data-v="0.149194"><b>+14.9%/yr</b></td>
 <td data-v="Financials">Financials<br><small>S&amp;P 500</small></td>
@@ -3137,7 +3152,7 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <td data-v="25.4059">25.4</td>
 <td data-v="0.0258647">+2.6%</td>
 <td data-v="0.112802">+11%</td>
-<td data-v="2.86583">P/B 2.9 · fair 1.6</td>
+<td data-v="2.86583">P/B 2.9 · fair 1.6<br><small>NCO 0.48%</small></td>
 <td data-v="">–</td>
 <td data-v="">–</td>
 <td data-v="4" class="c grade gnm">n/m</td>

@@ -9,7 +9,7 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 227.1
+  value: 227.5
   currency: INR
   date: '2026-11-13'
   source: yfinance JIOFIN.NS

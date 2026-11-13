@@ -13,7 +13,7 @@ balance:
   cash: 227470.0
   debt: 991610.0
 price:
-  value: 945.5
+  value: 943.6
   currency: INR
   date: '2026-11-13'
   source: yfinance HINDALCO.NS

@@ -13,7 +13,7 @@ balance:
   cash: 38950.0
   debt: 306210.0
 price:
-  value: 4840.3999
+  value: 4844.8999
   currency: INR
   date: '2026-11-13'
   source: yfinance TITAN.NS

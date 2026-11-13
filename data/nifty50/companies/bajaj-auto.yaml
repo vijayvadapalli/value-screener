@@ -13,7 +13,7 @@ balance:
   cash: 110935.8
   debt: 226398.5
 price:
-  value: 10797.0
+  value: 10850.0
   currency: INR
   date: '2026-11-13'
   source: yfinance BAJAJ-AUTO.NS

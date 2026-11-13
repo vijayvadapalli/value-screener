@@ -1,0 +1,36 @@
+ticker: 2899.HK
+yahoo: 2899.HK
+name: Zijin Mining Group Company Limited
+sector: copper
+model: producer
+currency: CNY
+period:
+  label: Q3-2026
+  end: 2026-09-30
+  per_year: 4
+  reported: 2026-10-23
+  next_report: 2027-03-23
+earnings:
+  net_income: 18356.0
+shares_m: 26589.7
+balance:
+  cash: 103489.7
+  debt: 169837.3
+price:
+  value: 27.94
+  currency: HKD
+  date: '2026-11-12'
+  source: yfinance 2899.HK
+sources:
+- Zijin Mining Q3-2026 report, 23 Oct 2026 (Q3 net profit attributable RMB 18.356bn; 9M RMB 57.53bn)
+- https://www.ad-hoc-news.de/boerse/news/corporate-news/zijin-mining-stock-nine-month-profit-jumps-51-93-prozent-on-metals-growth/70444118
+- 'Share count: 20,600,893,140 A + 5,988,840,000 H shares (Dec 2025 EGM notice / 2026 monthly returns)'
+assumptions:
+- Owner earnings = Q3 net profit attributable RMB 18,356m × 4 (D&A and sustaining capex not in the quarterly report; assumed equal)
+- Shares = 26,589.7m A + H – Yahoo's 5,989m for 2899.HK is the H-share line only, which made the quick screen look ~4x too cheap
+- 'NOT re-priced to spot: Q3 sold at gold ~$4,262 and copper ~$6.40 (quarter averages); at today''s lower gold and copper the earnings power is
+  lower – volumes not in the quarterly report'
+- Balance sheet from Yahoo's latest quarter (converted back from HKD at 1.176); not checked against the filing
+- Next report (FY2026) estimated from last year's late-March date
+notes:
+- In COPX; gold, copper, zinc, silver and lithium; took control of Chifeng Gold (25.85%) on 22 Oct 2026

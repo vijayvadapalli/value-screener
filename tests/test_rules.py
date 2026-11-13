@@ -20,9 +20,19 @@ def test_stale_never_buy():
     assert all(r["stale"] for r in res.values())
 
 
-def test_q2_files_are_stale_today():
-    res = run(COS, ["IAG", "CDE", "AG"], CFG)
-    assert all(r["stale"] for r in res.values())
+def test_stale_only_once_newer_results_exist():
+    res = run(COS, ["IAG", "CDE", "AG"], CFG)          # 4 Nov: CDE reports today, IAG and AG tomorrow
+    assert res["CDE"]["stale"] and "due today" in res["CDE"]["stale_reason"]
+    assert not res["IAG"]["stale"] and not res["AG"]["stale"]   # Q2 is still the latest there is
+    later = copy.deepcopy(CFG)
+    later["as_of"] = dt.date(2026, 11, 6)               # the Q3 releases are out: now they are stale
+    res = run(COS, ["IAG", "AG"], later)
+    assert all(r["stale"] and "were due" in r["stale_reason"] for r in res.values())
+    far = copy.deepcopy(COS)
+    far["IAG"]["period"]["next_report"] = dt.date(2027, 9, 1)   # waiting is capped at MAX_WAIT_DAYS
+    cfg = copy.deepcopy(CFG)
+    cfg["as_of"] = dt.date(2027, 8, 10)               # 406 days after the period ended
+    assert run(far, ["IAG"], cfg)["IAG"]["stale"]
 
 
 def test_higher_gold_raises_value():

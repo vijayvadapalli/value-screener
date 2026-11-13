@@ -159,6 +159,10 @@ def publish(dated: Path, list_name: str | None, kind: str) -> Path:
     """Copies a dated report from output/ to reports/<list><kind>, e.g. reports/core.html or
     reports/nifty50-profit-vs-price.pdf, replacing the previous one."""
     import shutil  # noqa: PLC0415
+    src = Path(dated).resolve()
+    private_dirs = [(ROOT / "data" / "private").resolve(), (ROOT / "output" / "private").resolve()]
+    if src.parent.name == "private" or any(d == src or d in src.parents for d in private_dirs) or "private" in (list_name or "").lower():
+        raise ValidationError(f"refusing to publish a private file: {dated}")   # private research never reaches reports/
     target = reports_folder() / f"{(list_name or 'all').lower()}{kind}"
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(dated, target)

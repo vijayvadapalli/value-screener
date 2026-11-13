@@ -13,7 +13,7 @@ balance:
   cash: 85860.0
   debt: 45920.0
 price:
-  value: 363.0
+  value: 363.65
   currency: INR
   date: '2026-11-13'
   source: yfinance ETERNAL.NS

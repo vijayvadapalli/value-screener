@@ -74,7 +74,10 @@ average from Screener.in for Indian companies. The Nifty v2 valuation of banks u
 figures.
 
 The rules follow the Valuation Playbook (Nov 2026); `PROJECT_INSTRUCTIONS.md` has them in full, ready to paste into a
-Claude Project. `docs/Value_Screener_Design.pdf` has the original requirements and formulas.
+Claude Project. `docs/Value_Screener_Design.pdf` has the original requirements and formulas. New to valuing companies? Start with [docs/Valuation_Overview.pdf](docs/Valuation_Overview.pdf) (4 pages, no
+formulas), then [docs/Valuation_Guide.pdf](docs/Valuation_Guide.pdf) (21 pages: Part A tech and DCF, Part B miners, technical analysis – every term, model and formula with worked
+examples; rebuild with `python docs/build_valuation_guide.py`). [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) shows how everything fits together – what is built, what is
+next, and what stays private.
 
 ## Quick start
 
@@ -93,6 +96,13 @@ use it.
 
 ## Every time
 
+The whole routine is one command – `python tools/weekly.py` (`--quick` skips Nifty 50 and the two big screens):
+prices, price history, every report with live metal prices, the screens, the model portfolios, the private research
+report and the tests, then a short brief (signal changes, results due, names near our buy levels, research rules near
+or triggered) in `output/private/weekly-brief.md`. In Claude Code, `/weekly` (`.claude/skills/weekly/SKILL.md`) also
+reads new results into the company files, checks the news and captures the weekly research report before running it.
+The individual steps, if you want to run them one by one:
+
 Share prices update after each market closes – for US listings that is about 9 pm UK time; before that you get the
 previous day's close.
 
@@ -102,6 +112,7 @@ source .venv/bin/activate
 # 1. share prices into the company files
 python tools/update_prices.py                    # core, watchlist, tech, oil (data/companies)
 python tools/update_prices.py --folder nifty50   # Nifty 50
+python tools/update_history.py                   # daily price history for the charts (first run ~15 s, then ~5 s)
 
 # 2. reports: one HTML (+ PDFs) per list (dated copies in output/, the latest in reports/)
 python -m valuescreen run --list core --live        # --live also fetches today's gold, silver and copper
@@ -223,6 +234,10 @@ The valuation then applies the v2 rules (`valuescreen/v2.py`):
   the 5-year average. Shown blue at most.
 - Financials: average of the 12-month EPS and book value × 5-year ROE, no net cash, and price-to-book against the fair
   multiple (5-yr ROE × the no-growth multiple).
+- Lenders (banks, NBFCs): book value is first cut by the bad loans not yet provided for (net NPA % × loans, from
+  Screener.in's quarterly NPA rows – the standalone page for banks). Net NPA above 2%, gross NPA above 5%, provision
+  coverage below 60% or gross NPA up more than half a point in a year caps the signal at blue (`asset_quality` in
+  `config.yaml`, `valuescreen/asset_quality.py`). Capital ratios (CAR / CET1) are not in the data – check them by hand.
 - Discounted at 12% (no-growth multiple ≈ 12.1x instead of 13.1x for the US).
 - Cash conversion (cash from operations ÷ net profit over 5 years) below 70% caps the signal at blue.
 - Conglomerates and finance arms (L&T, M&M, Bajaj Auto, Grasim) and insurers are flagged.
@@ -249,7 +264,9 @@ python -m valuescreen run --list miners --live # full valuations of the companie
 python tools/model_portfolio.py                # the model portfolios then use the full valuation instead of the quick one
 ```
 
-Promoted so far, filled from their Q3-2026 releases: **BTG**, **KGC** and **OGC**. The full model can differ a lot from the
+Promoted so far, filled from their Q3-2026 results: **BTG**, **KGC**, **OGC**, **ERO.TO**, **PE&OLES.MX**, **2899.HK** (Zijin)
+and **6693.HK** (Chifeng). Watch the share count for companies with A and H shares: Yahoo gives only the Hong Kong
+H shares (Zijin 5.99bn of 26.59bn), which made both look 4–5 times cheaper on the quick screen than they are. The full model can differ a lot from the
 quick screen, because it counts sustaining capex and re-prices metal to spot. On 13 Nov 2026 B2Gold went from +54%
 (quick) to −19% (AISC $2,602/oz, 63% of spot), Kinross from +39% to +19%, and OceanaGold from +52% to +42%.
 
@@ -291,12 +308,72 @@ open reports/us-screen.html
   filed (restatements kept beside the originals), six years of daily prices and splits, and each run's verdicts – the
   base for history charts and back-testing the signals later.
 - **Screen:** reverse DCF at 10% (growth needed for 5 years, 15x exit). Financials: average of 12-month EPS and book value
-  × 5-year ROE, no net cash, shown with price-to-book against the fair multiple. Energy and materials: average of 12-month
+  × 5-year ROE, no net cash, shown with price-to-book against the fair multiple. Lenders: book value less nonaccrual loans
+  the allowance doesn't cover; nonaccrual loans above 2% of loans, an allowance below them, or net charge-offs up by half
+  on a year earlier cap at blue and keep the company off the shortlist. Energy and materials: average of 12-month
   and 5-year EPS, capped at blue. Real estate: not valued. Quality: free-cash-flow yield, ROE, 5-year cash conversion
   (below 70% caps at blue), share count change over 3 years, debt ÷ EBITDA; and the profit-vs-price grade.
 - **Report:** filters by signal, index and sector; a table of the median growth needed by sector (where the market is
   cheap or stretched); a shortlist (green, grade A or B, cash conversion ≥ 70%, no debt or dilution flags); each ticker
   links to its Yahoo page and its SEC filings.
+
+## Price history (for charts and technical analysis)
+
+```bash
+python tools/update_history.py                       # core, tech, oil and the promoted miners (~50 symbols)
+python tools/update_history.py --lists core          # chosen lists, or --tickers NEM,YCA.L
+python tools/update_history.py --refresh             # download everything again
+```
+
+- **What:** 10 years of daily open, high, low, close, adjusted close and volume, plus splits and dividends, from Yahoo,
+  in `output/prices.sqlite` (~12 MB, rebuildable, not committed). Each symbol is the company file's Yahoo symbol;
+  for the miners list only companies with a full company file are included.
+- **Updates:** later runs fetch only the days since the last run (re-reading the last week for corrections). A new
+  split makes Yahoo restate every earlier price, so that symbol's history is reloaded in full.
+- **Currency:** stored as Yahoo gives it – `GBp` means pence (Yellow Cake trades at 515p = £5.15).
+- **Reading it:** `valuescreen/pricedb.py` – `bars()`, `closes()`, `actions()`, weekly and monthly bars with `resample()`.
+
+### Charts in the reports
+
+Every company section of the full reports (core, tech, oil, miners) has a price chart, built from this history each
+time `python -m valuescreen run` runs – update the history first.
+
+- **HTML – interactive:** RSI(14) with 70 / 30 lines on top; below it daily / weekly / monthly candles with
+  6M · 1Y · 3Y · 5Y · 10Y ranges and the 20-, 50- and 200-day averages; a crosshair shows open, high, low, close, change
+  and volume.
+- **Found automatically (marked auto):** support and resistance levels (where the price turned at least twice),
+  and trend lines – a rising one through higher lows, a falling one through lower highs – drawn only when at least
+  three turning points line up and no close has broken through since.
+- **Buttons, all off at first** (so the default chart is just price, averages, trend lines and RSI):
+  *Value lines* – thick lines for the 15x value / buy level (green), 12x value / NAV (dark green) and 25x sell zone
+  (red), with the price scale stretched so all of them show (the values are also listed under the chart);
+  *Support / resistance* – the nearest support (green) and resistance (red), thick, with labels; *All levels* – every
+  level found; *Volume*. Averages: 20-day light grey, 50-day green, 200-day dark red (the longer, the thicker); markers for results (E), dividends (D) and splits (S). A caption gives the price
+  against its 50- and 200-day averages, RSI, the 52-week range and the nearest support and resistance.
+- **PDF – static:** RSI over the last year of daily candles, with the same averages, nearest levels and value lines.
+- Charts use TradingView's open-source [Lightweight Charts](https://github.com/tradingview/lightweight-charts)
+  (Apache 2.0, `valuescreen/vendor/`), embedded so reports work offline and on GitHub Pages. A company without price
+  history simply has no chart; the run log says which.
+
+## Private research (your weekly report – never committed)
+
+```bash
+# 1. capture the week's report into data/private/research/<date>.yaml (Claude can do this from the PDF)
+# 2. build the private report
+python tools/research.py                 # → output/private/research.html (latest capture; --date for an older one)
+open output/private/research.html
+```
+
+- **Capture:** one YAML file per report – for each stock, ETF, metal or index: support and resistance (a price or a
+  `[low, high]` zone), targets, stance and notes, plus the IF / THEN rules, themes and macro notes.
+  `data/private/` and `output/` are git-ignored, and `loader.publish` refuses private files.
+- **Report:** how close each IF / THEN rule is to triggering (triggered / near within 3% / waiting); every asset's
+  price against its nearest support and resistance next to our signal, with **agree** (their support within 5% of our
+  buy level or value) and **conflict** (they are keen while our valuation says expensive, or the reverse); a section
+  per asset with their levels, our valuation, what changed since the previous week, history across weeks, and a chart
+  with a *Their levels* button (dashed teal support, orange resistance) beside our value lines and averages.
+- **Public charts:** only the plain support / resistance prices – no source, stance, notes, targets or positions –
+  appear on the public charts behind a *Watched levels* button. Mark a level `{price: 90, public: false}` to keep it off.
 
 ## Model portfolios (value, quality, momentum)
 
@@ -416,7 +493,9 @@ to `config.yaml` if it is not there.
 Spot prices, FX, multiples (12x / 15x cautious and fair, 25x sell), zone thresholds (20% margin of safety for BUY,
 AISC ≤ 60% of spot, developer BUY ≤ 0.8 × NAV), DCF settings (10%, 12% for INR, 15x exit, 5 years), the
 tiers, market-value shades, the gold stress-test prices, the Nifty v2 industry lists, and how old results (100 days)
-and prices (7 days) can be before they are flagged. A STALE company never shows as BUY.
+and prices (7 days) can be before they are flagged. A STALE company never shows as BUY. Results only count as stale
+once newer ones exist: a company file can carry `period.next_report`, and while that date is still ahead (a quarter
+not yet reported, or a half-yearly / annual reporter) the file stays current for up to 400 days.
 
 ## Models
 
@@ -498,6 +577,8 @@ LFS: GitHub Pages cannot serve LFS files.)
 
 ## Code map
 
+The full picture, with diagrams and status: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 ```
 valuescreen/loader.py      read and check company, list and config files (also last-12-month earnings, tiers)
 valuescreen/models.py      the valuation models; leases.py (Hut 8) and v2.py (Nifty v2 rules) beside it
@@ -510,10 +591,14 @@ valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (scr
 valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
 valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures
 valuescreen/miner_screen.py, etf_holdings.py   the miners quick screen and the ETF holdings it starts from
+valuescreen/pricedb.py   daily price history (output/prices.sqlite) for charts and technical analysis
+valuescreen/chart_levels.py, price_chart.py   moving averages, RSI, support / resistance, trend lines; the chart data (HTML) and static chart (PDF)
+valuescreen/vendor/         Lightweight Charts (TradingView, Apache 2.0) for the interactive charts
+valuescreen/research.py   private weekly research: levels, rules, agree / conflict with our valuation, the private report
 valuescreen/model_portfolio.py   the model portfolios: candidates from every screen, scoring, sleeves, sizing, report
 valuescreen/us_screen.py, us_universe.py, us_fundamentals.py, sec.py, factsdb.py   the S&P 500 / Nasdaq-100 screen:
                            index lists, SEC download, figures from filings, the SQLite database
-tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us, model_portfolio,
+tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us, model_portfolio, update_history, research, weekly,
                            screen_universe, make_nse_list
 ```
 

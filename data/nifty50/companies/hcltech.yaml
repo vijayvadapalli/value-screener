@@ -13,7 +13,7 @@ balance:
   cash: 306150.0
   debt: 52150.0
 price:
-  value: 1369.8
+  value: 1378.0
   currency: INR
   date: '2026-11-13'
   source: yfinance HCLTECH.NS

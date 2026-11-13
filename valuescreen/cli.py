@@ -27,7 +27,7 @@ import datetime as dt
 import sys
 from pathlib import Path
 
-from . import growth_data, history, html_report, loader, pdf, prices, report, technicals
+from . import growth_data, history, html_report, loader, pdf, price_chart, pricedb, prices, report, research, technicals
 from . import profit_vs_price as pvp
 from .engine import etf_lookthrough, ranked, run
 
@@ -103,6 +103,32 @@ def _technicals(tickers, companies, log):
     return found
 
 
+def _price_charts(tickers, companies, results, log):
+    """Chart data for each company from output/prices.sqlite (tools/update_history.py); {} when there is none."""
+    if not pricedb.DB.exists():
+        log.append("no price charts: run python tools/update_history.py to download the price history")
+        return {}
+    con = pricedb.connect()
+    weeks = research.load_weeks()   # private captures: only their plain support / resistance prices reach a public chart
+    out, missing, old = {}, [], []
+    for t in tickers:
+        symbol = companies[t].get("yahoo") or t
+        last = pricedb.last_date(con, symbol)
+        if last is None:
+            missing.append(symbol)
+            continue
+        if (dt.date.today() - dt.date.fromisoformat(last)).days > 5:
+            old.append(f"{symbol} {last}")
+        p = price_chart.payload(con, symbol, results[t], companies[t], watched=research.public_levels(weeks, t, symbol))
+        if p:
+            out[t] = p
+    if missing:
+        log.append("no price history for " + ", ".join(missing) + " – python tools/update_history.py --tickers " + ",".join(missing))
+    if old:
+        log.append("price history not updated recently: " + ", ".join(old) + " – run python tools/update_history.py")
+    return out
+
+
 def _profit_rows(a, tickers, companies, results, folder, out, log):
     """Profit-vs-price rows for the run's companies; figures cached per day in output/<folder>/profit_vs_price_cache/."""
     entries = loader.load_list_entries(a.list) if a.list else [{"ticker": t} for t in tickers]
@@ -168,6 +194,7 @@ def main(argv=None):
     if previous:
         log.append(f"previous figures in brackets are from the run of {previous['_date']}")
     tech = _technicals(tickers, companies, log) if a.technicals else {}
+    pcharts = _price_charts(tickers, companies, results, log)
 
     profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
     lookthroughs = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]
@@ -178,9 +205,9 @@ def main(argv=None):
     files = []
     if results:
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
-                                       previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log))
+                                       previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log, pcharts))
     if results and not a.no_pdf:
-        files.append(pdf.build(results, companies, cfg, out / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log))
+        files.append(pdf.build(results, companies, cfg, out / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log, pcharts))
         if profit_rows:
             path = out / f"{title.replace(' ', '_')}_Profit_vs_Price_{cfg['as_of']:%d%b%Y}.pdf"
             files.append(pvp.build(profit_rows, path, title, cfg["as_of"], pvp.sources_text(profit_rows, cfg["as_of"])))

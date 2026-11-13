@@ -13,7 +13,7 @@ balance:
   cash: 496390.0
   debt: 1190790.0
 price:
-  value: 1339.4
+  value: 1348.0
   currency: INR
   date: '2026-11-13'
   source: yfinance JSWSTEEL.NS

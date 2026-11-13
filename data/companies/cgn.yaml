@@ -9,6 +9,7 @@ period:
   end: '2025-12-31'
   per_year: 1
   reported: '2026-03-26'
+  next_report: 2027-03-26
 earnings:
   owner_earnings: 453.0
 shares_m: 7600.6826
@@ -23,3 +24,4 @@ sources:
 assumptions:
 - FY2025 EPS used; 1H-2026 was a small loss
 - Net cash not included (not retrieved)
+- Next report estimated from last year's annual results (26 Mar 2026); FY2025 kept because 1H-2026 was a small loss

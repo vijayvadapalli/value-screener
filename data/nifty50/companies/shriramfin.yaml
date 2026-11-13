@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 965.6
+  value: 970.0
   currency: INR
   date: '2026-11-13'
   source: yfinance SHRIRAMFIN.NS
-shares_m: 2352.62
+shares_m: 2354.959
 v2:
   eps_quarters:
   - 17.27
@@ -60,12 +60,44 @@ v2:
   - -13281.0
   book_value_ps: 474.0
   roe_5y: 0.16
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 5.38
+    - 4.55
+    - 4.53
+    - 4.57
+    - 4.54
+    - 4.58
+    - 4.64
+    - 4.65
+    net_npa_pct:
+    - 2.68
+    - 2.64
+    - 2.57
+    - 2.49
+    - 2.38
+    - 2.33
+    - 2.33
+    - 2.31
+    loans_cr: 307834.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/SHRIRAMFIN/
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/SHRIRAMFIN/consolidated/'
+- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/SHRIRAMFIN/consolidated/; NPA figures from the standalone
+  page: https://www.screener.in/company/SHRIRAMFIN/'
 assumptions:
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 notes: []

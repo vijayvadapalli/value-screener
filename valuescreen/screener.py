@@ -134,3 +134,45 @@ def parse_growth(html: str) -> dict:
         "sales_then": by_year(sales_row).get(base), "sales_now": by_year(sales_row).get("TTM"),
         "profit_then": by_year(profit_row).get(base), "profit_now": by_year(profit_row).get("TTM"),
     }
+
+
+SCHEDULE_URL = "https://www.screener.in/api/company/{id}/schedules/?parent={parent}&section=balance-sheet{cons}"
+
+
+def parse_asset_quality(html: str) -> dict | None:
+    """A lender's quarterly 'Gross NPA %' and 'Net NPA %' rows (banks fill them on the standalone page only, NBFCs on
+    either), plus what loans_cr() needs. None when the page has no NPA figures."""
+    soup = soup_of(html)
+    q_head, quarters = table(soup, "quarters")
+    gross, net = quarters.get("Gross NPA %") or [], quarters.get("Net NPA %") or []
+    if (gross[-1:] or [None])[0] is None and (net[-1:] or [None])[0] is None:   # some pages fill only older quarters
+        return None
+    b_head, bal = table(soup, "balance-sheet")
+    tag = soup.select_one("[data-company-id]")
+    return {"quarters": q_head[-8:], "gross_npa_pct": gross[-8:], "net_npa_pct": net[-8:],
+            "company_id": tag["data-company-id"] if tag else None,
+            "other_assets": (bal.get("Other Assets") or [None])[-1], "total_assets": (bal.get("Total Assets") or [None])[-1],
+            "balance_label": b_head[-1] if b_head else ""}
+
+
+def loans_cr(aq: dict, consolidated: bool) -> tuple:
+    """(loans in ₹ crore, how it was found) for the latest balance sheet. Screener files a lender's loans under 'Other
+    Assets'; its breakdown has a 'Loans n Advances' line that is right for the latest half-year but classified
+    differently in older years, so it is used only when it is at least 40% of total assets. Otherwise Other Assets −
+    cash equivalents, an upper bound (so the bad-loan deduction errs on the cautious side)."""
+    if not aq.get("company_id"):
+        return None, ""
+    import json  # noqa: PLC0415
+    page = SCHEDULE_URL.format(id=aq["company_id"], parent="Other+Assets", cons="&consolidated=" if consolidated else "")
+    try:
+        parts = json.loads(get(page))
+    except (ValueError, OSError):
+        parts = {}
+    latest = lambda name: number(list((parts.get(name) or {"": ""}).values())[-1])  # noqa: E731
+    loans, cash, total = latest("Loans n Advances"), latest("Cash Equivalents"), aq.get("total_assets")
+    view, label = "consolidated" if consolidated else "standalone", aq.get("balance_label", "")
+    if loans and total and loans >= 0.4 * total:
+        return loans, f"Screener.in {view} balance sheet, Loans n Advances, {label}"
+    if aq.get("other_assets"):
+        return aq["other_assets"] - (cash or 0), f"Screener.in {view} balance sheet, Other Assets − cash, {label} (upper bound)"
+    return None, ""

@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1079.35
+  value: 1080.0
   currency: INR
   date: '2026-11-13'
   source: yfinance SBIN.NS
-shares_m: 9235.018
+shares_m: 9243.528
 v2:
   eps_quarters:
   - 21.12
@@ -60,12 +60,44 @@ v2:
   - 38097.0
   book_value_ps: 728.0
   roe_5y: 0.16
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 2.07
+    - 1.82
+    - 1.83
+    - 1.73
+    - 1.57
+    - 1.49
+    - 1.47
+    - 1.39
+    net_npa_pct:
+    - 0.53
+    - 0.47
+    - 0.47
+    - 0.42
+    - 0.39
+    - 0.39
+    - 0.38
+    - 0.36
+    loans_cr: 5154323.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/SBIN/
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/SBIN/consolidated/'
+- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/SBIN/consolidated/; NPA figures from the standalone page:
+  https://www.screener.in/company/SBIN/'
 assumptions:
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 notes: []

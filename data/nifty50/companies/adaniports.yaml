@@ -13,7 +13,7 @@ balance:
   cash: 73097.6
   debt: 632361.6
 price:
-  value: 1896.5
+  value: 1903.3
   currency: INR
   date: '2026-11-13'
   source: yfinance ADANIPORTS.NS

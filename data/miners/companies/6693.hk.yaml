@@ -1,0 +1,37 @@
+ticker: 6693.HK
+yahoo: 6693.HK
+name: Chifeng Jilong Gold Mining Group Limited
+sector: gold
+model: producer
+currency: CNY
+period:
+  label: 9M-2026
+  end: 2026-09-30
+  per_year: 1.3333
+  reported: 2026-10-23
+  next_report: 2027-03-23
+earnings:
+  net_income: 2285.0
+shares_m: 2211.3
+balance:
+  cash: 14137.5
+  debt: 746.8
+price:
+  value: 31.62
+  currency: HKD
+  date: '2026-11-12'
+  source: yfinance 6693.HK
+sources:
+- Chifeng Jilong Gold Q3-2026 report, 23 Oct 2026 (9M net profit RMB 2,285m, +11%; Q3 RMB 553m, −42% on lower gold sales)
+- https://caratcapital.org/a-zijin-takes-control-of-chifeng-gold
+- https://app.dealroom.co/news/note/zijin-takes-control-of-chifeng-gold-as-stock-hits-second-straight-limit-up
+- 'Share count: 1,663,911,378 A + 236,499,800 H (2026 monthly returns) + 310.9m new H shares to Zijin at HK$30.19'
+assumptions:
+- Owner earnings = 9-month net profit RMB 2,285m annualised (× 4/3) – Q3 alone (RMB 553m) was hit by the timing of gold sales and takeover costs
+- Shares = 2,211.3m after Zijin's 310.9m new H shares (control from 22 Oct 2026); Yahoo's 547m was the H-share line only
+- Cash includes the new-share proceeds ≈ RMB 7,969m (310.9m × HK$30.19); balance otherwise from Yahoo's latest quarter
+- 'NOT re-priced to spot: gold averaged ~$4,262 in Q3, ~9% above today – volumes not in the quarterly report'
+- Next report (FY2026) estimated from last year's late-March date
+notes:
+- Zijin Mining now the controlling shareholder (25.85%)
+- Wassa (Ghana) and Laos operations

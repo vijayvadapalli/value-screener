@@ -40,6 +40,10 @@ Educational framework, not investment advice.
   - Cyclicals (oil & gas, metals, cement, power, autos, airlines): average of TTM and the 5-year average EPS.
   - Financials: average of TTM and book value × 5-year ROE; no net-cash adjustment. Show price-to-book against the
     fair multiple (5-yr ROE × no-growth multiple).
+  - Lenders: use adjusted book = book value − net NPA (net NPA % × loans) per share. Cap at blue if net NPA > 2%,
+    gross NPA > 5%, provision coverage < 60%, or gross NPA up > 0.5 points in four quarters. US: book less nonaccrual
+    loans not covered by the allowance; cap if nonaccrual > 2% of loans, allowance < nonaccrual, or net charge-offs
+    up by half on a year earlier. Check capital ratios (CAR / CET1) by hand.
   - Cash conversion = operating cash flow ÷ net profit over 5 years. Below 70% caps the signal at blue.
   - Flag conglomerates and finance arms (L&T, M&M, Bajaj Auto, Grasim). Insurers: earnings are a weak guide.
 

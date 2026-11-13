@@ -11,16 +11,17 @@ wording.py and profit_vs_price.py, the charts from charts.py.
 from __future__ import annotations
 
 import base64
+import json
 import html
 import re
 import tempfile
 from pathlib import Path
 
-from . import charts
+from . import charts, price_chart
 from . import profit_vs_price as pvp
 from . import style as S
-from .pdf import list_title
-from .wording import (MODEL_LABEL, calc_steps, day, headline, key_figures, kpi_cards, money, price_date,
+from .pdf import GROWTH_NOTE, RULES_NOTE, list_title
+from .wording import (MODEL_LABEL, calc_steps, day, headline, key_figures, kpi_cards, money, npa_summary, price_date,
                       worked_example)
 
 HTML_DPI = 150
@@ -136,6 +137,8 @@ def summary_row(r, p, previous, cfg):
     prev_mos = f"<br><small>({pct(prev['margin_of_safety'])})</small>" if prev.get("margin_of_safety") is not None else ""
     grade = p["grade"] if p else "n/m"
     flags = " ".join(f"[{e(f)}]" for f in r.get("flags", []))
+    if npa_summary(r):
+        flags += ("<br>" if flags else "") + f"<small>{e(npa_summary(r))}</small>"
     text = f"{t} {r['name']} {r.get('sector', '')}".lower()
     late = "late" if (r.get("price_undated") or (r.get("price_age_days") or 0) > 7) else ""
     return f"""<tr data-signal="{r['signal']}" data-grade="{e(grade)}" data-text="{e(text)}">
@@ -213,7 +216,7 @@ def _pvp_block(p):
             f'<p class="muted">Source: {"Screener.in" if p.get("source") == "screener" else "Yahoo Finance statements"}{src}</p></div></div>')
 
 
-def company_section(r, c, cfg, p, neighbours, chart_dir, tech):
+def company_section(r, c, cfg, p, neighbours, chart_dir, tech, pchart=None):
     t = r["ticker"]
     prev_t, next_t = neighbours
     nav = ['<a href="#summary">↑ Summary</a>']
@@ -245,6 +248,7 @@ def company_section(r, c, cfg, p, neighbours, chart_dir, tech):
 <p class="meta">{' · '.join(meta)} <span class="late">{flags}</span></p>
 {_cards(r)}
 <div class="callout" style="border-left-color:{S.SIGNAL[r['signal']]}">{markup(headline(r, cfg))}</div>
+{chart_block(t, pchart)}
 {img(band, 'valuation band')}
 <div class="grid2"><div>{img(curve, 'curve')}</div><div><h3>Key figures</h3>{_key_figures(r)}</div></div>
 <div class="grid2"><div>{img(heat, 'heatmap')}{img(extra, 'history')}</div>
@@ -253,6 +257,84 @@ def company_section(r, c, cfg, p, neighbours, chart_dir, tech):
 <div class="grid2"><div><h3>Assumptions and data notes</h3><ul class="small">{notes_html}</ul></div>
 <div><h3>Sources</h3><ul class="small">{sources_html}</ul></div></div>
 </section>"""
+
+
+def chart_block(t: str, p: dict | None) -> str:
+    """The interactive price chart (Lightweight Charts) with its data, or nothing when there is no price history."""
+    if not p:
+        return ""
+    data = json.dumps(p, separators=(",", ":")).replace("</", "<\\/")
+    values_tip = " · ".join(f"{v['label']} {v['price']:,.2f}" for v in p["values"]) or "no value lines"
+    note = "" if p["same_currency"] else f" · chart in {e(p['currency'])}, valuation in another currency – value lines left off"
+    key = (f'<i style="border-color:{price_chart.SMA_COLOURS[20]}"></i>SMA 20 <i style="border-color:{price_chart.SMA_COLOURS[50]};border-top-width:3px"></i>SMA 50 '
+           f'<i style="border-color:{price_chart.SMA_COLOURS[200]};border-top-width:4px"></i>SMA 200</span><span>buttons: '
+           f'<i style="border-color:{price_chart.LIGHT_GREEN};border-top-width:3px"></i>15x value / buy · <i style="border-color:{price_chart.DARK_GREEN};border-top-width:3px"></i>12x value / NAV · '
+           '<i style="border-color:var(--red);border-top-width:3px"></i>25x sell zone · <i style="border-color:var(--green)"></i>support · '
+           '<i style="border-color:var(--red)"></i>resistance (auto)</span><span><i style="border-color:#4299E1"></i><i style="border-color:#B794F4">'
+           '</i>trend lines (auto) · E results · D dividend · S split')
+    return f"""<div class="pc" id="pc-{e(t)}" data-pc="pcd-{e(t)}">
+<div class="pc-bar"><button data-iv="D">D</button><button data-iv="W">W</button><button data-iv="M">M</button><span class="sep"></span>
+{''.join(f'<button data-rg="{x}">{x}</button>' for x in ('6M', '1Y', '3Y', '5Y', '10Y'))}<span class="sep"></span>
+<button data-val title="{e(values_tip)}">Value lines</button>
+<button data-sr title="The nearest support below and resistance above the price (found automatically)">Support / resistance</button>
+<button data-lv title="Every support and resistance level found, not just the nearest">All levels</button>
+<button data-wl title="Support (teal) and resistance (orange) levels being watched">{e(p.get("watched_label", "Watched levels"))}</button>
+<button data-vol title="Show daily volume under the price">Volume</button><span class="pc-legend"></span></div>
+<div class="pc-rsi"></div><div class="pc-main"></div>
+<div class="pc-key"><span>{key}</span></div>
+<p class="pc-cap"><b>Price</b> ({e(p['symbol'])}, {e(p['currency'] or '')}): {e(price_chart.caption(p))}{note}</p>
+{f'<p class="pc-cap"><b>Value lines</b>: {e(values_tip)}</p>' if p["values"] else ""}
+<script type="application/json" id="pcd-{e(t)}">{data}</script></div>"""
+
+
+# ------------------------------------------------------------------------------------------------- summary extras (as in the PDF)
+def legend_html(rows) -> str:
+    """Signal colours, then what the tint strength means: tiers for a tiered list, otherwise market value."""
+    tiered = any(r.get("tier") for r in rows)
+    shades = (["Tier A · large, low-cost, royalties", "Tier B · mid-tier / higher cost", "Tier C · juniors, developers"] if tiered
+              else ["≥ $100bn (tech ≥ $200bn)", "$30–100bn", "$10–30bn", "< $10bn"])
+    chips = [f'<span class="chip" style="background:{S.SIGNAL[k]};color:#fff">{e(t)}</span>'
+             for k, t in (("green", "Green · buy / start a position"), ("blue", "Watch / hold"), ("red", "Red · expensive or no valid value"))]
+    chips += [f'<span class="chip" style="background:{S.TINT["blue"][i]};color:{S.INK}">{e(t)}</span>' for i, t in enumerate(shades)]
+    return '<div class="legend">' + "".join(chips) + "</div>"
+
+
+def _quality_html(r) -> str:
+    if r.get("pb") is not None and r.get("fair_pb") is not None:
+        label = "P/ABV" if (r.get("asset_quality") or {}).get("bad_loans_ps") else "P/B"
+        npa = npa_summary(r).replace(" gross · ", " / ").replace(" net", "")
+        return f"{label} {r['pb']:.1f}<br><small>fair {r['fair_pb']:.1f}{' · ' + e(npa) if npa else ''}</small>"
+    if r.get("cash_conversion") is not None:
+        cc = r["cash_conversion"]
+        return f'<span class="{"neg" if cc < 0.7 else ""}">cash {cc*100:.0f}%</span>'
+    if r.get("fcf_ps") is not None and r.get("price"):
+        return f"FCF {r['fcf_ps'] / r['price'] * 100:.1f}%"
+    return "–"
+
+
+def growth_table_html(rows, previous) -> str:
+    """Growth companies: value with no growth, at 10% and 20% a year, the growth the price needs, and quality."""
+    head = ["Ticker", "Price", "No growth", "@ 10%/yr", "@ 20%/yr", "Growth needed", "MoS", "P/E", "Quality", "Mkt value", "Signal", "Buy price"]
+    body = []
+    for r in rows:
+        ccy, g = r["price_ccy"], r.get("implied_growth")
+        before = previous.get(r["ticker"], {}).get("implied_growth")
+        mv = r.get("market_value_usd_bn")
+        mos = r.get("margin_of_safety")
+        pe_txt = f"{r['pe']:.1f}" if r.get("pe") else "–"
+        body.append(
+            f'<tr data-signal="{r["signal"]}"><td><a href="#c-{e(r["ticker"])}"><b>{e(r["display_ticker"])}</b></a><br><small>{e(r["name"])}</small></td>'
+            f'<td class="nw">{money(r["price"], ccy)}</td><td class="nw">{money(r["v0"], ccy)}</td><td class="nw">{money(r.get("v10"), ccy)}</td>'
+            f'<td class="nw">{money(r.get("v20"), ccy)}</td>'
+            f'<td class="nw"><b>{pct(g, 1) if g is not None else "–"}</b>{f"<br><small>({pct(before, 1)})</small>" if before is not None else ""}</td>'
+            f'<td class="nw {"pos" if (mos or -1) > 0 else "neg"}">{pct(mos) if mos is not None else "–"}</td>'
+            f'<td>{pe_txt}</td><td>{_quality_html(r)}</td>'
+            f'<td class="nw">{"–" if mv is None else (f"${mv:,.0f}bn" if mv >= 10 else f"${mv:,.1f}bn")}</td>'
+            f'<td class="sig"><span class="pill {r["signal"]}">{e(short_action(r["action"]))}</span></td>'
+            f'<td class="nw">{money(r.get("buy_level"), ccy) if r.get("buy_level") else "–"}</td></tr>')
+    return (f'<h3 id="growth">Growth companies – reverse DCF</h3><div class="wrap"><table class="sum gt"><thead><tr>'
+            + "".join(f"<th>{e(h)}</th>" for h in head) + f'</tr></thead><tbody>{"".join(body)}</tbody></table></div>'
+            f'<p class="small">{GROWTH_NOTE}</p>')
 
 
 # ------------------------------------------------------------------------------------------------- page
@@ -313,6 +395,157 @@ ol{{padding-left:20px;margin:6px 0}} ol li{{margin:3px 0}}
 .pvp{{display:flex;gap:18px;align-items:flex-start}} .pvp>div:last-child{{flex:1}} .pvp p{{margin:0 0 6px}}
 .bigrade{{font-size:44px;font-weight:700;line-height:1;min-width:56px;text-align:center}}
 footer{{color:var(--muted);font-size:12px;margin-top:40px}}
+table.gt th{{cursor:default}} table.gt th:after{{content:none}}
+.legend{{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 4px}} .chip{{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:3px}}
+.notes{{font-size:12.5px;color:var(--ink2);max-width:1100px;margin:6px 0}}
+.pc{{margin:12px 0 4px;border:1px solid var(--line);border-radius:6px;padding:8px 8px 4px}}
+.pc-bar{{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-bottom:4px}}
+.pc-bar button{{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:2px 9px;cursor:pointer;font:inherit}}
+.pc-bar button.on{{background:var(--ink);color:var(--bg);border-color:var(--ink)}} .pc-bar .sep{{width:8px}}
+.pc-legend{{color:var(--ink2);margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.pc-main{{height:380px}} .pc-rsi{{height:90px;margin-bottom:2px}}
+.pc-key{{font-size:11.5px;color:var(--muted);margin:4px 2px 2px;display:flex;flex-wrap:wrap;gap:4px 14px}}
+.pc-key i{{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:middle;margin-right:4px}}
+.pc-cap{{font-size:12.5px;color:var(--ink2);margin:2px 2px 4px}}
+@media (max-width:640px){{.pc-main{{height:300px}} .pc-legend{{margin-left:0;width:100%}}}}
+"""
+
+VENDOR = Path(__file__).parent / "vendor" / "lightweight-charts.standalone.production.js"
+CHART_JS = r"""
+const PC_SMA = window.PC_SMA_COLOURS;
+const PC_RANGE = {'6M': 0.5, '1Y': 1, '3Y': 3, '5Y': 5, '10Y': 10};
+const PC_AUTO_IV = {'6M': 'D', '1Y': 'D', '3Y': 'W', '5Y': 'W', '10Y': 'M'};
+function pcColours() {
+  const cs = getComputedStyle(document.documentElement), v = n => cs.getPropertyValue(n).trim();
+  return {bg: v('--bg') || '#fff', ink: v('--ink2') || '#444', muted: v('--muted') || '#888', line: v('--line') || '#eee',
+          green: v('--green'), red: v('--red'), blue: v('--blue'), price: v('--price')};
+}
+function pcSma(c, n) { const o = []; let s = 0; c.forEach((x, i) => { s += x; if (i >= n) s -= c[i - n]; o.push(i >= n - 1 ? s / n : null); }); return o; }
+function pcRsi(c, n = 14) {
+  const o = c.map(() => null); if (c.length <= n) return o;
+  let ag = 0, al = 0;
+  for (let i = 1; i <= n; i++) { const d = c[i] - c[i - 1]; ag += Math.max(d, 0); al += Math.max(-d, 0); }
+  ag /= n; al /= n; o[n] = al === 0 ? 100 : 100 - 100 / (1 + ag / al);
+  for (let i = n + 1; i < c.length; i++) { const d = c[i] - c[i - 1];
+    ag = (ag * (n - 1) + Math.max(d, 0)) / n; al = (al * (n - 1) + Math.max(-d, 0)) / n; o[i] = al === 0 ? 100 : 100 - 100 / (1 + ag / al); }
+  return o;
+}
+const pcDays = s => Date.parse(s) / 864e5;
+function pcInit(box) {
+  if (box.dataset.ready) return; box.dataset.ready = 1;
+  const d = JSON.parse(document.getElementById(box.dataset.pc).textContent), col = pcColours(), LC = LightweightCharts;
+  const last = d.D[d.D.length - 1][4], prec = last < 1 ? 4 : last < 10 ? 3 : 2;
+  const base = {autoSize: true, layout: {background: {type: 'solid', color: col.bg}, textColor: col.ink, fontSize: 11,
+                fontFamily: 'Inter, -apple-system, system-ui, sans-serif'},
+                grid: {vertLines: {color: col.line}, horzLines: {color: col.line}}, rightPriceScale: {borderColor: col.line, minimumWidth: 74},
+                crosshair: {mode: 0}};
+  const main = LC.createChart(box.querySelector('.pc-main'), {...base, timeScale: {borderColor: col.line}});
+  const osc = LC.createChart(box.querySelector('.pc-rsi'), {...base, layout: {...base.layout, attributionLogo: false}, timeScale: {visible: false, borderColor: col.line}});
+  const candle = main.addCandlestickSeries({upColor: col.green, downColor: col.red, borderVisible: false, wickUpColor: col.green,
+    wickDownColor: col.red, priceLineColor: col.price, priceFormat: {type: 'price', precision: prec, minMove: 1 / 10 ** prec}});
+  candle.priceScale().applyOptions({scaleMargins: {top: 0.06, bottom: 0.06}});
+  let vol = null;   // volume: off by default, the Volume button adds it
+  const volData = () => rows.map(r => ({time: r[0], value: r[5], color: r[4] >= r[1] ? col.green + '66' : col.red + '66'}));
+  const toggleVol = () => { const b = box.querySelector('[data-vol]');
+    if (vol) { main.removeSeries(vol); vol = null; candle.priceScale().applyOptions({scaleMargins: {top: 0.06, bottom: 0.06}}); }
+    else { vol = main.addHistogramSeries({priceScaleId: 'vol', priceFormat: {type: 'volume'}, lastValueVisible: false, priceLineVisible: false});
+           main.priceScale('vol').applyOptions({scaleMargins: {top: 0.84, bottom: 0}}); vol.setData(volData());
+           candle.priceScale().applyOptions({scaleMargins: {top: 0.06, bottom: 0.2}}); }
+    if (b) b.classList.toggle('on', !!vol); };
+  const quiet = {priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false};
+  const noScale = {autoscaleInfoProvider: () => null};   // averages and trend lines never stretch the price scale
+  const smaWidth = {20: 1, 50: 2, 200: 3};
+  const smas = {}; for (const n in PC_SMA) smas[n] = main.addLineSeries({color: PC_SMA[n], lineWidth: smaWidth[n] || 1, ...quiet, ...noScale});
+  const trends = d.trends.map(t => [t, main.addLineSeries({color: t.kind === 'resistance' ? '#B794F4' : '#4299E1', lineWidth: 2, ...quiet, ...noScale})]);
+  // buttons, all off at first: support / resistance (nearest), every level, and our value lines
+  const nearest = ['support', 'resistance'].map(k => d.levels.find(l => l.kind === k)).filter(Boolean);
+  let levelLines = [], valueLines = [], showValues = false, watchedLines = [], showWatched = false;
+  const watchedPrices = (d.watched || []).flatMap(w => [w.lo, w.hi]);
+  const btn = k => box.querySelector(`[${k}]`);
+  const drawLevels = mode => {   // mode: '' (off), 'near', 'all'
+    levelLines.forEach(x => candle.removePriceLine(x));
+    levelLines = (mode === 'all' ? d.levels : mode === 'near' ? nearest : []).map(l => candle.createPriceLine({price: l.price,
+      color: l.kind === 'support' ? col.green : col.red, lineWidth: 2, lineStyle: LC.LineStyle.Solid, axisLabelVisible: true,
+      title: l.kind === 'support' ? 'Support' : 'Resistance'}));
+    btn('data-sr')?.classList.toggle('on', mode === 'near'); btn('data-lv')?.classList.toggle('on', mode === 'all'); };
+  btn('data-sr').onclick = () => drawLevels(btn('data-sr').classList.contains('on') ? '' : 'near');
+  btn('data-lv').onclick = () => drawLevels(btn('data-lv').classList.contains('on') ? '' : 'all');
+  if (!d.levels.length) { btn('data-sr').style.display = 'none'; btn('data-lv').style.display = 'none'; }
+  else if (d.levels.length <= nearest.length) btn('data-lv').style.display = 'none';
+  // value lines: shown on request, thick, and the price scale stretches so every one (25x too) is in view
+  const valuePrices = d.values.map(v => v.price);
+  candle.applyOptions({autoscaleInfoProvider: original => { const r = original();
+    const extra = [...(showValues ? valuePrices : []), ...(showWatched ? watchedPrices : [])];
+    if (!r || !extra.length) return r;
+    return {...r, priceRange: {minValue: Math.min(r.priceRange.minValue, ...extra) * 0.97,
+                               maxValue: Math.max(r.priceRange.maxValue, ...extra) * 1.03}}; }});
+  const toggleValues = () => { showValues = !showValues;
+    valueLines.forEach(x => candle.removePriceLine(x));
+    valueLines = showValues ? d.values.map(v => candle.createPriceLine({price: v.price, color: v.color, lineWidth: 3,
+      lineStyle: v.solid ? LC.LineStyle.Solid : LC.LineStyle.Dashed, axisLabelVisible: true, title: v.label})) : [];
+    btn('data-val').classList.toggle('on', showValues); main.timeScale().applyOptions({}); candle.applyOptions({}); };
+  if (d.values.length) btn('data-val').onclick = toggleValues; else btn('data-val').style.display = 'none';
+  // levels someone else is watching (plain support / resistance, zones as two lines): off at first
+  const toggleWatched = () => { showWatched = !showWatched;
+    watchedLines.forEach(x => candle.removePriceLine(x));
+    watchedLines = showWatched ? d.watched.flatMap(w => { const c = w.kind === 'support' ? '#2C9C94' : '#DD6B20';
+      const t = w.kind === 'support' ? 'support' : 'resistance';
+      return (w.hi - w.lo > 1e-9 ? [w.lo, w.hi] : [w.lo]).map(p => candle.createPriceLine({price: p, color: c, lineWidth: 2,
+        lineStyle: LC.LineStyle.LargeDashed, axisLabelVisible: true, title: t})); }) : [];
+    btn('data-wl').classList.toggle('on', showWatched); candle.applyOptions({}); };
+  if (watchedPrices.length) btn('data-wl').onclick = toggleWatched; else btn('data-wl').style.display = 'none';
+  const rsi = osc.addLineSeries({color: col.blue, lineWidth: 1, priceLineVisible: false, lastValueVisible: true,
+    autoscaleInfoProvider: () => ({priceRange: {minValue: 0, maxValue: 100}})});
+  osc.applyOptions({watermark: {visible: true, text: 'RSI(14)', fontSize: 11, color: col.muted, horzAlign: 'left', vertAlign: 'top'}});
+  rsi.createPriceLine({price: 70, color: col.red, lineWidth: 1, lineStyle: LC.LineStyle.Dashed, axisLabelVisible: false, title: '70'});
+  rsi.createPriceLine({price: 30, color: col.green, lineWidth: 1, lineStyle: LC.LineStyle.Dashed, axisLabelVisible: false, title: '30'});
+  let syncing = false;
+  const link = (a, b) => a.timeScale().subscribeVisibleLogicalRangeChange(r => { if (!r || syncing) return; syncing = true;
+    b.timeScale().setVisibleLogicalRange(r); syncing = false; });
+  link(main, osc); link(osc, main);
+  const legend = box.querySelector('.pc-legend'), fmt = x => x == null ? '–' : x.toLocaleString(undefined, {maximumFractionDigits: prec});
+  const vfmt = x => x >= 1e9 ? (x / 1e9).toFixed(2) + 'B' : x >= 1e6 ? (x / 1e6).toFixed(2) + 'M' : x >= 1e3 ? (x / 1e3).toFixed(0) + 'K' : x;
+  let rows = [], iv = 'D', range = '1Y';
+  const show = r => { if (!r) return; const i = rows.findIndex(x => x[0] === r[0]), prev = i > 0 ? rows[i - 1][4] : r[1];
+    const ch = (r[4] / prev - 1) * 100;
+    legend.innerHTML = `<b>${r[0]}</b> O <b>${fmt(r[1])}</b> H <b>${fmt(r[2])}</b> L <b>${fmt(r[3])}</b> C <b>${fmt(r[4])}</b> ` +
+      `<span class="${ch >= 0 ? 'pos' : 'neg'}">${ch >= 0 ? '+' : ''}${ch.toFixed(2)}%</span> Vol <b>${vfmt(r[5])}</b>`; };
+  main.subscribeCrosshairMove(p => { const b = p.time ? rows.find(x => x[0] === p.time) : null; show(b || rows[rows.length - 1]); });
+  const snap = date => { const i = rows.findIndex(x => x[0] >= date); return i < 0 ? -1 : i; };
+  function setIv(next) {
+    iv = next; rows = d[iv]; const c = rows.map(r => r[4]);
+    candle.setData(rows.map(r => ({time: r[0], open: r[1], high: r[2], low: r[3], close: r[4]})));
+    for (const n in PC_SMA) { const s = pcSma(c, +n); smas[n].setData(rows.map((r, i) => s[i] == null ? {time: r[0]} : {time: r[0], value: s[i]})); }
+    if (vol) vol.setData(volData());
+    const rs = pcRsi(c); rsi.setData(rows.map((r, i) => rs[i] == null ? {time: r[0]} : {time: r[0], value: rs[i]}));
+    trends.forEach(([t, s]) => { const i0 = snap(t.from[0]), i1 = rows.length - 1;
+      if (i0 < 0 || i0 >= i1) { s.setData([]); return; }
+      const slope = (t.to[1] - t.from[1]) / Math.max(pcDays(t.to[0]) - pcDays(t.from[0]), 1);
+      const at = date => t.from[1] + slope * (pcDays(date) - pcDays(t.from[0]));
+      s.setData([{time: rows[i0][0], value: at(rows[i0][0])}, {time: rows[i1][0], value: at(rows[i1][0])}]); });
+    const seen = new Set(), marks = [];
+    d.markers.forEach(m => { const i = snap(m.date); if (i < 0) return; const key = rows[i][0] + m.kind; if (seen.has(key)) return; seen.add(key);
+      marks.push({time: rows[i][0], position: m.kind === 'E' ? 'aboveBar' : 'belowBar', shape: m.kind === 'E' ? 'square' : 'circle',
+                  color: m.kind === 'E' ? col.blue : m.kind === 'S' ? col.red : col.muted, text: m.kind}); });
+    candle.setMarkers(marks.sort((a, b) => a.time < b.time ? -1 : 1));
+    box.querySelectorAll('[data-iv]').forEach(b => b.classList.toggle('on', b.dataset.iv === iv));
+    show(rows[rows.length - 1]);
+  }
+  function setRange(next) {
+    range = next; const end = rows[rows.length - 1][0], from = new Date(Date.parse(end) - PC_RANGE[range] * 365.25 * 864e5).toISOString().slice(0, 10);
+    if (from <= rows[0][0]) main.timeScale().fitContent(); else main.timeScale().setVisibleRange({from, to: end});
+    box.querySelectorAll('[data-rg]').forEach(b => b.classList.toggle('on', b.dataset.rg === range));
+  }
+  box.querySelectorAll('[data-iv]').forEach(b => b.onclick = () => { setIv(b.dataset.iv); setRange(range); });
+  box.querySelectorAll('[data-rg]').forEach(b => b.onclick = () => { if (PC_AUTO_IV[b.dataset.rg] !== iv) setIv(PC_AUTO_IV[b.dataset.rg]); setRange(b.dataset.rg); });
+  const vb = box.querySelector('[data-vol]'); if (vb) vb.onclick = toggleVol;
+  setIv('D'); setRange('1Y');
+}
+if (window.LightweightCharts) {
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { pcInit(x.target); io.unobserve(x.target); } }),
+                                                                           {rootMargin: '300px'}) : null;
+  document.querySelectorAll('.pc').forEach(b => io ? io.observe(b) : pcInit(b));
+}
 """
 
 JS = """
@@ -348,8 +581,9 @@ apply();
 
 
 def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], path: Path, title: str,
-          previous: dict | None = None, tech: dict | None = None, lookthroughs=(), heatmaps=(None, None), log_lines=()):
-    previous, tech = previous or {}, tech or {}
+          previous: dict | None = None, tech: dict | None = None, lookthroughs=(), heatmaps=(None, None), log_lines=(),
+          price_charts: dict | None = None):
+    previous, tech, price_charts = previous or {}, tech or {}, price_charts or {}
     profit = {p["ticker"]: p for p in profit_rows}
     ordered = sorted(results.values(), key=lambda r: r["display_ticker"])
     tickers = [r["ticker"] for r in ordered]
@@ -359,7 +593,7 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     with tempfile.TemporaryDirectory() as tmp, charts.resolution(HTML_DPI):
         sections = [company_section(r, companies[r["ticker"]], cfg, profit.get(r["ticker"]),
                                     (tickers[i - 1] if i else None, tickers[i + 1] if i + 1 < len(tickers) else None),
-                                    Path(tmp), tech.get(r["ticker"])) for i, r in enumerate(ordered)]
+                                    Path(tmp), tech.get(r["ticker"]), price_charts.get(r["ticker"])) for i, r in enumerate(ordered)]
     toc = " ".join(f'<a href="#c-{e(t)}">{e(results[t]["display_ticker"])}</a>' for t in tickers)
     etf_html = ""
     for name, lt, etf in lookthroughs:
@@ -373,7 +607,15 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     heat_html = "".join(img(h, "heatmap") for h in heatmaps if h)
     if heat_html:
         heat_html = f'<section class="company" id="heatmaps"><h2>Scenario heatmaps – every company</h2>{heat_html}</section>'
+    growth_rows = [r for r in ordered if r["model"] == "growth"]
+    growth_html = growth_table_html(growth_rows, previous) if growth_rows else ""
+    pvp_html = (f'<h3 id="pvp">Profit growth vs price growth</h3><p class="notes">{pvp._at_a_glance(profit_rows)}</p>'
+                f'<p class="notes">{pvp.HOW_TO_READ}</p>' if profit_rows else "")
     log = "".join(f"<li>{e(x)}</li>" for x in log_lines) or "<li>stored prices</li>"
+    chart_scripts = (f"<script>{VENDOR.read_text(encoding='utf-8')}</script>"
+                     f"<script>window.PC_SMA_COLOURS = {json.dumps({str(k): v for k, v in price_chart.SMA_COLOURS.items()})};</script>"
+                     f"<script>{CHART_JS}</script>"
+                     if price_charts and VENDOR.exists() else "")
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} – value vs price</title><style>{CSS}</style></head><body><main>
 <h1 id="summary">{e(title)} – value vs price</h1>
@@ -391,13 +633,17 @@ and physical holders, and for growth companies the yearly growth the price needs
 <button data-sig="blue">Blue</button><button data-sig="red">Red</button>
 <span class="lab">Grade</span><button class="on" data-grd="all">All</button>{''.join(f'<button data-grd="{g}">{g}</button>' for g in GRADE_ORDER)}
 <input id="q" type="search" placeholder="Search ticker or name"><span class="lab" id="count"></span></div>
+{legend_html(ordered)}
 <div class="wrap"><table class="sum" id="sum"><thead>{SUMMARY_HEAD}</thead><tbody>
 {''.join(summary_row(r, profit.get(r['ticker']), previous, cfg) for r in ordered)}</tbody></table></div>
+<p class="notes">{RULES_NOTE}</p>
+{pvp_html}
+{growth_html}
 {''.join(sections)}{etf_html}{heat_html}
 <section class="company"><h2>Run log</h2><ul class="small">{log}</ul></section>
 <footer>Educational framework, not investment advice. Previous run's figures in (brackets). Prices in each exchange's currency;
 sales and profits as the company reports them.</footer>
-</main><script>{JS}</script></body></html>"""
+</main><script>{JS}</script>{chart_scripts}</body></html>"""
     path.write_text(page, encoding="utf-8")
     return path
 
