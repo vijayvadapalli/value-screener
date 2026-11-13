@@ -3,17 +3,17 @@
 Value vs price, the Rick Rule way: each company is valued only from its latest filing, re-priced to today's metal
 prices, and compared with what the market charges. Every run writes one HTML report per list that combines the value
 view (green / blue / red signals, buy levels) with a profit-growth-vs-price-growth grade, with a sortable summary table
-and a linked section per company – plus two PDFs of the same for printing. A flag shows whenever the data is out of date.
+and a linked section per company – plus a profit-vs-price PDF for printing. A flag shows whenever the data is out of date.
 
 ## Latest reports
 
-| List | Report (read this) | Value PDF | Profit vs price PDF |
-|---|---|---|---|
-| Core | [core.html](https://vijayvadapalli.github.io/value-screener/reports/core.html) | [core.pdf](https://vijayvadapalli.github.io/value-screener/reports/core.pdf) | [core-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/core-profit-vs-price.pdf) |
-| Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech.pdf) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
-| Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil.pdf) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
-| Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – | – |
-| Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50.pdf) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
+| List | Report (read this) | Profit vs price PDF |
+|---|---|---|
+| Core | [core.html](https://vijayvadapalli.github.io/value-screener/reports/core.html) | [core-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/core-profit-vs-price.pdf) |
+| Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
+| Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
+| Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – |
+| Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
 
