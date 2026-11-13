@@ -9,7 +9,7 @@ and a linked section per company – plus two PDFs of the same for printing. A f
 
 | List | Report (read this) | Value PDF | Profit vs price PDF |
 |---|---|---|---|
-| Portfolio | [portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/portfolio.html) | [portfolio.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio.pdf) | [portfolio-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio-profit-vs-price.pdf) |
+| Core | [core.html](https://vijayvadapalli.github.io/value-screener/reports/core.html) | [core.pdf](https://vijayvadapalli.github.io/value-screener/reports/core.pdf) | [core-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/core-profit-vs-price.pdf) |
 | Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech.pdf) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
 | Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil.pdf) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
 | Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – | – |
@@ -40,17 +40,17 @@ previous day's close.
 source .venv/bin/activate
 
 # 1. share prices into the company files
-python tools/update_prices.py                    # portfolio, watchlist, tech (data/companies)
+python tools/update_prices.py                    # core, watchlist, tech, oil (data/companies)
 python tools/update_prices.py --folder nifty50   # Nifty 50
 
 # 2. reports: one HTML + two PDFs per list (dated copies in output/, the latest in reports/)
-python -m valuescreen run --list portfolio --live   # --live also fetches today's gold, silver and copper
+python -m valuescreen run --list core --live        # --live also fetches today's gold, silver and copper
 python -m valuescreen run --list tech
 python -m valuescreen run --list watchlist
 python -m valuescreen run --list nifty50            # first run each day ≈ 4–5 min (Screener.in), then cached
 
 # 3. read them
-open reports/portfolio.html                         # Windows: start reports\portfolio.html
+open reports/core.html                              # Windows: start reports\core.html
 open reports/tech.html
 open reports/nifty50.html
 ```
@@ -68,8 +68,8 @@ Other runs:
 
 ```bash
 python -m valuescreen run --list watchlist             # data/lists/watchlist.yaml
-python -m valuescreen run --list portfolio --live      # your holdings, live prices (yfinance)
-python -m valuescreen run --list portfolio --technicals   # adds price vs 200-day average, RSI and MACD (yfinance)
+python -m valuescreen run --list core --live           # live prices (yfinance)
+python -m valuescreen run --list core --technicals   # adds price vs 200-day average, RSI and MACD (yfinance)
 python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4200,silver=55
 python -m valuescreen run --list tech
 python -m valuescreen run --all --etf URNM --no-pdf     # every company, ETF look-through, skip the PDFs
@@ -83,7 +83,7 @@ The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`
 
 Every run writes dated reports and working files to `output/` (`output/nifty50/` for the Nifty), which git ignores, so
 your history stays on your computer. It also copies the latest reports to `reports/` under fixed names
-(`portfolio.html`, `portfolio.pdf`, `portfolio-profit-vs-price.pdf`, and the same for each list) – the only reports git
+(`core.html`, `core.pdf`, `core-profit-vs-price.pdf`, and the same for each list) – the only reports git
 tracks and the site publishes.
 
 Reports:
@@ -94,7 +94,7 @@ Reports:
   comparison, notes and linked sources, with links back to the summary and to the previous and next company. One file
   with the charts inside, so it opens offline and can be shared as it is.
 - `<List>_Profit_vs_Price_<date>.pdf` – the profit-vs-price table for printing (see below).
-- `<List>_Value_vs_Price_<date>.pdf` – the value report for printing. Page 1 is the summary table (portfolio columns for producers,
+- `<List>_Value_vs_Price_<date>.pdf` – the value report for printing. Page 1 is the summary table (value columns for producers,
   royalties, developers; a reverse-DCF table for growth stocks), alphabetical, rows tinted by signal and by tier or
   market value. Each company then gets a headline, its "how to read" cards (price, value, margin of safety, buy level),
   the valuation band, the metal-price or growth curve, a heatmap, the calculation with a worked example, key figures,
@@ -179,7 +179,7 @@ them each quarter. NSE / BSE results filings remain the authority – check the 
 ## Screening all the miners (ETF holdings)
 
 A quick first pass over every miner in seven ETFs – which ones deserve a full company file. Kept separate from your
-portfolio: its own list (`data/lists/miners.yaml`), company folder (`data/miners/companies`) and output (`output/miners`).
+other lists: its own list (`data/lists/miners.yaml`), company folder (`data/miners/companies`) and output (`output/miners`).
 
 ```bash
 python tools/make_etf_list.py miners GDX GDXJ SIL SILJ COPX URNM URNJ   # the universe (~270 companies); re-run to refresh
@@ -199,8 +199,8 @@ python -m valuescreen run --list miners        # full valuations of the companie
 - **Signals:** Cheap = at least 20% below the 12x value · Fair = at or below 15x · Watch = 15–25x · Expensive = 25x or
   more, or no positive earnings · Not valued = developers and explorers (revenue under 2% of market value) and physical
   holders. **Shortlist** = Cheap producers with positive free cash flow and a grade other than D.
-- **Your holdings** from `data/lists/portfolio.yaml` are shown too, tagged "held" (a "My holdings" filter shows only
-  them); `--holdings none` leaves them out. Nothing is written to your portfolio files.
+- **The core list** (`data/lists/core.yaml`) is shown too, tagged "core" (a "Core list" filter shows only them);
+  `--also none` leaves them out, `--also <list>` uses another list. Nothing is written to those files.
 - **Yahoo rate limits:** on a list this long Yahoo sometimes blocks for a while. The run then stops fetching, says so,
   and keeps what it has; run it again later and only the missing companies are fetched.
 
@@ -287,7 +287,7 @@ to `config.yaml` if it is not there.
 ## Judgement calls (all in config.yaml)
 
 Spot prices, FX, multiples (12x / 15x cautious and fair, 25x sell), zone thresholds (20% margin of safety for BUY,
-AISC ≤ 60% of spot, developer BUY ≤ 0.8 × NAV), DCF settings (10%, 12% for INR, 15x exit, 5 years), the portfolio
+AISC ≤ 60% of spot, developer BUY ≤ 0.8 × NAV), DCF settings (10%, 12% for INR, 15x exit, 5 years), the
 tiers, market-value shades, the gold stress-test prices, the Nifty v2 industry lists, and how old results (100 days)
 and prices (7 days) can be before they are flagged. A STALE company never shows as BUY.
 
@@ -323,7 +323,7 @@ was a loss it starts from the next profitable year (about two years). Prices are
 profits as the company reports them – growth rates and the P/E change do not depend on the currency. Figures are cached
 per list and day in `output/<folder>/profit_vs_price_cache/`. Profits include one-offs: check big jumps in the filing.
 
-To see your position values, add the number of shares to `data/lists/portfolio.yaml`, e.g. `{ticker: FNV, quantity: 35}`;
+To see your position values, add a share quantity to `data/lists/core.yaml`, e.g. `{ticker: FNV, quantity: 35}`;
 the profit-vs-price report then shows each position's value in the share's own currency.
 
 ## Signals and zones
@@ -366,7 +366,7 @@ GitHub Pages (Settings → Pages → Deploy from a branch → main, / root) serv
 about a minute after the push. Each push replaces the previous version on the site; older versions stay only in the git
 history and in your local `output/` folder. Each commit of all lists adds about 30 MB to the repository (the Nifty HTML
 and PDF are ~10 MB each), so commit when something has changed rather than after every run. The repository is public,
-so the published reports – including the portfolio list – can be seen by anyone. (Do not move the HTML reports to Git
+so the published reports – including the core list – can be seen by anyone. (Do not move the HTML reports to Git
 LFS: GitHub Pages cannot serve LFS files.)
 
 ## Code map

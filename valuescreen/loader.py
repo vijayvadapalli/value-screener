@@ -156,7 +156,7 @@ def reports_folder() -> Path:
 
 
 def publish(dated: Path, list_name: str | None, kind: str) -> Path:
-    """Copies a dated report from output/ to reports/<list><kind>, e.g. reports/portfolio.html or
+    """Copies a dated report from output/ to reports/<list><kind>, e.g. reports/core.html or
     reports/nifty50-profit-vs-price.pdf, replacing the previous one."""
     import shutil  # noqa: PLC0415
     target = reports_folder() / f"{(list_name or 'all').lower()}{kind}"

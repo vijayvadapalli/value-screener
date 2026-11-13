@@ -25,9 +25,9 @@ from valuescreen import growth_data, loader  # noqa: E402
 from valuescreen import miner_screen as ms  # noqa: E402
 
 
-def add_holdings(entries: list[dict], list_name: str) -> tuple[list[dict], set]:
-    """The screen's entries plus your holdings from data/lists/<list_name>.yaml (Yahoo symbols from your company files).
-    Returns (entries, tickers that are held). A holding already in the ETF list is tagged, not added twice."""
+def add_list(entries: list[dict], list_name: str) -> tuple[list[dict], set]:
+    """The screen's entries plus the companies in data/lists/<list_name>.yaml (Yahoo symbols from the company files).
+    Returns (entries, tickers in that list). A company already in the ETF list is tagged, not added twice."""
     companies = loader.load_companies()
     by_symbol = {e["yahoo"].upper(): e for e in entries}
     held = set()
@@ -37,7 +37,7 @@ def add_holdings(entries: list[dict], list_name: str) -> tuple[list[dict], set]:
         match = by_symbol.get(symbol) or by_symbol.get(h["ticker"])
         if match is None:
             match = {"ticker": h["ticker"], "yahoo": symbol, "name": c.get("name", h["ticker"]), "metals": [c.get("sector", "other")],
-                     "etfs": ["your portfolio"]}
+                     "etfs": [f"{list_name} list"]}
             entries.append(match)
             by_symbol[symbol] = match
         held.add(match["ticker"])
@@ -49,8 +49,8 @@ def main():
     ap.add_argument("--list", default="miners", help="list in data/lists made by make_etf_list.py (default: miners)")
     ap.add_argument("--promote", nargs="?", const="shortlist", help="write draft company files: the shortlist, or comma-separated tickers")
     ap.add_argument("--refresh", action="store_true", help="fetch again even if today's figures are cached")
-    ap.add_argument("--holdings", default="portfolio", help="also show the companies in this list, tagged 'held' (default: portfolio; "
-                                                            "'none' to leave them out). Read only – your files are not touched")
+    ap.add_argument("--also", default="core", help="also show the companies in this list, tagged with its name (default: core; "
+                                                     "'none' to leave them out). Read only – no files are written")
     args = ap.parse_args()
     name = args.list.lower()
     list_file = ROOT / "data" / "lists" / f"{name}.yaml"
@@ -60,8 +60,8 @@ def main():
     folder = meta.get("folder") or name
     entries = loader.load_list_entries(name)
     held = set()
-    if args.holdings.lower() != "none":
-        entries, held = add_holdings(entries, args.holdings.lower())
+    if args.also.lower() != "none":
+        entries, held = add_list(entries, args.also.lower())
     today = dt.date.today()
     out = loader.output_folder(folder)
     # two at a time: Yahoo rate-limits bigger bursts on a list this long (failures are retried on the next run)
@@ -72,7 +72,7 @@ def main():
     missing = [e["ticker"] for e in entries if e["ticker"] not in raw]
     in_files = ms.tickers_in_files(loader.company_folders().values())
     for r in rows:
-        r["held"] = r["ticker"] in held
+        r["in_list"] = args.also.lower() if r["ticker"] in held else None
     etfs = sorted({x for e in entries for x in e.get("etfs", [])})
     title = f"{name.replace('_', ' ').title()}"
     path = ms.build(rows, out / f"{title.replace(' ', '_')}_Screen_{today:%d%b%Y}.html", title, today, etfs, in_files, missing)

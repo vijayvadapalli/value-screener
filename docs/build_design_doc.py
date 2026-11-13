@@ -78,7 +78,7 @@ def arch(path):
     ax.text(73, 58.5, "OUTPUTS", fontsize=7, color="#8a8984", fontweight="semibold")
     box(1, 39, 28, 17, "Company files (YAML)", ["one per ticker, refreshed quarterly", "earnings, shares, cash, debt", "metals sold + realised prices", "sources + report date"], "#2a78d6")
     box(1, 20, 28, 16, "Market data", ["share prices (yfinance / IBKR)", "gold, silver, copper futures", "uranium (manual weekly)", "FX rates"], "#2a78d6")
-    box(1, 2, 28, 15, "Config + lists", ["spot overrides, multiples", "zone thresholds", "portfolio / ETF / watchlist"], "#2a78d6")
+    box(1, 2, 28, 15, "Config + lists", ["spot overrides, multiples", "zone thresholds", "core list / ETF / watchlist"], "#2a78d6")
     box(36, 39, 30, 17, "1. Valuation models", ["producer / streamer", "developer (study NPV)", "physical NAV (SPUT, YCA)", "growth DCF (tech), cash-flow (oil)"], "#6250d6")
     box(36, 20, 30, 16, "2. Scenarios + reverse calc", ["metal −25% … +30%", "growth −10% … +25%", "implied metal price / growth"], "#6250d6")
     box(36, 2, 30, 15, "3. Rules", ["buy / watch / hold / sell zones", "stale-data check, cost check", "put & call strike levels"], "#6250d6")
@@ -98,7 +98,7 @@ doc = BaseDocTemplate(f"{HERE}/Value_Screener_Design.pdf", pagesize=A4, leftMarg
 doc.addPageTemplates([PageTemplate(frames=[Frame(15 * mm, 16 * mm, 180 * mm, 267 * mm)], onPage=footer)])
 st = [Paragraph("Value Screener", H1),
       Paragraph("Requirements and design for a lean value-vs-price stock picker · v1.0 · 4 November 2026", SUB), Spacer(1, 8),
-      callout("<b>In one sentence:</b> a Python tool that takes your portfolio, an ETF or a list of tickers, values each company only from its "
+      callout("<b>In one sentence:</b> a Python tool that takes a list of companies, an ETF or a list of tickers, values each company only from its "
               "latest filing re-priced to today's metal prices, and tells you which are cheap (buy zone), fair, or too expensive (sell zone) – "
               "with buy and sell price levels, option strike levels, and a warning whenever the data is out of date.")]
 
@@ -118,7 +118,7 @@ st.append(tbl([["#", "Use case", "Trigger", "What you get"],
                ["U2", "Earnings refresh", "A company reports", "Update its YAML file; re-run; see how value moved"],
                ["U3", "Before an options trade", "Selling a put or call", "Put strike at or below 12x value; call strike near 25x value"],
                ["U4", "Check an ETF", "Considering URNM, GDX, SIL", "Look-through value of the top holdings vs ETF price"],
-               ["U5", "Portfolio review", "Monthly", "Your own holdings ranked, with sell-zone warnings"],
+               ["U5", "Core list review", "Monthly", "The core list ranked, with sell-zone warnings"],
                ["U6", "What-if", "Metal price moves", "Values at −25% … +30% metals, or another spot price"]],
               [9 * mm, 33 * mm, 36 * mm, 102 * mm]))
 
@@ -127,7 +127,7 @@ st.append(Paragraph("3. Functional requirements", H2))
 st.append(Paragraph("Priority: <b>M</b> = must, <b>S</b> = should, <b>C</b> = could. Stage = when it is built (see roadmap).", S))
 fr = [["ID", "Requirement", "Pri", "Stage"],
       ["FR-1", "Load one YAML file per company; validate required fields and units; reject files with missing source or report date.", "M", "1"],
-      ["FR-2", "Accept input as: (a) a ticker list on the command line, (b) a watchlist file, (c) a portfolio file, (d) an ETF holdings file.", "M", "1"],
+      ["FR-2", "Accept input as: (a) a ticker list on the command line, (b) a watchlist file, (c) a list file, (d) an ETF holdings file.", "M", "1"],
       ["FR-3", "Producer model: owner earnings = adjusted net income + add-backs + D&A − sustaining capex, annualised, per share.", "M", "1"],
       ["FR-4", "Re-price each metal sold from the quarter's realised price to today's spot, after royalties and tax.", "M", "1"],
       ["FR-5", "Value = owner earnings × multiple + net cash per share, at 12x / 15x / 20x / 25x (configurable; Chevron-type 10x/13x).", "M", "1"],
@@ -179,7 +179,7 @@ st.append(code("""value-screener/
     cli.py         command line:  python -m valuescreen run --list watchlist
   data/companies/*.yaml   one file per company (filled for all ~40 companies valued so far)
   data/etfs/*.yaml        ETF holdings and weights
-  data/lists/*.yaml       watchlists and your portfolio
+  data/lists/*.yaml       watchlists and the core list
   config.yaml             spot prices, FX, multiples, zone thresholds
   tests/                  acceptance tests against the published reports
   output/                 generated reports (git-ignored)"""))

@@ -4,8 +4,8 @@
   python -m valuescreen run --list watchlist
   python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4100,silver=52
   python -m valuescreen run --etf URNM
-  python -m valuescreen run --list portfolio --live
-  python -m valuescreen run --list portfolio --technicals   # also 200-day average, RSI and MACD (needs yfinance)
+  python -m valuescreen run --list core --live
+  python -m valuescreen run --list core --technicals   # also 200-day average, RSI and MACD (needs yfinance)
   python -m valuescreen run --list nifty50          # a list with `folder: nifty50` uses data/nifty50/companies
   python -m valuescreen run --folder nifty50 --all  # the same folder without a list
   python -m valuescreen validate                    # every company folder
@@ -16,8 +16,8 @@ Each run writes to output/ (or output/<folder>), which git ignores:
   <List>_Profit_vs_Price_<date>.pdf    the profit-vs-price report for printing
   ranked.csv, signals_log.csv (one line per company per run), runs.json (previous figures shown in brackets),
   heatmaps and the profit-vs-price cache.
-and copies the three reports to reports/ under fixed names (portfolio.html, portfolio.pdf,
-portfolio-profit-vs-price.pdf, ...) – the only reports git tracks and GitHub Pages publishes.
+and copies the three reports to reports/ under fixed names (core.html, core.pdf,
+core-profit-vs-price.pdf, ...) – the only reports git tracks and GitHub Pages publishes.
 Profit-vs-price figures are fetched from Yahoo or Screener.in and cached per day; --no-profit skips them.
 """
 from __future__ import annotations
@@ -39,7 +39,7 @@ def _parser():
     which = r.add_mutually_exclusive_group()
     which.add_argument("--all", action="store_true", help="every company file")
     which.add_argument("--tickers", help="comma-separated tickers, e.g. AEM,NEM,HL")
-    which.add_argument("--list", help="a list in data/lists, e.g. watchlist or portfolio")
+    which.add_argument("--list", help="a list in data/lists, e.g. core or watchlist")
     r.add_argument("--folder", help="company folder: data/<folder>/companies, results in output/<folder> "
                                     "(default: the list's own `folder:`, else data/companies and output/)")
     r.add_argument("--etf", action="append", default=[], help="ETF look-through, e.g. URNM (repeatable)")

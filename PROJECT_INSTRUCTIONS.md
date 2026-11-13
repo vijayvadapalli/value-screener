@@ -61,7 +61,7 @@ Educational framework, not investment advice.
 ## 4. Reports
 - One PDF, all stocks in **alphabetical order**, bookmarked. **Page 1 = summary table**, landscape, one page
   preferred (two acceptable).
-- Portfolio table: Ticker, Name, Price (with date), 12x, 15x and 25x value, Margin of safety ($), MoS %, Tier, Signal,
+- Summary table: Ticker, Name, Price (with date), 12x, 15x and 25x value, Margin of safety ($), MoS %, Tier, Signal,
   Buy level, Comment. Rows coloured green / blue / red and shaded by tier.
 - Growth table: price, value per share (no growth, @10%, @20%), growth needed, margin of safety, P/E, quality check,
   tier, signal, buy price, comment. Show the previous run's figure in brackets when re-running.
@@ -72,7 +72,7 @@ Educational framework, not investment advice.
   cash-conversion chart for v2); assumptions and data notes; sources.
 
 ## 5. In this project
-- Run: `python -m valuescreen run --list portfolio` (add `--live` for prices, `--technicals` for 200-day / RSI / MACD).
+- Run: `python -m valuescreen run --list core` (add `--live` for prices, `--technicals` for 200-day / RSI / MACD).
   The report is `output/<List>_Value_vs_Price_<date>.pdf`.
 - Nifty 50: `python tools/fetch_screener.py nifty50`, then `python -m valuescreen run --list nifty50`.
 - Thresholds, tiers, discount rates and industry lists live in `config.yaml`; the rules in `valuescreen/rules.py`

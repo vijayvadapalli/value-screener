@@ -174,12 +174,12 @@ def _row(r, in_files):
     ccy = r.get("currency") or ""
     value = "–" if r.get("v12") is None else f"{money(r['v12'], ccy)}–{money(r['v15'], ccy)}"
     mos_class = "pos" if (r.get("mos") or -1) >= 0 else "neg"
-    star = (' <span class="tag held">held</span>' if r.get("held") else
+    star = (f' <span class="tag held">{_e(r["in_list"])}</span>' if r.get("in_list") else
             ' <span class="tag">in your files</span>' if r["ticker"] in in_files else "")
     flags = " ".join(f"[{_e(f)}]" for f in r["flags"])
     text = f"{r['ticker']} {r['name']} {' '.join(r['metals'])} {' '.join(r['etfs'])}".lower()
     grade = r.get("grade", "n/m")
-    return f"""<tr data-signal="{r['signal']}" data-held="{'yes' if r.get('held') else 'no'}" data-metal="{_e(' '.join(r['metals']))}" data-stage="{_e(r['stage'])}" data-text="{_e(text)}">
+    return f"""<tr data-signal="{r['signal']}" data-held="{'yes' if r.get('in_list') else 'no'}" data-metal="{_e(' '.join(r['metals']))}" data-stage="{_e(r['stage'])}" data-text="{_e(text)}">
 <td data-v="{_e(r['ticker'])}"><a href="https://finance.yahoo.com/quote/{_e(r['yahoo'])}" target="_blank" rel="noopener"><b>{_e(r['ticker'])}</b></a>{star}<br><small>{_e(r['name'])}</small>{f'<br><span class="flags">{flags}</span>' if flags else ''}</td>
 <td data-v="{ {'green': 0, 'blue': 1, 'red': 2}.get(r['signal'], 3)}"><span class="pill {r['signal']}">{_e(r['action'])}</span></td>
 <td data-v="{_num(r.get('mos'))}" class="{mos_class}">{_pct(r.get('mos'))}</td>
@@ -244,8 +244,8 @@ def build(rows: list[dict], path: Path, title: str, as_of: dt.date, etfs: list[s
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{_e(title)} – quick screen</title><style>{CSS}</style></head><body><main>
 <h1>{_e(title)} – quick screen</h1>
-<p class="sub">{len(rows)} companies from {_e(', '.join(e for e in etfs if e != 'your portfolio'))}
-{f"plus {sum(1 for r in rows if r.get('held') and 'your portfolio' in r['etfs'])} of your holdings not in them" if any('your portfolio' in r['etfs'] for r in rows) else ''} · run {as_of:%d %b %Y} · <span class="pos">{counts['green']} cheap</span>,
+<p class="sub">{len(rows)} companies from {_e(', '.join(e for e in etfs if not e.endswith(' list')))}
+{f"plus {sum(1 for r in rows if any(e.endswith(' list') for e in r['etfs']))} from your {next(e for r in rows for e in r['etfs'] if e.endswith(' list'))} not in them" if any(e.endswith(' list') for r in rows for e in r['etfs']) else ''} · run {as_of:%d %b %Y} · <span class="pos">{counts['green']} cheap</span>,
 {counts['blue']} fair or watch, <span class="neg">{counts['red']} expensive or loss-making</span>, {counts['grey']} not valued (developers, explorers, physical holders, no data)</p>
 <p class="method"><b>Signals:</b> Cheap = at least 20% below the 12x value · Fair = at or below the 15x value · Watch = between
 15x and 25x · Expensive = at or above 25x, or no positive earnings · Not valued = developers, explorers, physical holders.<br>
@@ -261,7 +261,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <div class="controls"><span class="lab">Signal</span>{buttons('signal', [('green', 'Cheap'), ('blue', 'Fair / watch'), ('red', 'Expensive'), ('grey', 'Not valued')])}
 <span class="lab">Metal</span>{buttons('metal', [(m, m.title()) for m in metals])}
 <span class="lab">Stage</span>{buttons('stage', [('producer', 'Producers'), ('developer / explorer', 'Developers'), ('physical holder', 'Physical')])}
-<span class="lab">Holdings</span>{buttons('held', [('yes', 'My holdings')])}
+<span class="lab">List</span>{buttons('held', [('yes', next((r['in_list'].title() + ' list' for r in rows if r.get('in_list')), 'Your list'))])}
 <input id="q" type="search" placeholder="Search ticker, name, ETF"><span class="lab" id="count"></span></div>
 <div class="wrap"><table class="sum" id="sum"><thead>{HEAD}</thead><tbody>{''.join(_row(r, in_files) for r in rows)}</tbody></table></div>
 <p class="small">No figures from Yahoo for: {_e(', '.join(missing)) or 'none'}.</p>

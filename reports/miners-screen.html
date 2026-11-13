@@ -58,7 +58,7 @@ main{max-width:1640px} .tag.held{background:var(--ink);color:var(--bg);border-co
 </style></head><body><main>
 <h1>Miners – quick screen</h1>
 <p class="sub">274 companies from COPX, GDX, GDXJ, SIL, SILJ, URNJ, URNM
-plus 2 of your holdings not in them · run 13 Nov 2026 · <span class="pos">40 cheap</span>,
+plus 2 from your core list not in them · run 13 Nov 2026 · <span class="pos">40 cheap</span>,
 69 fair or watch, <span class="neg">52 expensive or loss-making</span>, 113 not valued (developers, explorers, physical holders, no data)</p>
 <p class="method"><b>Signals:</b> Cheap = at least 20% below the 12x value · Fair = at or below the 15x value · Watch = between
 15x and 25x · Expensive = at or above 25x, or no positive earnings · Not valued = developers, explorers, physical holders.<br>
@@ -74,7 +74,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <div class="controls"><span class="lab">Signal</span><button class="on" data-k="signal" data-v="all">All</button><button data-k="signal" data-v="green">Cheap</button><button data-k="signal" data-v="blue">Fair / watch</button><button data-k="signal" data-v="red">Expensive</button><button data-k="signal" data-v="grey">Not valued</button>
 <span class="lab">Metal</span><button class="on" data-k="metal" data-v="all">All</button><button data-k="metal" data-v="copper">Copper</button><button data-k="metal" data-v="data centres">Data Centres</button><button data-k="metal" data-v="gold">Gold</button><button data-k="metal" data-v="royalty (oil &amp; gas)">Royalty (Oil &amp; Gas)</button><button data-k="metal" data-v="silver">Silver</button><button data-k="metal" data-v="uranium">Uranium</button>
 <span class="lab">Stage</span><button class="on" data-k="stage" data-v="all">All</button><button data-k="stage" data-v="producer">Producers</button><button data-k="stage" data-v="developer / explorer">Developers</button><button data-k="stage" data-v="physical holder">Physical</button>
-<span class="lab">Holdings</span><button class="on" data-k="held" data-v="all">All</button><button data-k="held" data-v="yes">My holdings</button>
+<span class="lab">List</span><button class="on" data-k="held" data-v="all">All</button><button data-k="held" data-v="yes">Core list</button>
 <input id="q" type="search" placeholder="Search ticker, name, ETF"><span class="lab" id="count"></span></div>
 <div class="wrap"><table class="sum" id="sum"><thead><tr><th>Ticker</th><th>Signal</th><th>Margin of safety</th><th>Metal / ETFs</th><th>Stage</th><th>Price</th><th>Mkt value</th>
 <th>Value 12x–15x</th><th>Price ÷ op. cash</th><th>FCF yield</th><th>EV / EBITDA</th><th>P/B</th><th>Net cash ÷ price</th><th>Grade</th>
@@ -409,7 +409,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.181235">+18%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.272727">+27%</td></tr><tr data-signal="green" data-held="yes" data-metal="gold" data-stage="producer" data-text="iag iamgold corporation gold gdx gdxj">
-<td data-v="IAG"><a href="https://finance.yahoo.com/quote/IAG" target="_blank" rel="noopener"><b>IAG</b></a> <span class="tag held">held</span><br><small>IAMGOLD Corporation</small></td>
+<td data-v="IAG"><a href="https://finance.yahoo.com/quote/IAG" target="_blank" rel="noopener"><b>IAG</b></a> <span class="tag held">core</span><br><small>IAMGOLD Corporation</small></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.392334" class="pos">+39%</td>
 <td data-v="gold">gold<br><small>GDX GDXJ</small></td>
@@ -544,7 +544,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0351637">+4%</td>
 <td data-v="2" class="c grade gC">C</td>
 <td data-v="0.134868">+13%</td></tr><tr data-signal="green" data-held="yes" data-metal="gold silver" data-stage="producer" data-text="fsm fortuna mining corp. gold silver gdx gdxj sil">
-<td data-v="FSM"><a href="https://finance.yahoo.com/quote/FSM" target="_blank" rel="noopener"><b>FSM</b></a> <span class="tag held">held</span><br><small>Fortuna Mining Corp.</small></td>
+<td data-v="FSM"><a href="https://finance.yahoo.com/quote/FSM" target="_blank" rel="noopener"><b>FSM</b></a> <span class="tag held">core</span><br><small>Fortuna Mining Corp.</small></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.298396" class="pos">+30%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX GDXJ SIL</small></td>
@@ -664,7 +664,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.169504">+17%</td>
 <td data-v="3" class="c grade gD">D</td>
 <td data-v="0.643836">+64%</td></tr><tr data-signal="green" data-held="yes" data-metal="gold silver" data-stage="producer" data-text="paas pan american silver corp. gold silver gdx sil silj">
-<td data-v="PAAS"><a href="https://finance.yahoo.com/quote/PAAS" target="_blank" rel="noopener"><b>PAAS</b></a> <span class="tag held">held</span><br><small>Pan American Silver Corp.</small></td>
+<td data-v="PAAS"><a href="https://finance.yahoo.com/quote/PAAS" target="_blank" rel="noopener"><b>PAAS</b></a> <span class="tag held">core</span><br><small>Pan American Silver Corp.</small></td>
 <td data-v="0"><span class="pill green">Cheap</span></td>
 <td data-v="0.210118" class="pos">+21%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX SIL SILJ</small></td>
@@ -814,7 +814,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0963137">+10%</td>
 <td data-v="0" class="c grade gA">A</td>
 <td data-v="0.55665">+56%</td></tr><tr data-signal="blue" data-held="yes" data-metal="gold" data-stage="producer" data-text="agi alamos gold inc. gold gdx gdxj">
-<td data-v="AGI"><a href="https://finance.yahoo.com/quote/AGI" target="_blank" rel="noopener"><b>AGI</b></a> <span class="tag held">held</span><br><small>Alamos Gold Inc.</small></td>
+<td data-v="AGI"><a href="https://finance.yahoo.com/quote/AGI" target="_blank" rel="noopener"><b>AGI</b></a> <span class="tag held">core</span><br><small>Alamos Gold Inc.</small></td>
 <td data-v="1"><span class="pill blue">Fair</span></td>
 <td data-v="0.0857776" class="pos">+9%</td>
 <td data-v="gold">gold<br><small>GDX GDXJ</small></td>
@@ -994,7 +994,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0459893">+5%</td>
 <td data-v="1" class="c grade gB">B</td>
 <td data-v="1.49849">+150%</td></tr><tr data-signal="blue" data-held="yes" data-metal="gold" data-stage="producer" data-text="nem newmont corporation gold gdx">
-<td data-v="NEM"><a href="https://finance.yahoo.com/quote/NEM" target="_blank" rel="noopener"><b>NEM</b></a> <span class="tag held">held</span><br><small>Newmont Corporation</small></td>
+<td data-v="NEM"><a href="https://finance.yahoo.com/quote/NEM" target="_blank" rel="noopener"><b>NEM</b></a> <span class="tag held">core</span><br><small>Newmont Corporation</small></td>
 <td data-v="1"><span class="pill blue">Fair</span></td>
 <td data-v="-0.0256891" class="neg">−3%</td>
 <td data-v="gold">gold<br><small>GDX</small></td>
@@ -1129,7 +1129,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.30063">+30%</td>
 <td data-v="1" class="c grade gB">B</td>
 <td data-v="0.247342">+25%</td></tr><tr data-signal="blue" data-held="yes" data-metal="gold" data-stage="producer" data-text="aem agnico eagle mines limited gold gdx">
-<td data-v="AEM"><a href="https://finance.yahoo.com/quote/AEM" target="_blank" rel="noopener"><b>AEM</b></a> <span class="tag held">held</span><br><small>Agnico Eagle Mines Limited</small></td>
+<td data-v="AEM"><a href="https://finance.yahoo.com/quote/AEM" target="_blank" rel="noopener"><b>AEM</b></a> <span class="tag held">core</span><br><small>Agnico Eagle Mines Limited</small></td>
 <td data-v="1"><span class="pill blue">Fair</span></td>
 <td data-v="-0.165862" class="neg">−17%</td>
 <td data-v="gold">gold<br><small>GDX</small></td>
@@ -1519,7 +1519,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0777362">+8%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.475483">+48%</td></tr><tr data-signal="blue" data-held="yes" data-metal="gold silver" data-stage="producer" data-text="cde coeur mining, inc. gold silver gdx gdxj sil silj">
-<td data-v="CDE"><a href="https://finance.yahoo.com/quote/CDE" target="_blank" rel="noopener"><b>CDE</b></a> <span class="tag held">held</span><br><small>Coeur Mining, Inc.</small></td>
+<td data-v="CDE"><a href="https://finance.yahoo.com/quote/CDE" target="_blank" rel="noopener"><b>CDE</b></a> <span class="tag held">core</span><br><small>Coeur Mining, Inc.</small></td>
 <td data-v="1"><span class="pill blue">Watch</span></td>
 <td data-v="-0.664566" class="neg">−66%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX GDXJ SIL SILJ</small></td>
@@ -1548,11 +1548,11 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="3.28134">3.3</td>
 <td data-v="-0.353688">−35%</td>
 <td data-v="0" class="c grade gA">A</td>
-<td data-v="-0.276515">−28%</td></tr><tr data-signal="blue" data-held="yes" data-metal="royalty (oil &amp; gas)" data-stage="producer" data-text="frhlf freehold royalties ltd. royalty (oil &amp; gas) your portfolio">
-<td data-v="FRHLF"><a href="https://finance.yahoo.com/quote/FRHLF" target="_blank" rel="noopener"><b>FRHLF</b></a> <span class="tag held">held</span><br><small>Freehold Royalties Ltd.</small><br><span class="flags">[CAD statements converted at 0.7009]</span></td>
+<td data-v="-0.276515">−28%</td></tr><tr data-signal="blue" data-held="yes" data-metal="royalty (oil &amp; gas)" data-stage="producer" data-text="frhlf freehold royalties ltd. royalty (oil &amp; gas) core list">
+<td data-v="FRHLF"><a href="https://finance.yahoo.com/quote/FRHLF" target="_blank" rel="noopener"><b>FRHLF</b></a> <span class="tag held">core</span><br><small>Freehold Royalties Ltd.</small><br><span class="flags">[CAD statements converted at 0.7009]</span></td>
 <td data-v="1"><span class="pill blue">Watch</span></td>
 <td data-v="-0.76856" class="neg">−77%</td>
-<td data-v="royalty (oil &amp; gas)">royalty (oil &amp; gas)<br><small>your portfolio</small></td>
+<td data-v="royalty (oil &amp; gas)">royalty (oil &amp; gas)<br><small>core list</small></td>
 <td data-v="producer">producer<br><small>TTM Sep 26</small></td>
 <td data-v="11.96"><span class="nw">$11.96</span><br><small>2026-11-12</small></td>
 <td data-v="1.96097">$2.0bn</td>
@@ -1729,7 +1729,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.0684913">−7%</td>
 <td data-v="3" class="c grade gD">D</td>
 <td data-v="-0.108548">−11%</td></tr><tr data-signal="red" data-held="yes" data-metal="gold silver" data-stage="producer" data-text="rgld royal gold, inc. gold silver gdx silj">
-<td data-v="RGLD"><a href="https://finance.yahoo.com/quote/RGLD" target="_blank" rel="noopener"><b>RGLD</b></a> <span class="tag held">held</span><br><small>Royal Gold, Inc.</small></td>
+<td data-v="RGLD"><a href="https://finance.yahoo.com/quote/RGLD" target="_blank" rel="noopener"><b>RGLD</b></a> <span class="tag held">core</span><br><small>Royal Gold, Inc.</small></td>
 <td data-v="2"><span class="pill red">Expensive</span></td>
 <td data-v="-1.13716" class="neg">−114%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX SILJ</small></td>
@@ -1789,7 +1789,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0293847">+3%</td>
 <td data-v="0" class="c grade gA">A</td>
 <td data-v="1.00351">+100%</td></tr><tr data-signal="red" data-held="yes" data-metal="gold silver" data-stage="producer" data-text="fnv franco-nevada corporation gold silver gdx silj">
-<td data-v="FNV"><a href="https://finance.yahoo.com/quote/FNV" target="_blank" rel="noopener"><b>FNV</b></a> <span class="tag held">held</span><br><small>Franco-Nevada Corporation</small></td>
+<td data-v="FNV"><a href="https://finance.yahoo.com/quote/FNV" target="_blank" rel="noopener"><b>FNV</b></a> <span class="tag held">core</span><br><small>Franco-Nevada Corporation</small></td>
 <td data-v="2"><span class="pill red">Expensive</span></td>
 <td data-v="-1.35784" class="neg">−136%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX SILJ</small></td>
@@ -1849,7 +1849,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.0694128">−7%</td>
 <td data-v="1" class="c grade gB">B</td>
 <td data-v="0.445826">+45%</td></tr><tr data-signal="red" data-held="yes" data-metal="gold silver" data-stage="producer" data-text="wpm wheaton precious metals corp. gold silver gdx sil silj">
-<td data-v="WPM"><a href="https://finance.yahoo.com/quote/WPM" target="_blank" rel="noopener"><b>WPM</b></a> <span class="tag held">held</span><br><small>Wheaton Precious Metals Corp.</small><br><span class="flags">[capex above operating cash flow]</span></td>
+<td data-v="WPM"><a href="https://finance.yahoo.com/quote/WPM" target="_blank" rel="noopener"><b>WPM</b></a> <span class="tag held">core</span><br><small>Wheaton Precious Metals Corp.</small><br><span class="flags">[capex above operating cash flow]</span></td>
 <td data-v="2"><span class="pill red">Expensive</span></td>
 <td data-v="-1.52942" class="neg">−153%</td>
 <td data-v="gold silver">gold, silver<br><small>GDX SIL SILJ</small></td>
@@ -1999,7 +1999,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.272711">−27%</td>
 <td data-v="0" class="c grade gA">A</td>
 <td data-v="-0.462541">−46%</td></tr><tr data-signal="red" data-held="yes" data-metal="uranium" data-stage="producer" data-text="ccj cameco corporation uranium urnm">
-<td data-v="CCJ"><a href="https://finance.yahoo.com/quote/CCJ" target="_blank" rel="noopener"><b>CCJ</b></a> <span class="tag held">held</span><br><small>Cameco Corporation</small><br><span class="flags">[CAD statements converted at 0.7009] [latest year, not the last 12 months]</span></td>
+<td data-v="CCJ"><a href="https://finance.yahoo.com/quote/CCJ" target="_blank" rel="noopener"><b>CCJ</b></a> <span class="tag held">core</span><br><small>Cameco Corporation</small><br><span class="flags">[CAD statements converted at 0.7009] [latest year, not the last 12 months]</span></td>
 <td data-v="2"><span class="pill red">Expensive</span></td>
 <td data-v="-5.42884" class="neg">< −200%</td>
 <td data-v="uranium">uranium<br><small>URNM</small></td>
@@ -2059,7 +2059,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0331474">+3%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.472222">+47%</td></tr><tr data-signal="red" data-held="yes" data-metal="copper" data-stage="producer" data-text="ivn.to ivanhoe mines ltd. copper copx">
-<td data-v="IVN.TO"><a href="https://finance.yahoo.com/quote/IVN.TO" target="_blank" rel="noopener"><b>IVN.TO</b></a> <span class="tag held">held</span><br><small>Ivanhoe Mines Ltd.</small><br><span class="flags">[USD statements converted at 1.427] [capex above operating cash flow] [debt &gt; 3× EBITDA]</span></td>
+<td data-v="IVN.TO"><a href="https://finance.yahoo.com/quote/IVN.TO" target="_blank" rel="noopener"><b>IVN.TO</b></a> <span class="tag held">core</span><br><small>Ivanhoe Mines Ltd.</small><br><span class="flags">[USD statements converted at 1.427] [capex above operating cash flow] [debt &gt; 3× EBITDA]</span></td>
 <td data-v="2"><span class="pill red">Expensive</span></td>
 <td data-v="-6.65926" class="neg">< −200%</td>
 <td data-v="copper">copper<br><small>COPX</small></td>
@@ -2179,7 +2179,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.841508">−84%</td>
 <td data-v="2" class="c grade gC">C</td>
 <td data-v="0.381777">+38%</td></tr><tr data-signal="red" data-held="yes" data-metal="uranium" data-stage="producer" data-text="uuuu energy fuels inc. uranium urnm urnj">
-<td data-v="UUUU"><a href="https://finance.yahoo.com/quote/UUUU" target="_blank" rel="noopener"><b>UUUU</b></a> <span class="tag held">held</span><br><small>Energy Fuels Inc.</small><br><span class="flags">[capex above operating cash flow]</span></td>
+<td data-v="UUUU"><a href="https://finance.yahoo.com/quote/UUUU" target="_blank" rel="noopener"><b>UUUU</b></a> <span class="tag held">core</span><br><small>Energy Fuels Inc.</small><br><span class="flags">[capex above operating cash flow]</span></td>
 <td data-v="2"><span class="pill red">No earnings</span></td>
 <td data-v="" class="neg">–</td>
 <td data-v="uranium">uranium<br><small>URNM URNJ</small></td>
@@ -2374,7 +2374,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.133117">+13%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.378947">+38%</td></tr><tr data-signal="red" data-held="yes" data-metal="gold" data-stage="producer" data-text="mta metalla royalty &amp; streaming ltd. gold gdxj">
-<td data-v="MTA"><a href="https://finance.yahoo.com/quote/MTA" target="_blank" rel="noopener"><b>MTA</b></a> <span class="tag held">held</span><br><small>Metalla Royalty &amp; Streaming Ltd.</small></td>
+<td data-v="MTA"><a href="https://finance.yahoo.com/quote/MTA" target="_blank" rel="noopener"><b>MTA</b></a> <span class="tag held">core</span><br><small>Metalla Royalty &amp; Streaming Ltd.</small></td>
 <td data-v="2"><span class="pill red">No earnings</span></td>
 <td data-v="" class="neg">–</td>
 <td data-v="gold">gold<br><small>GDXJ</small></td>
@@ -2463,11 +2463,11 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="2.86667">2.9</td>
 <td data-v="-0.499768">−50%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
-<td data-v="-0.385714">−39%</td></tr><tr data-signal="red" data-held="yes" data-metal="data centres" data-stage="producer" data-text="hut hut 8 corp. data centres your portfolio">
-<td data-v="HUT"><a href="https://finance.yahoo.com/quote/HUT" target="_blank" rel="noopener"><b>HUT</b></a> <span class="tag held">held</span><br><small>Hut 8 Corp.</small><br><span class="flags">[capex above operating cash flow]</span></td>
+<td data-v="-0.385714">−39%</td></tr><tr data-signal="red" data-held="yes" data-metal="data centres" data-stage="producer" data-text="hut hut 8 corp. data centres core list">
+<td data-v="HUT"><a href="https://finance.yahoo.com/quote/HUT" target="_blank" rel="noopener"><b>HUT</b></a> <span class="tag held">core</span><br><small>Hut 8 Corp.</small><br><span class="flags">[capex above operating cash flow]</span></td>
 <td data-v="2"><span class="pill red">No earnings</span></td>
 <td data-v="" class="neg">–</td>
-<td data-v="data centres">data centres<br><small>your portfolio</small></td>
+<td data-v="data centres">data centres<br><small>core list</small></td>
 <td data-v="producer">producer<br><small>TTM Sep 26</small></td>
 <td data-v="61.975"><span class="nw">$61.97</span><br><small>2026-11-12</small></td>
 <td data-v="7.43933">$7.4bn</td>
@@ -3064,7 +3064,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.148573">+15%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="">–</td></tr><tr data-signal="grey" data-held="yes" data-metal="uranium" data-stage="developer / explorer" data-text="uec uranium energy corp. uranium urnm">
-<td data-v="UEC"><a href="https://finance.yahoo.com/quote/UEC" target="_blank" rel="noopener"><b>UEC</b></a> <span class="tag held">held</span><br><small>Uranium Energy Corp.</small></td>
+<td data-v="UEC"><a href="https://finance.yahoo.com/quote/UEC" target="_blank" rel="noopener"><b>UEC</b></a> <span class="tag held">core</span><br><small>Uranium Energy Corp.</small></td>
 <td data-v="3"><span class="pill grey">Not valued</span></td>
 <td data-v="" class="neg">–</td>
 <td data-v="uranium">uranium<br><small>URNM</small></td>
@@ -3754,7 +3754,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0430285">+4%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="0.826087">+83%</td></tr><tr data-signal="grey" data-held="yes" data-metal="uranium" data-stage="developer / explorer" data-text="nxe nexgen energy ltd. uranium urnm urnj">
-<td data-v="NXE"><a href="https://finance.yahoo.com/quote/NXE" target="_blank" rel="noopener"><b>NXE</b></a> <span class="tag held">held</span><br><small>NexGen Energy Ltd.</small><br><span class="flags">[CAD statements converted at 0.7009]</span></td>
+<td data-v="NXE"><a href="https://finance.yahoo.com/quote/NXE" target="_blank" rel="noopener"><b>NXE</b></a> <span class="tag held">core</span><br><small>NexGen Energy Ltd.</small><br><span class="flags">[CAD statements converted at 0.7009]</span></td>
 <td data-v="3"><span class="pill grey">Not valued</span></td>
 <td data-v="" class="neg">–</td>
 <td data-v="uranium">uranium<br><small>URNM URNJ</small></td>
@@ -3919,7 +3919,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="0.0203542">+2%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="-0.2">−20%</td></tr><tr data-signal="grey" data-held="yes" data-metal="gold silver" data-stage="developer / explorer" data-text="abra.to abrasilver resource corp. gold silver gdxj sil silj">
-<td data-v="ABRA.TO"><a href="https://finance.yahoo.com/quote/ABRA.TO" target="_blank" rel="noopener"><b>ABRA.TO</b></a> <span class="tag held">held</span><br><small>AbraSilver Resource Corp.</small></td>
+<td data-v="ABRA.TO"><a href="https://finance.yahoo.com/quote/ABRA.TO" target="_blank" rel="noopener"><b>ABRA.TO</b></a> <span class="tag held">core</span><br><small>AbraSilver Resource Corp.</small></td>
 <td data-v="3"><span class="pill grey">Not valued</span></td>
 <td data-v="" class="neg">–</td>
 <td data-v="gold silver">gold, silver<br><small>GDXJ SIL SILJ</small></td>
@@ -4159,7 +4159,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <td data-v="-0.599418">−60%</td>
 <td data-v="4" class="c grade gnm">n/m</td>
 <td data-v="">–</td></tr><tr data-signal="grey" data-held="yes" data-metal="uranium" data-stage="physical holder" data-text="yca.l yellow cake plc uranium urnm">
-<td data-v="YCA.L"><a href="https://finance.yahoo.com/quote/YCA.L" target="_blank" rel="noopener"><b>YCA.L</b></a> <span class="tag held">held</span><br><small>Yellow Cake plc</small><br><span class="flags">[USD statements converted at 0.7563] [latest year, not the last 12 months]</span></td>
+<td data-v="YCA.L"><a href="https://finance.yahoo.com/quote/YCA.L" target="_blank" rel="noopener"><b>YCA.L</b></a> <span class="tag held">core</span><br><small>Yellow Cake plc</small><br><span class="flags">[USD statements converted at 0.7563] [latest year, not the last 12 months]</span></td>
 <td data-v="3"><span class="pill grey">Not valued</span></td>
 <td data-v="" class="neg">–</td>
 <td data-v="uranium">uranium<br><small>URNM</small></td>

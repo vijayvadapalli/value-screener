@@ -214,7 +214,7 @@ def test_pdf_has_a_summary_and_a_bookmarked_section_per_company(tmp_path):
     out = pdf.build(res, cos, cfg, tmp_path / "r.pdf", "Test")
     data = out.read_bytes()
     assert data.startswith(b"%PDF") and data.count(b"/Title") >= len(tickers)
-    assert pdf.file_name("portfolio", dt.date(2026, 11, 12)) == "Portfolio_Value_vs_Price_12Nov2026.pdf"
+    assert pdf.file_name("core", dt.date(2026, 11, 12)) == "Core_Value_vs_Price_12Nov2026.pdf"
 
 
 def test_screener_page_parsing():

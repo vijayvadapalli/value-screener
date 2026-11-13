@@ -1,9 +1,9 @@
 """Profit growth vs price growth report on its own (the same figures also appear in every `valuescreen run` report).
 
-    python tools/profit_vs_price.py --list portfolio
+    python tools/profit_vs_price.py --list core
     python tools/profit_vs_price.py --list tech
     python tools/profit_vs_price.py --list nifty50              # Screener.in, about 4 minutes the first time each day
-    python tools/profit_vs_price.py --list portfolio --refresh  # ignore today's cached figures
+    python tools/profit_vs_price.py --list core --refresh  # ignore today's cached figures
 
 Writes output/<folder>/<List>_Profit_vs_Price_<date>.pdf and copies it to reports/<list>-profit-vs-price.pdf. Method and grades: valuescreen/profit_vs_price.py;
 data sources: valuescreen/growth_data.py.
@@ -25,7 +25,7 @@ from valuescreen.pdf import list_title  # noqa: E402
 
 def main():
     ap = argparse.ArgumentParser(description="Profit growth vs price growth report for a list")
-    ap.add_argument("--list", required=True, help="a list in data/lists, e.g. portfolio, tech, nifty50")
+    ap.add_argument("--list", required=True, help="a list in data/lists, e.g. core, tech, nifty50")
     ap.add_argument("--refresh", action="store_true", help="fetch again even if today's figures are cached")
     args = ap.parse_args()
     name = args.list.lower()

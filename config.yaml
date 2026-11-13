@@ -59,7 +59,7 @@ stale_days:                      # days after period end before a file is treate
   liquid: 100
 price_stale_days: 7              # a share price older than this gets a [price N days old] flag
 
-# Portfolio tiers (Valuation Playbook). A = large low-cost producers and royalty companies with strong balance sheets:
+# Tiers (Valuation Playbook). A = large low-cost producers and royalty companies with strong balance sheets:
 # start a position at or below the 15x value, add at or below 12x. B and C keep the strict rule: BUY only with a 20%
 # margin of safety at 12x (or at or below 0.8x NAV). A company file can also set `tier:` itself.
 tiers:

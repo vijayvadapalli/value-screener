@@ -1,6 +1,6 @@
 """One bookmarked PDF per run (Valuation Playbook, section 4).
 
-Page 1 explains the method, shows the legend and the summary table(s): a portfolio table (12x / 15x / 25x values)
+Page 1 explains the method, shows the legend and the summary table(s): a value table (12x / 15x / 25x values)
 for producers, royalty companies, developers and the rest, and a growth table (reverse DCF) for tech and Nifty
 stocks. Rows are tinted in their signal's colour – darker for tier A or bigger companies.
 
@@ -166,7 +166,7 @@ def kpi_row(cards, st):
 
 # ------------------------------------------------------------------------------------------------- summary tables
 def tint_strength(r):
-    """Tier A/B/C for the portfolio; market-value shade for growth stocks."""
+    """Tier A/B/C for tiered lists; market-value shade for growth stocks."""
     if r.get("tier") in S.TIER_STRENGTH:
         return S.TIER_STRENGTH[r["tier"]]
     return S.SHADE_STRENGTH.get(r.get("shade"), 3)
@@ -245,7 +245,7 @@ def _values(r):
     return ("–", "–", "–"), None
 
 
-def portfolio_table(rows, st, previous, tech):
+def value_table(rows, st, previous, tech):
     widths = _widths([34, 22, 17, 17, 17, 17, 14, 8, 29, 25, 72])
     data = [_header(["Ticker", "Price (date)", "12x value", "15x value", "25x value", "Margin of safety", "MoS %", "Tier",
                      "Signal", "Buy level", "Comment"], {2, 3, 4, 5, 6}, st)]
@@ -296,7 +296,7 @@ def growth_table(rows, st, previous, tech):
 
 
 def legend(st, rows):
-    """Signal colours, then what the tint strength means: tiers for a tiered portfolio, otherwise market value."""
+    """Signal colours, then what the tint strength means: tiers for a tiered list, otherwise market value."""
     tiered = any(r.get("tier") for r in rows)
     shades = (["Tier A · large, low-cost, royalties", "Tier B · mid-tier / higher cost", "Tier C · juniors, developers"] if tiered
               else ["≥ $100bn (tech ≥ $200bn)", "$30–100bn", "$10–30bn", "< $10bn"])
@@ -321,7 +321,7 @@ METHOD = ("<b>Method.</b> Value from the latest reported numbers only (no target
           "Margin of safety = (value − price) ÷ value.")
 
 
-PORTFOLIO_NOTE = ("<b>Rules.</b> Tier A: start at or below the 15x value, add at or below 12x. Tiers B and C: buy only with a 20% "
+RULES_NOTE = ("<b>Rules.</b> Tier A: start at or below the 15x value, add at or below 12x. Tiers B and C: buy only with a 20% "
                   "margin at 12x and AISC ≤ 60% of spot, or ≤ 0.8× NAV (0.85× physical). Red = ≥ 25x, ≥ 1.5× NAV or no valid "
                   "value. Before buying: price vs 200-day average (below = buy in thirds), RSI/MACD; sell puts at 12x. "
                   "[Flags]: STALE = results > ~100 days old or newer results due; price age. (Previous run.)")
@@ -438,7 +438,7 @@ def build(results: dict, companies: dict, cfg: dict, path: Path, title: str, pre
                        "company's report follows in the same order", st.subtitle),
              Spacer(1, 3), Paragraph(METHOD, st.small), Spacer(1, 4), legend(st, others or growth), Spacer(1, 4)]
     if others:
-        story += [portfolio_table(others, st, previous, tech), Spacer(1, 2), Paragraph(PORTFOLIO_NOTE, st.tiny)]
+        story += [value_table(others, st, previous, tech), Spacer(1, 2), Paragraph(RULES_NOTE, st.tiny)]
     if growth:
         if others:
             story += [CondPageBreak(60 * mm), Spacer(1, 8), Paragraph("Growth companies – reverse DCF", st.h2),
@@ -455,7 +455,7 @@ def build(results: dict, companies: dict, cfg: dict, path: Path, title: str, pre
 
 
 def list_title(list_name: str | None) -> str:
-    """'nifty50' → 'Nifty 50', 'portfolio' → 'Portfolio', None → 'All Companies'."""
+    """'nifty50' → 'Nifty 50', 'core' → 'Core', None → 'All Companies'."""
     return re.sub(r"([A-Za-z])(\d)", r"\1 \2", (list_name or "all companies").replace("_", " ").title())
 
 

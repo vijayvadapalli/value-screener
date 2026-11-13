@@ -1,11 +1,11 @@
-# Current holdings (20), from the Valuation Playbook, Nov 2026.
-# Optional: add the number of shares you hold, e.g. {ticker: FNV, quantity: 35}. The profit-vs-price report then shows
+# Core list (20 companies), from the Valuation Playbook, Nov 2026.
+# Optional: add a share quantity, e.g. {ticker: FNV, quantity: 35}. The profit-vs-price report then shows
 # each position's value in the share's own currency. Quantities are never used in the valuations.
 # Tier A = large low-cost producers / royalties with strong balance sheets: start at or below 15x, add at or below 12x.
 # Tier B = mid-tier / higher cost; tier C = juniors, developers, speculative. B/C: BUY only with a 20% margin at 12x
 # (or at or below 0.8x NAV).
 # Tiers live in config.yaml (tiers:). IVPAF (Ivanhoe's US OTC line) is valued from the TSX file, IVN.
-name: My portfolio
+name: Core
 tickers:
   # Royalties
   - {ticker: FNV}
