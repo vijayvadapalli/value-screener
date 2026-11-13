@@ -1,0 +1,39 @@
+ticker: PEY
+yahoo: PEY.TO
+name: Peyto Exploration & Development Corp.
+sector: energy
+model: cashflow
+currency: CAD
+period:
+  label: TTM Sep 26
+  end: '2026-09-30'
+  per_year: 1
+earnings:
+  cfo_ex_wc: 957.1
+  capex: 507.1
+  shares_m: 206.556
+rank_on_normalised: true
+shares_m: 206.556
+balance:
+  cash: 55.5
+  debt: 1004.6
+multiples:
+- 10
+- 13
+cyclical: true
+price:
+  value: 25.24
+  currency: CAD
+  date: '2026-11-12'
+  source: yfinance PEY.TO
+sources:
+- Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's statements (TTM Sep 26; normal basis FY22–FY25), not checked against the filings
+- Owner earnings = operating cash flow excluding working-capital moves − all capex (growth capex included, so conservative)
+- Valued on the 4-year average ('normal' oil and gas prices), not the latest twelve months – prices in 2026 include a spike
+- Balance sheet at 2026-09-30
+earnings_normalised:
+  cfo_ex_wc: 749.3
+  capex: 460.1
+  shares_m: 206.556

@@ -1,0 +1,39 @@
+ticker: CVE
+yahoo: CVE.TO
+name: Cenovus Energy Inc.
+sector: energy
+model: cashflow
+currency: CAD
+period:
+  label: TTM Sep 26
+  end: '2026-09-30'
+  per_year: 1
+earnings:
+  cfo_ex_wc: 15823.0
+  capex: 5184.0
+  shares_m: 1807.322
+rank_on_normalised: true
+shares_m: 1807.322
+balance:
+  cash: 5548.0
+  debt: 11550.0
+multiples:
+- 10
+- 13
+cyclical: true
+price:
+  value: 41.21
+  currency: CAD
+  date: '2026-11-12'
+  source: yfinance CVE.TO
+sources:
+- Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's statements (TTM Sep 26; normal basis FY22–FY25), not checked against the filings
+- Owner earnings = operating cash flow excluding working-capital moves − all capex (growth capex included, so conservative)
+- Valued on the 4-year average ('normal' oil and gas prices), not the latest twelve months – prices in 2026 include a spike
+- Balance sheet at 2026-09-30
+earnings_normalised:
+  cfo_ex_wc: 8982.5
+  capex: 4494.5
+  shares_m: 1807.322

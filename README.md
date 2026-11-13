@@ -11,6 +11,7 @@ and a linked section per company – plus two PDFs of the same for printing. A f
 |---|---|---|---|
 | Portfolio | [portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/portfolio.html) | [portfolio.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio.pdf) | [portfolio-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio-profit-vs-price.pdf) |
 | Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech.pdf) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
+| Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil.pdf) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
 | Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – | – |
 | Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50.pdf) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
 
@@ -205,6 +206,20 @@ python -m valuescreen run --list miners        # full valuations of the companie
 
 This is a filter, not a verdict – a shortlisted company gets a full company file (metal sold, realised prices, AISC)
 and the proper producer valuation before any decision.
+
+## Adding companies by hand (oil and gas)
+
+```bash
+python tools/add_companies.py oil XOM COP EOG TPL SU.TO CNQ.TO CVE.TO IMO.TO TOU.TO WCP.TO PEY.TO PSK.TO
+python -m valuescreen run --list oil
+```
+
+Writes a draft `cashflow`-model company file (10x / 13x) from Yahoo's reported statements for each symbol that has no
+file yet, and the list `data/lists/oil.yaml`. Owner earnings = operating cash flow excluding working-capital moves − all
+capex. The value is ranked on the average of the last four financial years ("normal" prices, like Chevron's file),
+because 2026 cash flows include a price spike; the latest twelve months are kept in `earnings` for reference. Canadian
+companies use their Toronto listing, so price and results are both in C$. Files are marked DRAFT – check them, or let
+`tools/update_results.py` replace them with the latest reported quarter.
 
 ## Keeping the data current
 

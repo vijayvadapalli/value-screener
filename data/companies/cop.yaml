@@ -1,0 +1,39 @@
+ticker: COP
+yahoo: COP
+name: ConocoPhillips
+sector: energy
+model: cashflow
+currency: USD
+period:
+  label: TTM Sep 26
+  end: '2026-09-30'
+  per_year: 1
+earnings:
+  cfo_ex_wc: 24053.0
+  capex: 12128.0
+  shares_m: 1182.335
+rank_on_normalised: true
+shares_m: 1182.335
+balance:
+  cash: 9929.0
+  debt: 23262.0
+multiples:
+- 10
+- 13
+cyclical: true
+price:
+  value: 140.06
+  currency: USD
+  date: '2026-11-12'
+  source: yfinance COP
+sources:
+- Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)
+assumptions:
+- DRAFT from Yahoo's statements (TTM Sep 26; normal basis FY22–FY25), not checked against the filings
+- Owner earnings = operating cash flow excluding working-capital moves − all capex (growth capex included, so conservative)
+- Valued on the 4-year average ('normal' oil and gas prices), not the latest twelve months – prices in 2026 include a spike
+- Balance sheet at 2026-09-30
+earnings_normalised:
+  cfo_ex_wc: 22518.0
+  capex: 11519.5
+  shares_m: 1182.335
