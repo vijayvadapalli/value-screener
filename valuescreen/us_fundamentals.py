@@ -119,12 +119,49 @@ def _instant_on(facts, names, day: dt.date, unit="USD"):
     return None
 
 
-def summarize(facts: dict) -> dict:
+RECENT_DAYS = 200   # figures older than this, against today, are not used (the company falls back to Yahoo)
+
+
+def shares_outstanding(facts, as_of: dt.date | None = None):
+    """(date, shares). The cover-page count from the latest filing, adding up every share class it lists (Mastercard and
+    Fox report one figure per class) – if it is recent; many companies stopped tagging it years ago. Otherwise the latest
+    quarter's diluted weighted average. None if neither is recent."""
+    as_of = as_of or dt.date.today()
+    recent = lambda end: (as_of - _d(end)).days <= RECENT_DAYS  # noqa: E731
+    cover = facts.get("facts", {}).get("dei", {}).get("EntityCommonStockSharesOutstanding", {}).get("units", {}).get("shares", [])
+    if cover:
+        latest = max(cover, key=lambda f: ((f.get("filed") or ""), f["end"]))
+        same = [f for f in cover if f.get("accn") == latest.get("accn") and f["end"] == latest["end"]]
+        total = sum(f["val"] for f in same)
+        if recent(latest["end"]) and total > 0:
+            return latest["end"], total
+    weighted = [f for f in facts.get("facts", {}).get("us-gaap", {}).get(SHARE_TAGS["us-gaap"][0], {}).get("units", {}).get("shares", [])
+                if f.get("start") and 80 <= (_d(f["end"]) - _d(f["start"])).days <= 100]
+    if weighted:
+        latest = max(weighted, key=lambda f: (f["end"], f.get("filed") or ""))
+        if recent(latest["end"]):
+            return latest["end"], latest["val"]
+    return None
+
+
+def problem(s: dict, as_of: dt.date | None = None) -> str | None:
+    """Why a company's SEC figures should not be used (it then falls back to Yahoo), or None if they are fine."""
+    as_of = as_of or dt.date.today()
+    if s["ttm"].get("net_income") is None:
+        return "no recent net income in the SEC data"
+    if not s["ttm_end"] or (as_of - s["ttm_end"]).days > RECENT_DAYS:
+        return f"SEC figures end {s['ttm_end']}"
+    if not s["shares"]:
+        return "no recent share count in the SEC data"
+    return None
+
+
+def summarize(facts: dict, as_of: dt.date | None = None) -> dict:
     quarters = {k: _best(facts, names, _quarters) for k, names in FLOW_TAGS.items()}
     years = {k: _best(facts, names, _years) for k, names in FLOW_TAGS.items()}
     years["eps"] = _best(facts, EPS_TAGS, _years, unit="USD/shares")
-    revenue_q = quarters["revenue"] or quarters["net_income"]
-    ends = sorted(revenue_q)[-4:]
+    window = quarters["net_income"] or quarters["revenue"]   # the twelve months follow the figure that is valued
+    ends = sorted(window)[-4:]
     complete = len(ends) == 4 and all(80 <= (b - a).days <= 100 for a, b in zip(ends, ends[1:]))
     ttm = {}
     if complete:
@@ -138,10 +175,7 @@ def summarize(facts: dict) -> dict:
     bal = {k: v for k, v in ((k, _latest_instant(facts, names)) for k, names in INSTANT_TAGS.items()) if v}
     debt = bal["debt_total"][1] if "debt_total" in bal else (bal.get("debt_noncurrent", (0, 0))[1] + bal.get("debt_current", (0, 0))[1])
     debt += bal.get("short_borrowings", (0, 0))[1]
-    shares = _latest_instant(facts, SHARE_TAGS["dei"], unit="shares", ns="dei")
-    if shares is None:
-        diluted = _best(facts, SHARE_TAGS["us-gaap"][:1], _quarters, unit="shares")
-        shares = (max(diluted), diluted[max(diluted)]) if diluted else None
+    shares = shares_outstanding(facts, as_of)
     annual_equity = {y: _instant_on(facts, INSTANT_TAGS["equity"], y) for y in years["net_income"]}
     annual_shares = _best(facts, SHARE_TAGS["us-gaap"][:1], _years, unit="shares")
     filed = [f.get("filed") for ns in facts.get("facts", {}).values() for t in ns.values() for u in t.get("units", {}).values()

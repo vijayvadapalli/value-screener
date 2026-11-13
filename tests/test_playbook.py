@@ -401,3 +401,24 @@ def test_us_screen_values_a_company_and_applies_splits():
     assert r["pe_change"] == pytest.approx((30 / 40) / (5.9 / 4.8) - 1, rel=1e-6) and r["grade"] == "A"
     fin = us.evaluate_sec({**entry, "sector": "Financials"}, summarize(_sec_facts()), px, cfg_with())
     assert fin["nc"] == 0.0 and fin.get("pb") is not None
+
+
+def test_stale_sec_figures_fall_back_and_old_share_counts_are_ignored():
+    from valuescreen.us_fundamentals import problem, shares_outstanding, summarize
+    facts = _sec_facts()
+    assert problem(summarize(facts, dt.date(2026, 11, 13)), dt.date(2026, 11, 13)) is None
+    assert "SEC figures end" in problem(summarize(facts, dt.date(2027, 9, 1)), dt.date(2027, 9, 1))
+    old = {"facts": {"dei": {"EntityCommonStockSharesOutstanding": {"units": {"shares": [
+        {"end": "2010-10-27", "val": 1.2e8, "filed": "2010-11-02", "accn": "x"}]}}}}}
+    assert shares_outstanding(old, dt.date(2026, 11, 13)) is None              # stopped tagging years ago
+    two_classes = {"facts": {"dei": {"EntityCommonStockSharesOutstanding": {"units": {"shares": [
+        {"end": "2026-10-20", "val": 5.8e9, "filed": "2026-10-30", "accn": "q3"},
+        {"end": "2026-10-20", "val": 6.5e9, "filed": "2026-10-30", "accn": "q3"}]}}}}}
+    assert shares_outstanding(two_classes, dt.date(2026, 11, 13)) == ("2026-10-20", 12.3e9)   # classes added up
+
+
+def test_split_adjustment_only_when_the_old_figure_is_pre_split():
+    from valuescreen.us_screen import split_multiplier
+    assert split_multiplier(50e6, 600e6, 10.0) == 10.0     # 50m before a 10-for-1 split ≈ 500m now: adjust
+    assert split_multiplier(520e6, 600e6, 10.0) == 1.0     # already restated: leave it
+    assert split_multiplier(500e6, 600e6, 1.0) == 1.0

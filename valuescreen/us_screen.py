@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import datetime as dt
 import html
+import math
 import statistics
 from pathlib import Path
 
@@ -82,6 +83,15 @@ def finish(r: dict, eps_ttm, eps_5y, bvps, roe_5y, nc, cfg):
     return r
 
 
+def split_multiplier(shares_then, shares_now, factor):
+    """The SEC data sometimes restates old per-share figures for a later split and sometimes not. If multiplying the old
+    share count by the split factor brings it closer to today's count, the old figure is pre-split: return the factor
+    (old per-share figures are divided by it). Otherwise it was already restated: return 1."""
+    if factor == 1 or not shares_then or not shares_now:
+        return factor if not shares_then else 1.0 if factor == 1 else factor
+    return factor if abs(math.log(shares_now / (shares_then * factor))) < abs(math.log(shares_now / shares_then)) else 1.0
+
+
 def _ratio(a, b):
     return a / b if a is not None and b not in (None, 0) else None
 
@@ -112,8 +122,9 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
     ebitda = (ttm.get("operating_income") or 0) + (ttm.get("d_and_a") or 0) if ttm.get("operating_income") is not None else None
     r["debt_ebitda"] = _ratio(bal["debt"], ebitda) if ebitda and ebitda > 0 else None
     old = [y for y in years if s["ttm_end"] and (s["ttm_end"] - y).days >= 2.5 * 365 and annual[y].get("shares")]
-    if old and annual[old[-1]].get("shares"):
-        then = annual[old[-1]]["shares"] * px["split_since"](old[-1].isoformat())
+    if old:
+        raw = annual[old[-1]]["shares"]
+        then = raw * split_multiplier(raw, shares, px["split_since"](old[-1].isoformat()))
         r["share_change_3y"] = shares / then - 1
     nc = (bal["cash_and_st"] - bal["debt"]) / shares
     bvps = bal["equity"] / shares if bal.get("equity") else None
@@ -127,8 +138,9 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
         if eps_y[target] <= 0:
             later = [y for y in base if y > target and eps_y[y] > 0]
             target = min(later) if later else target
+        mult = split_multiplier(annual[target].get("shares"), shares, px["split_since"](target.isoformat()))
         p = pvp.evaluate({"source": "sec", "years": (s["ttm_end"] - target).days / 365.25, "price": px["price"],
-                          "eps_then": eps_y[target] / px["split_since"](target.isoformat()), "eps_now": eps_ttm,
+                          "eps_then": eps_y[target] / mult, "eps_now": eps_ttm,
                           "price_then": px["on"](target.isoformat())})
         r["grade"], r["pe_change"] = p["grade"], p["pe_change"]
     r.setdefault("grade", "n/m")
@@ -140,6 +152,10 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
         r["flags"].append(f"shares +{r['share_change_3y']*100:.0f}% in 3 years")
     if r["low_cash"]:
         r["flags"].append(f"cash conversion {r['cash_conversion']*100:.0f}%")
+    last_year = annual[years[-1]].get("net_income") if years else None
+    avg5 = sum(eps_hist) / len(eps_hist) * shares if eps_hist else None
+    if ni and last_year and avg5 and last_year > 0 and avg5 > 0 and ni > 2 * last_year and ni > 2 * avg5:
+        r["flags"].append(f"profit ×{ni / last_year:.1f} on last year – one-off? check the filing")
     return r
 
 
@@ -147,7 +163,7 @@ def evaluate_yahoo(entry: dict, raw: dict, cfg: dict) -> dict:
     """Foreign filers (ASML, Arm, PDD …): the same test on Yahoo's figures."""
     r = {**{k: entry[k] for k in ("ticker", "yahoo", "name", "sector", "industry", "indexes", "cik")}, "source": "Yahoo",
          "price": raw.get("price"), "price_date": raw.get("price_date"), "price_change_1y": raw.get("price_change_1y"),
-         "flags": ["foreign filer – Yahoo figures"]}
+         "flags": [f"Yahoo figures – {entry['why']}" if entry.get("why") else "foreign filer – Yahoo figures"]}
     price, shares, fx = raw.get("price"), raw.get("shares"), raw.get("fx")
     if not price or not shares or not fx:
         return dict(r, signal="grey", action="No data")
@@ -165,9 +181,13 @@ def evaluate_yahoo(entry: dict, raw: dict, cfg: dict) -> dict:
 
 
 def shortlist(rows):
+    """Green, grade A or B, healthy cash conversion, no red flags – one line per company (share classes such as GOOG and
+    GOOGL share a CIK)."""
+    seen = set()
     return [r for r in rows if r.get("signal") == "green" and r.get("grade") in ("A", "B")
+            and not (r.get("cik") and (r["cik"] in seen or seen.add(r["cik"])))
             and (r["sector"] in FINANCIAL or (r.get("cash_conversion") or 0) >= 0.70 or r["source"] == "Yahoo")
-            and not any(f.startswith(("debt", "shares +")) for f in r["flags"])]
+            and not any(f.startswith(("debt", "shares +", "profit ×")) for f in r["flags"])]
 
 
 def sort_key(r):
@@ -289,7 +309,7 @@ twelve months' net income ÷ shares, plus net cash. Value with no growth = EPS �
 Green ≤ 5% a year, blue 5–25%, red ≥ 25% or no earnings. Financials use book value × 5-year ROE (no net cash), energy and materials
 average the 12-month and 5-year EPS and are capped at blue, real estate is not valued, and cash conversion below 70% caps at blue.
 Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … D = rose a third+). A filter, not a verdict.</p>
-<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt or dilution flags): {short_html}</div>
+<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution or one-off flags): {short_html}</div>
 <h3>By sector</h3>{sector_table(rows)}
 <div class="controls"><span class="lab">Signal</span>{buttons('signal', [('green', 'Cheap'), ('blue', 'Watch / hold'), ('red', 'Expensive'), ('grey', 'Not valued')])}
 <span class="lab">Index</span>{buttons('index', [('S&P 500', 'S&P 500'), ('Nasdaq-100', 'Nasdaq-100')])}

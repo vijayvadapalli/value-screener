@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT))
 from valuescreen import factsdb, growth_data, loader, sec, us_universe  # noqa: E402
 from valuescreen import miner_screen  # noqa: E402
 from valuescreen import us_screen as us  # noqa: E402
-from valuescreen.us_fundamentals import summarize, wanted_tags  # noqa: E402
+from valuescreen.us_fundamentals import problem, summarize, wanted_tags  # noqa: E402
 
 OUT = loader.output_folder("us")
 DB = OUT / "us_facts.sqlite"
@@ -115,9 +115,15 @@ def main():
             notes.append(f"{e['ticker']}: no price from Yahoo")
             continue
         try:
-            rows.append(us.evaluate_sec(e, summarize(facts), px, cfg))
+            summary = summarize(facts, today)
         except Exception as err:  # noqa: BLE001 - one odd filer must not stop the screen
-            notes.append(f"{e['ticker']}: could not read its figures ({err.__class__.__name__})")
+            summary, why = None, f"SEC figures unreadable ({err.__class__.__name__})"
+        else:
+            why = problem(summary, today)
+        if why:                       # gaps in the SEC data – use Yahoo's figures and say so
+            via_yahoo.append({**e, "why": why})
+            continue
+        rows.append(us.evaluate_sec(e, summary, px, cfg))
     raw = growth_data.collect(via_yahoo, {}, "us", OUT / "screen_cache" / f"foreign-{today}.json", workers=2)
     rows += [us.evaluate_yahoo(e, raw[e["ticker"]], cfg) for e in via_yahoo if e["ticker"] in raw]
     notes += [f"{e['ticker']}: no figures from the SEC or Yahoo" for e in via_yahoo if e["ticker"] not in raw]
