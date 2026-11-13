@@ -1,9 +1,17 @@
 # Value Screener
 
-Value vs price, the Rick Rule way: each company is valued only from its latest filing, re-priced to today's metal
-prices, and compared with what the market charges. Every run writes one HTML report per list that combines the value
-view (green / blue / red signals, buy levels) with a profit-growth-vs-price-growth grade, with a sortable summary table
-and a linked section per company – plus a profit-vs-price PDF for printing. A flag shows whenever the data is out of date.
+Is a share cheap or expensive right now? Value vs price, the Rick Rule way: each company is valued only from its
+latest filing, re-priced to today's metal prices, and compared with what the market charges.
+
+Every run writes one HTML report per list: a sortable summary table, then a section per company with its signal, buy
+levels, charts and the full calculation, plus a grade for whether profits have kept up with the share price. A flag
+shows whenever the data is out of date.
+
+**Contents:** [Latest reports](#latest-reports) · [How to read a report](#how-to-read-a-report) ·
+[Quick start](#quick-start) · [Every time](#every-time) · [Screening a big list](#screening-a-big-list-first-nifty-50-and-other-nse-indexes) ·
+[Screening the miners](#screening-all-the-miners-etf-holdings) · [Keeping the data current](#keeping-the-data-current) ·
+[Adding a company](#adding-a-company) · [Models](#models) · [Signals and zones](#signals-and-zones) ·
+[Publishing](#publishing-the-reports) · [Code map](#code-map)
 
 ## Latest reports
 
@@ -13,9 +21,50 @@ and a linked section per company – plus a profit-vs-price PDF for printing. A 
 | Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
 | Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
 | Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – |
+| S&P 500 + Nasdaq-100 screen | [us-screen.html](https://vijayvadapalli.github.io/value-screener/reports/us-screen.html) | – |
 | Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
+
+## How to read a report
+
+- **Signal colour.** Green = cheap enough to buy or add · blue = watch or hold · red = expensive, or no reliable value.
+  The exact thresholds for each kind of company are under [Signals and zones](#signals-and-zones).
+- **Grade A–D.** Has the share price run ahead of profits over about three years? A = profits clearly outran the price,
+  D = the price ran well ahead. See [Profit growth vs price growth](#profit-growth-vs-price-growth).
+- **STALE.** The results or the price are too old to trust. A stale company never shows as green.
+- **[flags]** in the comments point at things to check yourself: one-off quarters, cyclicals, high costs, conglomerates.
+
+Start with the summary table: click a column to sort, filter by signal or grade, and click a ticker to jump to that
+company's section.
+
+### Words used in the reports
+
+| Term | In plain words |
+|---|---|
+| **Price** | What one share costs on the stock market today (the last closing price). |
+| **Value** | What one share is worth from the business's own figures: the cash it earns for its owners each year × a multiple, plus the cash it holds after paying off debt. This tool works it out; the market does not. |
+| **Margin of safety** | How far the price is below the value. 30% means you pay 70 for something worth 100. The bigger, the more room for mistakes. |
+| **Buy level** | The price at which the signal would turn green. |
+| **Price assumes** | For growth stocks: how fast profits must grow each year for today's price to make sense. Low = cheap, 25%+ = the market expects a lot. |
+| **EPS** | Earnings per share: the company's profit for the year divided by the number of shares. |
+| **P/E** (price ÷ earnings) | How many years of today's profit you pay for. P/E 15 = price is 15 × a year's profit per share. Lower is cheaper, if profits hold up. |
+| **P/E change** | Whether shares got dearer or cheaper over about three years compared with profits. It drives the A–D grade. |
+| **ROE** (return on equity) | Profit as a % of the money the shareholders have in the business. 15–20%+ a year is a good business; under 10% is weak. Banks are valued on it. |
+| **Price ÷ book** | Price compared with the company's net assets per share (its book value). Used for banks and insurers. |
+| **Owner earnings** | Profit plus depreciation, minus the spending needed just to keep the business running: the cash an owner could take out. |
+| **Net cash** | Cash minus debt. Negative means more debt than cash. |
+| **Multiple (12x / 15x / 25x)** | How many years of owner earnings a share is worth: 12x = cautious, 15x = fair, 25x = expensive. |
+| **Cash conversion** | Cash the business really collected ÷ the profit it reported, over 5 years. Under 70% means the profit is not turning into cash. |
+| **FCF yield** | Free cash flow (cash left after all spending) as a % of the share price. Negative = spending more than it earns. |
+| **NAV** | Net asset value: for a developer, what its mine project is worth; for a physical trust, the metal it holds. |
+| **AISC** | All-in sustaining cost: what a miner spends to produce one ounce or pound, all costs included. |
+| **Tier A / B / C** | How much the business is trusted (A = best). Tier A gets a looser buy rule. |
+| **Cyclical** | Profits swing with prices (oil, metals, cement, autos), so a cheap-looking year may be a peak. Capped at blue. |
+
+ROE is shown in each company's "Profit growth vs price growth" box: the latest twelve months from Yahoo, or a 3-year
+average from Screener.in for Indian companies. The Nifty v2 valuation of banks uses a 5-year average, shown under key
+figures.
 
 The rules follow the Valuation Playbook (Nov 2026); `PROJECT_INSTRUCTIONS.md` has them in full, ready to paste into a
 Claude Project. `docs/Value_Screener_Design.pdf` has the original requirements and formulas.
@@ -31,6 +80,10 @@ pip install yfinance beautifulsoup4 lxml  # first time only: prices, profit-vs-p
 python -m valuescreen validate            # checks every company file
 ```
 
+Your prompt shows `(.venv)` while the environment is active. All `python` and `pip` commands in this README assume it
+is active. In VS Code, also pick `.venv/bin/python` under **Python: Select Interpreter** so the editor and Run button
+use it.
+
 ## Every time
 
 Share prices update after each market closes – for US listings that is about 9 pm UK time; before that you get the
@@ -43,9 +96,10 @@ source .venv/bin/activate
 python tools/update_prices.py                    # core, watchlist, tech, oil (data/companies)
 python tools/update_prices.py --folder nifty50   # Nifty 50
 
-# 2. reports: one HTML + two PDFs per list (dated copies in output/, the latest in reports/)
+# 2. reports: one HTML (+ PDFs) per list (dated copies in output/, the latest in reports/)
 python -m valuescreen run --list core --live        # --live also fetches today's gold, silver and copper
 python -m valuescreen run --list tech
+python -m valuescreen run --list oil
 python -m valuescreen run --list watchlist
 python -m valuescreen run --list nifty50            # first run each day ≈ 4–5 min (Screener.in), then cached
 
@@ -55,27 +109,20 @@ open reports/tech.html
 open reports/nifty50.html
 ```
 
-Uranium has no free price feed: set `spot.uranium` in `config.yaml` when it moves. `as_of: today` in `config.yaml`
-dates the report and the stale-data checks; set a fixed date there, or pass `--asof 2026-11-04`, to rerun a past day.
+Uranium has no free price feed: set `spot.uranium` in `config.yaml` when it moves. To rerun a past day, pass
+`--asof 2026-11-04` (or set `as_of` in `config.yaml`).
 
 Once a quarter, after Indian results: `python tools/fetch_screener.py nifty50` refreshes the Nifty v2 data.
-
-Your prompt shows `(.venv)` while the environment is active. All `python` and `pip` commands in this README assume it
-is active. In VS Code, also pick `.venv/bin/python` under **Python: Select Interpreter** so the editor and Run button
-use it.
 
 Other runs:
 
 ```bash
-python -m valuescreen run --list watchlist             # data/lists/watchlist.yaml
-python -m valuescreen run --list core --live           # live prices (yfinance)
-python -m valuescreen run --list core --technicals   # adds price vs 200-day average, RSI and MACD (yfinance)
-python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4200,silver=55
-python -m valuescreen run --list tech
-python -m valuescreen run --all --etf URNM --no-pdf     # every company, ETF look-through, skip the PDFs
-python -m valuescreen run --list tech --no-profit      # skip the profit-vs-price figures (no Yahoo calls)
-python tools/profit_vs_price.py --list tech            # the profit-vs-price PDF on its own
-python -m pytest -q                                    # 215 tests, incl. reproducing the Nov 2026 reports
+python -m valuescreen run --list core --technicals        # adds price vs 200-day average, RSI and MACD (yfinance)
+python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4200,silver=55   # a few tickers at chosen metal prices
+python -m valuescreen run --all --etf URNM --no-pdf       # every company, ETF look-through, skip the PDFs
+python -m valuescreen run --list tech --no-profit         # skip the profit-vs-price figures (no Yahoo calls)
+python tools/profit_vs_price.py --list tech               # the profit-vs-price PDF on its own
+python -m pytest -q                                       # the tests, incl. reproducing the Nov 2026 reports
 ```
 
 The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`, so updating the live files in
@@ -86,7 +133,7 @@ your history stays on your computer. It also copies the latest reports to `repor
 (`core.html`, `core.pdf`, `core-profit-vs-price.pdf`, and the same for each list) – the only reports git
 tracks and the site publishes.
 
-Reports:
+What each run writes:
 
 - `<List>_Value_vs_Price_<date>.html` – **the report to read.** One page with both views: a summary table (click a column
   to sort; filter by signal or grade; search by name) where every ticker links to its company section. Each section has
@@ -207,6 +254,30 @@ python -m valuescreen run --list miners        # full valuations of the companie
 This is a filter, not a verdict – a shortlisted company gets a full company file (metal sold, realised prices, AISC)
 and the proper producer valuation before any decision.
 
+## Screening the S&P 500 and Nasdaq-100 (SEC figures)
+
+```bash
+export SEC_USER_AGENT="Your Name your.email@example.com"   # once, in ~/.zshrc – the SEC requires a contact in every request
+pip install beautifulsoup4 lxml yfinance                    # if not installed yet
+python tools/screen_us.py                                   # first run 10–20 minutes, later runs a minute or two
+open reports/us-screen.html
+```
+
+- **Universe:** the S&P 500 and Nasdaq-100 constituents from their Wikipedia lists (~520 companies, sectors included).
+- **Figures:** each company's own SEC filings, from the SEC's bulk "company facts" file (~1–1.5 GB, downloaded once a
+  week; `--refresh` forces it). Quarters are worked out from year-to-date figures, Q4 = the year − nine months. Foreign
+  filers (ASML, Arm, PDD and a few others file 20-F reports) use Yahoo's figures instead, flagged in the report.
+- **Database:** `output/us/us_facts.sqlite` (not committed, rebuildable) holds every stored figure with the date it was
+  filed (restatements kept beside the originals), six years of daily prices and splits, and each run's verdicts – the
+  base for history charts and back-testing the signals later.
+- **Screen:** reverse DCF at 10% (growth needed for 5 years, 15x exit). Financials: average of 12-month EPS and book value
+  × 5-year ROE, no net cash, shown with price-to-book against the fair multiple. Energy and materials: average of 12-month
+  and 5-year EPS, capped at blue. Real estate: not valued. Quality: free-cash-flow yield, ROE, 5-year cash conversion
+  (below 70% caps at blue), share count change over 3 years, debt ÷ EBITDA; and the profit-vs-price grade.
+- **Report:** filters by signal, index and sector; a table of the median growth needed by sector (where the market is
+  cheap or stretched); a shortlist (green, grade A or B, cash conversion ≥ 70%, no debt or dilution flags); each ticker
+  links to its Yahoo page and its SEC filings.
+
 ## Adding companies by hand (oil and gas)
 
 ```bash
@@ -234,8 +305,8 @@ and source only). It skips a company if Yahoo has no price, quotes another curre
 so check those by hand. It converts London pence to pounds.
 
 **Metal prices.** `--live` fetches gold, silver and copper for that run only and does not save them. Uranium has no free
-feed: look up the U3O8 spot price weekly and set `spot.uranium` in `config.yaml`. `as_of: today` there means the
-stale-data check counts from today; a fixed date (or `--asof`) reruns a past day.
+feed: look up the U3O8 spot price weekly and set `spot.uranium` in `config.yaml`. `as_of: today` there dates the report
+and means the stale-data check counts from today.
 
 ## Refreshing a company when it reports (about 10 minutes by hand)
 
@@ -383,7 +454,9 @@ valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (scr
 valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
 valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures
 valuescreen/miner_screen.py, etf_holdings.py   the miners quick screen and the ETF holdings it starts from
-tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners,
+valuescreen/us_screen.py, us_universe.py, us_fundamentals.py, sec.py, factsdb.py   the S&P 500 / Nasdaq-100 screen:
+                           index lists, SEC download, figures from filings, the SQLite database
+tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us,
                            screen_universe, make_nse_list
 ```
 

@@ -33,6 +33,11 @@ td.c{text-align:center} .pos{color:var(--green);font-weight:600} .neg{color:var(
 td.flags{color:var(--muted);font-size:11.5px;max-width:240px}
 .pill{display:inline-block;padding:2px 10px;border-radius:10px;color:#fff;font-weight:600;font-size:12px;white-space:nowrap}
 .pill.big{font-size:14px;padding:4px 16px;border-radius:14px}
+td.sig{width:1%} .hastip{position:relative;cursor:help;outline:none}
+.tip{display:none;position:absolute;z-index:20;left:0;top:calc(100% + 6px);width:340px;max-width:80vw;white-space:normal;
+background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:12.5px;
+font-weight:400;line-height:1.45;box-shadow:0 4px 16px rgba(0,0,0,.18)} .tip>span{display:block;margin:0 0 5px} .tip>span:last-child{margin:0}
+.hastip:hover .tip,.hastip:focus .tip{display:block}
 .pill.green{background:var(--green)} .pill.blue{background:var(--blue)} .pill.red{background:var(--red)}
 .grade{font-weight:700;font-size:16px} .gA{color:var(--gA)} .gB{color:var(--gB)} .gC{color:var(--gC)} .gD{color:var(--gD)} .gnm{color:var(--muted)}
 .company{border-top:1px solid var(--line);margin-top:36px;padding-top:14px;scroll-margin-top:10px}

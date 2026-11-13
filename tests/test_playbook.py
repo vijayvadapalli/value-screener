@@ -333,3 +333,71 @@ def test_physical_holders_are_not_valued_as_producers():
     from valuescreen import miner_screen as ms
     r = ms.evaluate(_miner_raw(name="Yellow Cake plc"), {"ticker": "YCA.L"})
     assert r["stage"] == "physical holder" and r["signal"] == "grey"
+
+
+# ------------------------------------------------------------------------------------------------- US screen (SEC figures)
+def _sec_facts():
+    """A made-up filer: fiscal years = calendar years, 10-Qs with year-to-date cash flow, a 2-for-1 split in 2025."""
+    def dur(start, end, val, form="10-Q", filed=None):
+        return {"start": start, "end": end, "val": val, "form": form, "filed": filed or end, "accn": f"a-{end}-{start}"}
+
+    def inst(end, val, form="10-Q"):
+        return {"end": end, "val": val, "form": form, "filed": end, "accn": f"i-{end}"}
+    ni, ocf = [], []
+    for y in range(2021, 2027):
+        if y < 2026:
+            ni.append(dur(f"{y}-01-01", f"{y}-12-31", 400.0 + 40 * (y - 2021), "10-K", f"{y + 1}-02-15"))
+            ocf.append(dur(f"{y}-01-01", f"{y}-12-31", 500.0, "10-K", f"{y + 1}-02-15"))
+        for q, end in ((1, f"{y}-03-31"), (2, f"{y}-06-30"), (3, f"{y}-09-30")):
+            ni.append(dur(f"{y}-{3*q-2:02d}-01", end, 100.0 + 10 * (y - 2021)))
+            ocf.append(dur(f"{y}-01-01", end, 125.0 * q))            # year to date
+    eps = [dur(f"{y}-01-01", f"{y}-12-31", (400.0 + 40 * (y - 2021)) / (50 if y < 2025 else 100), "10-K", f"{y + 1}-02-15")
+           for y in range(2021, 2026)]
+    return {"facts": {"us-gaap": {
+        "NetIncomeLoss": {"units": {"USD": ni}}, "NetCashProvidedByUsedInOperatingActivities": {"units": {"USD": ocf}},
+        "Revenues": {"units": {"USD": [dict(f, val=f["val"] * 5) for f in ni]}},
+        "EarningsPerShareDiluted": {"units": {"USD/shares": eps}},
+        "CashAndCashEquivalentsAtCarryingValue": {"units": {"USD": [inst("2026-09-30", 300.0)]}},
+        "LongTermDebt": {"units": {"USD": [inst("2026-09-30", 100.0)]}},
+        "StockholdersEquity": {"units": {"USD": [inst(f"{y}-12-31", 2000.0, "10-K") for y in range(2021, 2026)] + [inst("2026-09-30", 2400.0)]}},
+    }, "dei": {"EntityCommonStockSharesOutstanding": {"units": {"shares": [inst("2026-09-30", 100.0)]}}}}}
+
+
+def test_sec_quarters_ttm_and_balance():
+    from valuescreen.us_fundamentals import summarize
+    s = summarize(_sec_facts())
+    # TTM to Sep 2026 = Q4 2025 (the year 560 − its three quarters 3 × 140) + Q1–Q3 2026 (3 × 150)
+    assert s["ttm_end"] == dt.date(2026, 9, 30) and s["ttm_complete"]
+    assert s["ttm"]["net_income"] == pytest.approx(560 - 420 + 450)
+    assert s["ttm"]["ocf"] == pytest.approx(500 - 375 + 375)          # Q4 2025 from year-to-date + 2026 Q1–Q3 (125 each)
+    assert s["balance"]["cash_and_st"] == 300 and s["balance"]["debt"] == 100 and s["shares"] == 100
+
+
+def test_sec_database_round_trip_and_point_in_time(tmp_path):
+    from valuescreen import factsdb
+    from valuescreen.us_fundamentals import wanted_tags
+    con = factsdb.connect(tmp_path / "f.sqlite")
+    factsdb.save_facts(con, 42, _sec_facts(), wanted_tags())
+    full = factsdb.load_facts(con, 42)
+    early = factsdb.load_facts(con, 42, filed_by="2024-06-30")
+    n = lambda f: len(f["facts"]["us-gaap"]["NetIncomeLoss"]["units"]["USD"])  # noqa: E731
+    assert n(full) == len(_sec_facts()["facts"]["us-gaap"]["NetIncomeLoss"]["units"]["USD"]) and n(early) < n(full)
+    factsdb.save_prices(con, "TST", [("2023-12-29", 40.0), ("2026-11-12", 30.0)], [("2025-06-02", 2.0)])
+    assert factsdb.split_factor_since(con, "TST", "2023-12-31") == 2.0 and factsdb.split_factor_since(con, "TST", "2025-12-31") == 1.0
+
+
+def test_us_screen_values_a_company_and_applies_splits():
+    from valuescreen import us_screen as us
+    from valuescreen.us_fundamentals import summarize
+    entry = {"ticker": "TST", "yahoo": "TST", "name": "Test Inc", "sector": "Information Technology", "industry": "Software",
+             "indexes": ["S&P 500"], "cik": 42}
+    px = {"price": 30.0, "date": "2026-11-12", "change_1y": 0.1, "on": lambda day: 40.0,
+          "split_since": lambda day: 2.0 if day < "2025-06-02" else 1.0}
+    r = us.evaluate_sec(entry, summarize(_sec_facts()), px, cfg_with())
+    assert r["eps"] == pytest.approx(5.9)                                # 590 ÷ 100 shares
+    assert r["v0"] == pytest.approx(5.9 * dcf_factor(0.0, cfg_with(), 0.10) + 2.0)
+    assert r["implied_growth"] is not None and r["implied_growth"] < 0 and r["signal"] == "green"
+    # EPS three years back (FY2023: 480 ÷ 50 = 9.6 a share before the split = 4.8 now) vs 5.9 now, price 40 → 30
+    assert r["pe_change"] == pytest.approx((30 / 40) / (5.9 / 4.8) - 1, rel=1e-6) and r["grade"] == "A"
+    fin = us.evaluate_sec({**entry, "sector": "Financials"}, summarize(_sec_facts()), px, cfg_with())
+    assert fin["nc"] == 0.0 and fin.get("pb") is not None

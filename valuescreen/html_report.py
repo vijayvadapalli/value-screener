@@ -110,7 +110,25 @@ def _num(x):
     return "" if x is None else f"{x:.6g}"
 
 
-def summary_row(r, p, previous):
+def short_action(action: str) -> str:
+    """The pill's word: 'Buy – start (≤ 15x)' → 'Buy', 'Watch / hold' → 'Watch'; the full text goes in the hover card."""
+    word = action.split(" – ")[0]
+    return {"Watch / hold": "Watch", "No valid value": "No value"}.get(word, word)
+
+
+def _signal_cell(r, cfg):
+    """A short pill; hovering (or tapping) it shows the full action, the headline sentence, any cap and the flags."""
+    lines = ([f"<b>{e(r['action'])}</b>"] if r["action"] != short_action(r["action"]) else []) + [markup(headline(r, cfg))]
+    if r.get("signal_caps"):
+        lines.append("Capped at blue: " + e(", ".join(r["signal_caps"])) + ".")
+    if r.get("flags"):
+        lines.append("Flags: " + e(", ".join(r["flags"])))
+    tip = "".join(f"<span>{x}</span>" for x in lines)
+    return (f'<span class="pill {r["signal"]} hastip" tabindex="0">{e(short_action(r["action"]))}'
+            f'<span class="tip" role="tooltip">{tip}</span></span>')
+
+
+def summary_row(r, p, previous, cfg):
     t = r["ticker"]
     value, basis = _value_cell(r)
     assumes, assumes_v = _assumes_cell(r)
@@ -126,18 +144,34 @@ def summary_row(r, p, previous):
 <td data-v="{_num(r.get('v_low'))}"><span class="nw">{value}</span><br><small>{basis}</small></td>
 <td data-v="{_num(r.get('margin_of_safety'))}" class="{'pos' if (r.get('margin_of_safety') or -1) >= 0 else 'neg'}">{pct(r.get('margin_of_safety'))}{prev_mos}</td>
 <td data-v="{_num(r.get('buy_level'))}">{_buy_cell(r)}</td>
-<td data-v="{SIGNAL_ORDER[r['signal']]}"><span class="pill {r['signal']}">{e(r['action'])}</span></td>
+<td data-v="{SIGNAL_ORDER[r['signal']]}" class="sig">{_signal_cell(r, cfg)}</td>
 <td data-v="{_num(assumes_v)}">{assumes}</td>
 <td data-v="{e(r.get('tier') or '')}" class="c">{e(r.get('tier') or '–')}</td>
 <td data-v="{GRADE_ORDER[grade]}" class="c grade g{grade.replace('/', '')}">{e(grade)}</td>
 <td data-v="{_num(p and p['pe_change'])}">{pct(p and p['pe_change'])}</td>
 <td data-v="{_num(p and p['profit_growth'])}">{pct(p and p['profit_growth'])}</td>
 <td data-v="{_num(p and p['price_growth'])}">{pct(p and p['price_growth'])}</td>
+<td data-v="{_num(p and p.get('roe'))}">{pct(p and p.get('roe'))}</td>
 <td class="flags">{flags}</td></tr>"""
 
 
-SUMMARY_HEAD = """<tr><th>Ticker</th><th>Price</th><th>Value</th><th>Margin of safety</th><th>Buy level</th><th>Signal</th>
-<th>Price assumes</th><th>Tier</th><th>Grade</th><th>P/E change</th><th>Profit /yr</th><th>Price /yr</th><th>Flags</th></tr>"""
+HEADERS = [
+    ("Ticker", "Click a ticker to jump to the company's full section"),
+    ("Price", "Last closing share price and its date (orange = more than 7 days old)"),
+    ("Value", "What a share is worth from the latest results; the line below says how it was valued"),
+    ("Margin of safety", "How far the price is below the value: 30% = paying 70 for something worth 100. Last run in (brackets)"),
+    ("Buy level", "The price at which the signal turns green"),
+    ("Signal", "Green = buy, blue = watch / hold, red = expensive or no value. Hover a signal for the reason"),
+    ("Price assumes", "Growth stocks: the yearly profit growth the price needs. Miners: the metal price the share price implies"),
+    ("Tier", "How much the business is trusted, A = best"),
+    ("Grade", "Profits vs share price over about 3 years: A = profits outran the price, D = the price ran ahead"),
+    ("P/E change", "How the price-to-earnings ratio moved over the period; drives the grade"),
+    ("Profit /yr", "Yearly profit growth over the period"),
+    ("Price /yr", "Yearly share price growth over the period"),
+    ("ROE", "Return on equity: profit as a % of the shareholders' money in the business. 15–20%+ is good, under 10% weak"),
+    ("Flags", "Things to check yourself: stale data, one-offs, cyclicals and more"),
+]
+SUMMARY_HEAD = "<tr>" + "".join(f'<th title="{e(tip)}">{e(name)}</th>' for name, tip in HEADERS) + "</tr>"
 
 
 # ------------------------------------------------------------------------------------------------- company sections
@@ -256,6 +290,11 @@ td.c{{text-align:center}} .pos{{color:var(--green);font-weight:600}} .neg{{color
 td.flags{{color:var(--muted);font-size:11.5px;max-width:240px}}
 .pill{{display:inline-block;padding:2px 10px;border-radius:10px;color:#fff;font-weight:600;font-size:12px;white-space:nowrap}}
 .pill.big{{font-size:14px;padding:4px 16px;border-radius:14px}}
+td.sig{{width:1%}} .hastip{{position:relative;cursor:help;outline:none}}
+.tip{{display:none;position:absolute;z-index:20;left:0;top:calc(100% + 6px);width:340px;max-width:80vw;white-space:normal;
+background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:12.5px;
+font-weight:400;line-height:1.45;box-shadow:0 4px 16px rgba(0,0,0,.18)}} .tip>span{{display:block;margin:0 0 5px}} .tip>span:last-child{{margin:0}}
+.hastip:hover .tip,.hastip:focus .tip{{display:block}}
 .pill.green{{background:var(--green)}} .pill.blue{{background:var(--blue)}} .pill.red{{background:var(--red)}}
 .grade{{font-weight:700;font-size:16px}} .gA{{color:var(--gA)}} .gB{{color:var(--gB)}} .gC{{color:var(--gC)}} .gD{{color:var(--gD)}} .gnm{{color:var(--muted)}}
 .company{{border-top:1px solid var(--line);margin-top:36px;padding-top:14px;scroll-margin-top:10px}}
@@ -353,7 +392,7 @@ and physical holders, and for growth companies the yearly growth the price needs
 <span class="lab">Grade</span><button class="on" data-grd="all">All</button>{''.join(f'<button data-grd="{g}">{g}</button>' for g in GRADE_ORDER)}
 <input id="q" type="search" placeholder="Search ticker or name"><span class="lab" id="count"></span></div>
 <div class="wrap"><table class="sum" id="sum"><thead>{SUMMARY_HEAD}</thead><tbody>
-{''.join(summary_row(r, profit.get(r['ticker']), previous) for r in ordered)}</tbody></table></div>
+{''.join(summary_row(r, profit.get(r['ticker']), previous, cfg) for r in ordered)}</tbody></table></div>
 {''.join(sections)}{etf_html}{heat_html}
 <section class="company"><h2>Run log</h2><ul class="small">{log}</ul></section>
 <footer>Educational framework, not investment advice. Previous run's figures in (brackets). Prices in each exchange's currency;
