@@ -15,13 +15,19 @@ def _yf():
         return None
 
 
+MINOR_UNITS = {"GBp": ("GBP", 100), "GBX": ("GBP", 100)}  # London shares are often quoted in pence
+
+
 def _last_close(yf, symbol):
+    """(close, date, currency), with pence converted to pounds; None if Yahoo has no price."""
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        h = yf.Ticker(symbol).history(period="10d", auto_adjust=False)
+        ticker = yf.Ticker(symbol)
+        h = ticker.history(period="10d", auto_adjust=False)
     if h is None or h.empty:
         return None
-    return float(h["Close"].iloc[-1]), h.index[-1].date()
+    currency, divisor = MINOR_UNITS.get(ticker.history_metadata.get("currency"), (ticker.history_metadata.get("currency"), 1))
+    return float(h["Close"].iloc[-1]) / divisor, h.index[-1].date(), currency
 
 
 def refresh_prices(companies: dict, tickers: list[str]) -> list[str]:
@@ -37,9 +43,13 @@ def refresh_prices(companies: dict, tickers: list[str]) -> list[str]:
         except Exception as e:  # noqa: BLE001
             got = None
             log.append(f"{t}: live price failed ({e.__class__.__name__}) - using {c['price']['value']} from {c['price']['date']}")
-        if got:
-            px, d = got
-            c["price"].update(value=px, date=d, source=f"yfinance {c['yahoo']}")
+        if not got:
+            continue
+        px, d, ccy = got
+        if ccy and ccy != c["price"]["currency"]:
+            log.append(f"{t}: Yahoo quotes {ccy}, the file uses {c['price']['currency']} - using the stored price")
+            continue
+        c["price"].update(value=px, date=d, source=f"yfinance {c['yahoo']}")
     return log
 
 

@@ -5,23 +5,67 @@ sector: Fast Moving Consumer Goods
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 206894.7
-shares_m: 12531.912581
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 12534.12
 balance:
   cash: 234907.7
   debt: 23993.6
 price:
-  value: 278.85
+  value: 283.9
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance ITC.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ITC/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 3.94
+  - 15.76
+  - 4.19
+  - 4.09
+  - 3.94
+  - 4.3
+  - 3.51
+  - 3.33
+  eps_annual:
+  - 8.47
+  - 9.24
+  - 10.27
+  - 12.45
+  - 10.69
+  - 12.37
+  - 15.44
+  - 16.39
+  - 27.77
+  - 16.51
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 15503.0
+  - 19477.0
+  - 20751.0
+  - 35052.0
+  - 21018.0
+  cfo_annual:
+  - 15776.0
+  - 18878.0
+  - 17179.0
+  - 17627.0
+  - 18464.0
+  book_value_ps: 57.0
+  roe_5y: 0.32

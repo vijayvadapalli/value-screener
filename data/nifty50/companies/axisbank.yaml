@@ -1,0 +1,71 @@
+ticker: AXISBANK
+yahoo: AXISBANK.NS
+name: Axis Bank Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1333.0
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance AXISBANK.NS
+shares_m: 3114.244
+v2:
+  eps_quarters:
+  - 21.78
+  - 24.13
+  - 20.13
+  - 17.82
+  - 22.58
+  - 24.46
+  - 24.54
+  - 24.74
+  eps_annual:
+  - 16.51
+  - 1.78
+  - 19.59
+  - 6.57
+  - 23.49
+  - 45.99
+  - 35.16
+  - 85.49
+  - 90.58
+  - 84.89
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 14207.0
+  - 10919.0
+  - 26492.0
+  - 28191.0
+  - 26548.0
+  cfo_annual:
+  - 28137.0
+  - 22075.0
+  - -5555.0
+  - 44384.0
+  - -8637.0
+  book_value_ps: 738.0
+  roe_5y: 0.14
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/AXISBANK/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

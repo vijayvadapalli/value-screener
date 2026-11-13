@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-MODELS = {"producer", "cashflow", "developer", "physical", "growth"}
+MODELS = {"producer", "cashflow", "developer", "physical", "growth", "leases", "liquid"}
 
 
 class ValidationError(ValueError):
@@ -26,7 +26,8 @@ def _date(x, field, ticker):
 
 def load_config(path: Path | None = None) -> dict:
     cfg = yaml.safe_load(open(path or ROOT / "config.yaml"))
-    cfg["as_of"] = _date(cfg["as_of"], "as_of", "config")
+    as_of = cfg.get("as_of", "today")
+    cfg["as_of"] = dt.date.today() if str(as_of).lower() == "today" else _date(as_of, "as_of", "config")
     return cfg
 
 
@@ -61,6 +62,19 @@ def validate_company(c: dict, src: str = "") -> dict:
         raise ValidationError(f"{t}: developer model needs npv_curve")
     if m == "physical" and "holdings" not in c:
         raise ValidationError(f"{t}: physical model needs holdings")
+    if m == "leases":
+        for f in ("projects", "scenarios", "balance", "shares_m"):
+            if f not in c:
+                raise ValidationError(f"{t}: leases model needs {f}")
+        for s in ("Cautious", "Base", "Fair"):
+            if s not in c["scenarios"]:
+                raise ValidationError(f"{t}: leases model needs a {s} scenario")
+    if m == "liquid" and not (c.get("liquid_assets") or c.get("holdings")):
+        raise ValidationError(f"{t}: liquid model needs liquid_assets (and shares_m)")
+    if m == "liquid" and "shares_m" not in c:
+        raise ValidationError(f"{t}: liquid model needs shares_m")
+    if c.get("ltm"):
+        apply_ltm(c)
     for x in c.get("metals", []):
         for f in ("metal", "units", "realised"):
             if f not in x:
@@ -69,6 +83,54 @@ def validate_company(c: dict, src: str = "") -> dict:
     c.setdefault("notes", [])
     c.setdefault("yahoo", c["ticker"])
     return c
+
+
+def apply_ltm(c: dict) -> dict:
+    """Last 12 months instead of the latest quarter × 4 (Valuation Playbook open item 5).
+
+    `ltm:` lists the last four single quarters, oldest first, each with the same earnings fields as `earnings`
+    (adj_net_income or net_income, da, sustaining_capex, ...) and optionally `metals` (units sold, realised price).
+    They are summed into one 12-month period: units add up, realised prices are weighted by units sold.
+    The latest quarter is kept as `earnings_latest_quarter` for the report.
+    """
+    t = c.get("ticker", "?")
+    qs = c["ltm"]
+    if len(qs) != 4:
+        raise ValidationError(f"{t}: ltm needs exactly 4 quarters, got {len(qs)}")
+    money = sorted({k for q in qs for k, v in q.items() if isinstance(v, (int, float))})
+    merged = {}
+    for k in money:
+        missing = [i for i, q in enumerate(qs) if k not in q]
+        if missing:
+            raise ValidationError(f"{t}: ltm field {k} is missing in quarter(s) {missing}")
+        merged[k] = sum(q[k] for q in qs)
+    metals = {}
+    for q in qs:
+        for m in q.get("metals", []):
+            d = metals.setdefault(m["metal"], {"metal": m["metal"], "units": 0.0, "value": 0.0})
+            d["units"] += m["units"]; d["value"] += m["units"] * m["realised"]
+            for extra in ("aisc", "royalty"):
+                if extra in m:
+                    d[extra] = m[extra]  # latest quarter's figure
+    if metals:
+        c["metals"] = [{**{k: v for k, v in d.items() if k != "value"}, "realised": d["value"] / d["units"]}
+                       for d in metals.values() if d["units"]]
+    c["earnings_latest_quarter"] = c.get("earnings")
+    c["earnings"] = merged
+    c["period"]["per_year"] = 1
+    c["period"]["label"] = f"LTM to {c['period']['end'].isoformat()}"
+    c.setdefault("assumptions", []).append("Last 12 months: the four latest reported quarters added up (not the latest quarter × 4)")
+    return c
+
+
+def tier_of(c: dict, cfg: dict) -> str | None:
+    """A, B or C from the company file's `tier:`, else from config `tiers:`; None when untiered."""
+    if c.get("tier"):
+        return str(c["tier"]).upper()
+    for tier, tickers in (cfg.get("tiers") or {}).items():
+        if c["ticker"].upper() in {str(x).upper() for x in tickers}:
+            return str(tier).upper()
+    return None
 
 
 def _folder_name(folder: str) -> str:
@@ -85,6 +147,11 @@ def companies_folder(folder: str | None = None) -> Path:
 def output_folder(folder: str | None = None) -> Path:
     """Where results go: output/, or output/<folder>/."""
     return ROOT / "output" / _folder_name(folder) if folder else ROOT / "output"
+
+
+def reports_folder(folder: str | None = None) -> Path:
+    """Where the HTML and PDF reports go: reports/, or reports/<folder>/. Unlike output/, git tracks this folder."""
+    return ROOT / "reports" / _folder_name(folder) if folder else ROOT / "reports"
 
 
 def company_folders() -> dict[str, Path]:
@@ -115,10 +182,16 @@ def load_etf(name: str, folder: Path | None = None) -> dict:
     return e
 
 
-def load_list(name: str, folder: Path | None = None) -> list[str]:
+def load_list_entries(name: str, folder: Path | None = None) -> list[dict]:
+    """Every entry of a list as a dict with at least `ticker` (upper case); other fields – yahoo, name, industry,
+    quantity – are kept as written."""
     folder = folder or ROOT / "data" / "lists"
     d = yaml.safe_load(open(folder / f"{name.lower()}.yaml"))
-    return [x["ticker"].upper() if isinstance(x, dict) else str(x).upper() for x in d["tickers"]]
+    return [{**x, "ticker": x["ticker"].upper()} if isinstance(x, dict) else {"ticker": str(x).upper()} for x in d["tickers"]]
+
+
+def load_list(name: str, folder: Path | None = None) -> list[str]:
+    return [x["ticker"] for x in load_list_entries(name, folder)]
 
 
 def fx(cfg: dict, frm: str, to: str) -> float:

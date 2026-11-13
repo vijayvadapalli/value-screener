@@ -22,9 +22,9 @@ metals:
   aisc: 1648
 tax_rate: 0.35
 price:
-  value: 183.45
+  value: 178.41
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance AEM
 sources:
 - AEM Q3-2026 results, SEC Ex 99.1, 28 Oct 2026

@@ -23,9 +23,9 @@ metals:
   realised: 73.15
 tax_rate: 0.22859
 price:
-  value: 242.14
+  value: 247.72
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance FNV
 sources:
 - Franco-Nevada Q2-2026 results, Aug 2026

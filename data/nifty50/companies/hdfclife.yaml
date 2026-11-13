@@ -1,0 +1,71 @@
+ticker: HDFCLIFE
+yahoo: HDFCLIFE.NS
+name: HDFC Life Insurance Company Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 587.65
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance HDFCLIFE.NS
+shares_m: 2171.856
+v2:
+  eps_quarters:
+  - 1.96
+  - 2.21
+  - 2.54
+  - 2.08
+  - 1.94
+  - 2.31
+  - 2.81
+  - 2.4
+  eps_annual:
+  - 4.44
+  - 5.5
+  - 6.33
+  - 6.43
+  - 6.73
+  - 6.28
+  - 6.37
+  - 7.32
+  - 8.41
+  - 8.86
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1327.0
+  - 1368.0
+  - 1574.0
+  - 1811.0
+  - 1912.0
+  cfo_annual:
+  - 5943.0
+  - 6883.0
+  - 10721.0
+  - 15597.0
+  - 22625.0
+  book_value_ps: 89.6
+  roe_5y: 0.11
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HDFCLIFE/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

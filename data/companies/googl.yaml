@@ -19,9 +19,9 @@ balance:
   cash: 265098
   debt: 125102
 price:
-  value: 288.93
+  value: 298.7
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance GOOGL
 sources:
 - Alphabet Q3-2026 release

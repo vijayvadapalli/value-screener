@@ -1,0 +1,71 @@
+ticker: SBIN
+yahoo: SBIN.NS
+name: State Bank of India
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1079.35
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance SBIN.NS
+shares_m: 9235.018
+v2:
+  eps_quarters:
+  - 21.12
+  - 21.96
+  - 23.76
+  - 22.9
+  - 23.09
+  - 21.28
+  - 26.12
+  - 27.47
+  eps_annual:
+  - 0.3
+  - -5.11
+  - 2.58
+  - 22.15
+  - 25.11
+  - 39.64
+  - 62.35
+  - 75.17
+  - 86.91
+  - 90.24
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 37183.0
+  - 57750.0
+  - 69543.0
+  - 80523.0
+  - 86666.0
+  cfo_annual:
+  - 57695.0
+  - -86014.0
+  - 21632.0
+  - 45484.0
+  - 38097.0
+  book_value_ps: 728.0
+  roe_5y: 0.16
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/SBIN/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

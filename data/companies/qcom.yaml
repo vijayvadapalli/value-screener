@@ -16,9 +16,9 @@ balance:
   cash: 8304
   debt: 15270
 price:
-  value: 173.19
+  value: 177.14
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance QCOM
 sources:
 - Qualcomm FQ3-2026 release

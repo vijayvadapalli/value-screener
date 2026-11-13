@@ -5,24 +5,68 @@ sector: Automobile and Auto Components
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 823900.0
-shares_m: 3682.99214
+  label: TTM to Jun 2026
+  end: '2026-06-30'
+  per_year: 4
+shares_m: 3686.094
 balance:
   cash: 478280.0
   debt: 813950.0
 price:
-  value: 293.7
+  value: 288.35
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance TMPV.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TMPV/consolidated/'
 assumptions:
 - 'CHECK before relying on it: year''s EPS 223.7 vs Yahoo trailing EPS -9.2: a one-off or corporate action? check the filing'
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 9.36
+  - 14.69
+  - 23.01
+  - 10.66
+  - 206.85
+  - -9.47
+  - 15.7
+  - 2.1
+  eps_annual:
+  - 25.82
+  - 31.13
+  - -99.84
+  - -39.08
+  - -40.51
+  - -34.45
+  - 7.27
+  - 94.47
+  - 75.6
+  - 223.74
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -11309.0
+  - 2690.0
+  - 31807.0
+  - 28149.0
+  - 82645.0
+  cfo_annual:
+  - 14283.0
+  - 35388.0
+  - 67915.0
+  - 63102.0
+  - 13041.0
+  book_value_ps: 304.0
+  roe_5y: 0.37

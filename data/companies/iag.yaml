@@ -24,9 +24,9 @@ metals:
   aisc: 2271
 tax_rate: 0.3
 price:
-  value: 17.47
+  value: 17.14
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance IAG
 sources:
 - IAMGOLD Q2-2026 results, SEC Ex 99.1, 6 Aug 2026

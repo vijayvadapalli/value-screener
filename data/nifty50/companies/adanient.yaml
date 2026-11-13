@@ -5,23 +5,67 @@ sector: Metals & Mining
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 92307.4
-shares_m: 1353.7226
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 1353.184
 balance:
   cash: 100112.3
   debt: 1066217.9
 price:
-  value: 2733.3
+  value: 2679.6001
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance ADANIENT.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ADANIENT/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 0.49
+  - 32.3
+  - 7.44
+  - 27.75
+  - 47.27
+  - -0.81
+  - -8.92
+  - 11.02
+  eps_annual:
+  - 8.71
+  - 6.68
+  - 6.32
+  - 10.03
+  - 8.13
+  - 6.85
+  - 20.95
+  - 27.55
+  - 59.74
+  - 72.31
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 788.0
+  - 2422.0
+  - 3335.0
+  - 8005.0
+  - 9951.0
+  cfo_annual:
+  - 1385.0
+  - 17626.0
+  - 10312.0
+  - 4513.0
+  - 2357.0
+  book_value_ps: 724.0
+  roe_5y: 0.07

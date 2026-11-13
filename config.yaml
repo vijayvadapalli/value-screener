@@ -1,10 +1,10 @@
 # Value Screener configuration. Everything a judgement call lives here, not in the code.
 
-as_of: 2026-11-04            # "today" for stale checks; override with --asof
+as_of: today                 # date for stale checks and the report name: "today", or a fixed date like 2026-11-04; --asof overrides
 
 spot:                        # USD per oz (gold, silver) or per lb (uranium U3O8, copper, zinc, lead)
-  gold: 3930.0
-  silver: 50.0
+  gold: 4131
+  silver: 52.86
   uranium: 92.0
   copper: 6.40
   zinc: 1.35
@@ -22,6 +22,7 @@ fx_usd_per_unit:             # USD per 1 unit of currency
   AUD: 0.7029                # 26 Oct 2026
   TWD: 0.0312695             # 1 / 31.98, TSMC's Q3 average
   KZT: 0.00204082            # 1 / 490, Kazatomprom 2026 guidance rate
+  INR: 0.0106346             # 1 / 94.033, Yahoo INR=X close 12 Nov 2026 – only for the market-value shade of Indian stocks
   # GBP and HKD are not needed while those companies' inputs and prices share a currency.
 
 multiples:                   # owner-earnings multiples [cautious, fair]
@@ -31,7 +32,9 @@ multiples:                   # owner-earnings multiples [cautious, fair]
   fair_band: [15, 20]        # shown for reference
 
 growth_dcf:
-  discount_rate: 0.10
+  discount_rate: 0.10            # US and everything not listed below
+  discount_rate_by_currency:     # Playbook: 12% for India (no-growth multiple ≈ 12.1x instead of 13.1x)
+    INR: 0.12
   exit_multiple: 15.0
   years: 5
 
@@ -45,8 +48,36 @@ zones:
   growth_buy: 0.05               # implied growth at or below = BUY
   growth_watch: 0.10
   growth_sell: 0.25
+  growth_buy_tier_a: 0.10        # tier A growth stocks are green up to 10% a year
+  min_cash_conversion: 0.70      # operating cash ÷ net profit over 5 years; below this the signal is capped at blue
 
 stale_days:                      # days after period end before a file is treated as stale
   default: 100
   developer: 200
   physical: 45
+  leases: 100
+  liquid: 100
+price_stale_days: 7              # a share price older than this gets a [price N days old] flag
+
+# Portfolio tiers (Valuation Playbook). A = large low-cost producers and royalty companies with strong balance sheets:
+# start a position at or below the 15x value, add at or below 12x. B and C keep the strict rule: BUY only with a 20%
+# margin of safety at 12x (or at or below 0.8x NAV). A company file can also set `tier:` itself.
+tiers:
+  A: [AEM, AGI, CCJ, FNV, NEM, PAAS, RGLD, WPM]
+  B: [CDE, FRHLF, FSM, IAG, IVN, IVPAF]
+  C: [ABRA, HUT, MTA, NXE, UEC, UUUU, YCA]
+
+# Shade for growth stocks (tech, Nifty 50) = market value in US$ bn: darkest / medium / light, lightest below.
+market_cap_shades_usd_bn: {darkest: 100, medium: 30, light: 10, tech_mega: 200}
+
+stress_gold: [3000, 3500]        # producers: value at 12x if gold falls to these prices (US$/oz)
+
+nifty_v2:                        # per-share rules for Indian companies valued from Screener.in (tools/fetch_screener.py)
+  one_off_median_x: 2.0          # a quarter is a one-off if > 2x the median of the other 7 quarters ...
+  one_off_neighbour_x: 1.6       # ... and > 1.6x its neighbours; it is replaced by the neighbours' average
+  cyclical_industries: [Metals & Mining, Oil Gas & Consumable Fuels, Construction Materials, Power,
+                        Automobile and Auto Components]
+  cyclical_tickers: [INDIGO]     # airlines sit under "Services"
+  financial_industries: [Financial Services]
+  insurers: [HDFCLIFE, SBILIFE, ICICIPRULI, ICICIGI, LICI]
+  conglomerates: [LT, M&M, BAJAJ-AUTO, GRASIM]   # flagged: conglomerates and finance arms

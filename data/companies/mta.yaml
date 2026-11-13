@@ -20,9 +20,9 @@ metals:
   realised: 4504
 tax_rate: 0.0
 price:
-  value: 7.88
+  value: 7.51
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance MTA
 sources:
 - Metalla Q2-2026 results, Aug 2026

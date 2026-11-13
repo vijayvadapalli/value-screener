@@ -3,10 +3,13 @@ numpy>=1.24
 scipy>=1.10
 matplotlib>=3.7
 pytest>=7.0
-# for docs/build_design_doc.py; newer releases need Python 3.10+:
+# the PDF report (and docs/build_design_doc.py); newer releases need Python 3.10+:
 reportlab>=4.0,<4.3
-# optional, for --live prices:
+# optional, for --live prices, --technicals and tools/update_prices.py:
 # yfinance>=0.2.40
+# optional, for tools/fetch_screener.py (Nifty v2 data from Screener.in):
+# beautifulsoup4>=4.12
 # optional, for tools/update_results.py (lxml lets yfinance read the earnings calendar):
 # anthropic>=0.125
+# google-genai>=1.0   (for --provider gemini)
 # lxml>=5.0

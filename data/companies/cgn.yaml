@@ -13,9 +13,9 @@ earnings:
   owner_earnings: 453.0
 shares_m: 7600.6826
 price:
-  value: 2.15
+  value: 2.04
   currency: HKD
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance 1164.HK
 sources:
 - CGN Mining FY2025 results, 26 Mar 2026

@@ -25,9 +25,9 @@ metals:
   realised: 75.33
 tax_rate: 0.46
 price:
-  value: 9.59
+  value: 9.11
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance FSM
 sources:
 - Fortuna Q2-2026 results, SEC Ex 99.5, 5 Aug 2026

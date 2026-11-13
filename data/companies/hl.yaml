@@ -29,9 +29,9 @@ metals:
   realised: 4279
 tax_rate: 0.213046
 price:
-  value: 14.95
+  value: 13.35
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance HL
 sources:
 - Hecla Q3-2026 results, 3 Nov 2026

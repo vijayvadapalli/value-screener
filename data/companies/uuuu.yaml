@@ -1,0 +1,30 @@
+ticker: UUUU
+yahoo: UUUU
+name: Energy Fuels
+sector: uranium
+model: liquid
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-11-04'
+shares_m: 250
+liquid_assets:
+- label: Cash + marketable securities (30 Sep 2026)
+  amount: 855.9
+price:
+  value: 6.68
+  currency: USD
+  date: '2026-11-12'
+  source: yfinance UUUU
+comment: Loss-making (Q3 net loss $52m); rare-earth upside, high risk.
+sources:
+- Energy Fuels Q3 2026 results, 4 Nov 2026 (Finviz copy)
+- Price – StockAnalysis (26 Oct 2026)
+- Portfolio Value vs Price report, 11 Nov 2026
+assumptions:
+- Not valued – loss-making while building uranium, rare-earth and heavy-mineral projects (Donald, Toliara, Vara Mada)
+- Gross liquid assets; total liabilities of $757.8m are not broken out in the release and likely include convertible notes, so net liquid assets
+  are much lower
+- Shares derived from the market value, not reported

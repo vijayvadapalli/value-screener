@@ -1,5 +1,5 @@
 ticker: ABRA
-yahoo: ABRA.V
+yahoo: ABRA.TO
 name: AbraSilver Resource
 sector: silver
 model: developer
@@ -28,10 +28,10 @@ balance:
   amount: 75.563
   currency: CAD
 price:
-  value: 11.77
+  value: 10.78
   currency: CAD
-  date: '2026-10-23'
-  source: StockAnalysis
+  date: '2026-11-12'
+  source: yfinance ABRA.TO
 sources:
 - Diablillos Definitive Feasibility Study, 22 Jun 2026 (after-tax NPV 8%)
 - Value vs Price – companion report (Q2 / feasibility), 4 Nov 2026

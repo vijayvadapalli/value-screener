@@ -5,23 +5,67 @@ sector: Fast Moving Consumer Goods
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 15423.0
-shares_m: 989.698573
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 989.972
 balance:
   cash: 43199.2
   debt: 28195.1
 price:
-  value: 1077.7
+  value: 1080.1
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance TATACONSUM.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TATACONSUM/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 2.82
+  - 3.49
+  - 3.38
+  - 4.09
+  - 3.89
+  - 4.24
+  - 4.31
+  - 4.74
+  eps_annual:
+  - 6.09
+  - 7.76
+  - 6.39
+  - 4.93
+  - 9.18
+  - 10.03
+  - 12.8
+  - 11.92
+  - 12.92
+  - 15.59
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1015.0
+  - 1320.0
+  - 1215.0
+  - 1287.0
+  - 1547.0
+  cfo_annual:
+  - 1516.0
+  - 1461.0
+  - 1937.0
+  - 2057.0
+  - 2422.0
+  book_value_ps: 223.0
+  roe_5y: 0.07

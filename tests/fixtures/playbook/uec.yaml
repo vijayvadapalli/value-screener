@@ -1,0 +1,36 @@
+ticker: UEC
+yahoo: UEC
+name: Uranium Energy Corp
+sector: uranium
+model: liquid
+currency: USD
+period:
+  label: FY2026 (Jul)
+  end: '2026-07-31'
+  per_year: 1
+  reported: '2026-09-29'
+shares_m: 515.3
+liquid_assets:
+- label: Cash (31 Jul 2026)
+  amount: 495
+- label: Equity securities (implied)
+  amount: 149
+holdings:
+  metal: uranium
+  units: 1.256
+debt: 0
+price:
+  value: 8.83
+  currency: USD
+  date: '2026-10-12'
+  source: Weiss Ratings (12 Oct 2026)
+comment: Speculative – most of the price pays for projects.
+sources:
+- UEC fiscal 2026 results, 29 Sep 2026 (YCharts)
+- Price – Weiss Ratings (12 Oct 2026)
+- Portfolio Value vs Price report, 11 Nov 2026
+assumptions:
+- Not valued – almost no earnings (FY2026 revenue $37m) and no single feasibility study covers its many US and Canadian projects
+- No debt. Uranium in process (359k lb) not counted
+- Shares derived from the market value, not reported
+- Equity securities ≈ $149m are implied from the balance sheet (derived), not a reported line

@@ -5,23 +5,67 @@ sector: Automobile and Auto Components
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 55152.3
-shares_m: 274.521706
+  label: TTM to Jun 2026
+  end: '2026-06-30'
+  per_year: 4
+shares_m: 274.521
 balance:
   cash: 60797.5
   debt: 5139.5
 price:
-  value: 7713.0
+  value: 7589.0
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance EICHERMOT.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/EICHERMOT/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 40.15
+  - 42.7
+  - 49.68
+  - 43.95
+  - 49.93
+  - 51.79
+  - 55.41
+  - 53.28
+  eps_annual:
+  - 61.27
+  - 71.89
+  - 80.75
+  - 66.91
+  - 49.28
+  - 61.32
+  - 106.55
+  - 146.13
+  - 172.69
+  - 201.06
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1677.0
+  - 2914.0
+  - 4001.0
+  - 4734.0
+  - 5515.0
+  cfo_annual:
+  - 1527.0
+  - 2823.0
+  - 3724.0
+  - 3980.0
+  - 4805.0
+  book_value_ps: 915.0
+  roe_5y: 0.22

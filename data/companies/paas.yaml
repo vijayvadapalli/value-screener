@@ -26,9 +26,9 @@ metals:
   realised: 70.97
 tax_rate: 0.369835
 price:
-  value: 41.49
+  value: 37.72
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance PAAS
 sources:
 - Pan American Q2-2026 results, Aug 2026

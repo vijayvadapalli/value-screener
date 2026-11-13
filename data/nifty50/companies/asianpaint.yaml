@@ -5,23 +5,67 @@ sector: Consumer Durables
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 43253.5
-shares_m: 958.464572
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 959.389
 balance:
   cash: 86016.4
   debt: 39289.3
 price:
-  value: 2523.8
+  value: 2498.3999
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance ASIANPAINT.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ASIANPAINT/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 11.58
+  - 7.22
+  - 11.47
+  - 10.36
+  - 11.05
+  - 12.22
+  - 16.05
+  - 11.13
+  eps_annual:
+  - 20.22
+  - 21.26
+  - 22.48
+  - 28.2
+  - 32.73
+  - 31.59
+  - 42.81
+  - 56.92
+  - 38.23
+  - 45.09
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 3085.0
+  - 4195.0
+  - 5558.0
+  - 3710.0
+  - 4395.0
+  cfo_annual:
+  - 986.0
+  - 4193.0
+  - 6104.0
+  - 4424.0
+  - 7088.0
+  book_value_ps: 227.0
+  roe_5y: 0.25

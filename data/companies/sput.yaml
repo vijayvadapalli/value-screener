@@ -17,9 +17,9 @@ nav_ref:
   value: 22.22
   spot: 93.6
 price:
-  value: 19.11
+  value: 17.84
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance U-U.TO
 sources:
 - Sprott Physical Uranium Trust NAV via yellowcakeanalytics.com, 3 Nov 2026

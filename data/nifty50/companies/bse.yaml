@@ -1,0 +1,71 @@
+ticker: BSE
+yahoo: BSE.NS
+name: BSE Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 3920.0
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance BSE.NS
+shares_m: 407.895
+v2:
+  eps_quarters:
+  - 5.41
+  - 12.17
+  - 13.28
+  - 13.75
+  - 14.82
+  - 19.55
+  - 21.43
+  - 19.84
+  eps_annual:
+  - 4.57
+  - 14.22
+  - 4.27
+  - 3.02
+  - 3.58
+  - 6.27
+  - 5.43
+  - 19.17
+  - 32.65
+  - 61.22
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 245.0
+  - 206.0
+  - 772.0
+  - 1322.0
+  - 2487.0
+  cfo_annual:
+  - 1442.0
+  - -137.0
+  - 2643.0
+  - 414.0
+  - 3104.0
+  book_value_ps: 195.0
+  roe_5y: 0.28
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/BSE/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

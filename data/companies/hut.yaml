@@ -1,0 +1,121 @@
+ticker: HUT
+yahoo: HUT
+name: Hut 8
+sector: data centres
+model: leases
+currency: USD
+period:
+  label: Q3-2026
+  end: '2026-09-30'
+  per_year: 4
+  reported: '2026-11-04'
+shares_m: 120.037556
+price:
+  value: 61.975
+  currency: USD
+  date: '2026-11-12'
+  source: yfinance HUT
+balance:
+  cash: 156.865
+  btc_hut: 522.0
+  btc_abtc: 702.9
+  abtc_stake: 0.64
+  other_investments: 30.1
+  debt_total: 7631.5
+adj_ebitda_quarter: 33.0
+tax_rate: 0.21
+projects:
+  River Bend:
+    noi: 466.667
+    start: 2027
+    frac0: 0.5
+    end: 2042
+    debt: 3250
+    rate: 0.06192
+    io_until: 2027
+    mat: 2042
+    cost: 3823.5
+  Beacon Point 1:
+    noi: 645.0
+    start: 2027
+    frac0: 0.25
+    end: 2042
+    debt: 4250
+    rate: 0.06129
+    io_until: 2029
+    mat: 2042
+    cost: 5000.0
+  Beacon Point 2:
+    noi: 655.0
+    start: 2028
+    frac0: 0.5
+    end: 2045
+    debt: 4250
+    rate: 0.065
+    io_until: 2030
+    mat: 2045
+    cost: 5000.0
+    unfunded_equity: 750.0
+    equity_year: 2027.5
+    scenario_rate: true
+    probability: true
+scenarios:
+  Cautious:
+    r: 0.12
+    resid: 2.0
+    p_bp2: 0.75
+    ops: 3
+    bp2_rate: 0.07
+    delay: 0.5
+  Base:
+    r: 0.1
+    resid: 4.0
+    p_bp2: 0.9
+    ops: 5
+    bp2_rate: 0.065
+    delay: 0.0
+  Fair:
+    r: 0.09
+    resid: 7.0
+    p_bp2: 1.0
+    ops: 7
+    bp2_rate: 0.06
+    delay: 0.0
+caprate_check:
+  Cautious:
+  - 0.08
+  - 0.12
+  - 3
+  Base:
+  - 0.075
+  - 0.1
+  - 5
+  Fair:
+  - 0.07
+  - 0.09
+  - 7
+comment: Texas power approval (10–17 Dec) gates Phase 2 financing.
+sources:
+- Hut 8 10-Q, quarter to 30 Sep 2026 – sec.gov/Archives/edgar/data/0001964789/000119312526446146/hut-20260930.htm
+- Hut 8 Q3 2026 results release (4 Nov 2026) – prnewswire.com; SEC 8-K Ex 99.1 (tm2628741d1)
+- River Bend notes 8-K (27 Apr 2026) · Beacon Point notes 8-K (Jun 2026) · Q4 2025 release (25 Feb 2026) for the River Bend lease
+- Q3 2026 call coverage – Investing.com transcript, BigGo Finance; price – Morningstar quantitative report (7 Nov 2026)
+- Inputs from valuation-models/tests/fixtures/leases_example.yaml (10 Nov 2026)
+assumptions:
+- River Bend NOI = $7.0bn ÷ 15 years; Beacon Point Phase 1 = company campus NOI $1.3bn − Phase 2 $655m. NOI ≈ rent because the leases are triple-net.
+- Phase 1 lease assumed to run to 2042 (bond maturity). Construction-period interest assumed paid from the restricted proceeds, so no equity is
+  needed for River Bend or Phase 1, as management says.
+- 'Phase 2: $5.0bn cost (85% debt, 15% equity = $750m from Hut 8) is an assumption from the Phase 1 bond size; management has not given cost or
+  terms.'
+- Tax 21% on NOI less interest and 15-year straight-line depreciation; loss carry-forwards and bonus depreciation would lower it (upside).
+- 'American Bitcoin: only its bitcoin is counted, not its mining business or debt. Rest of the business at 3–7x the adjusted EBITDA run-rate.'
+notes:
+- Price $52.65 is the 6 Nov 2026 close per Morningstar; earlier sources conflict ($48.46 intraday 6 Nov, $45.95 close 5 Nov, $63.75 cited for
+  4 Nov).
+- 'Tenant quality is the strongest point: a Google backstop at River Bend and an AA- or better tenant at Beacon Point, so the main risk is delivery,
+  not payment.'
+- 'Watch-list dates: 10 Dec 2026 (audit result for Beacon Point''s Texas baseload classification) and 17 Dec (expected final classification) –
+  both gate Phase 2 financing.'
+- 'Volatility is extreme (beta above 4): closes moved from about $76 (15 Oct) to $46 (5 Nov). Size any options small.'
+- Morningstar's quantitative model (7 Nov) gives $70.74 fair value / 5 stars, but it does not model the leases and reads the restricted construction
+  cash as low leverage.

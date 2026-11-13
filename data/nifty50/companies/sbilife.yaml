@@ -1,0 +1,71 @@
+ticker: SBILIFE
+yahoo: SBILIFE.NS
+name: SBI Life Insurance Company Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1782.7
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance SBILIFE.NS
+shares_m: 1003.132
+v2:
+  eps_quarters:
+  - 5.5
+  - 8.12
+  - 5.93
+  - 4.93
+  - 5.75
+  - 8.02
+  - 7.23
+  - 5.47
+  eps_annual:
+  - 9.55
+  - 11.5
+  - 13.27
+  - 14.22
+  - 14.56
+  - 15.05
+  - 17.19
+  - 18.91
+  - 24.08
+  - 24.63
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1506.0
+  - 1721.0
+  - 1894.0
+  - 2413.0
+  - 2470.0
+  cfo_annual:
+  - 21852.0
+  - 28656.0
+  - 29122.0
+  - 25547.0
+  - 34523.0
+  book_value_ps: 205.0
+  roe_5y: 0.14
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in standalone page, fetched 12 Nov 2026: https://www.screener.in/company/SBILIFE/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

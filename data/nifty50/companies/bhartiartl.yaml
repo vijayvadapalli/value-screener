@@ -5,23 +5,67 @@ sector: Telecommunication
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 266952.0
-shares_m: 6238.658094
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 6241.613
 balance:
   cash: 501982.0
   debt: 1954117.0
 price:
-  value: 2056.8999
+  value: 2113.8
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance BHARTIARTL.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/BHARTIARTL/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 25.95
+  - 19.33
+  - 10.43
+  - 11.91
+  - 11.63
+  - 12.02
+  - 13.09
+  - 14.24
+  eps_annual:
+  - 8.57
+  - 2.48
+  - 0.92
+  - -57.9
+  - -26.96
+  - 7.6
+  - 14.97
+  - 13.2
+  - 58.85
+  - 43.81
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 8305.0
+  - 12287.0
+  - 8558.0
+  - 37481.0
+  - 33823.0
+  cfo_annual:
+  - 55017.0
+  - 65325.0
+  - 78898.0
+  - 98332.0
+  - 122230.0
+  book_value_ps: 253.0
+  roe_5y: 0.17

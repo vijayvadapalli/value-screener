@@ -1,0 +1,55 @@
+ticker: NESTLEIND
+yahoo: NESTLEIND.NS
+name: Nestle India Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1265.6
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance NESTLEIND.NS
+shares_m: 1928.16
+v2:
+  eps_quarters:
+  - 3.57
+  - 4.53
+  - 3.35
+  - 3.85
+  - 5.18
+  - 5.76
+  - 4.97
+  - 5.24
+  eps_annual:
+  - 15.55
+  - 20.4
+  - 16.63
+  - 18.15
+  years:
+  - Dec 2023
+  - Mar 202415m
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2999.0
+  - 3933.0
+  - 3208.0
+  - 3499.0
+  cfo_annual:
+  - 2936.0
+  - 5048.0
+  book_value_ps: 30.0
+  roe_5y: null
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/NESTLEIND/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

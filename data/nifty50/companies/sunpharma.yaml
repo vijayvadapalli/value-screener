@@ -5,23 +5,67 @@ sector: Healthcare
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 114794.2
-shares_m: 2399.33497
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 2399.337
 balance:
   cash: 337814.6
   debt: 46273.2
 price:
-  value: 1829.0
+  value: 1870.4
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance SUNPHARMA.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/SUNPHARMA/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 12.1
+  - 8.96
+  - 9.5
+  - 13.0
+  - 14.04
+  - 11.31
+  - 12.06
+  - 8.29
+  eps_annual:
+  - 29.03
+  - 8.73
+  - 11.11
+  - 15.69
+  - 12.1
+  - 13.64
+  - 35.32
+  - 39.91
+  - 45.55
+  - 47.84
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 3389.0
+  - 8513.0
+  - 9610.0
+  - 10965.0
+  - 11509.0
+  cfo_annual:
+  - 8985.0
+  - 4959.0
+  - 12135.0
+  - 14072.0
+  - 12419.0
+  book_value_ps: 372.0
+  roe_5y: 0.16

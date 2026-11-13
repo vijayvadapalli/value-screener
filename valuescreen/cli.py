@@ -5,9 +5,18 @@
   python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4100,silver=52
   python -m valuescreen run --etf URNM
   python -m valuescreen run --list portfolio --live
+  python -m valuescreen run --list portfolio --technicals   # also 200-day average, RSI and MACD (needs yfinance)
   python -m valuescreen run --list nifty50          # a list with `folder: nifty50` uses data/nifty50/companies
   python -m valuescreen run --folder nifty50 --all  # the same folder without a list
   python -m valuescreen validate                    # every company folder
+
+Each run writes the reports to reports/ (or reports/<folder>), which git tracks:
+  <List>_Value_vs_Price_<date>.html    the combined report – value and profit vs price, linked, sortable (read this one)
+  <List>_Value_vs_Price_<date>.pdf     the value report for printing
+  <List>_Profit_vs_Price_<date>.pdf    the profit-vs-price report for printing
+and its working files to output/ (or output/<folder>), which git ignores: ranked.csv, signals_log.csv (one line
+per company per run), runs.json (previous figures shown in brackets), heatmaps and the profit-vs-price cache.
+Profit-vs-price figures are fetched from Yahoo or Screener.in and cached per day; --no-profit skips them.
 """
 from __future__ import annotations
 
@@ -16,53 +25,52 @@ import datetime as dt
 import sys
 from pathlib import Path
 
-from . import loader, prices, report
+from . import growth_data, history, html_report, loader, pdf, prices, report, technicals
+from . import profit_vs_price as pvp
 from .engine import etf_lookthrough, ranked, run
 
 
-def _parse_spot(s):
-    out = {}
-    for part in (s or "").split(","):
-        if part.strip():
-            k, v = part.split("=")
-            out[k.strip().lower()] = float(v)
-    return out
-
-
-def main(argv=None):
+def _parser():
     ap = argparse.ArgumentParser(prog="valuescreen", description="Value vs price screener")
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run", help="value companies and write reports")
-    g = r.add_mutually_exclusive_group()
-    g.add_argument("--all", action="store_true", help="every company file")
-    g.add_argument("--tickers", help="comma-separated tickers, e.g. AEM,NEM,HL")
-    g.add_argument("--list", help="a list in data/lists, e.g. watchlist or portfolio")
+    which = r.add_mutually_exclusive_group()
+    which.add_argument("--all", action="store_true", help="every company file")
+    which.add_argument("--tickers", help="comma-separated tickers, e.g. AEM,NEM,HL")
+    which.add_argument("--list", help="a list in data/lists, e.g. watchlist or portfolio")
     r.add_argument("--folder", help="company folder: data/<folder>/companies, results in output/<folder> "
                                     "(default: the list's own `folder:`, else data/companies and output/)")
     r.add_argument("--etf", action="append", default=[], help="ETF look-through, e.g. URNM (repeatable)")
     r.add_argument("--live", action="store_true", help="fetch live share and metal prices (needs yfinance)")
+    r.add_argument("--technicals", action="store_true", help="price vs 200-day average, RSI and MACD (needs yfinance)")
     r.add_argument("--spot", help="override spot, e.g. gold=4100,silver=52,uranium=95")
     r.add_argument("--asof", help="date for stale checks (default: config as_of, or today with --live)")
-    r.add_argument("--out", help="output folder (default: output/, or output/<folder>)")
+    r.add_argument("--out", help="one folder for the reports and working files (default: reports/ and output/, "
+                                 "or reports/<folder> and output/<folder>)")
     r.add_argument("--config", help="path to config.yaml")
+    r.add_argument("--no-pdf", action="store_true", help="skip the PDF reports (the HTML report is always written)")
+    r.add_argument("--no-profit", action="store_true", help="skip the profit-vs-price figures (no Yahoo / Screener.in calls)")
     sub.add_parser("validate", help="check every company file")
-    a = ap.parse_args(argv)
+    return ap
 
-    cfg = loader.load_config(Path(a.config) if getattr(a, "config", None) else None)
-    if a.cmd == "validate":
-        for label, path in loader.company_folders().items():
-            found = loader.load_companies(path)
-            print(f"{len(found)} company files valid in {label}: {', '.join(sorted(found))}")
-        return 0
-    folder = a.folder or (loader.list_folder(a.list) if a.list else None)
-    companies = loader.load_companies(loader.companies_folder(folder))
 
-    log = []
-    if a.asof:
-        cfg["as_of"] = dt.date.fromisoformat(a.asof)
-    elif a.live:
-        cfg["as_of"] = prices.today()
-    etfs = [loader.load_etf(x) for x in a.etf]
+def _parse_spot(text):
+    out = {}
+    for part in (text or "").split(","):
+        if part.strip():
+            metal, value = part.split("=")
+            out[metal.strip().lower()] = float(value)
+    return out
+
+
+def _validate():
+    for label, path in loader.company_folders().items():
+        found = loader.load_companies(path)
+        print(f"{len(found)} company files valid in {label}: {', '.join(sorted(found))}")
+    return 0
+
+
+def _pick_tickers(a, companies, etfs, folder, log):
     if a.tickers:
         tickers = [t.strip().upper() for t in a.tickers.split(",")]
     elif a.list:
@@ -71,13 +79,79 @@ def main(argv=None):
         tickers = sorted(companies)
     else:
         tickers = []
-    for e in etfs:  # make sure ETF holdings we have files for are valued
-        tickers += [h["ticker"].upper() for h in e["holdings"] if h["ticker"].upper() in companies and h["ticker"].upper() not in tickers]
+    for etf in etfs:  # value the ETF holdings we have files for
+        tickers += [h["ticker"].upper() for h in etf["holdings"]
+                    if h["ticker"].upper() in companies and h["ticker"].upper() not in tickers]
     missing = [t for t in tickers if t not in companies]
     if missing:
         where = loader.companies_folder(folder).relative_to(loader.ROOT)
         log.append(f"no company file for: {', '.join(missing)} – skipped (add {where}/<ticker>.yaml)")
-        tickers = [t for t in tickers if t in companies]
+    return [t for t in tickers if t in companies]
+
+
+def _technicals(tickers, companies, log):
+    found = {}
+    for t in tickers:
+        closes = technicals.fetch(companies[t]["yahoo"])
+        if closes:
+            found[t] = technicals.read(closes)
+    missing = [t for t in tickers if t not in found]
+    if missing:
+        log.append(f"no price history for: {', '.join(missing)}")
+    return found
+
+
+def _profit_rows(a, tickers, companies, results, folder, out, log):
+    """Profit-vs-price rows for the run's companies; figures cached per day in output/<folder>/profit_vs_price_cache/."""
+    entries = loader.load_list_entries(a.list) if a.list else [{"ticker": t} for t in tickers]
+    entries = [x for x in entries if x["ticker"] in results]
+    cache = out / "profit_vs_price_cache" / f"{a.list or folder or 'all'}-{dt.date.today().isoformat()}.json"
+    raw = growth_data.collect(entries, companies, folder, cache, log=log.append)
+    return pvp.rows(entries, raw, results, companies)
+
+
+def _print_summary(cfg, vals, grow, lookthroughs, log, files):
+    for line in log:
+        print("·", line)
+    sp = cfg["spot"]
+    print(f"\nValue vs price · {cfg['as_of']} · gold {sp['gold']:,.0f} silver {sp['silver']:.2f} uranium {sp['uranium']:.0f}")
+    print(f"{'#':>3} {'TICKER':7} {'PRICE':>10} {'VALUE':>17} {'VAL/PX':>7} {'MoS':>6}  {'SIGNAL':6} ZONE")
+    for r in vals:
+        if r["v_low"] is None:
+            value = "not valued"
+        else:
+            value = f"{r['v_low']:,.2f}" + (f"–{r['v_high']:,.2f}" if abs(r["v_high"] - r["v_low"]) > 1e-9 else "")
+        m = r.get("margin_of_safety")
+        mos = "" if m is None else "<-200%" if m < -2 else f"{m*100:+.0f}%"
+        print(f"{r['rank']:>3} {r['ticker']:7} {r['price']:>10,.2f} {value:>17} {r['coverage_lo']*100:>6.0f}% {mos:>6}  "
+              f"{r['signal']:6} {r['zone']}")
+    if grow:
+        print(f"\n{'#':>3} {'TICKER':11} {'PRICE':>10} {'NO-GROWTH':>10} {'NEEDS':>9}  {'SIGNAL':6} ZONE")
+        for r in grow:
+            g = "" if r["implied_growth"] is None else f"{r['implied_growth']*100:+.1f}%"
+            print(f"{r['rank']:>3} {r['ticker']:11} {r['price']:>10,.2f} {r['v0']:>10,.2f} {g:>9}  {r['signal']:6} {r['zone']}")
+    for name, lt, etf in lookthroughs:
+        if lt.get("ratio_lo"):
+            print(f"\n{name}: valued holdings {lt['coverage_weight']:.1f}% of fund · look-through value "
+                  f"{lt['ratio_lo']*100:.0f}–{lt['ratio_hi']*100:.0f}% of price → {lt['value_lo']:.2f}–{lt['value_hi']:.2f} "
+                  f"vs {etf['price']['value']:.2f}")
+    print("\nReports: " + " · ".join(str(f) for f in files))
+
+
+def main(argv=None):
+    a = _parser().parse_args(argv)
+    if a.cmd == "validate":
+        return _validate()
+    cfg = loader.load_config(Path(a.config) if a.config else None)
+    folder = a.folder or (loader.list_folder(a.list) if a.list else None)
+    companies = loader.load_companies(loader.companies_folder(folder))
+    log = []
+    if a.asof:
+        cfg["as_of"] = dt.date.fromisoformat(a.asof)
+    elif a.live:
+        cfg["as_of"] = prices.today()
+    etfs = [loader.load_etf(x) for x in a.etf]
+    tickers = _pick_tickers(a, companies, etfs, folder, log)
     if a.live:
         log += prices.refresh_spot(cfg)
         log += prices.refresh_prices(companies, tickers)
@@ -86,33 +160,33 @@ def main(argv=None):
     results = run(companies, tickers, cfg)
     vals, grow = ranked(results)
     out = Path(a.out) if a.out else loader.output_folder(folder)
+    reports = Path(a.out) if a.out else loader.reports_folder(folder)
     out.mkdir(parents=True, exist_ok=True)
-    report.write_csv(vals, grow, out / "ranked.csv")
-    heat = report.make_heatmaps(vals, grow, cfg, out)
-    lts = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]
-    report.write_html(vals, grow, lts, cfg, heat, out / "report.html", log)
-    report.append_signals(vals, grow, out / "signals_log.csv", cfg["as_of"])
+    reports.mkdir(parents=True, exist_ok=True)
+    runs = out / "runs.json"
+    previous = history.previous(runs, cfg["as_of"])
+    if previous:
+        log.append(f"previous figures in brackets are from the run of {previous['_date']}")
+    tech = _technicals(tickers, companies, log) if a.technicals else {}
 
-    # console summary
-    for line in log:
-        print("·", line)
-    print(f"\nValue vs price · {cfg['as_of']} · gold {cfg['spot']['gold']:,.0f} silver {cfg['spot']['silver']:.2f} uranium {cfg['spot']['uranium']:.0f}")
-    print(f"{'#':>3} {'TICKER':7} {'PRICE':>10} {'VALUE':>17} {'VAL/PX':>7} {'MoS':>6}  ZONE")
-    for rr in vals:
-        v = f"{rr['v_low']:,.2f}" + (f"–{rr['v_high']:,.2f}" if abs(rr['v_high'] - rr['v_low']) > 1e-9 else "")
-        m_ = rr.get("margin_of_safety")
-        mos = "" if m_ is None else ("<-200%" if m_ < -2 else f"{m_*100:+.0f}%")
-        print(f"{rr['rank']:>3} {rr['ticker']:7} {rr['price']:>10,.2f} {v:>17} {rr['coverage_lo']*100:>6.0f}% {mos:>6}  {rr['zone']}")
-    if grow:
-        print(f"\n{'#':>3} {'TICKER':7} {'PRICE':>10} {'NO-GROWTH':>10} {'NEEDS':>9}  ZONE")
-        for rr in grow:
-            g_ = "" if rr["implied_growth"] is None else f"{rr['implied_growth']*100:+.1f}%"
-            print(f"{rr['rank']:>3} {rr['ticker']:7} {rr['price']:>10,.2f} {rr['v0']:>10,.2f} {g_:>9}  {rr['zone']}")
-    for name, lt, e in lts:
-        if lt.get("ratio_lo"):
-            print(f"\n{name}: valued holdings {lt['coverage_weight']:.1f}% of fund · look-through value {lt['ratio_lo']*100:.0f}–{lt['ratio_hi']*100:.0f}% "
-                  f"of price → {lt['value_lo']:.2f}–{lt['value_hi']:.2f} vs {e['price']['value']:.2f}")
-    print(f"\nReports: {out/'report.html'} · {out/'ranked.csv'}")
+    profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
+    lookthroughs = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]
+    report.write_csv(vals, grow, out / "ranked.csv")
+    report.append_signals(vals, grow, out / "signals_log.csv", cfg["as_of"])
+    name = a.list or folder
+    title = pdf.list_title(name)
+    files = []
+    if results:
+        files.append(html_report.build(results, companies, cfg, profit_rows, reports / html_report.file_name(name, cfg["as_of"]), title,
+                                       previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log))
+    if results and not a.no_pdf:
+        files.append(pdf.build(results, companies, cfg, reports / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log))
+        if profit_rows:
+            path = reports / f"{title.replace(' ', '_')}_Profit_vs_Price_{cfg['as_of']:%d%b%Y}.pdf"
+            files.append(pvp.build(profit_rows, path, title, cfg["as_of"], pvp.sources_text(profit_rows, cfg["as_of"])))
+    files.append(out / "ranked.csv")
+    history.save(runs, cfg["as_of"], results)
+    _print_summary(cfg, vals, grow, lookthroughs, log, files)
     return 0
 
 

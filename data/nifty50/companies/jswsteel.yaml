@@ -5,23 +5,67 @@ sector: Metals & Mining
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 223160.0
-shares_m: 2440.826972
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 2445.636
 balance:
   cash: 496390.0
   debt: 1190790.0
 price:
-  value: 1355.6
+  value: 1339.4
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance JSWSTEEL.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/JSWSTEEL/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 2.93
+  - 6.15
+  - 8.93
+  - 6.64
+  - 8.75
+  - 66.94
+  - 19.02
+  - 21.59
+  eps_annual:
+  - 14.57
+  - 25.71
+  - 31.6
+  - 16.67
+  - 32.73
+  - 85.49
+  - 17.14
+  - 36.03
+  - 14.33
+  - 91.26
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 20938.0
+  - 4139.0
+  - 8973.0
+  - 3491.0
+  - 25508.0
+  cfo_annual:
+  - 26270.0
+  - 23323.0
+  - 12078.0
+  - 20899.0
+  - 25152.0
+  book_value_ps: 463.0
+  roe_5y: 0.13

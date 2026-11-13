@@ -21,9 +21,9 @@ metals:
   realised: 4506
 tax_rate: 0.197
 price:
-  value: 246.08
+  value: 255.34
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance RGLD
 sources:
 - Royal Gold Q2-2026 results, Aug 2026

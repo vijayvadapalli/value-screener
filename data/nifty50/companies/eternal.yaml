@@ -5,23 +5,65 @@ sector: Consumer Services
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 3660.0
-shares_m: 9212.774343
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 9659.643
 balance:
   cash: 85860.0
   debt: 45920.0
 price:
-  value: 358.3
+  value: 363.0
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance ETERNAL.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ETERNAL/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 0.06
+  - 0.04
+  - 0.03
+  - 0.07
+  - 0.11
+  - 0.18
+  - 0.1
+  - 0.13
+  eps_annual:
+  - -0.46
+  - -4.26
+  - -10.46
+  - -3.45
+  - -1.54
+  - -1.14
+  - 0.4
+  - 0.55
+  - 0.38
+  years:
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -1222.0
+  - -971.0
+  - 351.0
+  - 527.0
+  - 366.0
+  cfo_annual:
+  - -693.0
+  - -844.0
+  - 646.0
+  - 308.0
+  - 632.0
+  book_value_ps: 32.4
+  roe_5y: -0.02

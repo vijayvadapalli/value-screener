@@ -5,24 +5,68 @@ sector: Information Technology
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 166420.0
-shares_m: 2706.625485
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 2713.273
 balance:
   cash: 306150.0
   debt: 52150.0
 price:
-  value: 1430.5
+  value: 1369.8
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance HCLTECH.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HCLTECH/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes:
 - Yahoo labels the statements USD but the figures look like INR, so they were not converted
+v2:
+  eps_quarters:
+  - 16.92
+  - 15.87
+  - 14.16
+  - 15.61
+  - 15.02
+  - 16.54
+  - 17.04
+  - 18.91
+  eps_annual:
+  - 30.16
+  - 31.32
+  - 37.31
+  - 40.75
+  - 41.07
+  - 49.74
+  - 54.73
+  - 57.86
+  - 64.08
+  - 61.33
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 13523.0
+  - 14845.0
+  - 15710.0
+  - 17399.0
+  - 16652.0
+  cfo_annual:
+  - 16900.0
+  - 18009.0
+  - 22448.0
+  - 22261.0
+  - 19975.0
+  book_value_ps: 280.0
+  roe_5y: 0.23

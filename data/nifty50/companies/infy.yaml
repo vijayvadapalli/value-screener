@@ -5,23 +5,67 @@ sector: Information Technology
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 312962.533
-shares_m: 4050.376561
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 4059.001
 balance:
   cash: 354432.666
   debt: 91347.651
 price:
-  value: 1167.4
+  value: 1136.5
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance INFY.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/INFY/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 16.39
+  - 16.93
+  - 16.66
+  - 17.73
+  - 16.41
+  - 20.96
+  - 19.15
+  - 19.28
+  eps_annual:
+  - 31.24
+  - 36.69
+  - 35.26
+  - 38.96
+  - 45.42
+  - 52.56
+  - 58.08
+  - 63.2
+  - 64.32
+  - 72.59
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 22146.0
+  - 24108.0
+  - 26248.0
+  - 26750.0
+  - 29474.0
+  cfo_annual:
+  - 23885.0
+  - 22467.0
+  - 25210.0
+  - 35694.0
+  - 33986.0
+  book_value_ps: 244.0
+  roe_5y: 0.31

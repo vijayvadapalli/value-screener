@@ -20,9 +20,9 @@ balance:
   cash: 56586
   debt: 33366
 price:
-  value: 200.13
+  value: 166.19
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance NVDA
 sources:
 - Nvidia Q2 FY2027 release

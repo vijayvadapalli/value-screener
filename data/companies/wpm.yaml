@@ -24,9 +24,9 @@ metals:
   realised: 73.41
 tax_rate: 0.0
 price:
-  value: 131.5
+  value: 131.8
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance WPM
 sources:
 - Wheaton Q2-2026 results and 2026 guidance midpoints, Aug 2026

@@ -27,9 +27,9 @@ metals:
   realised: 71.18
 tax_rate: 0.431881
 price:
-  value: 14.58
+  value: 14.3
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance CDE
 sources:
 - Coeur Q2-2026 results, SEC Ex 99.1, 5 Aug 2026

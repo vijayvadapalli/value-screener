@@ -18,6 +18,7 @@ by --promote say so. Next, for the shortlist only:  python tools/update_results.
 """
 import argparse
 import datetime as dt
+import importlib.util
 import json
 import logging
 import math
@@ -240,9 +241,7 @@ def main():
     entries = [e for e in yaml.safe_load(path.read_text(encoding="utf-8"))["tickers"] if isinstance(e, dict) and e.get("yahoo")]
     if not entries:
         sys.exit("This list has no entries with a yahoo symbol.")
-    try:
-        import yfinance  # noqa: F401, PLC0415
-    except ImportError:
+    if importlib.util.find_spec("yfinance") is None:
         sys.exit("The yfinance package is missing. Run: pip install yfinance")
 
     global COMPANIES, OUT

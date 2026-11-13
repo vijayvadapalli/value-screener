@@ -15,9 +15,9 @@ shares_m: 259.356608
 balance:
   net_cash: 157121
 price:
-  value: 60.0
+  value: 62.5
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance KAP.L
 sources:
 - Kazatomprom 1H2026 financial results, 21 Aug 2026

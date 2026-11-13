@@ -5,23 +5,67 @@ sector: Healthcare
 model: growth
 currency: INR
 period:
-  label: FY26 (Mar)
-  end: '2026-03-31'
-  per_year: 1
-earnings:
-  net_income: 42850.0
-shares_m: 833.66412
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+shares_m: 835.032
 balance:
   cash: 87814.0
   debt: 77341.0
 price:
-  value: 1366.0
+  value: 1379.2
   currency: INR
-  date: '2026-11-05'
+  date: '2026-11-13'
   source: yfinance DRREDDY.NS
 sources:
-- Yahoo Finance annual statements via yfinance, fetched 2026-11-05 (unverified draft)
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/DRREDDY/consolidated/'
 assumptions:
-- DRAFT from Yahoo's annual figures (FY26 (Mar)), not checked against the filings
-- 'Placeholder: replace with the most recent reported quarter (single-quarter net income, per_year 4), then remove this DRAFT note'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
 notes: []
+v2:
+  eps_quarters:
+  - 16.94
+  - 19.09
+  - 16.99
+  - 16.14
+  - 14.5
+  - 2.65
+  - 5.32
+  - 11.08
+  eps_annual:
+  - 15.59
+  - 11.41
+  - 23.49
+  - 24.38
+  - 23.47
+  - 26.23
+  - 54.14
+  - 66.87
+  - 67.77
+  - 50.27
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2182.0
+  - 4507.0
+  - 5578.0
+  - 5725.0
+  - 4158.0
+  cfo_annual:
+  - 2811.0
+  - 5888.0
+  - 4543.0
+  - 4643.0
+  - 5674.0
+  book_value_ps: 465.0
+  roe_5y: 0.16

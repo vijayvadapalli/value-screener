@@ -1,0 +1,57 @@
+ticker: JIOFIN
+yahoo: JIOFIN.NS
+name: Jio Financial Services Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 227.1
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance JIOFIN.NS
+shares_m: 6859.091
+v2:
+  eps_quarters:
+  - 0.46
+  - 0.5
+  - 0.51
+  - 1.09
+  - 0.42
+  - 0.43
+  - 1.26
+  - 0.52
+  eps_annual:
+  - null
+  - 2.53
+  - 2.54
+  - 2.46
+  years:
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 31.0
+  - 1605.0
+  - 1613.0
+  - 1561.0
+  cfo_annual:
+  - 2055.0
+  - -678.0
+  - -10089.0
+  - -15439.0
+  book_value_ps: 196.0
+  roe_5y: null
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/JIOFIN/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

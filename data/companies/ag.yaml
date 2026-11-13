@@ -25,9 +25,9 @@ metals:
   realised: 4347
 tax_rate: 0.350933
 price:
-  value: 15.39
+  value: 13.99
   currency: USD
-  date: '2026-11-04'
+  date: '2026-11-12'
   source: yfinance AG
 sources:
 - First Majestic Q2-2026 release and interim statements (SEC 6-K)

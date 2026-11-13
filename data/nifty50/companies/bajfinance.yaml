@@ -1,0 +1,71 @@
+ticker: BAJFINANCE
+yahoo: BAJFINANCE.NS
+name: Bajaj Finance Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1110.2
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance BAJFINANCE.NS
+shares_m: 6225.955
+v2:
+  eps_quarters:
+  - 6.86
+  - 7.21
+  - 7.56
+  - 7.84
+  - 6.39
+  - 8.78
+  - 9.61
+  - 10.06
+  eps_annual:
+  - 3.34
+  - 4.32
+  - 6.91
+  - 8.75
+  - 7.33
+  - 11.61
+  - 19.01
+  - 23.35
+  - 26.77
+  - 30.56
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 7028.0
+  - 11508.0
+  - 14451.0
+  - 16779.0
+  - 19332.0
+  cfo_annual:
+  - -37029.0
+  - -42112.0
+  - -72760.0
+  - -67792.0
+  - -65790.0
+  book_value_ps: 198.0
+  roe_5y: 0.2
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/BAJFINANCE/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

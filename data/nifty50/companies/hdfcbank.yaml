@@ -1,0 +1,71 @@
+ticker: HDFCBANK
+yahoo: HDFCBANK.NS
+name: HDFC Bank Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 800.95
+  currency: INR
+  date: '2026-11-13'
+  source: yfinance HDFCBANK.NS
+shares_m: 15438.116
+v2:
+  eps_quarters:
+  - 11.54
+  - 12.31
+  - 10.6
+  - 12.76
+  - 12.87
+  - 13.22
+  - 12.5
+  - 13.43
+  eps_annual:
+  - 14.91
+  - 17.83
+  - 20.5
+  - 24.85
+  - 28.87
+  - 34.31
+  - 41.22
+  - 42.16
+  - 46.26
+  - 49.39
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 38151.0
+  - 46149.0
+  - 65446.0
+  - 73440.0
+  - 79219.0
+  cfo_annual:
+  - -11960.0
+  - 20814.0
+  - 19069.0
+  - 127242.0
+  - 113506.0
+  book_value_ps: 391.0
+  roe_5y: 0.15
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HDFCBANK/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

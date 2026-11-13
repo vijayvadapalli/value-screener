@@ -1,10 +1,12 @@
 # Value Screener
 
 Value vs price, the Rick Rule way: each company is valued only from its latest filing, re-priced to today's metal
-prices, and compared with what the market charges. Output is a ranked list with buy / watch / hold / sell zones,
-put and call levels, and a warning whenever the data is out of date.
+prices, and compared with what the market charges. Every run writes one HTML report per list that combines the value
+view (green / blue / red signals, buy levels) with a profit-growth-vs-price-growth grade, with a sortable summary table
+and a linked section per company – plus two PDFs of the same for printing. A flag shows whenever the data is out of date.
 
-See `docs/Value_Screener_Design.pdf` for requirements, formulas and the roadmap.
+The rules follow the Valuation Playbook (Nov 2026); `PROJECT_INSTRUCTIONS.md` has them in full, ready to paste into a
+Claude Project. `docs/Value_Screener_Design.pdf` has the original requirements and formulas.
 
 ## Quick start
 
@@ -12,11 +14,39 @@ See `docs/Value_Screener_Design.pdf` for requirements, formulas and the roadmap.
 cd value-screener
 python3 -m venv .venv                     # first time only
 source .venv/bin/activate                 # every new terminal (Windows: .venv\Scripts\activate)
-pip install -r requirements.txt           # first time only; for live prices also: pip install yfinance
+pip install -r requirements.txt           # first time only
+pip install yfinance beautifulsoup4 lxml  # first time only: prices, profit-vs-price figures, Nifty data
 python -m valuescreen validate            # checks every company file
-python -m valuescreen run --all --etf URNM
-open output/report.html                   # (Windows: start output\report.html)
 ```
+
+## Every time
+
+Share prices update after each market closes – for US listings that is about 9 pm UK time; before that you get the
+previous day's close.
+
+```bash
+source .venv/bin/activate
+
+# 1. share prices into the company files
+python tools/update_prices.py                    # portfolio, watchlist, tech (data/companies)
+python tools/update_prices.py --folder nifty50   # Nifty 50
+
+# 2. reports: one HTML + two PDFs per list, in reports/
+python -m valuescreen run --list portfolio --live   # --live also fetches today's gold, silver and copper
+python -m valuescreen run --list tech
+python -m valuescreen run --list watchlist
+python -m valuescreen run --list nifty50            # first run each day ≈ 4–5 min (Screener.in), then cached
+
+# 3. read them
+open reports/Portfolio_Value_vs_Price_*.html        # Windows: start reports\Portfolio_Value_vs_Price_<date>.html
+open reports/Tech_Value_vs_Price_*.html
+open reports/nifty50/Nifty_50_Value_vs_Price_*.html
+```
+
+Uranium has no free price feed: set `spot.uranium` in `config.yaml` when it moves. `as_of: today` in `config.yaml`
+dates the report and the stale-data checks; set a fixed date there, or pass `--asof 2026-11-04`, to rerun a past day.
+
+Once a quarter, after Indian results: `python tools/fetch_screener.py nifty50` refreshes the Nifty v2 data.
 
 Your prompt shows `(.venv)` while the environment is active. All `python` and `pip` commands in this README assume it
 is active. In VS Code, also pick `.venv/bin/python` under **Python: Select Interpreter** so the editor and Run button
@@ -27,17 +57,40 @@ Other runs:
 ```bash
 python -m valuescreen run --list watchlist             # data/lists/watchlist.yaml
 python -m valuescreen run --list portfolio --live      # your holdings, live prices (yfinance)
+python -m valuescreen run --list portfolio --technicals   # adds price vs 200-day average, RSI and MACD (yfinance)
 python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4200,silver=55
 python -m valuescreen run --list tech
-python -m pytest -q                                    # 151 tests, incl. reproducing the Nov 2026 reports
+python -m valuescreen run --all --etf URNM --no-pdf     # every company, ETF look-through, skip the PDFs
+python -m valuescreen run --list tech --no-profit      # skip the profit-vs-price figures (no Yahoo calls)
+python tools/profit_vs_price.py --list tech            # the profit-vs-price PDF on its own
+python -m pytest -q                                    # 215 tests, incl. reproducing the Nov 2026 reports
 ```
 
 The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`, so updating the live files in
 `data/` never breaks them.
 
-Outputs (in `output/`): `report.html` (ranked tables, heatmaps, every company's assumptions and sources),
-`ranked.csv`, `heatmap_metals.png`, `heatmap_growth.png`, and `signals_log.csv` (appended every run – use it after
-4–6 quarters to see whether the BUY zone actually beat GDX/SIL).
+Reports go to `reports/` (`reports/nifty50/` for the Nifty), which git tracks, so you can commit them. Working files go
+to `output/`, which git ignores.
+
+Reports:
+
+- `<List>_Value_vs_Price_<date>.html` – **the report to read.** One page with both views: a summary table (click a column
+  to sort; filter by signal or grade; search by name) where every ticker links to its company section. Each section has
+  the headline, the "how to read" cards, the valuation band, charts, key figures, the calculation, the profit-vs-price
+  comparison, notes and linked sources, with links back to the summary and to the previous and next company. One file
+  with the charts inside, so it opens offline and can be shared as it is.
+- `<List>_Profit_vs_Price_<date>.pdf` – the profit-vs-price table for printing (see below).
+- `<List>_Value_vs_Price_<date>.pdf` – the value report for printing. Page 1 is the summary table (portfolio columns for producers,
+  royalties, developers; a reverse-DCF table for growth stocks), alphabetical, rows tinted by signal and by tier or
+  market value. Each company then gets a headline, its "how to read" cards (price, value, margin of safety, buy level),
+  the valuation band, the metal-price or growth curve, a heatmap, the calculation with a worked example, key figures,
+  assumptions and sources. Bookmarked; footer on every page.
+
+Working files (in `output/`):
+
+- `ranked.csv`, `heatmap_metals.png`, `heatmap_growth.png`, the profit-vs-price cache.
+- `signals_log.csv` – appended every run; use it after 4–6 quarters to see whether the BUY zone beat GDX/SIL.
+- `runs.json` – each run's key figures, so the next report shows the previous run's figure in (brackets).
 
 ## Screening a big list first (NIFTY 50 and other NSE indexes)
 
@@ -49,9 +102,8 @@ python tools/make_nse_list.py nifty50          # download the constituents into 
 python tools/screen_universe.py nifty50        # rank all of them (about 20 seconds for 50)
 python tools/screen_universe.py nifty50 --promote        # also write draft company files for the BUY / WATCH ones
 python tools/screen_universe.py nifty50 --promote-all    # ... or for every valued company, flagged ones included
+python tools/fetch_screener.py nifty50        # Nifty v2 data from Screener.in for every company (about 4 minutes)
 python -m valuescreen validate                 # checks every company folder
-python tools/update_results.py --folder nifty50 --tickers ITC,TCS --force --dry-run   # Claude replaces each draft with the latest quarter
-python tools/update_prices.py --folder nifty50 # fresh share prices for that folder
 python -m valuescreen run --list nifty50       # values the companies that have files
 ```
 
@@ -62,7 +114,8 @@ companies in `data/companies/` and `output/`:
 | | Metals / tech (default) | NIFTY 50 |
 |---|---|---|
 | Company files | `data/companies/` | `data/nifty50/companies/` |
-| Run results (`report.html`, `ranked.csv`, `signals_log.csv`, heatmaps) | `output/` | `output/nifty50/` |
+| Reports (HTML and PDFs – tracked by git) | `reports/` | `reports/nifty50/` |
+| Working files (`ranked.csv`, `signals_log.csv`, `runs.json`, heatmaps, caches) | `output/` | `output/nifty50/` |
 | Screen table and cached Yahoo data | | `output/nifty50/screen_nifty50.csv`, `output/nifty50/screen_cache/` |
 | Backups from `update_results.py` | `output/backups/` | `output/nifty50/backups/` |
 
@@ -82,18 +135,38 @@ net cash, and the growth the share price already assumes. It is deliberately rou
   really rupees and is left alone. The check compares EPS with Yahoo's trailing EPS.
 - **Drafts are placeholders.** `--promote` never overwrites a file you already have, marks each draft as unverified, and
   a flagged company's draft starts with a CHECK note (the run table does not show the flag, so read the file or
-  `report.html`); your stale-data rule shows it as STALE until `update_results.py` replaces it with a reported quarter. Expect a
+  the HTML report); your stale-data rule shows it as STALE until `update_results.py` replaces it with a reported quarter. Expect a
   "moved -75%" warning there, because a quarter is about a quarter of a year.
 
-Yahoo is the only source used because it is free and needs no account. For checking the shortlist by hand, Screener.in
-has 10 years of financials per company, and the NSE / BSE results filings are the authority.
+### Nifty v2 – the full valuation
+
+`tools/fetch_screener.py` reads each company's consolidated page on Screener.in (the playbook's source for India) and
+writes a `v2:` block into its file: the last 8 quarterly EPS, up to 10 yearly EPS, 5 years of net profit and cash from
+operations, book value per share and 5-year ROE. It also updates the price and share count and keeps everything else
+(net cash, notes, sources). It waits ~4 seconds between pages and backs off when Screener rate-limits it; re-run
+failed tickers with `--tickers`. A new file starts with net cash 0 and a note to add it from StockAnalysis.
+
+The valuation then applies the v2 rules (`valuescreen/v2.py`):
+
+- Per share, 12 months: the last four quarters, after replacing a one-off quarter (more than 2× the median of the other
+  seven and 1.6× its neighbours) with its neighbours' average.
+- Cyclicals (oil & gas, metals, cement, power, autos, airlines – lists in `config.yaml`): average of the 12-month EPS and
+  the 5-year average. Shown blue at most.
+- Financials: average of the 12-month EPS and book value × 5-year ROE, no net cash, and price-to-book against the fair
+  multiple (5-yr ROE × the no-growth multiple).
+- Discounted at 12% (no-growth multiple ≈ 12.1x instead of 13.1x for the US).
+- Cash conversion (cash from operations ÷ net profit over 5 years) below 70% caps the signal at blue.
+- Conglomerates and finance arms (L&T, M&M, Bajaj Auto, Grasim) and insurers are flagged.
+
+The AI updater (`update_results.py`) also works on these files, but `fetch_screener.py` is the quicker way to refresh
+them each quarter. NSE / BSE results filings remain the authority – check the key figures before acting.
 
 ## Keeping the data current
 
 | What | How often | Command |
 |---|---|---|
 | Share prices | before each scan | `python tools/update_prices.py` (add `--dry-run` to preview) |
-| Metal prices | before each scan | gold, silver, copper: add `--live` to a run. Uranium, zinc, lead and `as_of`: edit `spot` in `config.yaml` |
+| Metal prices | before each scan | gold, silver, copper: add `--live` to a run. Uranium, zinc, lead: edit `spot` in `config.yaml` |
 | Company results | when a company reports | `python tools/update_results.py --all --check`, then see below |
 
 **Share prices.** `tools/update_prices.py` saves Yahoo's latest close into each company file's `price` block (value, date
@@ -101,11 +174,8 @@ and source only). It skips a company if Yahoo has no price, quotes another curre
 so check those by hand. It converts London pence to pounds.
 
 **Metal prices.** `--live` fetches gold, silver and copper for that run only and does not save them. Uranium has no free
-feed: look up the U3O8 spot price weekly and set `spot.uranium` in `config.yaml`. Update `as_of` there too, since it is
-the date the stale-data check counts from.
-
-> Known issue: `--live` reads the YCA share price in pence as pounds (about 100 times too high). Use
-> `tools/update_prices.py` for YCA, which converts it correctly.
+feed: look up the U3O8 spot price weekly and set `spot.uranium` in `config.yaml`. `as_of: today` there means the
+stale-data check counts from today; a fixed date (or `--asof`) reruns a past day.
 
 ## Refreshing a company when it reports (about 10 minutes by hand)
 
@@ -113,13 +183,25 @@ the date the stale-data check counts from.
 uses the `next_report` date in each file, Yahoo's earnings calendar (needs `lxml`), and the time since the period ended.
 Developers and physical trusts never show as due; use `--force` for those after a new study or NAV.
 
-To have Claude draft the update for the due companies (needs `pip install anthropic` and `ANTHROPIC_API_KEY`; API use
-is billed separately):
+To have an AI draft the update for the due companies, pick a provider:
+
+| | Claude (default) | Gemini |
+|---|---|---|
+| Install | `pip install anthropic` | `pip install google-genai` |
+| Key | `ANTHROPIC_API_KEY` (billed separately) | `GEMINI_API_KEY`, a free key from Google AI Studio |
+| Run | `python tools/update_results.py ...` | `python tools/update_results.py --provider gemini ...` |
+| Searches with | Claude's web search and page fetch | Google Search (it works from search results and may not open the whole filing) |
 
 ```bash
-python tools/update_results.py --tickers CDE --dry-run   # Claude searches the web and shows the proposed changes
+python tools/update_results.py --tickers CDE --dry-run   # the AI searches the web and shows the proposed changes
 python tools/update_results.py --tickers CDE             # same, then type y to save (old file goes to output/backups/)
+python tools/update_results.py --provider gemini --tickers CDE --dry-run   # the same with Gemini
 ```
+
+Neither provider is told which sites to use. The prompt asks for the company's own results release or filing, never
+analyst estimates, and every changed number must come with a source URL and a quote, shown in the diff. Gemini's free
+tier has request limits (check them in AI Studio); if it is rate limited the company is skipped, so retry later. Model
+names change: if the default is not found, the error lists the ones that exist, and `--model` or `GEMINI_MODEL` sets one.
 
 It never changes the share price or the ticker, name, sector, model or currency, and it flags numbers that changed
 by more than 50% or have no source. Numbers from the web can still be wrong, so check the key figures against the
@@ -145,27 +227,104 @@ to `config.yaml` if it is not there.
 ## Judgement calls (all in config.yaml)
 
 Spot prices, FX, multiples (12x / 15x cautious and fair, 25x sell), zone thresholds (20% margin of safety for BUY,
-AISC ≤ 60% of spot, developer BUY ≤ 0.8 × NAV), DCF settings for tech (10%, 15x exit, 5 years) and how old
-results can be before they are STALE (100 days; a STALE company never shows as BUY).
+AISC ≤ 60% of spot, developer BUY ≤ 0.8 × NAV), DCF settings (10%, 12% for INR, 15x exit, 5 years), the portfolio
+tiers, market-value shades, the gold stress-test prices, the Nifty v2 industry lists, and how old results (100 days)
+and prices (7 days) can be before they are flagged. A STALE company never shows as BUY.
 
-## Zones
+## Models
 
-| Zone | Producers / royalty | Developers | Physical trusts | Tech (implied growth) |
+| `model:` | For | Value |
+|---|---|---|
+| `producer` | miners, royalty and streaming companies | owner earnings (adj. net income + D&A − sustaining capex; royalties: adj. net income) re-priced to today's metals, × 12 / 15 / 25 + net cash. A company without `metals` (Cameco) keeps its own realised prices. Optional `ltm:` (four quarters) values the last 12 months instead of the latest quarter × 4; optional `cfo` and `capex_total` add free cash flow after all capex. |
+| `cashflow` | oil & gas | the same at 10x / 13x |
+| `developer` | ABRA, NXE | study NPV at today's metal price × ownership + cash − debt, per share |
+| `physical` | Yellow Cake, Sprott | holdings × spot + other net assets |
+| `growth` | tech, Nifty 50 | reverse DCF: the growth the price needs; Nifty v2 rules when the file has a `v2:` block |
+| `leases` | Hut 8 | each lease's cash after project bonds and tax, discounted, + site value at lease end; cautious / base / fair |
+| `liquid` | UEC, UUUU | not valued: liquid assets as a share of market value |
+
+## Profit growth vs price growth
+
+Did the share price run ahead of the company's profits over about three years? For each company: yearly growth in
+sales, profit and the share price over the same years, and what that did to the P/E –
+`P/E change = ((1 + price growth) ÷ (1 + profit growth)) ^ years − 1`.
+
+| Grade | P/E change | Means |
+|---|---|---|
+| A | fell 25% or more | profits clearly outran the price |
+| B | fell up to 25% | profits a little ahead |
+| C | rose up to a third | roughly in line |
+| D | rose more than a third | the price ran ahead of profits |
+| n/m | – | a loss at either end, missing figures, or valued on assets (developers, physical holders, leases) |
+
+Indian companies use Screener.in's 3-year compounded growth (net profit). Everything else uses Yahoo Finance statements
+from the financial year about three years back to the latest twelve months (diluted EPS, so buybacks count); if that year
+was a loss it starts from the next profitable year (about two years). Prices are in the exchange's currency, sales and
+profits as the company reports them – growth rates and the P/E change do not depend on the currency. Figures are cached
+per list and day in `output/<folder>/profit_vs_price_cache/`. Profits include one-offs: check big jumps in the filing.
+
+To see your position values, add the number of shares to `data/lists/portfolio.yaml`, e.g. `{ticker: FNV, quantity: 35}`;
+the profit-vs-price report then shows each position's value in the share's own currency.
+
+## Signals and zones
+
+Green = buy / start a position, blue = watch / hold, red = expensive or no valid value.
+
+| Zone | Producers / royalty | Developers, leases | Physical trusts | Growth (implied growth) |
 |---|---|---|---|---|
-| BUY | margin of safety ≥ 20% at 12x and AISC ≤ 60% spot | price ≤ 0.8 × NAV | ≤ 0.85 × NAV | ≤ 5%/yr |
-| WATCH | 0–20% | 0.8–1.0 × NAV | 0.85–1.0 × NAV | 5–10% |
-| HOLD | between | 1.0–1.5 × NAV | 1.0–1.1 × NAV | 10–25% |
-| SELL / write calls | price ≥ 25x owner earnings | ≥ 1.5 × NAV | ≥ 1.1 × NAV | ≥ 25% |
+| BUY | tier A: price ≤ 15x value (start), ≤ 12x (add). Tiers B, C: margin of safety ≥ 20% at 12x. AISC ≤ 60% spot | ≤ 0.8 × NAV (cautious value) | ≤ 0.85 × NAV | ≤ 5%/yr (≤ 10% tier A) |
+| WATCH | 0–20% | 0.8–1.0 × | 0.85–1.0 × NAV | 5–10% |
+| HOLD | between | 1.0–1.5 × | 1.0–1.1 × NAV | 10–25% |
+| SELL / write calls | price ≥ 25x owner earnings | ≥ 1.5 × | ≥ 1.1 × NAV | ≥ 25% |
+
+A cheap cyclical, or cash conversion below 70%, is capped at blue. Comments carry [flags] for stale results, old or
+undated prices, high costs, one-off quarters, cyclicals, conglomerates and insurers.
 
 ## Optional packages
 
-`requirements.txt` has the core packages, plus `reportlab` for rebuilding the design PDF
-(`python docs/build_design_doc.py`). Install these only if you use the feature:
+`requirements.txt` has the core packages, including `reportlab` for the PDF report. The report uses the Inter
+typeface, included in `valuescreen/fonts/` (SIL Open Font License). Install these only if you use the feature:
 
 | Package | Needed for |
 |---|---|
-| `yfinance` | `--live` prices and `tools/update_prices.py` |
+| `yfinance` | `--live` prices, `--technicals` and `tools/update_prices.py` |
+| `beautifulsoup4`, `lxml` | `tools/fetch_screener.py` (Nifty v2 data from Screener.in) |
 | `lxml` | Yahoo's earnings calendar in `tools/update_results.py` |
 | `anthropic` | Claude drafting updates in `tools/update_results.py` |
+| `google-genai` | Gemini drafting updates in `tools/update_results.py --provider gemini` |
 
-Educational framework, not investment advice. Next stage (see design doc): RSI / MACD / 200-day triggers.
+## Committing the reports
+
+`reports/` is tracked by git; `output/` is not. A day's reports for every list are about 30 MB (the Nifty HTML and PDF
+are ~10 MB each), so commit the runs you want to keep, or store the reports with Git LFS so the repository holds only
+small pointers:
+
+```bash
+brew install git-lfs && git lfs install                     # once per computer
+git lfs track "reports/**/*.pdf" "reports/**/*.html"        # once per repo – writes .gitattributes
+git add .gitattributes reports/
+git commit -m "Reports 13 Nov 2026" && git push
+git lfs ls-files                                            # lists the reports stored in LFS
+```
+
+LFS storage and bandwidth count against your GitHub allowance (Settings → Billing and plans). Another computer needs
+`git lfs install` too, or it gets pointer files instead of the reports. The repository is public, so committed reports –
+including the portfolio list – can be seen by anyone.
+
+## Code map
+
+```
+valuescreen/loader.py      read and check company, list and config files (also last-12-month earnings, tiers)
+valuescreen/models.py      the valuation models; leases.py (Hut 8) and v2.py (Nifty v2 rules) beside it
+valuescreen/rules.py       zones, signals, buy levels, flags, stale checks
+valuescreen/engine.py      runs models + rules over a set of companies
+valuescreen/wording.py     what the report says: headlines, steps, worked examples, key figures, cards
+valuescreen/charts.py      the charts; style.py holds the fonts and colours
+valuescreen/html_report.py the combined HTML report;  pdf.py the value PDF;  profit_vs_price.py the profit-vs-price method + PDF
+valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (screener.py reads Screener pages)
+valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
+valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures
+tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, screen_universe, make_nse_list
+```
+
+Educational framework, not investment advice.
