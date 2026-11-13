@@ -10,12 +10,14 @@
   python -m valuescreen run --folder nifty50 --all  # the same folder without a list
   python -m valuescreen validate                    # every company folder
 
-Each run writes the reports to reports/ (or reports/<folder>), which git tracks:
+Each run writes to output/ (or output/<folder>), which git ignores:
   <List>_Value_vs_Price_<date>.html    the combined report – value and profit vs price, linked, sortable (read this one)
   <List>_Value_vs_Price_<date>.pdf     the value report for printing
   <List>_Profit_vs_Price_<date>.pdf    the profit-vs-price report for printing
-and its working files to output/ (or output/<folder>), which git ignores: ranked.csv, signals_log.csv (one line
-per company per run), runs.json (previous figures shown in brackets), heatmaps and the profit-vs-price cache.
+  ranked.csv, signals_log.csv (one line per company per run), runs.json (previous figures shown in brackets),
+  heatmaps and the profit-vs-price cache.
+and copies the three reports to reports/ under fixed names (portfolio.html, portfolio.pdf,
+portfolio-profit-vs-price.pdf, ...) – the only reports git tracks and GitHub Pages publishes.
 Profit-vs-price figures are fetched from Yahoo or Screener.in and cached per day; --no-profit skips them.
 """
 from __future__ import annotations
@@ -45,8 +47,8 @@ def _parser():
     r.add_argument("--technicals", action="store_true", help="price vs 200-day average, RSI and MACD (needs yfinance)")
     r.add_argument("--spot", help="override spot, e.g. gold=4100,silver=52,uranium=95")
     r.add_argument("--asof", help="date for stale checks (default: config as_of, or today with --live)")
-    r.add_argument("--out", help="one folder for the reports and working files (default: reports/ and output/, "
-                                 "or reports/<folder> and output/<folder>)")
+    r.add_argument("--out", help="folder for the dated reports and working files (default: output/ or output/<folder>); "
+                                 "nothing is copied to reports/")
     r.add_argument("--config", help="path to config.yaml")
     r.add_argument("--no-pdf", action="store_true", help="skip the PDF reports (the HTML report is always written)")
     r.add_argument("--no-profit", action="store_true", help="skip the profit-vs-price figures (no Yahoo / Screener.in calls)")
@@ -160,9 +162,7 @@ def main(argv=None):
     results = run(companies, tickers, cfg)
     vals, grow = ranked(results)
     out = Path(a.out) if a.out else loader.output_folder(folder)
-    reports = Path(a.out) if a.out else loader.reports_folder(folder)
     out.mkdir(parents=True, exist_ok=True)
-    reports.mkdir(parents=True, exist_ok=True)
     runs = out / "runs.json"
     previous = history.previous(runs, cfg["as_of"])
     if previous:
@@ -177,13 +177,17 @@ def main(argv=None):
     title = pdf.list_title(name)
     files = []
     if results:
-        files.append(html_report.build(results, companies, cfg, profit_rows, reports / html_report.file_name(name, cfg["as_of"]), title,
+        files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
                                        previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log))
     if results and not a.no_pdf:
-        files.append(pdf.build(results, companies, cfg, reports / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log))
+        files.append(pdf.build(results, companies, cfg, out / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log))
         if profit_rows:
-            path = reports / f"{title.replace(' ', '_')}_Profit_vs_Price_{cfg['as_of']:%d%b%Y}.pdf"
+            path = out / f"{title.replace(' ', '_')}_Profit_vs_Price_{cfg['as_of']:%d%b%Y}.pdf"
             files.append(pvp.build(profit_rows, path, title, cfg["as_of"], pvp.sources_text(profit_rows, cfg["as_of"])))
+    if not a.out:   # the latest of each report, under a fixed name, for git and GitHub Pages
+        for f in list(files):
+            kind = ".html" if f.suffix == ".html" else "-profit-vs-price.pdf" if "Profit_vs_Price" in f.name else ".pdf"
+            files.append(loader.publish(f, name, kind))
     files.append(out / "ranked.csv")
     history.save(runs, cfg["as_of"], results)
     _print_summary(cfg, vals, grow, lookthroughs, log, files)

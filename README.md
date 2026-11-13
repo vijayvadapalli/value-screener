@@ -5,6 +5,16 @@ prices, and compared with what the market charges. Every run writes one HTML rep
 view (green / blue / red signals, buy levels) with a profit-growth-vs-price-growth grade, with a sortable summary table
 and a linked section per company – plus two PDFs of the same for printing. A flag shows whenever the data is out of date.
 
+## Latest reports
+
+| List | Report (read this) | Value PDF | Profit vs price PDF |
+|---|---|---|---|
+| Portfolio | [portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/portfolio.html) | [portfolio.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio.pdf) | [portfolio-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio-profit-vs-price.pdf) |
+| Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech.pdf) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
+| Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50.pdf) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
+
+Each run replaces these with the newest version, so the links never change; the date is inside each report.
+
 The rules follow the Valuation Playbook (Nov 2026); `PROJECT_INSTRUCTIONS.md` has them in full, ready to paste into a
 Claude Project. `docs/Value_Screener_Design.pdf` has the original requirements and formulas.
 
@@ -31,16 +41,16 @@ source .venv/bin/activate
 python tools/update_prices.py                    # portfolio, watchlist, tech (data/companies)
 python tools/update_prices.py --folder nifty50   # Nifty 50
 
-# 2. reports: one HTML + two PDFs per list, in reports/
+# 2. reports: one HTML + two PDFs per list (dated copies in output/, the latest in reports/)
 python -m valuescreen run --list portfolio --live   # --live also fetches today's gold, silver and copper
 python -m valuescreen run --list tech
 python -m valuescreen run --list watchlist
 python -m valuescreen run --list nifty50            # first run each day ≈ 4–5 min (Screener.in), then cached
 
 # 3. read them
-open reports/Portfolio_Value_vs_Price_*.html        # Windows: start reports\Portfolio_Value_vs_Price_<date>.html
-open reports/Tech_Value_vs_Price_*.html
-open reports/nifty50/Nifty_50_Value_vs_Price_*.html
+open reports/portfolio.html                         # Windows: start reports\portfolio.html
+open reports/tech.html
+open reports/nifty50.html
 ```
 
 Uranium has no free price feed: set `spot.uranium` in `config.yaml` when it moves. `as_of: today` in `config.yaml`
@@ -69,8 +79,10 @@ python -m pytest -q                                    # 215 tests, incl. reprod
 The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`, so updating the live files in
 `data/` never breaks them.
 
-Reports go to `reports/` (`reports/nifty50/` for the Nifty), which git tracks, so you can commit them. Working files go
-to `output/`, which git ignores.
+Every run writes dated reports and working files to `output/` (`output/nifty50/` for the Nifty), which git ignores, so
+your history stays on your computer. It also copies the latest reports to `reports/` under fixed names
+(`portfolio.html`, `portfolio.pdf`, `portfolio-profit-vs-price.pdf`, and the same for each list) – the only reports git
+tracks and the site publishes.
 
 Reports:
 
@@ -114,7 +126,8 @@ companies in `data/companies/` and `output/`:
 | | Metals / tech (default) | NIFTY 50 |
 |---|---|---|
 | Company files | `data/companies/` | `data/nifty50/companies/` |
-| Reports (HTML and PDFs – tracked by git) | `reports/` | `reports/nifty50/` |
+| Latest reports (tracked by git, published) | `reports/<list>.html` etc. | `reports/nifty50.html` etc. |
+| Dated reports (local history) | `output/` | `output/nifty50/` |
 | Working files (`ranked.csv`, `signals_log.csv`, `runs.json`, heatmaps, caches) | `output/` | `output/nifty50/` |
 | Screen table and cached Yahoo data | | `output/nifty50/screen_nifty50.csv`, `output/nifty50/screen_cache/` |
 | Backups from `update_results.py` | `output/backups/` | `output/nifty50/backups/` |
@@ -293,23 +306,21 @@ typeface, included in `valuescreen/fonts/` (SIL Open Font License). Install thes
 | `anthropic` | Claude drafting updates in `tools/update_results.py` |
 | `google-genai` | Gemini drafting updates in `tools/update_results.py --provider gemini` |
 
-## Committing the reports
+## Publishing the reports
 
-`reports/` is tracked by git; `output/` is not. A day's reports for every list are about 30 MB (the Nifty HTML and PDF
-are ~10 MB each), so commit the runs you want to keep, or store the reports with Git LFS so the repository holds only
-small pointers:
+`reports/` holds only the latest report for each list, so committing it publishes just those:
 
 ```bash
-brew install git-lfs && git lfs install                     # once per computer
-git lfs track "reports/**/*.pdf" "reports/**/*.html"        # once per repo – writes .gitattributes
-git add .gitattributes reports/
+git add reports/
 git commit -m "Reports 13 Nov 2026" && git push
-git lfs ls-files                                            # lists the reports stored in LFS
 ```
 
-LFS storage and bandwidth count against your GitHub allowance (Settings → Billing and plans). Another computer needs
-`git lfs install` too, or it gets pointer files instead of the reports. The repository is public, so committed reports –
-including the portfolio list – can be seen by anyone.
+GitHub Pages (Settings → Pages → Deploy from a branch → main, / root) serves them at the links under "Latest reports"
+about a minute after the push. Each push replaces the previous version on the site; older versions stay only in the git
+history and in your local `output/` folder. Each commit of all lists adds about 30 MB to the repository (the Nifty HTML
+and PDF are ~10 MB each), so commit when something has changed rather than after every run. The repository is public,
+so the published reports – including the portfolio list – can be seen by anyone. (Do not move the HTML reports to Git
+LFS: GitHub Pages cannot serve LFS files.)
 
 ## Code map
 

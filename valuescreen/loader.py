@@ -149,9 +149,20 @@ def output_folder(folder: str | None = None) -> Path:
     return ROOT / "output" / _folder_name(folder) if folder else ROOT / "output"
 
 
-def reports_folder(folder: str | None = None) -> Path:
-    """Where the HTML and PDF reports go: reports/, or reports/<folder>/. Unlike output/, git tracks this folder."""
-    return ROOT / "reports" / _folder_name(folder) if folder else ROOT / "reports"
+def reports_folder() -> Path:
+    """reports/ – the latest report for each list under a fixed name. Git tracks it and GitHub Pages publishes it;
+    the dated copies stay in output/, which git ignores."""
+    return ROOT / "reports"
+
+
+def publish(dated: Path, list_name: str | None, kind: str) -> Path:
+    """Copies a dated report from output/ to reports/<list><kind>, e.g. reports/portfolio.html or
+    reports/nifty50-profit-vs-price.pdf, replacing the previous one."""
+    import shutil  # noqa: PLC0415
+    target = reports_folder() / f"{(list_name or 'all').lower()}{kind}"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(dated, target)
+    return target
 
 
 def company_folders() -> dict[str, Path]:

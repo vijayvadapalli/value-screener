@@ -58,8 +58,8 @@ def test_list_run_uses_the_lists_folder_for_companies_and_results(project, capsy
     assert "MSFT" in text and "NEM" in text and "AEM" not in text
     assert "no company file for: TCS" in text and "data/nifty50/companies/<ticker>.yaml" in text
     assert (project / "output" / "nifty50" / "ranked.csv").exists()
-    assert list((project / "reports" / "nifty50").glob("Nifty_50_Value_vs_Price_*.html"))   # reports go to the tracked folder
-    assert not list((project / "output" / "nifty50").glob("*.html"))
+    assert list((project / "output" / "nifty50").glob("Nifty_50_Value_vs_Price_*.html"))   # dated copy, not tracked
+    assert (project / "reports" / "nifty50.html").exists() and (project / "reports" / "nifty50.pdf").exists()   # latest, published
     assert (project / "output" / "nifty50" / "signals_log.csv").exists()
     assert not (project / "output" / "ranked.csv").exists()
 

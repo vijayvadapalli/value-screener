@@ -5,7 +5,7 @@
     python tools/profit_vs_price.py --list nifty50              # Screener.in, about 4 minutes the first time each day
     python tools/profit_vs_price.py --list portfolio --refresh  # ignore today's cached figures
 
-Writes reports/<folder>/<List>_Profit_vs_Price_<date>.pdf. Method and grades: valuescreen/profit_vs_price.py;
+Writes output/<folder>/<List>_Profit_vs_Price_<date>.pdf and copies it to reports/<list>-profit-vs-price.pdf. Method and grades: valuescreen/profit_vs_price.py;
 data sources: valuescreen/growth_data.py.
 """
 from __future__ import annotations
@@ -39,10 +39,9 @@ def main():
     results = run(companies, [e["ticker"] for e in entries if e["ticker"] in companies], cfg)
     rows = pvp.rows(entries, raw, results, companies)
     title = list_title(name)
-    reports = loader.reports_folder(folder)
-    reports.mkdir(parents=True, exist_ok=True)
-    path = pvp.build(rows, reports / f"{title.replace(' ', '_')}_Profit_vs_Price_{today:%d%b%Y}.pdf", title, today,
+    path = pvp.build(rows, out_dir / f"{title.replace(' ', '_')}_Profit_vs_Price_{today:%d%b%Y}.pdf", title, today,
                      pvp.sources_text(rows, today))
+    loader.publish(path, name, "-profit-vs-price.pdf")
     pct = lambda x: "" if x is None else f"{x*100:+.0f}%"  # noqa: E731
     print(f"\n{'TICKER':11} {'GRADE':5} {'P/E CHANGE':>10}  {'PROFIT/YR':>9} {'PRICE/YR':>9}  VALUE")
     for r in rows:
