@@ -32,6 +32,9 @@ Each run replaces these with the newest version, so the links never change; the 
 
 ## How to read a report
 
+![Core list report](docs/images/core.png)
+*The core list report: value against price for each company, its buy level, signal, tier and profit-vs-price grade. Click a ticker for the full working.*
+
 - **Signal colour.** Green = cheap enough to buy or add · blue = watch or hold · red = expensive, or no reliable value.
   The exact thresholds for each kind of company are under [Signals and zones](#signals-and-zones).
 - **Grade A–D.** Has the share price run ahead of profits over about three years? A = profits clearly outran the price,
@@ -229,6 +232,9 @@ them each quarter. NSE / BSE results filings remain the authority – check the 
 
 ## Screening all the miners (ETF holdings)
 
+![Miners quick screen](docs/images/miners-screen.png)
+*The miners quick screen: ~270 companies from seven ETFs, with a shortlist that deserves a full company file.*
+
 A quick first pass over every miner in seven ETFs – which ones deserve a full company file. Kept separate from your
 other lists: its own list (`data/lists/miners.yaml`), company folder (`data/miners/companies`) and output (`output/miners`).
 
@@ -267,6 +273,9 @@ until the reported quarter replaces them; any figure the release does not give i
 
 ## Screening the S&P 500 and Nasdaq-100 (SEC figures)
 
+![S&P 500 and Nasdaq-100 screen](docs/images/us-screen.png)
+*The S&P 500 / Nasdaq-100 screen: growth needed to justify the price, by sector and company, from SEC figures.*
+
 ```bash
 export SEC_USER_AGENT="Your Name your.email@example.com"   # once, in ~/.zshrc – the SEC requires a contact in every request
 pip install beautifulsoup4 lxml yfinance                    # if not installed yet
@@ -290,6 +299,9 @@ open reports/us-screen.html
   links to its Yahoo page and its SEC filings.
 
 ## Model portfolios (value, quality, momentum)
+
+![Model portfolio – resources, value first](docs/images/model-resources.png)
+*The resources, value-first model portfolio: sleeves, entry (full or a third), margin of safety, momentum, risk and exit rule for each holding.*
 
 ```bash
 python tools/model_portfolio.py                      # both profiles, from today's screens (a few seconds)
