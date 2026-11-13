@@ -280,3 +280,56 @@ def test_combined_html_links_every_company(tmp_path):
         assert f'href="#c-{t}"' in page and f'id="c-{t}"' in page
     assert 'class="c grade gB"' in page or 'class="c grade gC"' in page   # MSFT graded from the figures above
     assert "data:image/png;base64," in page
+
+
+# ------------------------------------------------------------------------------------------------- miners screen
+def test_etf_tickers_become_yahoo_symbols():
+    from valuescreen import etf_holdings as eh
+    assert eh.split_ticker("NST AU") == ("NST", "AU") and eh.split_ticker("NEM") == ("NEM", "US")
+    assert eh.yahoo_symbol("NST", "AU") == "NST.AX" and eh.yahoo_symbol("APM", "CN") == "APM.TO"
+    assert eh.yahoo_symbol("1164", "HK") == "1164.HK" and eh.yahoo_symbol("X", "ZZ") is None
+    assert eh.name_key("Barrick Mining Corp") == eh.name_key("BARRICK MINING CORP.")
+
+
+def _miner_raw(**changes):
+    raw = {"name": "Test Gold", "currency": "CAD", "report_ccy": "USD", "fx": 1.4, "usd": 0.7, "price": 20.0,
+           "price_date": "2026-11-12", "shares": 100e6, "sales_now": 900e6, "profit_now": 150e6, "ocf_ttm": 300e6,
+           "capex_ttm": -100e6, "ebitda": 400e6, "book_value_ps": 8.0, "cash": 200e6, "debt": 100e6, "ttm_label": "TTM Sep 26",
+           "years": 3.0, "eps_then": 0.5, "eps_now": 1.5, "price_then": 10.0, "price_change_1y": 0.4}
+    return {**raw, **changes}
+
+
+def test_miner_screen_values_a_producer():
+    from valuescreen import miner_screen as ms
+    r = ms.evaluate(_miner_raw(), {"ticker": "TST.TO", "metals": ["gold"], "etfs": ["GDXJ"]})
+    eps, nc = 150e6 * 1.4 / 100e6, (200e6 - 100e6) * 1.4 / 100e6          # 2.10 and 1.40 a share in C$
+    assert r["stage"] == "producer" and r["v12"] == pytest.approx(12 * eps + nc)
+    assert r["mos"] == pytest.approx(1 - 20 / (12 * eps + nc)) and r["signal"] == "green"
+    assert r["fcf_yield"] == pytest.approx(200e6 * 1.4 / 100e6 / 20)
+    assert r["market_value_usd"] == pytest.approx(20 * 100e6 * 0.7 / 1e9)
+    assert any("converted" in f for f in r["flags"])
+
+
+def test_miner_screen_does_not_value_explorers_and_shortlists_producers():
+    from valuescreen import miner_screen as ms
+    explorer = ms.evaluate(_miner_raw(sales_now=0.0, profit_now=-20e6), {"ticker": "EXP.V"})
+    assert explorer["stage"] == "developer / explorer" and explorer["signal"] == "grey"
+    raw = {"TST.TO": _miner_raw(), "DEAR": _miner_raw(price=200.0)}
+    rows = ms.with_grades([ms.evaluate(raw[t], {"ticker": t}) for t in raw], raw)
+    assert [r["ticker"] for r in ms.shortlist(rows)] == ["TST.TO"]
+
+
+def test_miner_drafts_are_valid_company_files(tmp_path):
+    from valuescreen import miner_screen as ms
+    raw = {"TST.TO": _miner_raw()}
+    row = ms.evaluate(raw["TST.TO"], {"ticker": "TST.TO", "yahoo": "TST.TO", "metals": ["gold"], "etfs": ["GDXJ"]})
+    written, _ = ms.write_drafts([row], raw, tmp_path, dt.date(2026, 11, 13))
+    c = loader.validate_company(yaml.safe_load((tmp_path / "tst.to.yaml").read_text()))
+    assert written == ["TST.TO"] and c["currency"] == "CAD" and c["earnings"]["net_income"] == pytest.approx(210.0)
+    assert ms.write_drafts([row], raw, tmp_path, dt.date(2026, 11, 13)) == ([], ["TST.TO"])   # never overwritten
+
+
+def test_physical_holders_are_not_valued_as_producers():
+    from valuescreen import miner_screen as ms
+    r = ms.evaluate(_miner_raw(name="Yellow Cake plc"), {"ticker": "YCA.L"})
+    assert r["stage"] == "physical holder" and r["signal"] == "grey"

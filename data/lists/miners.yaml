@@ -1,0 +1,2369 @@
+# Written by tools/make_etf_list.py from GDX, GDXJ, SIL, SILJ, COPX, URNM, URNJ holdings on 2026-11-13. Re-run it to refresh.
+name: miners (GDX, GDXJ, SIL, SILJ, COPX, URNM, URNJ)
+folder: miners
+tickers:
+- ticker: WPM
+  yahoo: WPM
+  name: Wheaton Precious Metals Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - SIL
+  - SILJ
+  weight: 24.38
+- ticker: CCJ
+  yahoo: CCJ
+  name: Cameco Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  weight: 19.86
+- ticker: U-U.TO
+  yahoo: U-U.TO
+  name: Sprott Physical Uranium Trust
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  weight: 17.02
+- ticker: NXE
+  yahoo: NXE
+  name: NexGen Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 14.26
+- ticker: PDN.AX
+  yahoo: PDN.AX
+  name: Paladin Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 13.12
+- ticker: NEM
+  yahoo: NEM
+  name: Newmont Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 11.69
+- ticker: AEM
+  yahoo: AEM
+  name: Agnico Eagle Mines Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 11.46
+- ticker: DNN
+  yahoo: DNN
+  name: Denison Mines Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 11.36
+- ticker: PAAS
+  yahoo: PAAS
+  name: Pan American Silver Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - SIL
+  - SILJ
+  weight: 10.77
+- ticker: CDE
+  yahoo: CDE
+  name: Coeur Mining Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 10.06
+- ticker: HL
+  yahoo: HL
+  name: Hecla Mining Co
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 9.61
+- ticker: AG
+  yahoo: AG
+  name: First Majestic Silver Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 9.46
+- ticker: UUUU
+  yahoo: UUUU
+  name: Energy Fuels Inc.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 8.35
+- ticker: B
+  yahoo: B
+  name: Barrick Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 7.82
+- ticker: AGI
+  yahoo: AGI
+  name: Alamos Gold Inc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 6.5
+- ticker: EQX
+  yahoo: EQX
+  name: Equinox Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 6.21
+- ticker: 1164.HK
+  yahoo: 1164.HK
+  name: CGN Mining Co. Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 5.96
+- ticker: EXK
+  yahoo: EXK
+  name: Endeavour Mining Plc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 5.83
+- ticker: FNV
+  yahoo: FNV
+  name: Franco-Nevada Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - SILJ
+  weight: 5.46
+- ticker: IAG
+  yahoo: IAG
+  name: Iamgold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 5.42
+- ticker: KAP.IL
+  yahoo: KAP.IL
+  name: NAC Kazatomprom JSC
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  weight: 5.39
+- ticker: BMN.AX
+  yahoo: BMN.AX
+  name: Bannerman Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 5.27
+- ticker: BHP.AX
+  yahoo: BHP.AX
+  name: BHP GROUP LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 5.18
+- ticker: BOE.AX
+  yahoo: BOE.AX
+  name: Boss Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 5.17
+- ticker: TECK-B.TO
+  yahoo: TECK-B.TO
+  name: TECK RESOURCES LTD-CLS B
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 5.05
+- ticker: BOL.ST
+  yahoo: BOL.ST
+  name: Boliden AB
+  metals:
+  - silver
+  - copper
+  etfs:
+  - SILJ
+  - COPX
+  weight: 5.04
+- ticker: ANTO.L
+  yahoo: ANTO.L
+  name: ANTOFAGASTA PLC
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 5.01
+- ticker: AAL.L
+  yahoo: AAL.L
+  name: ANGLO AMERICAN PLC
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 5.01
+- ticker: ISO.TO
+  yahoo: ISO.TO
+  name: IsoEnergy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 4.97
+- ticker: AU
+  yahoo: AU
+  name: Anglogold Ashanti Plc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 4.94
+- ticker: HBM.TO
+  yahoo: HBM.TO
+  name: HUDBAY MINERALS INC
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.88
+- ticker: YCA.L
+  yahoo: YCA.L
+  name: Yellow Cake PLC
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  weight: 4.81
+- ticker: OR
+  yahoo: OR
+  name: Or Royalties Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 4.79
+- ticker: FM.TO
+  yahoo: FM.TO
+  name: FIRST QUANTUM MINERALS LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.77
+- ticker: LUG.TO
+  yahoo: LUG.TO
+  name: Lundin Gold Inc
+  metals:
+  - gold
+  - copper
+  etfs:
+  - GDX
+  - GDXJ
+  - COPX
+  weight: 4.68
+- ticker: GLEN.L
+  yahoo: GLEN.L
+  name: GLENCORE PLC
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.68
+- ticker: 2899.HK
+  yahoo: 2899.HK
+  name: ZIJIN MINING GROUP CO LTD-H
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.67
+- ticker: FCX
+  yahoo: FCX
+  name: FREEPORT-MCMORAN INC
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.64
+- ticker: SSRM
+  yahoo: SSRM
+  name: Ssr Mining Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 4.62
+- ticker: SCCO
+  yahoo: SCCO
+  name: SOUTHERN COPPER CORP
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.53
+- ticker: KGH.WA
+  yahoo: KGH.WA
+  name: KGHM Polska Miedz SA
+  metals:
+  - silver
+  - copper
+  etfs:
+  - SILJ
+  - COPX
+  weight: 4.52
+- ticker: PE&OLES.MX
+  yahoo: PE&OLES.MX
+  name: Industrias Penoles Sab De Cv
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 4.44
+- ticker: 5713.T
+  yahoo: 5713.T
+  name: SUMITOMO METAL MINING CO LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 4.42
+- ticker: FRES.L
+  yahoo: FRES.L
+  name: Fresnillo Plc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - SIL
+  - SILJ
+  weight: 4.39
+- ticker: GFI
+  yahoo: GFI
+  name: Gold Fields Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 4.05
+- ticker: AYA
+  yahoo: AYA
+  name: Aya Gold & Silver Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 4.01
+- ticker: UEC
+  yahoo: UEC
+  name: Uranium Energy Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  weight: 3.86
+- ticker: SFR.AX
+  yahoo: SFR.AX
+  name: SANDFIRE RESOURCES LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 3.64
+- ticker: KGC
+  yahoo: KGC
+  name: Kinross Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 3.52
+- ticker: DYL.AX
+  yahoo: DYL.AX
+  name: Deep Yellow Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 3.44
+- ticker: BVN
+  yahoo: BVN
+  name: CIA DE MINAS BUENAVENTUR-ADR
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 3.27
+- ticker: NST.AX
+  yahoo: NST.AX
+  name: Northern Star Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 3.11
+- ticker: HYMC
+  yahoo: HYMC
+  name: Hycroft Mining Holding Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 3.1
+- ticker: PPTA
+  yahoo: PPTA
+  name: Perpetua Resources Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 3.08
+- ticker: DSV.TO
+  yahoo: DSV.TO
+  name: Discovery Mining Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  weight: 3.07
+- ticker: BVN
+  yahoo: BVN
+  name: Cia De Minas Buenaventura Saa
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SILJ
+  weight: 3.04
+- ticker: SA
+  yahoo: SA
+  name: Seabridge Gold Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SILJ
+  weight: 3.0
+- ticker: 2099.HK
+  yahoo: 2099.HK
+  name: CHINA GOLD INTERNATIONAL RES
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 3.0
+- ticker: BKY.AX
+  yahoo: BKY.AX
+  name: Berkeley Energia Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 2.96
+- ticker: SVM
+  yahoo: SVM
+  name: Silvercorp Metals Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 2.92
+- ticker: TFPM
+  yahoo: TFPM
+  name: Triple Flag Precious Metals Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 2.88
+- ticker: SASK.V
+  yahoo: SASK.V
+  name: Atha Energy Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 2.88
+- ticker: CS.TO
+  yahoo: CS.TO
+  name: CAPSTONE COPPER CORP
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 2.86
+- ticker: URG
+  yahoo: URG
+  name: Ur-Energy Inc.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 2.83
+- ticker: SKE
+  yahoo: SKE
+  name: Skeena Resources Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SILJ
+  weight: 2.53
+- ticker: IVN.TO
+  yahoo: IVN.TO
+  name: IVANHOE MINES LTD-CL A
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 2.49
+- ticker: 010130.KS
+  yahoo: 010130.KS
+  name: KOREA ZINC CO LTD
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 2.41
+- ticker: RGLD
+  yahoo: RGLD
+  name: Royal Gold Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - SILJ
+  weight: 2.34
+- ticker: 1208.HK
+  yahoo: 1208.HK
+  name: MMG LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 2.33
+- ticker: NDA.DE
+  yahoo: NDA.DE
+  name: AURUBIS AG
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 2.25
+- ticker: FSM
+  yahoo: FSM
+  name: Fortuna Silver Mines Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  weight: 2.03
+- ticker: 5711.T
+  yahoo: 5711.T
+  name: MITSUBISHI MATERIALS CORP
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 1.99
+- ticker: GMIN.TO
+  yahoo: GMIN.TO
+  name: G Mining Ventures Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.92
+- ticker: BTG
+  yahoo: BTG
+  name: B2gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.9
+- ticker: VZLA
+  yahoo: VZLA
+  name: Vizsla Silver Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 1.88
+- ticker: OGC
+  yahoo: OGC
+  name: Oceanagold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.77
+- ticker: 0358.HK
+  yahoo: 0358.HK
+  name: JIANGXI COPPER CO LTD-H
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 1.77
+- ticker: DPM.TO
+  yahoo: DPM.TO
+  name: Dundee Precious Metals Inc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.74
+- ticker: ERO.TO
+  yahoo: ERO.TO
+  name: ERO COPPER CORP
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 1.74
+- ticker: MGA.TO
+  yahoo: MGA.TO
+  name: Mega Uranium Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 1.71
+- ticker: EVN.AX
+  yahoo: EVN.AX
+  name: Evolution Mining Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 1.67
+- ticker: HMY
+  yahoo: HMY
+  name: Harmony Gold Mining Co Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.58
+- ticker: EGO
+  yahoo: EGO
+  name: Eldorado Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.54
+- ticker: TFPM.TO
+  yahoo: TFPM.TO
+  name: TRIPLE FLAG PRECIOUS MET
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 1.54
+- ticker: GLO.TO
+  yahoo: GLO.TO
+  name: Global Atomic Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 1.47
+- ticker: TGB
+  yahoo: TGB
+  name: TREKOR METALS LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 1.44
+- ticker: PRU.AX
+  yahoo: PRU.AX
+  name: Perseus Mining Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.39
+- ticker: EU.V
+  yahoo: EU.V
+  name: Encore Energy Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 1.37
+- ticker: HOC.L
+  yahoo: HOC.L
+  name: Hochschild Mining Plc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDX
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 1.36
+- ticker: USAS
+  yahoo: USAS
+  name: Americas Gold & Silver Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 1.34
+- ticker: RMS.AX
+  yahoo: RMS.AX
+  name: Ramelius Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.33
+- ticker: AGE.AX
+  yahoo: AGE.AX
+  name: Alligator Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 1.32
+- ticker: ARTG.V
+  yahoo: ARTG.V
+  name: Artemis Gold Inc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.21
+- ticker: 1818.HK
+  yahoo: 1818.HK
+  name: Zhaojin Mining Industry Co Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.17
+- ticker: 2259.HK
+  yahoo: 2259.HK
+  name: Zijin Gold International Co Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 1.16
+- ticker: AEU.AX
+  yahoo: AEU.AX
+  name: Atomic Eagle Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 1.16
+- ticker: NGEX.TO
+  yahoo: NGEX.TO
+  name: NGEX MINERALS LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 1.15
+- ticker: KNT.TO
+  yahoo: KNT.TO
+  name: K92 Mining Inc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.14
+- ticker: 3939.HK
+  yahoo: 3939.HK
+  name: Wanguo Gold Group Ltd
+  metals:
+  - gold
+  - copper
+  etfs:
+  - GDXJ
+  - COPX
+  weight: 1.11
+- ticker: TXR.TO
+  yahoo: TXR.TO
+  name: Torex Resources Inc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.1
+- ticker: GMD.AX
+  yahoo: GMD.AX
+  name: Genesis Minerals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.09
+- ticker: MAU.TO
+  yahoo: MAU.TO
+  name: Montage Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.09
+- ticker: VAU.AX
+  yahoo: VAU.AX
+  name: Vault Minerals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.08
+- ticker: ASM
+  yahoo: ASM
+  name: Avino Silver & Gold Mines Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 1.08
+- ticker: 1258.HK
+  yahoo: 1258.HK
+  name: CHINA NONFERROUS MINING CORP
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 1.08
+- ticker: ABRA.TO
+  yahoo: ABRA.TO
+  name: Abrasilver Resource Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 1.06
+- ticker: CMM.AX
+  yahoo: CMM.AX
+  name: Capricorn Metals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.04
+- ticker: CGAU
+  yahoo: CGAU
+  name: Centerra Gold Inc
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 1.02
+- ticker: AUGO
+  yahoo: AUGO
+  name: Aura Minerals Inc
+  metals:
+  - gold
+  - uranium
+  etfs:
+  - GDX
+  - GDXJ
+  - URNJ
+  weight: 0.99
+- ticker: GGP.AX
+  yahoo: GGP.AX
+  name: Greatland Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 0.96
+- ticker: ALS.TO
+  yahoo: ALS.TO
+  name: ALTIUS MINERALS CORPORATION
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.94
+- ticker: ARIS
+  yahoo: ARIS
+  name: Aris Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 0.93
+- ticker: LAM.TO
+  yahoo: LAM.TO
+  name: Laramide Resources Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 0.93
+- ticker: DEV.AX
+  yahoo: DEV.AX
+  name: DevEx Resources Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.92
+- ticker: LOT.AX
+  yahoo: LOT.AX
+  name: Lotus Resources Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 0.89
+- ticker: ATYM.L
+  yahoo: ATYM.L
+  name: ATALAYA MINING COPPER SA
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.88
+- ticker: EL8.AX
+  yahoo: EL8.AX
+  name: Elevate Uranium Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.88
+- ticker: NUCL
+  yahoo: NUCL
+  name: Eagle Nuclear Energy Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 0.86
+- ticker: WDO.TO
+  yahoo: WDO.TO
+  name: Wesdome Gold Mines Ltd/Canada
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 0.82
+- ticker: PAF.L
+  yahoo: PAF.L
+  name: Pan African Resources Plc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.82
+- ticker: WGX.AX
+  yahoo: WGX.AX
+  name: Westgold Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 0.79
+- ticker: RRL.AX
+  yahoo: RRL.AX
+  name: Regis Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 0.72
+- ticker: PEN.AX
+  yahoo: PEN.AX
+  name: Peninsula Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNM
+  - URNJ
+  weight: 0.72
+- ticker: ARN.TO
+  yahoo: ARN.TO
+  name: Asarian Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.72
+- ticker: EMR.AX
+  yahoo: EMR.AX
+  name: Emerald Resources Nl
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.7
+- ticker: GGD.TO
+  yahoo: GGD.TO
+  name: Gogold Resources Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 0.68
+- ticker: NEWP
+  yahoo: NEWP
+  name: New Pacific Metals Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 0.67
+- ticker: CXU.AX
+  yahoo: CXU.AX
+  name: Cauldron Energy Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.67
+- ticker: SYH.V
+  yahoo: SYH.V
+  name: Skyharbour Resources Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.67
+- ticker: HYMC
+  yahoo: HYMC
+  name: HYCROFT MINING HOLDING CO-A
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 0.66
+- ticker: AAUC
+  yahoo: AAUC
+  name: Allied Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.64
+- ticker: IAUX
+  yahoo: IAUX
+  name: I-80 Gold Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 0.63
+- ticker: AMMN.JK
+  yahoo: AMMN.JK
+  name: Amman Mineral Internasional Pt
+  metals:
+  - gold
+  etfs:
+  - GDX
+  weight: 0.62
+- ticker: PDI.AX
+  yahoo: PDI.AX
+  name: Pdi Gold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.62
+- ticker: SSMR
+  yahoo: SSMR
+  name: SUNSHINE SILVER MINING & REF
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 0.6
+- ticker: USA.TO
+  yahoo: USA.TO
+  name: AMERICAS GOLD AND SILVER CORP
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 0.57
+- ticker: FUU.V
+  yahoo: FUU.V
+  name: F3 Uranium Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.57
+- ticker: AEC.V
+  yahoo: AEC.V
+  name: Anfield Energy Inc.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.56
+- ticker: MUX
+  yahoo: MUX
+  name: Mcewen Mining Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 0.55
+- ticker: KCN.AX
+  yahoo: KCN.AX
+  name: Kingsgate Consolidated Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.51
+- ticker: TMQ
+  yahoo: TMQ
+  name: Trilogy Metals Inc
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.51
+- ticker: WAF.AX
+  yahoo: WAF.AX
+  name: West African Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.5
+- ticker: NG
+  yahoo: NG
+  name: Novagold Resources Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.49
+- ticker: OGG
+  yahoo: OGG
+  name: Osisko Gold Group Inc
+  metals:
+  - gold
+  - silver
+  - copper
+  etfs:
+  - GDXJ
+  - SILJ
+  - COPX
+  weight: 0.49
+- ticker: TLG.TO
+  yahoo: TLG.TO
+  name: Troilus Gold Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 0.48
+- ticker: FFM.AX
+  yahoo: FFM.AX
+  name: FIREFLY METALS LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.48
+- ticker: OBM.AX
+  yahoo: OBM.AX
+  name: Ora Banda Mining Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.47
+- ticker: LUNR.TO
+  yahoo: LUNR.TO
+  name: Lunr Royalties Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.47
+- ticker: ARG.TO
+  yahoo: ARG.TO
+  name: AMERIGO RESOURCES LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.47
+- ticker: IE
+  yahoo: IE
+  name: IVANHOE ELECTRIC INC / US
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.47
+- ticker: CVV.V
+  yahoo: CVV.V
+  name: CanAlaska Uranium Ltd.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.47
+- ticker: SXGC.TO
+  yahoo: SXGC.TO
+  name: Southern Cross Gold Consolidated Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.46
+- ticker: ALK.AX
+  yahoo: ALK.AX
+  name: Alkane Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.45
+- ticker: SCZ.TO
+  yahoo: SCZ.TO
+  name: SANTACRUZ SILVER MINING LTD
+  metals:
+  - silver
+  etfs:
+  - SIL
+  - SILJ
+  weight: 0.45
+- ticker: 1515.T
+  yahoo: 1515.T
+  name: NITTETSU MINING CO LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.45
+- ticker: BRMS.JK
+  yahoo: BRMS.JK
+  name: Bumi Resources Minerals Tbk Pt
+  metals:
+  - gold
+  etfs:
+  - GDX
+  - GDXJ
+  weight: 0.44
+- ticker: HSLV.TO
+  yahoo: HSLV.TO
+  name: Highlander Silver Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.42
+- ticker: WRN
+  yahoo: WRN
+  name: Western Copper & Gold Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.42
+- ticker: EMAS.JK
+  yahoo: EMAS.JK
+  name: Merdeka Gold Resources Tbk Pt
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.41
+- ticker: SGD.TO
+  yahoo: SGD.TO
+  name: Snowline Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.41
+- ticker: CNL.TO
+  yahoo: CNL.TO
+  name: Collective Mining Ltd
+  metals:
+  - gold
+  - copper
+  etfs:
+  - GDXJ
+  - COPX
+  weight: 0.39
+- ticker: FF.TO
+  yahoo: FF.TO
+  name: First Mining Gold Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 0.38
+- ticker: SLS.TO
+  yahoo: SLS.TO
+  name: SOLARIS RESOURCES INC
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.38
+- ticker: DVP.AX
+  yahoo: DVP.AX
+  name: DEVELOP GLOBAL LTD
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.37
+- ticker: STUD.V
+  yahoo: STUD.V
+  name: Stallion Uranium Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.37
+- ticker: RSG.AX
+  yahoo: RSG.AX
+  name: Resolute Mining Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.36
+- ticker: FNUC
+  yahoo: FNUC
+  name: Frontier Nuclear and Minerals Inc.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.35
+- ticker: BGL.AX
+  yahoo: BGL.AX
+  name: Bellevue Gold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.31
+- ticker: GORO
+  yahoo: GORO
+  name: GOLDGROUP MINING INC
+  metals:
+  - silver
+  etfs:
+  - SIL
+  weight: 0.31
+- ticker: COSA.V
+  yahoo: COSA.V
+  name: Cosa Resources Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.31
+- ticker: BNZ.AX
+  yahoo: BNZ.AX
+  name: Benz Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.3
+- ticker: MI6.AX
+  yahoo: MI6.AX
+  name: Minerals 260 Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.29
+- ticker: RIO.TO
+  yahoo: RIO.TO
+  name: Rio2 Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.29
+- ticker: DRD
+  yahoo: DRD
+  name: Drdgold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.28
+- ticker: PUR.V
+  yahoo: PUR.V
+  name: Premier American Uranium Inc.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.28
+- ticker: HMMC.TO
+  yahoo: HMMC.TO
+  name: Hemlo Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.25
+- ticker: ITRG
+  yahoo: ITRG
+  name: Integra Resources Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.25
+- ticker: JAGU
+  yahoo: JAGU
+  name: Jaguar Uranium Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.25
+- ticker: 0340.HK
+  yahoo: 0340.HK
+  name: Tongguan Gold Group Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.24
+- ticker: ORE.TO
+  yahoo: ORE.TO
+  name: Orezone Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.24
+- ticker: MANU.V
+  yahoo: MANU.V
+  name: Manhattan Uranium Discovery Corp.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.24
+- ticker: TRALT.IS
+  yahoo: TRALT.IS
+  name: Koza Altin Isletmeleri As
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.23
+- ticker: CYL.AX
+  yahoo: CYL.AX
+  name: Catalyst Metals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.23
+- ticker: OMG.V
+  yahoo: OMG.V
+  name: Omai Gold Mines Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.22
+- ticker: 6693.HK
+  yahoo: 6693.HK
+  name: Chifeng Jilong Gold Mining Co Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.22
+- ticker: SLVR.TO
+  yahoo: SLVR.TO
+  name: Silver Tiger Metals Inc
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.22
+- ticker: NEO.L
+  yahoo: NEO.L
+  name: NEO ENERGY METALS PLC
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.22
+- ticker: DC
+  yahoo: DC
+  name: Dakota Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.2
+- ticker: MSA.TO
+  yahoo: MSA.TO
+  name: Mineros Sa
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.2
+- ticker: NCX.V
+  yahoo: NCX.V
+  name: Northisle Copper & Gold Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.2
+- ticker: FDY.TO
+  yahoo: FDY.TO
+  name: FARADAY COPPER CORP
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.2
+- ticker: ELE
+  yahoo: ELE
+  name: Elemental Royalty Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.19
+- ticker: PNR.AX
+  yahoo: PNR.AX
+  name: Pantoro Gold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.19
+- ticker: NDM.TO
+  yahoo: NDM.TO
+  name: NORTHERN DYNASTY MINERALS
+  metals:
+  - copper
+  etfs:
+  - COPX
+  weight: 0.19
+- ticker: LGD.TO
+  yahoo: LGD.TO
+  name: Liberty Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.18
+- ticker: GROY
+  yahoo: GROY
+  name: Gold Royalty Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.17
+- ticker: USL.AX
+  yahoo: USL.AX
+  name: Unico Silver Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.17
+- ticker: APM.TO
+  yahoo: APM.TO
+  name: Andean Precious Metals Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 0.17
+- ticker: BTR.AX
+  yahoo: BTR.AX
+  name: Brightstar Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.16
+- ticker: SBM.AX
+  yahoo: SBM.AX
+  name: St Barbara Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.16
+- ticker: MTA
+  yahoo: MTA
+  name: Metalla Royalty & Streaming Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.16
+- ticker: FRS.AX
+  yahoo: FRS.AX
+  name: Forrestania Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.16
+- ticker: SVL.AX
+  yahoo: SVL.AX
+  name: SILVER MINES LTD
+  metals:
+  - silver
+  etfs:
+  - SIL
+  - SILJ
+  weight: 0.16
+- ticker: FTUR.V
+  yahoo: FTUR.V
+  name: Future Fuels Inc.
+  metals:
+  - uranium
+  etfs:
+  - URNJ
+  weight: 0.16
+- ticker: TCG.AX
+  yahoo: TCG.AX
+  name: Turaco Gold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.15
+- ticker: NFGC
+  yahoo: NFGC
+  name: New Found Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.15
+- ticker: ASL.AX
+  yahoo: ASL.AX
+  name: Andean Silver Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.15
+- ticker: BYN.V
+  yahoo: BYN.V
+  name: Banyan Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.14
+- ticker: PML.V
+  yahoo: PML.V
+  name: Panoro Minerals Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.14
+- ticker: TRMET.IS
+  yahoo: TRMET.IS
+  name: Koza Anadolu Metal Madencilik Isletmele
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.13
+- ticker: AMI.AX
+  yahoo: AMI.AX
+  name: Aurelia Metals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.13
+- ticker: GAU
+  yahoo: GAU
+  name: Galiano Gold Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.13
+- ticker: VMET.TO
+  yahoo: VMET.TO
+  name: Versamet Royalties Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.13
+- ticker: ASE.V
+  yahoo: ASE.V
+  name: Asante Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.12
+- ticker: TALA.TO
+  yahoo: TALA.TO
+  name: Talamore Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.12
+- ticker: MKO.V
+  yahoo: MKO.V
+  name: Mako Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.12
+- ticker: TAU.V
+  yahoo: TAU.V
+  name: Thesis Gold Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.11
+- ticker: CTGO
+  yahoo: CTGO
+  name: Contango Ore Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.11
+- ticker: GSKR.V
+  yahoo: GSKR.V
+  name: Goldsky Resources Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.11
+- ticker: SSMR
+  yahoo: SSMR
+  name: Sunshine Silver Mining & Refining Co
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.11
+- ticker: VGZ
+  yahoo: VGZ
+  name: Vista Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.11
+- ticker: BRC.TO
+  yahoo: BRC.TO
+  name: Blackrock Silver Corp
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  weight: 0.11
+- ticker: GSVR.V
+  yahoo: GSVR.V
+  name: Guanajuato Silver Co Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SIL
+  - SILJ
+  weight: 0.11
+- ticker: SVRS.V
+  yahoo: SVRS.V
+  name: Silver Storm Mining Ltd
+  metals:
+  - gold
+  - silver
+  etfs:
+  - GDXJ
+  - SILJ
+  weight: 0.11
+- ticker: TUD.V
+  yahoo: TUD.V
+  name: Tudor Gold Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.11
+- ticker: SMI.AX
+  yahoo: SMI.AX
+  name: Santana Minerals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.1
+- ticker: AUXX.V
+  yahoo: AUXX.V
+  name: Gold X2 Mining Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.1
+- ticker: MNO.TO
+  yahoo: MNO.TO
+  name: Meridian Mining Uk Societas
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.1
+- ticker: HSTR.TO
+  yahoo: HSTR.TO
+  name: Heliostar Metals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.1
+- ticker: SOSI1.HE
+  yahoo: SOSI1.HE
+  name: Sotkamo Silver AB
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.1
+- ticker: VOLCABC1.LM
+  yahoo: VOLCABC1.LM
+  name: Volcan Cia Minera SAA
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.1
+- ticker: TRX
+  yahoo: TRX
+  name: Trx Gold Corporation
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.09
+- ticker: BC8.AX
+  yahoo: BC8.AX
+  name: Black Cat Syndicate Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.09
+- ticker: NMG.AX
+  yahoo: NMG.AX
+  name: New Murchison Gold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.09
+- ticker: PZG
+  yahoo: PZG
+  name: Paramount Gold Nevada Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.09
+- ticker: VOXR
+  yahoo: VOXR
+  name: Vox Royalty Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.08
+- ticker: AUC.AX
+  yahoo: AUC.AX
+  name: Ausgold Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.08
+- ticker: IDR
+  yahoo: IDR
+  name: Idaho Strategic Resources Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.08
+- ticker: AGMR.TO
+  yahoo: AGMR.TO
+  name: Silver Mountain Resources Inc
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.08
+- ticker: BMC.AX
+  yahoo: BMC.AX
+  name: BMC Minerals Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.08
+- ticker: CMCL
+  yahoo: CMCL
+  name: Caledonia Mining Corp Plc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.07
+- ticker: ARCI.JK
+  yahoo: ARCI.JK
+  name: Archi Indonesia Tbk Pt
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.07
+- ticker: SIND
+  yahoo: SIND
+  name: Sinda Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.07
+- ticker: NEXG.V
+  yahoo: NEXG.V
+  name: Nexgold Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.06
+- ticker: FDR.V
+  yahoo: FDR.V
+  name: Founders Metals Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.06
+- ticker: LUCA.V
+  yahoo: LUCA.V
+  name: Luca Mining Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.06
+- ticker: SM.V
+  yahoo: SM.V
+  name: Sierra Madre Gold And Silver Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.06
+- ticker: DTR.AX
+  yahoo: DTR.AX
+  name: Dateline Resources Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: JAG.TO
+  yahoo: JAG.TO
+  name: Jaguar Mining Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: AZY.AX
+  yahoo: AZY.AX
+  name: Antipa Minerals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: USAU
+  yahoo: USAU
+  name: Us Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: GLDG
+  yahoo: GLDG
+  name: Goldmining Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: MEK.AX
+  yahoo: MEK.AX
+  name: Meeka Metals Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: WRLG.V
+  yahoo: WRLG.V
+  name: West Red Lake Gold Mines Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: 8299.HK
+  yahoo: 8299.HK
+  name: Gt Gold Holdings Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.05
+- ticker: AAG.V
+  yahoo: AAG.V
+  name: Aftermath Silver Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.05
+- ticker: CKG.V
+  yahoo: CKG.V
+  name: Chesapeake Gold Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.05
+- ticker: CUU.V
+  yahoo: CUU.V
+  name: Copper Fox Metals Inc
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.04
+- ticker: FPC.V
+  yahoo: FPC.V
+  name: Falco Resources Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.04
+- ticker: MKR.AX
+  yahoo: MKR.AX
+  name: Manuka Resources Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.04
+- ticker: THM
+  yahoo: THM
+  name: International Tower Hill Mines Ltd
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.03
+- ticker: BNKR.TO
+  yahoo: BNKR.TO
+  name: Bunker Hill Silver Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.03
+- ticker: IPT.V
+  yahoo: IPT.V
+  name: IMPACT Silver Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.03
+- ticker: PSAB.JK
+  yahoo: PSAB.JK
+  name: J Resources Asia Pasific Tbk Pt
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.02
+- ticker: VGC.TO
+  yahoo: VGC.TO
+  name: Valor Gold Corp
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.02
+- ticker: ARD.AX
+  yahoo: ARD.AX
+  name: Argent Minerals Ltd
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.01
+- ticker: WAM.V
+  yahoo: WAM.V
+  name: Alaska Silver Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.01
+- ticker: FMR.TO
+  yahoo: FMR.TO
+  name: Future Mineral Resources Inc
+  metals:
+  - gold
+  etfs:
+  - GDXJ
+  weight: 0.0
+- ticker: MSV.TO
+  yahoo: MSV.TO
+  name: Minco Silver Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.0
+- ticker: PEN
+  yahoo: PEN
+  name: PERUVIAN SOL
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.0
+- ticker: TUO.V
+  yahoo: TUO.V
+  name: Teuton Resources Corp
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.0
+- ticker: WVM.V
+  yahoo: WVM.V
+  name: West Vault Mining Inc
+  metals:
+  - silver
+  etfs:
+  - SILJ
+  weight: 0.0

@@ -11,6 +11,7 @@ and a linked section per company – plus two PDFs of the same for printing. A f
 |---|---|---|---|
 | Portfolio | [portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/portfolio.html) | [portfolio.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio.pdf) | [portfolio-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/portfolio-profit-vs-price.pdf) |
 | Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech.pdf) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
+| Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – | – |
 | Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50.pdf) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
@@ -174,6 +175,37 @@ The valuation then applies the v2 rules (`valuescreen/v2.py`):
 The AI updater (`update_results.py`) also works on these files, but `fetch_screener.py` is the quicker way to refresh
 them each quarter. NSE / BSE results filings remain the authority – check the key figures before acting.
 
+## Screening all the miners (ETF holdings)
+
+A quick first pass over every miner in seven ETFs – which ones deserve a full company file. Kept separate from your
+portfolio: its own list (`data/lists/miners.yaml`), company folder (`data/miners/companies`) and output (`output/miners`).
+
+```bash
+python tools/make_etf_list.py miners GDX GDXJ SIL SILJ COPX URNM URNJ   # the universe (~270 companies); re-run to refresh
+python tools/screen_miners.py                  # screen them all (~5 minutes the first time each day, then cached)
+open reports/miners-screen.html                # the report
+python tools/screen_miners.py --promote        # draft company files for the shortlist, in data/miners/companies
+python tools/update_results.py --folder miners --tickers BTG,KGC --force --dry-run   # fill in the reported quarter
+python -m valuescreen run --list miners        # full valuations of the companies that have files
+```
+
+- **Funds:** GDX and GDXJ (VanEck), SIL and COPX (Global X), SILJ (Amplify), URNM and URNJ (Sprott), read from the fund
+  companies' own daily holdings files. One entry per company; its US listing when an ETF holds it.
+- **Figures:** Yahoo's latest twelve months (or latest year, flagged). Value = net profit per share × 12 / 15 + net cash;
+  owner earnings taken as net profit (sustaining capex assumed equal to depreciation) and metals **not** re-priced to spot.
+  Also price ÷ operating cash flow, free-cash-flow yield, EV / EBITDA, price ÷ book, net cash ÷ price, the profit-vs-price
+  grade and the 1-year price change. Money in the price currency (statements converted where needed, flagged).
+- **Signals:** Cheap = at least 20% below the 12x value · Fair = at or below 15x · Watch = 15–25x · Expensive = 25x or
+  more, or no positive earnings · Not valued = developers and explorers (revenue under 2% of market value) and physical
+  holders. **Shortlist** = Cheap producers with positive free cash flow and a grade other than D.
+- **Your holdings** from `data/lists/portfolio.yaml` are shown too, tagged "held" (a "My holdings" filter shows only
+  them); `--holdings none` leaves them out. Nothing is written to your portfolio files.
+- **Yahoo rate limits:** on a list this long Yahoo sometimes blocks for a while. The run then stops fetching, says so,
+  and keeps what it has; run it again later and only the missing companies are fetched.
+
+This is a filter, not a verdict – a shortlisted company gets a full company file (metal sold, realised prices, AISC)
+and the proper producer valuation before any decision.
+
 ## Keeping the data current
 
 | What | How often | Command |
@@ -335,7 +367,9 @@ valuescreen/html_report.py the combined HTML report;  pdf.py the value PDF;  pro
 valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (screener.py reads Screener pages)
 valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
 valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures
-tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, screen_universe, make_nse_list
+valuescreen/miner_screen.py, etf_holdings.py   the miners quick screen and the ETF holdings it starts from
+tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners,
+                           screen_universe, make_nse_list
 ```
 
 Educational framework, not investment advice.
