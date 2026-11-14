@@ -63,21 +63,21 @@ Educational framework, not investment advice.
   Sell puts at the 12x level for the rest of a planned position.
 
 ## 4. Reports
-- One PDF, all stocks in **alphabetical order**, bookmarked. **Page 1 = summary table**, landscape, one page
-  preferred (two acceptable).
+- One HTML report per list (no PDFs), all stocks in **alphabetical order**, linked from a contents line. **The summary
+  table comes first**, sortable and filterable; markets (commodities, indices, ETFs) follow, price only.
 - Summary table: Ticker, Name, Price (with date), 12x, 15x and 25x value, Margin of safety ($), MoS %, Tier, Signal,
   Buy level, Comment. Rows coloured green / blue / red and shaded by tier.
 - Growth table: price, value per share (no growth, @10%, @20%), growth needed, margin of safety, P/E, quality check,
   tier, signal, buy price, comment. Show the previous run's figure in brackets when re-running.
 - Explain the method first, at the start of each report and in the table footnote. Flags go in the comment column in
-  [brackets]. Footer on every page: "educational framework, not investment advice".
+  [brackets]. Say "educational framework, not investment advice" in the report.
 - Each stock: headline callout; "How to read" cards (price / value / margin of safety); calculation steps and a worked
   example; summary table; charts (value vs price, growth or metal-price curve, heatmap, and a 10-year EPS /
   cash-conversion chart for v2); assumptions and data notes; sources.
 
 ## 5. In this project
 - Run: `python -m valuescreen run --list core` (add `--live` for prices, `--technicals` for 200-day / RSI / MACD).
-  The report is `output/<List>_Value_vs_Price_<date>.pdf`.
+  The report is `output/<List>_Value_vs_Price_<date>.html`, copied to `reports/<list>.html`.
 - Nifty 50: `python tools/fetch_screener.py nifty50`, then `python -m valuescreen run --list nifty50`.
 - Thresholds, tiers, discount rates and industry lists live in `config.yaml`; the rules in `valuescreen/rules.py`
   and `valuescreen/v2.py`.

@@ -16,17 +16,17 @@ shows whenever the data is out of date.
 
 ## Latest reports
 
-| List | Report (read this) | Profit vs price PDF |
-|---|---|---|
-| Core | [core.html](https://vijayvadapalli.github.io/value-screener/reports/core.html) | [core-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/core-profit-vs-price.pdf) |
-| Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) | [tech-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/tech-profit-vs-price.pdf) |
-| Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) | [oil-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/oil-profit-vs-price.pdf) |
-| Miners – full valuations | [miners.html](https://vijayvadapalli.github.io/value-screener/reports/miners.html) | [miners-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/miners-profit-vs-price.pdf) |
-| Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) | – |
-| S&P 500 + Nasdaq-100 screen | [us-screen.html](https://vijayvadapalli.github.io/value-screener/reports/us-screen.html) | – |
-| Model portfolio – balanced | [model-portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/model-portfolio.html) | – |
-| Model portfolio – resources, value first | [model-resources.html](https://vijayvadapalli.github.io/value-screener/reports/model-resources.html) | – |
-| Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) | [nifty50-profit-vs-price.pdf](https://vijayvadapalli.github.io/value-screener/reports/nifty50-profit-vs-price.pdf) |
+| List | Report |
+|---|---|
+| Core | [core.html](https://vijayvadapalli.github.io/value-screener/reports/core.html) |
+| Tech | [tech.html](https://vijayvadapalli.github.io/value-screener/reports/tech.html) |
+| Oil & gas | [oil.html](https://vijayvadapalli.github.io/value-screener/reports/oil.html) |
+| Miners – full valuations | [miners.html](https://vijayvadapalli.github.io/value-screener/reports/miners.html) |
+| Miners screen (~270) | [miners-screen.html](https://vijayvadapalli.github.io/value-screener/reports/miners-screen.html) |
+| S&P 500 + Nasdaq-100 screen | [us-screen.html](https://vijayvadapalli.github.io/value-screener/reports/us-screen.html) |
+| Model portfolio – balanced | [model-portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/model-portfolio.html) |
+| Model portfolio – resources, value first | [model-resources.html](https://vijayvadapalli.github.io/value-screener/reports/model-resources.html) |
+| Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
 
@@ -74,7 +74,7 @@ average from Screener.in for Indian companies. The Nifty v2 valuation of banks u
 figures.
 
 The rules follow the Valuation Playbook (Nov 2026); `PROJECT_INSTRUCTIONS.md` has them in full, ready to paste into a
-Claude Project. `docs/Value_Screener_Design.pdf` has the original requirements and formulas. New to valuing companies? Start with [docs/Valuation_Overview.pdf](docs/Valuation_Overview.pdf) (4 pages, no
+Claude Project. New to valuing companies? Start with [docs/Valuation_Overview.pdf](docs/Valuation_Overview.pdf) (4 pages, no
 formulas), then [docs/Valuation_Guide.pdf](docs/Valuation_Guide.pdf) (21 pages: Part A tech and DCF, Part B miners, technical analysis – every term, model and formula with worked
 examples; rebuild with `python docs/build_valuation_guide.py`). [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) shows how everything fits together – what is built, what is
 next, and what stays private.
@@ -114,7 +114,7 @@ python tools/update_prices.py                    # core, watchlist, tech, oil (d
 python tools/update_prices.py --folder nifty50   # Nifty 50
 python tools/update_history.py                   # daily price history for the charts (first run ~15 s, then ~5 s)
 
-# 2. reports: one HTML (+ PDFs) per list (dated copies in output/, the latest in reports/)
+# 2. reports: one HTML per list (dated copies in output/, the latest in reports/)
 python -m valuescreen run --list core --live        # --live also fetches today's gold, silver and copper
 python -m valuescreen run --list tech
 python -m valuescreen run --list oil
@@ -137,9 +137,9 @@ Other runs:
 ```bash
 python -m valuescreen run --list core --technicals        # adds price vs 200-day average, RSI and MACD (yfinance)
 python -m valuescreen run --tickers AEM,NEM,HL --spot gold=4200,silver=55   # a few tickers at chosen metal prices
-python -m valuescreen run --all --etf URNM --no-pdf       # every company, ETF look-through, skip the PDFs
+python -m valuescreen run --all --etf URNM               # every company, with the URNM ETF look-through
 python -m valuescreen run --list tech --no-profit         # skip the profit-vs-price figures (no Yahoo calls)
-python tools/profit_vs_price.py --list tech               # the profit-vs-price PDF on its own
+python tools/profit_vs_price.py --list tech               # the profit-vs-price grades on their own, printed
 python -m pytest -q                                       # the tests, incl. reproducing the Nov 2026 reports
 ```
 
@@ -148,8 +148,8 @@ The tests read a frozen copy of the 4 Nov 2026 data in `tests/fixtures/nov2026/`
 
 Every run writes dated reports and working files to `output/` (`output/nifty50/` for the Nifty), which git ignores, so
 your history stays on your computer. It also copies the latest reports to `reports/` under fixed names
-(`core.html`, `core.pdf`, `core-profit-vs-price.pdf`, and the same for each list) – the only reports git
-tracks and the site publishes.
+(`core.html`, `tech.html`, ... – one per list) – the only reports git tracks and the site publishes. There are no
+PDFs: the HTML report holds everything, opens offline and prints from the browser.
 
 What each run writes:
 
@@ -158,12 +158,6 @@ What each run writes:
   the headline, the "how to read" cards, the valuation band, charts, key figures, the calculation, the profit-vs-price
   comparison, notes and linked sources, with links back to the summary and to the previous and next company. One file
   with the charts inside, so it opens offline and can be shared as it is.
-- `<List>_Profit_vs_Price_<date>.pdf` – the profit-vs-price table for printing (see below).
-- `<List>_Value_vs_Price_<date>.pdf` – the value report for printing. Page 1 is the summary table (value columns for producers,
-  royalties, developers; a reverse-DCF table for growth stocks), alphabetical, rows tinted by signal and by tier or
-  market value. Each company then gets a headline, its "how to read" cards (price, value, margin of safety, buy level),
-  the valuation band, the metal-price or growth curve, a heatmap, the calculation with a worked example, key figures,
-  assumptions and sources. Bookmarked; footer on every page.
 
 Working files (in `output/`):
 
@@ -359,7 +353,6 @@ time `python -m valuescreen run` runs – update the history first.
   *Support / resistance* – the nearest support (green) and resistance (red), thick, with labels; *All levels* – every
   level found; *Volume*. Averages: 20-day light grey, 50-day green, 200-day dark red (the longer, the thicker); markers for results (E), dividends (D) and splits (S). A caption gives the price
   against its 50- and 200-day averages, RSI, the 52-week range and the nearest support and resistance.
-- **PDF – static:** RSI over the last year of daily candles, with the same averages, nearest levels and value lines.
 - Charts use TradingView's open-source [Lightweight Charts](https://github.com/tradingview/lightweight-charts)
   (Apache 2.0, `valuescreen/vendor/`), embedded so reports work offline and on GitHub Pages. A company without price
   history simply has no chart; the run log says which.
@@ -374,7 +367,7 @@ and give it either a Yahoo symbol or a long-term series:
 - {ticker: URANIUM, name: Uranium spot (Cameco month-end), series: uranium_spot, unit: US$/lb, market: true}
 ```
 
-The report then has a **Markets** section (and a table in the PDF): price and date, change over a week, a month and a
+The report then has a **Markets** section: price and date, change over a week, a month and a
 year, the price against its 50- and 200-day averages, RSI, the 52-week range, and a chart for each – not valued, no
 signal. The core list holds gold, silver, uranium, WTI crude, the US dollar index (DXY), GDX, SILJ and XLE this way.
 Uranium has no daily series on Yahoo, so it uses Cameco's month-end spot price from 1988
@@ -582,8 +575,8 @@ undated prices, high costs, one-off quarters, cyclicals, conglomerates and insur
 
 ## Optional packages
 
-`requirements.txt` has the core packages, including `reportlab` for the PDF report. The report uses the Inter
-typeface, included in `valuescreen/fonts/` (SIL Open Font License). Install these only if you use the feature:
+`requirements.txt` has the core packages. The report uses the Inter typeface, included in `valuescreen/fonts/` (SIL Open
+Font License). Install these only if you use the feature:
 
 | Package | Needed for |
 |---|---|
@@ -592,6 +585,7 @@ typeface, included in `valuescreen/fonts/` (SIL Open Font License). Install thes
 | `lxml` | Yahoo's earnings calendar in `tools/update_results.py` |
 | `anthropic` | Claude drafting updates in `tools/update_results.py` |
 | `google-genai` | Gemini drafting updates in `tools/update_results.py --provider gemini` |
+| `reportlab` | rebuilding the guides in `docs/` (`docs/build_*.py`) |
 
 ## Publishing the reports
 
@@ -604,8 +598,8 @@ git commit -m "Reports 13 Nov 2026" && git push
 
 GitHub Pages (Settings → Pages → Deploy from a branch → main, / root) serves them at the links under "Latest reports"
 about a minute after the push. Each push replaces the previous version on the site; older versions stay only in the git
-history and in your local `output/` folder. Each commit of all lists adds about 30 MB to the repository (the Nifty HTML
-and PDF are ~10 MB each), so commit when something has changed rather than after every run. The repository is public,
+history and in your local `output/` folder. Each commit of all lists adds about 20 MB to the repository (the Nifty HTML
+is ~10 MB), so commit when something has changed rather than after every run. The repository is public,
 so the published reports – including the core list – can be seen by anyone. (Do not move the HTML reports to Git
 LFS: GitHub Pages cannot serve LFS files.)
 
@@ -620,13 +614,13 @@ valuescreen/rules.py       zones, signals, buy levels, flags, stale checks
 valuescreen/engine.py      runs models + rules over a set of companies
 valuescreen/wording.py     what the report says: headlines, steps, worked examples, key figures, cards
 valuescreen/charts.py      the charts; style.py holds the fonts and colours
-valuescreen/html_report.py the combined HTML report;  pdf.py the value PDF;  profit_vs_price.py the profit-vs-price method + PDF
+valuescreen/html_report.py the HTML report;  profit_vs_price.py the profit-vs-price method and grades
 valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (screener.py reads Screener pages)
 valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
 valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures
 valuescreen/miner_screen.py, etf_holdings.py   the miners quick screen and the ETF holdings it starts from
 valuescreen/pricedb.py   daily price history (output/prices.sqlite) for charts and technical analysis
-valuescreen/chart_levels.py, price_chart.py   moving averages, RSI, support / resistance, trend lines; the chart data (HTML) and static chart (PDF)
+valuescreen/chart_levels.py, price_chart.py   moving averages, RSI, support / resistance, trend lines; the chart data for the HTML report
 valuescreen/vendor/         Lightweight Charts (TradingView, Apache 2.0) for the interactive charts
 valuescreen/longterm.py   long-term monthly gold, silver (World Bank), uranium (IMF) and uranium spot (Cameco) for the long-term charts
 valuescreen/markets.py    price-only list entries (commodities, DXY, ETFs): price facts and charts for the Markets section

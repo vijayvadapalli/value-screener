@@ -110,7 +110,7 @@ def test_payload_converts_pence_and_keeps_value_lines(con):
     assert PC.payload(con, "NONE", r, c) is None
 
 
-def test_chart_block_and_static_png(con, tmp_path):
+def test_chart_block(con):
     r = {"model": "physical", "nav": 6.0, "buy_level": 5.1, "call_level": 6.6, "price_ccy": "GBP", "signal": "green", "action": "Buy"}
     p = PC.payload(con, "YCA.L", r, {"period": {}})
     html = html_report.chart_block("YCA", p)
@@ -118,8 +118,6 @@ def test_chart_block_and_static_png(con, tmp_path):
     data = html.split('<script type="application/json" id="pcd-YCA">')[1].split("</script>")[0]
     assert json.loads(data.replace("<\\/", "</"))["symbol"] == "YCA.L"
     assert html_report.chart_block("YCA", None) == ""
-    assert PC.static_png(p, tmp_path / "c.png").exists()
-    assert PC.static_png(None, tmp_path / "d.png") is None
 
 
 def test_cameco_uranium_table_parses_month_end_spot():

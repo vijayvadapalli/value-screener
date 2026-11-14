@@ -1,8 +1,8 @@
 # Value Screener – architecture
 
-What the system does, how the parts fit together, what is built and what is next. Updated 13 Nov 2026.
-The original requirements and formulas are in [Value_Screener_Design.pdf](Value_Screener_Design.pdf); how to run
-everything is in the [README](../README.md); how companies are valued, in plain English, is in
+What the system does, how the parts fit together, what is built and what is next. Updated 14 Nov 2026.
+The rules are in [PROJECT_INSTRUCTIONS.md](../PROJECT_INSTRUCTIONS.md); how to run everything is in the
+[README](../README.md); how companies are valued, in plain English, is in
 [Valuation_Overview.pdf](Valuation_Overview.pdf) (short) and [Valuation_Guide.pdf](Valuation_Guide.pdf) (detailed).
 
 ![Architecture overview](architecture.png)
@@ -54,10 +54,10 @@ flowchart LR
   end
 
   subgraph OUT["Outputs (output/, dated)"]
-    FULL["Full reports per list<br/>HTML + PDF + profit-vs-price PDF"]:::done
+    FULL["Full report per list (HTML)<br/>value · profit vs price · markets"]:::done
     SCR["Screen reports<br/>miners · US · Nifty"]:::done
     MPR["Model portfolio reports"]:::done
-    CH["Interactive charts in HTML<br/>static charts in PDF"]:::done
+    CH["Interactive charts<br/>in the HTML reports"]:::done
     PRIV["output/private/research.html<br/>+ weekly brief"]:::priv
   end
 
@@ -119,7 +119,7 @@ flowchart LR
 | `model_portfolio.py` | candidates from every screen, value / quality / momentum scores, sleeves, sizing, report |
 | `technicals.py`, `prices.py`, `history.py` | 200-day average, RSI, MACD; live prices; previous-run figures |
 | `pricedb.py` | the price-history database: bars, splits and dividends, weekly / monthly resampling |
-| `chart_levels.py`, `price_chart.py` | SMA 20/50/200, RSI(14), swing highs and lows, support / resistance, automatic trend lines (incl. channel edges and two-touch lines); the chart data for HTML and the static chart for PDF |
+| `chart_levels.py`, `price_chart.py` | SMA 20/50/200, RSI(14), swing highs and lows, support / resistance, automatic trend lines (incl. channel edges and two-touch lines); the chart data for the HTML report |
 | `markets.py`, `longterm.py` | price-only list entries (gold, silver, uranium, WTI, DXY, ETFs): price facts and charts for the Markets section; the long-term monthly series and the Cameco uranium refresh |
 | `research.py` | private: the weekly capture's levels, rules and stance against today's price and our valuation; the private report |
 
@@ -127,14 +127,14 @@ flowchart LR
 | Module | Output |
 |---|---|
 | `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links |
-| `pdf.py`, `charts.py`, `style.py`, `wording.py` | bookmarked PDF with charts; one look (Inter, palette); the words in every report |
+| `charts.py`, `style.py`, `wording.py` | the report's charts; one look (Inter, palette); the words and notes in every report |
 | `report.py` | ranked CSV, signal log, heatmaps |
 | `html_report.chart_block` + `vendor/` | per company: RSI on top, candles (D / W / M, 6M–10Y), SMA 20/50/200, nearest auto support / resistance (all on request) and trend lines, value / buy / add / sell lines, E / D / S markers (Lightweight Charts, Apache 2.0) |
 
 ### Commands (`tools/` and `python -m valuescreen`)
 | Command | Does |
 |---|---|
-| `python -m valuescreen run --list <core/tech/oil/miners/nifty50> --live` | full valuations → HTML + PDF + profit-vs-price PDF, published to `reports/` |
+| `python -m valuescreen run --list <core/tech/oil/miners/nifty50> --live` | full valuations → one HTML report (no PDFs), published to `reports/<list>.html` |
 | `update_prices.py`, `update_results.py`, `fetch_screener.py`, `add_companies.py` | keep company files current |
 | `screen_miners.py [--promote]`, `screen_us.py`, `screen_universe.py`, `make_etf_list.py`, `make_nse_list.py` | quick screens and their universes |
 | `model_portfolio.py` | the two model portfolios |
@@ -203,7 +203,7 @@ flowchart TD
 |---|---|
 | Valuation models, rules, tiers, signals, flags (Valuation Playbook) | built |
 | Bad loans for lenders – adjusted book, NPA / nonaccrual / charge-off warning signs (Nifty 50 and US screen) | built |
-| Full reports per list – HTML with navigation, PDF, profit-vs-price PDF | built |
+| Full report per list – HTML with navigation (PDFs dropped, Nov 2026) | built |
 | Lists: core, tech, oil, miners (promoted: BTG, KGC, OGC), Nifty 50 | built |
 | Miners quick screen from seven ETFs (~270) | built |
 | S&P 500 / Nasdaq-100 screen from SEC figures, with database | built |
@@ -247,7 +247,7 @@ flowchart LR
   Y["Yahoo daily prices"] --> DB["output/prices.sqlite<br/>10y open/high/low/close/volume,<br/>splits, dividends"]
   DB --> TA["Chart analytics<br/>SMA 20/50/200 · RSI(14) · swing highs/lows<br/>support & resistance · auto trend lines"]
   V["Valuation<br/>value band · buy / add / sell levels · signal"] --> CH
-  TA --> CH["Chart in every company section<br/>interactive (HTML) · static (PDF)"]
+  TA --> CH["Chart in every company section<br/>interactive (HTML)"]
   W["Your weekly report"]:::priv -- "plain levels only" --> CH
 ```
 
@@ -258,7 +258,7 @@ flowchart LR
 | **Levels and trend lines** | Swing highs and lows found by code; horizontal support and resistance where price turned several times, labelled with the price; a falling line through lower highs and a rising line through higher lows – drawn only when the fit is clean, marked "auto" |
 | **Our valuation on the chart** | Shaded 12x–15x value band, buy and add lines, start of the sell zone, today's signal badge, results (E) and dividend (D) markers |
 | **Watched levels** (stage 3) | Plain support / resistance prices from your private weekly report, dashed and unnamed; everything else from that report stays private |
-| **The chart** (stage 2 – built) | Daily / weekly / monthly, 1–10 years, crosshair with open, high, low, close and volume; TradingView's open-source Lightweight Charts embedded in the HTML report (works offline and on GitHub Pages); a static version in the PDF |
+| **The chart** (stage 2 – built) | Daily / weekly / monthly, 1–10 years, crosshair with open, high, low, close and volume; TradingView's open-source Lightweight Charts embedded in the HTML report (works offline and on GitHub Pages) |
 | **Later** | Markets page (ratios such as SILJ/GDXJ, URNM/GLD, gold/silver; weekly and YTD change); "after a sell-off" forward returns; a scorecard of whether signals and levels worked |
 
 ### The terms

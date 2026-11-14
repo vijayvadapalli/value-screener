@@ -1,5 +1,5 @@
 """Ranked CSV, the signal log and the two cross-company scenario heatmaps.
-The reports themselves are html_report.py (combined, linked) and pdf.py / profit_vs_price.py (for printing)."""
+The report itself is html_report.py (combined, linked); profit_vs_price.py holds the profit-vs-price method."""
 from __future__ import annotations
 
 import csv

@@ -1,4 +1,4 @@
-"""Charts for the PDF report. Each public function writes a PNG and returns its path, or None when it does not apply.
+"""Charts for the HTML report (value vs price, growth curves, heatmaps, EPS history). Each public function writes a PNG and returns its path, or None when it does not apply.
 
 One style throughout: Inter, no top/right spines, a faint grid, the market price in orange, values in blue,
 the buy zone green and the sell zone red.
@@ -41,7 +41,7 @@ def new_figure(size):
     return plt.subplots(figsize=(size[0] * MM, size[1] * MM))
 
 
-DPI = {"value": 220}   # charts for the PDF; the HTML report uses less to keep the file small
+DPI = {"value": 220}   # default; the HTML report sets its own (charts.resolution) to keep the file small
 
 
 @contextmanager

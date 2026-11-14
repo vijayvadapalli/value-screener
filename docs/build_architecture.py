@@ -50,10 +50,10 @@ COLUMNS = [
         ("Research merge", ["their levels vs our value"], PRIVATE),
     ]),
     ("OUTPUTS", GREEN, [
-        ("Full reports", ["HTML + PDF + profit vs", "price, per list"], BUILT),
+        ("Full reports", ["one HTML per list: value,", "profit vs price, markets"], BUILT),
         ("Screen reports", ["miners, US, Nifty"], BUILT),
         ("Model portfolio pages", ["sleeves, entry, risk,", "market value"], BUILT),
-        ("Charts in reports", ["interactive in HTML,", "static in PDF"], BUILT),
+        ("Charts in reports", ["interactive, in the", "HTML reports"], BUILT),
         ("Private research", ["research.html +", "weekly brief"], PRIVATE),
     ]),
     ("PUBLISHED", GREEN, [

@@ -1,4 +1,4 @@
-"""One look for charts and PDFs: the Inter typeface (SIL Open Font License, valuescreen/fonts) and a small palette.
+"""One look for the reports and charts: the Inter typeface (SIL Open Font License, valuescreen/fonts) and a small palette.
 
 Signals: green = buy / start a position, blue = watch / hold, red = expensive or no valid value.
 Rows are tinted in the signal's colour; the tint is darkest for tier A (or the largest market values) and lightest for C.
@@ -47,32 +47,6 @@ def font_family() -> str:
         family = "Inter"
     _registered["mpl"] = family
     return family
-
-
-def pdf_fonts() -> dict:
-    """Registers Inter with reportlab once. Returns {'regular','medium','semibold','bold'} font names."""
-    if "pdf" in _registered:
-        return _registered["pdf"]
-    from reportlab.pdfbase import pdfmetrics  # noqa: PLC0415
-    from reportlab.pdfbase.ttfonts import TTFont  # noqa: PLC0415
-    names = {}
-    weights = {"regular": "Regular", "medium": "Medium", "semibold": "SemiBold", "bold": "Bold"}
-    if all((FONTS / f"Inter-{w}.ttf").exists() for w in weights.values()):
-        for key, w in weights.items():
-            pdfmetrics.registerFont(TTFont(f"Inter-{w}", str(FONTS / f"Inter-{w}.ttf")))
-            names[key] = f"Inter-{w}"
-        pdfmetrics.registerFontFamily("Inter-Regular", normal="Inter-Regular", bold="Inter-SemiBold",
-                                      italic="Inter-Regular", boldItalic="Inter-SemiBold")
-    else:  # matplotlib always ships DejaVu
-        import os  # noqa: PLC0415
-        import matplotlib  # noqa: PLC0415
-        ttf = os.path.join(matplotlib.get_data_path(), "fonts", "ttf")
-        pdfmetrics.registerFont(TTFont("DV", os.path.join(ttf, "DejaVuSans.ttf")))
-        pdfmetrics.registerFont(TTFont("DVB", os.path.join(ttf, "DejaVuSans-Bold.ttf")))
-        pdfmetrics.registerFontFamily("DV", normal="DV", bold="DVB", italic="DV", boldItalic="DVB")
-        names = {"regular": "DV", "medium": "DV", "semibold": "DVB", "bold": "DVB"}
-    _registered["pdf"] = names
-    return names
 
 
 def tint(signal: str, strength: int | None) -> str:

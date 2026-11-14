@@ -1,11 +1,10 @@
-"""Price charts for the company sections: the data for the interactive HTML chart, and a static PNG for the PDF.
+"""Price charts for the company sections: the data for the interactive HTML chart.
 
-Both show RSI(14) above candles with the 20-, 50- and 200-day averages, support / resistance and trend lines found
+It shows RSI(14) above candles with the 20-, 50- and 200-day averages, support / resistance and trend lines found
 automatically (chart_levels.py), and our own valuation on the price: the value lines, buy / add levels and the start
 of the sell zone, with results (E) and dividend (D) markers. Prices come from output/prices.sqlite (pricedb.py).
 
     payload(con, symbol, r, c)   → dict for the HTML chart (JSON), or None when there is no history
-    static_png(p, path)          → PNG path for the PDF from a payload, or None
 """
 from __future__ import annotations
 
@@ -173,83 +172,3 @@ def caption(p: dict) -> str:
     if res:
         parts.append(f"resistance {res[0]['price']:,.2f}")
     return " · ".join(parts)
-
-
-# ------------------------------------------------------------------------------------------------- static chart (PDF)
-def static_png(p: dict | None, path, width_in=7.4, height_in=3.3, dpi=150):
-    if not p:
-        return None
-    symbol = p["symbol"]
-    import matplotlib  # noqa: PLC0415
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt  # noqa: PLC0415
-    from matplotlib.patches import Rectangle  # noqa: PLC0415
-
-    plt.rcParams["font.family"] = S.font_family()
-    rows = p["D"]
-    closes = [x[4] for x in rows]
-    smas = {n: L.sma_series(closes, n) for n in SMA_COLOURS}
-    rsi = L.rsi_series(closes)
-    first = next(i for i, x in enumerate(rows) if x[0] >= p["show_from"])
-    rows, closes = rows[first:], closes[first:]
-    xs = range(len(rows))
-    fig = plt.figure(figsize=(width_in, height_in), dpi=dpi)
-    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 4.4], hspace=0.05)
-    axr, ax = fig.add_subplot(gs[0]), fig.add_subplot(gs[1])
-    for a in (ax, axr):
-        for side in ("top", "right"):
-            a.spines[side].set_visible(False)
-        for side in ("left", "bottom"):
-            a.spines[side].set_color(S.LINE)
-        a.tick_params(colors=S.INK2, labelsize=6.5, length=2)
-        a.set_xlim(-1, len(rows) + 1)
-    up, down = S.SIGNAL["green"], S.SIGNAL["red"]
-    for i, (_, o, h, lo, cl, v) in enumerate(rows):
-        col = up if cl >= o else down
-        ax.plot([i, i], [lo, h], color=col, lw=0.5)
-        ax.add_patch(Rectangle((i - 0.32, min(o, cl)), 0.64, max(abs(cl - o), 1e-9), color=col, lw=0))
-    for n, col in SMA_COLOURS.items():
-        ys = smas[n][first:]
-        ax.plot([i for i, y in zip(xs, ys) if y], [y for y in ys if y], color=col, lw={20: 0.8, 50: 1.4, 200: 1.9}[n], label=f"SMA {n}")
-    lo_y, hi_y = min(x[3] for x in rows), max(x[2] for x in rows)
-    span = hi_y - lo_y
-    in_view = lambda y: lo_y - 0.25 * span <= y <= hi_y + 0.25 * span  # noqa: E731
-    for lvl in nearest_levels(p):
-        if in_view(lvl["price"]):
-            colour = S.SIGNAL["green"] if lvl["kind"] == "support" else S.SIGNAL["red"]
-            ax.axhline(lvl["price"], color=colour, lw=0.7, ls=(0, (1, 2)))
-            ax.text(len(rows) + 2, lvl["price"], f"{lvl['kind']} {lvl['price']:,.2f}", fontsize=5.3, color=colour, va="center", ha="left")
-    for v in p["values"]:
-        if in_view(v["price"]):
-            ax.axhline(v["price"], color=v["color"], lw=1.1 if v["solid"] else 0.9, ls="-" if v["solid"] else (0, (4, 2)))
-            ax.text(1, v["price"], f" {v['label']} {v['price']:,.2f}", fontsize=5.8, color=v["color"], va="bottom", weight="bold")
-    index = {x[0]: i for i, x in enumerate(rows)}
-    for t in p["trends"]:
-        if t["from"][0] in index or t["from"][0] < rows[0][0]:
-            d0 = dt.date.fromisoformat(t["from"][0])
-            d1 = dt.date.fromisoformat(t["to"][0])
-            day_i = lambda d: next((i for i, x in enumerate(rows) if x[0] >= d.isoformat()), len(rows) - 1)  # noqa: E731
-            i0, i1 = day_i(d0), day_i(d1)
-            slope = (t["to"][1] - t["from"][1]) / max((d1 - d0).days, 1)
-            y0 = t["from"][1] + slope * (dt.date.fromisoformat(rows[i0][0]) - d0).days
-            ax.plot([i0, i1], [y0, t["to"][1]], color="#B794F4" if t["kind"] == "resistance" else "#4299E1", lw=1.1)
-    ax.axhline(closes[-1], color=S.PRICE, lw=0.7)
-    ax.text(len(rows) + 2, closes[-1], f"{closes[-1]:,.2f}", fontsize=5.8, color=S.PRICE, va="center", ha="left", weight="bold")
-    ax.set_ylim(lo_y - 0.06 * span, hi_y + 0.06 * span)
-    axr.set_xticks([])
-    r_vals = rsi[first:]
-    axr.plot([i for i, y in zip(xs, r_vals) if y is not None], [y for y in r_vals if y is not None], color=S.SIGNAL["blue"], lw=0.8)
-    for y, col in ((70, S.SIGNAL["red"]), (30, S.SIGNAL["green"])):
-        axr.axhline(y, color=col, lw=0.5, ls="--")
-    axr.set_ylim(0, 100)
-    axr.set_yticks([30, 70])
-    ticks = [i for i, x in enumerate(rows) if i == 0 or x[0][5:7] != rows[i - 1][0][5:7]][::2]
-    ax.set_xticks(ticks)
-    ax.set_xticklabels([dt.date.fromisoformat(rows[i][0]).strftime("%b %y") for i in ticks])
-    axr.text(1, 92, "RSI(14)", fontsize=5.5, color=S.INK2, va="top")
-    ccy = p["currency"] or ""
-    axr.set_title(f"{symbol} · daily, 1 year · {ccy} · last {closes[-1]:,.2f}", fontsize=7.5, loc="left", color=S.INK)
-    ax.legend(loc="upper left", fontsize=5.5, frameon=False, ncol=3, bbox_to_anchor=(0, 1.0))
-    fig.savefig(path, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    return path

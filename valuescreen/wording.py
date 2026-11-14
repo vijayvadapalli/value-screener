@@ -1,10 +1,12 @@
 """What the reports say about each company: headlines, comments, the calculation steps, worked examples, the key-figure
-rows and the "how to read" cards. Plain functions on a result dict (see engine.run); the PDF only lays them out.
+rows and the "how to read" cards, and the notes under the summary tables. Plain functions on a result dict (see
+engine.run); html_report.py lays them out.
 
-Text uses reportlab's paragraph mark-up (<b>, <br/>, <font>), which the PDF renders."""
+Text uses a small paragraph mark-up (<b>, <br/>, <font>), which html_report.markup() turns into HTML."""
 from __future__ import annotations
 
 import html
+import re
 
 from . import style as S
 
@@ -362,3 +364,23 @@ def kpi_cards(r):
     elif m == "leases" and r.get("irr") is not None:
         cards.append(("Return a year", f"{r['irr']*100:.1f}%", "base case at today's price", S.INK2))
     return cards
+
+
+# ------------------------------------------------------------------------------------------------- report notes
+RULES_NOTE = ("<b>Rules.</b> Tier A: start at or below the 15x value, add at or below 12x. Tiers B and C: buy only with a 20% "
+                  "margin at 12x and AISC ≤ 60% of spot, or ≤ 0.8× NAV (0.85× physical). Red = ≥ 25x, ≥ 1.5× NAV or no valid "
+                  "value. Before buying: price vs 200-day average (below = buy in thirds), RSI/MACD; sell puts at 12x. "
+                  "[Flags]: STALE = results > ~100 days old and newer ones out (or due); price age. (Previous run.)")
+
+
+GROWTH_NOTE = ("<b>Columns.</b> Value per share with no growth, 10% and 20% a year for 5 years (15x exit, discounted at 10% US / "
+               "12% India). Growth needed = the growth that makes the value equal the price; previous run in (brackets). Green ≤ 5% "
+               "a year (≤ 10% for tier A), blue 5–25%, red ≥ 25%. Cyclicals, cash conversion below 70% and lenders with "
+               "bad-loan warning signs are capped at blue. Quality = 5-year cash conversion, or price-to-book against the fair "
+               "multiple (5-yr ROE × no-growth multiple) for financials; P/ABV = on book less bad loans not provided for. "
+               "Shade = market value.")
+
+
+def list_title(list_name: str | None) -> str:
+    """'nifty50' → 'Nifty 50', 'core' → 'Core', None → 'All Companies'."""
+    return re.sub(r"([A-Za-z])(\d)", r"\1 \2", (list_name or "all companies").replace("_", " ").title())

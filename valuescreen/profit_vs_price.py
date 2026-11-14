@@ -17,20 +17,15 @@ quarterly statements for the rest (diluted EPS, so buybacks and new shares count
 from __future__ import annotations
 
 import datetime as dt
-from pathlib import Path
-
-from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
 from . import style as S
-from .pdf import Pill, Styles, _header, _widths, hexc, muted, new_document
-from .wording import day, esc, money
+from .wording import esc, money
 
 ASSET_MODELS = {"developer": "a developer, valued on its study NAV, not profits",
                 "physical": "holds the metal; profits are revaluations, so it is valued on NAV",
                 "leases": "valued on contracted lease cash, not today's profits",
                 "liquid": "no meaningful profits; not valued"}
 GRADE_COLOUR = {"A": S.SIGNAL["green"], "B": "#4FA884", "C": "#B7791F", "D": S.SIGNAL["red"], "n/m": S.MUTED}
-GRADE_TINT = {"A": S.TINT["green"][1], "B": S.TINT["green"][3], "C": "#FBF6EA", "D": S.TINT["red"][2], "n/m": S.SOFT}
 
 
 # ------------------------------------------------------------------------------------------------- the numbers
@@ -143,7 +138,7 @@ def comment(r: dict) -> str:
     return text + (f" {esc(r['note'])}" if r.get("note") else "")
 
 
-# ------------------------------------------------------------------------------------------------- the PDF
+# ------------------------------------------------------------------------------------------------- report text
 def _amount(x, ccy, unit):
     if x is None:
         return "–"
@@ -151,63 +146,6 @@ def _amount(x, ccy, unit):
         return f"{S.money(x, ccy, 0)} cr"
     millions = x / 1e6
     return f"{S.money(millions / 1000, ccy, 1)}bn" if abs(millions) >= 10000 else f"{S.money(millions, ccy, 0)}m"
-
-
-def _pct(x, nd=0):
-    return "–" if x is None else S.pct(x, nd) + "/yr"
-
-
-def _row(r, st, widths, with_position):
-    ccy = r["currency"]
-    late = r.get("price_date") and (dt.date.today() - r["price_date"]).days > 7
-    price = (f"{st.bold(money(r['price'], ccy))}<br/><font size='6.1' color='{'#B7791F' if late else S.MUTED}'>"
-             f"{day(r.get('price_date'))}</font>")
-    one_year = "<br/>" + muted(f"1 yr {S.pct(r['price_change_1y'])}", 5.9) if r.get("price_change_1y") is not None else ""
-    unit = "cr" if r.get("source") == "screener" else "m"
-    then_now = f"{_amount(r.get('profit_then'), r['report_ccy'], unit)} → {_amount(r.get('profit_now'), r['report_ccy'], unit)}"
-    period = f"{r.get('base_label') or '?'} → {r.get('latest_label') or '?'}".replace(" ", "&nbsp;")
-    profit = f"{st.bold(_pct(r['profit_growth']))}<br/>{muted(then_now + ' · ' + period, 5.9)}"
-    pe_change_txt = "n/m" if r["pe_change"] is None else st.bold(S.pct(r["pe_change"]))
-    value = r.get("value")
-    if value:
-        value_cell = Table([[Pill(value["action"], S.SIGNAL[value["signal"]], widths[9] - 10, st.f["semibold"], 6.4)],
-                            [Paragraph(muted(esc(value["detail"]), 6), st.td)]], colWidths=[widths[9] - 8])
-        value_cell.setStyle(TableStyle([("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-                                        ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 1)]))
-    else:
-        value_cell = Paragraph(muted("no company file"), st.td)
-    cells = [Paragraph(f"{st.bold(esc(r['ticker']))}<br/><font size='6.2' color='{S.INK2}'>{esc(r['name'])}</font>", st.td),
-             Paragraph(price, st.td), Paragraph(_pct(r["sales_growth"]), st.td_right), Paragraph(profit, st.td_right),
-             Paragraph(_pct(r["price_growth"]) + one_year, st.td_right), Paragraph(pe_change_txt, st.td_right),
-             Paragraph("–" if not r.get("pe_now") else f"{r['pe_now']:.1f}", st.td_right),
-             Paragraph("–" if r.get("roe") is None else f"{r['roe']*100:.0f}%", st.td_right),
-             Paragraph(f"<font size='{13 if len(r['grade']) == 1 else 8}' color='{GRADE_COLOUR[r['grade']]}' "
-                       f"name='{st.f['bold']}'>{r['grade']}</font>", st.td_center),
-             value_cell]
-    if with_position:
-        q = r.get("quantity")
-        cells.append(Paragraph("–" if not q else f"{money(q * r['price'], ccy, 0)}<br/>{muted(f'{q:,g} shares', 5.9)}", st.td_right))
-    cells.append(Paragraph(comment(r), st.comment))
-    return cells
-
-
-def _table(rows, st):
-    with_position = any(r.get("quantity") for r in rows)
-    parts = [30, 21, 14, 40, 15, 14, 11, 10, 10, 30] + ([20] if with_position else []) + [56]
-    widths = _widths(parts)
-    names = ["Ticker", "Price (date)", "Sales growth", "Profit growth (then → now)", "Price growth", "P/E change",
-             "P/E now", "ROE", "Grade", "Value report"] + (["Position"] if with_position else []) + ["Comment"]
-    numeric = {2, 3, 4, 5, 6, 7} | ({10} if with_position else set())
-    data = [_header(names, numeric, st)] + [_row(r, st, widths, with_position) for r in rows]
-    t = Table(data, colWidths=widths, repeatRows=1)
-    style = [("VALIGN", (0, 0), (-1, -1), "MIDDLE"), ("TOPPADDING", (0, 0), (-1, -1), 2), ("BOTTOMPADDING", (0, 0), (-1, -1), 2.2),
-             ("LEFTPADDING", (0, 0), (-1, -1), 4), ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-             ("BACKGROUND", (0, 0), (-1, 0), hexc("#EEF0F4")), ("LINEBELOW", (0, 0), (-1, 0), 0.8, hexc(S.INK2))]
-    for i, r in enumerate(rows, start=1):
-        style += [("BACKGROUND", (0, i), (-1, i), hexc(GRADE_TINT[r["grade"]])), ("LINEBELOW", (0, i), (-1, i), 1.0, hexc("#FFFFFF")),
-                  ("LINEBEFORE", (0, i), (0, i), 3, hexc(GRADE_COLOUR[r["grade"]]))]
-    t.setStyle(TableStyle(style))
-    return t
 
 
 def _at_a_glance(rows):
@@ -231,19 +169,6 @@ HOW_TO_READ = ("<b>How to read it.</b> Growth is a yearly rate over about three 
                "Prices are in the exchange's currency; sales and profits as reported (m = millions, cr = crore). Profits "
                "include one-offs – check large jumps in the filing. A rising metal price lifts miners' profits faster than "
                "their prices (most gold miners grade A now); if the metal falls, profits fall faster too.")
-
-
-def build(rows: list[dict], path: Path, title: str, as_of: dt.date, sources: str):
-    """rows: evaluated records (see evaluate), sorted as they should appear."""
-    st = Styles()
-    doc = new_document(path, f"{title} – profit growth vs price growth", f"{title} · profit growth vs price growth · {day(as_of)}", st)
-    story = [Paragraph(f"{esc(title)} – profit growth vs price growth", st.title),
-             Paragraph(f"{len(rows)} companies, from 'profits ran furthest ahead of the price' (top) to 'price ran ahead of "
-                       f"profits' (bottom) · run {day(as_of)}", st.subtitle),
-             Spacer(1, 3), Paragraph(_at_a_glance(rows), st.small), Spacer(1, 5), _table(rows, st), Spacer(1, 4),
-             Paragraph(HOW_TO_READ, st.tiny), Spacer(1, 2), Paragraph(f"<b>Sources:</b> {esc(sources)}", st.tiny)]
-    doc.build(story)
-    return path
 
 
 def sort_key(r):

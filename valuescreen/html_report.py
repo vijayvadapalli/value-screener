@@ -20,8 +20,7 @@ from pathlib import Path
 from . import charts, price_chart
 from . import profit_vs_price as pvp
 from . import style as S
-from .pdf import GROWTH_NOTE, RULES_NOTE, list_title
-from .wording import (MODEL_LABEL, calc_steps, day, headline, key_figures, kpi_cards, money, npa_summary, price_date,
+from .wording import (GROWTH_NOTE, RULES_NOTE, list_title, MODEL_LABEL, calc_steps, day, headline, key_figures, kpi_cards, money, npa_summary, price_date,
                       worked_example)
 
 HTML_DPI = 150
@@ -35,7 +34,7 @@ def e(x):
 
 
 def markup(text: str) -> str:
-    """reportlab paragraph mark-up (used by wording.py) → HTML."""
+    """The paragraph mark-up wording.py writes (<b>, <br/>, <font>) → HTML."""
     def font(m):
         attrs = dict(re.findall(r"(\w+)='([^']*)'", m.group(0)))
         style = []
@@ -289,7 +288,7 @@ def chart_block(t: str, p: dict | None) -> str:
 <script type="application/json" id="pcd-{e(t)}">{data}</script></div>"""
 
 
-# ------------------------------------------------------------------------------------------------- summary extras (as in the PDF)
+# ------------------------------------------------------------------------------------------------- summary extras
 def legend_html(rows) -> str:
     """Signal colours, then what the tint strength means: tiers for a tiered list, otherwise market value."""
     tiered = any(r.get("tier") for r in rows)

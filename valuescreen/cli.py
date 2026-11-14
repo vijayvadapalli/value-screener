@@ -11,13 +11,10 @@
   python -m valuescreen validate                    # every company folder
 
 Each run writes to output/ (or output/<folder>), which git ignores:
-  <List>_Value_vs_Price_<date>.html    the combined report – value and profit vs price, linked, sortable (read this one)
-  <List>_Value_vs_Price_<date>.pdf     the value report for printing
-  <List>_Profit_vs_Price_<date>.pdf    the profit-vs-price report for printing
+  <List>_Value_vs_Price_<date>.html    the report – value and profit vs price, markets, charts, linked, sortable
   ranked.csv, signals_log.csv (one line per company per run), runs.json (previous figures shown in brackets),
   heatmaps and the profit-vs-price cache.
-and copies the three reports to reports/ under fixed names (core.html, core.pdf,
-core-profit-vs-price.pdf, ...) – the only reports git tracks and GitHub Pages publishes.
+and copies the report to reports/<list>.html (core.html, ...) – the only reports git tracks and GitHub Pages publishes.
 Profit-vs-price figures are fetched from Yahoo or Screener.in and cached per day; --no-profit skips them.
 """
 from __future__ import annotations
@@ -27,8 +24,9 @@ import datetime as dt
 import sys
 from pathlib import Path
 
-from . import growth_data, history, html_report, loader, markets, pdf, price_chart, pricedb, prices, report, research, technicals
+from . import growth_data, history, html_report, loader, markets, price_chart, pricedb, prices, report, research, technicals
 from . import profit_vs_price as pvp
+from .wording import list_title
 from .engine import etf_lookthrough, ranked, run
 
 
@@ -50,7 +48,6 @@ def _parser():
     r.add_argument("--out", help="folder for the dated reports and working files (default: output/ or output/<folder>); "
                                  "nothing is copied to reports/")
     r.add_argument("--config", help="path to config.yaml")
-    r.add_argument("--no-pdf", action="store_true", help="skip the PDF reports (the HTML report is always written)")
     r.add_argument("--no-profit", action="store_true", help="skip the profit-vs-price figures (no Yahoo / Screener.in calls)")
     sub.add_parser("validate", help="check every company file")
     return ap
@@ -202,22 +199,15 @@ def main(argv=None):
     report.write_csv(vals, grow, out / "ranked.csv")
     report.append_signals(vals, grow, out / "signals_log.csv", cfg["as_of"])
     name = a.list or folder
-    title = pdf.list_title(name)
+    title = list_title(name)
     files = []
     if results:
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
                                        previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log, pcharts,
                                        market_rows))
-    if results and not a.no_pdf:
-        files.append(pdf.build(results, companies, cfg, out / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log, pcharts,
-                               market_rows))
-        if profit_rows:
-            path = out / f"{title.replace(' ', '_')}_Profit_vs_Price_{cfg['as_of']:%d%b%Y}.pdf"
-            files.append(pvp.build(profit_rows, path, title, cfg["as_of"], pvp.sources_text(profit_rows, cfg["as_of"])))
-    if not a.out:   # the latest of each report, under a fixed name, for git and GitHub Pages
+    if not a.out:   # the latest report, under a fixed name, for git and GitHub Pages
         for f in list(files):
-            kind = ".html" if f.suffix == ".html" else "-profit-vs-price.pdf" if "Profit_vs_Price" in f.name else ".pdf"
-            files.append(loader.publish(f, name, kind))
+            files.append(loader.publish(f, name, ".html"))
     files.append(out / "ranked.csv")
     history.save(runs, cfg["as_of"], results)
     _print_summary(cfg, vals, grow, lookthroughs, log, files)

@@ -1,5 +1,5 @@
 """The Valuation Playbook rules: India's 12% rate, tiers, signals and flags, Nifty v2, the lease and liquid-asset
-models, last-12-month earnings, the gold stress test, technicals, run history and the PDF. No network calls."""
+models, last-12-month earnings, the gold stress test, technicals, run history and the HTML report. No network calls."""
 import copy
 import datetime as dt
 import importlib.util
@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from valuescreen import history, loader, pdf, screener, technicals, v2
+from valuescreen import history, loader, screener, technicals, v2
 from valuescreen.engine import run
 from valuescreen.models import dcf_factor
 
@@ -215,17 +215,19 @@ def test_previous_run_is_the_latest_earlier_date(tmp_path):
 
 
 # ------------------------------------------------------------------------------------------------- reports
-def test_pdf_has_a_summary_and_a_bookmarked_section_per_company(tmp_path):
+def test_html_report_has_a_summary_row_and_a_section_per_company(tmp_path):
+    from valuescreen import html_report, wording
     cfg = cfg_with()
     cos = {**copy.deepcopy(COS), **copy.deepcopy(EXTRA),
            "TEST": indian([4, 4, 4, 4, 4, 4, 15, 4], kind="cyclical", eps_annual=[10, 12, 14, 15, 16],
                           cfo_annual=[9, 10, 12, 14, 15], profit_annual=[10, 12, 14, 15, 16], years=["2022", "2023", "2024", "2025", "2026"])}
     tickers = ["ABRA", "AEM", "CCJ", "HUT", "MSFT", "TEST", "UEC", "YCA"]
     res = run(cos, tickers, cfg)
-    out = pdf.build(res, cos, cfg, tmp_path / "r.pdf", "Test")
-    data = out.read_bytes()
-    assert data.startswith(b"%PDF") and data.count(b"/Title") >= len(tickers)
-    assert pdf.file_name("core", dt.date(2026, 11, 12)) == "Core_Value_vs_Price_12Nov2026.pdf"
+    out = html_report.build(res, cos, cfg, [], tmp_path / "r.html", "Test")
+    page = out.read_text(encoding="utf-8")
+    assert all(f'id="c-{t}"' in page for t in tickers)
+    assert html_report.file_name("core", dt.date(2026, 11, 12)).startswith("Core_Value_vs_Price_12Nov2026")
+    assert wording.list_title("nifty50") == "Nifty 50"
 
 
 def test_screener_page_parsing():

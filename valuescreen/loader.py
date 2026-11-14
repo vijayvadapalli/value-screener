@@ -156,8 +156,7 @@ def reports_folder() -> Path:
 
 
 def publish(dated: Path, list_name: str | None, kind: str) -> Path:
-    """Copies a dated report from output/ to reports/<list><kind>, e.g. reports/core.html or
-    reports/nifty50-profit-vs-price.pdf, replacing the previous one."""
+    """Copies a dated report from output/ to reports/<list><kind>, e.g. reports/core.html, replacing the previous one."""
     import shutil  # noqa: PLC0415
     src = Path(dated).resolve()
     private_dirs = [(ROOT / "data" / "private").resolve(), (ROOT / "output" / "private").resolve()]
