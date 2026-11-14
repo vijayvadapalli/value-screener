@@ -55,6 +55,7 @@ def steps(quick: bool):
     if not quick:
         out.append(("prices – Nifty 50", ["tools/update_prices.py", "--folder", "nifty50"]))
     out.append(("price history", ["tools/update_history.py"]))
+    out.append(("uranium spot history (Cameco)", ["-m", "valuescreen.longterm"]))
     out += [(f"report – {name}", ["-m", "valuescreen", "run", "--list", name, "--live"]) for name in LISTS]
     if not quick:
         out += [("report – nifty50", ["-m", "valuescreen", "run", "--list", "nifty50"]),

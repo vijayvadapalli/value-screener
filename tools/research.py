@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 import update_history  # noqa: E402
 
-from valuescreen import engine, loader, price_chart, pricedb  # noqa: E402
+from valuescreen import engine, loader, longterm, price_chart, pricedb  # noqa: E402
 from valuescreen import research as R  # noqa: E402
 
 
@@ -67,13 +67,19 @@ def main():
         sym = symbols.get(key)
         if key == "URANIUM":
             prices[key] = cfg["spot"]["uranium"]
+            spot = longterm.series("uranium_spot")   # Cameco month-end spot: their spot levels can be drawn on it
+            charts[key] = (price_chart.payload_monthly("Uranium spot (Cameco)", spot, longterm.NOTES["uranium_spot"],
+                                                       watched=R.levels(item)) if spot else
+                           price_chart.payload_monthly("Uranium (IMF)", longterm.series("uranium"), longterm.NOTES["uranium"]))
         elif sym and pricedb.last_date(con, sym):
             info = pricedb.info(con, sym) or {}
             p, _ = pricedb.to_major(pricedb.bars(con, sym)[-1]["close"], info.get("currency"))
             prices[key] = p
             r = result or {"model": None, "price_ccy": pricedb.to_major(1.0, info.get("currency"))[1]}
-            charts[key] = price_chart.payload(con, sym, r, company or {"period": {}},
-                                              watched=[x for x in R.levels(item)], watched_label="Their levels")
+            history = longterm.series(key.lower()) if key.lower() in longterm.COLUMNS else None
+            charts[key] = price_chart.payload(con, sym, r, company or {"period": {}}, watched=R.levels(item),
+                                              watched_label="Their levels", mode="research", long_years=None,
+                                              long_monthly=history, patterns=R.pattern_lines(item))
         if result:
             results[key] = result
             list_name = report or lists.get(key)

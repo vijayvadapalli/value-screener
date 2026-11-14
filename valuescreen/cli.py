@@ -27,7 +27,7 @@ import datetime as dt
 import sys
 from pathlib import Path
 
-from . import growth_data, history, html_report, loader, pdf, price_chart, pricedb, prices, report, research, technicals
+from . import growth_data, history, html_report, loader, markets, pdf, price_chart, pricedb, prices, report, research, technicals
 from . import profit_vs_price as pvp
 from .engine import etf_lookthrough, ranked, run
 
@@ -75,8 +75,8 @@ def _validate():
 def _pick_tickers(a, companies, etfs, folder, log):
     if a.tickers:
         tickers = [t.strip().upper() for t in a.tickers.split(",")]
-    elif a.list:
-        tickers = loader.load_list(a.list)
+    elif a.list:   # markets (commodities, indices, ETFs shown price-only) have no company file and are not valued
+        tickers = [x["ticker"] for x in loader.load_list_entries(a.list) if not markets.is_market(x)]
     elif a.all or not etfs:
         tickers = sorted(companies)
     else:
@@ -196,6 +196,7 @@ def main(argv=None):
     tech = _technicals(tickers, companies, log) if a.technicals else {}
     pcharts = _price_charts(tickers, companies, results, log)
 
+    market_rows = markets.rows([x for x in loader.load_list_entries(a.list) if markets.is_market(x)], log.append) if a.list else []
     profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
     lookthroughs = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]
     report.write_csv(vals, grow, out / "ranked.csv")
@@ -205,9 +206,11 @@ def main(argv=None):
     files = []
     if results:
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
-                                       previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log, pcharts))
+                                       previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log, pcharts,
+                                       market_rows))
     if results and not a.no_pdf:
-        files.append(pdf.build(results, companies, cfg, out / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log, pcharts))
+        files.append(pdf.build(results, companies, cfg, out / pdf.file_name(name, cfg["as_of"]), title, previous, tech, log, pcharts,
+                               market_rows))
         if profit_rows:
             path = out / f"{title.replace(' ', '_')}_Profit_vs_Price_{cfg['as_of']:%d%b%Y}.pdf"
             files.append(pvp.build(profit_rows, path, title, cfg["as_of"], pvp.sources_text(profit_rows, cfg["as_of"])))

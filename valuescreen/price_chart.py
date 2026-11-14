@@ -91,32 +91,36 @@ def _markers(con, symbol, c, factor, start):
     return sorted(out, key=lambda x: x["date"])
 
 
-def payload(con, symbol: str, r: dict, c: dict, watched: list | None = None, watched_label: str = "Watched levels") -> dict | None:
+def payload(con, symbol: str, r: dict, c: dict, watched: list | None = None, watched_label: str = "Watched levels",
+            mode: str = "public", long_years: int | None = LONG_YEARS, long_monthly: list | None = None,
+            patterns: list | None = None) -> dict | None:
     bars, currency, factor = _scaled(con, symbol)
     if len(bars) < 30:
         return None
     last_day = dt.date.fromisoformat(bars[-1]["date"])
     d_start = (last_day - dt.timedelta(days=DAILY_DAYS + WARMUP_DAYS)).isoformat()
-    l_start = (last_day - dt.timedelta(days=365 * LONG_YEARS)).isoformat()
+    l_start = (last_day - dt.timedelta(days=365 * long_years)).isoformat() if long_years else bars[0]["date"]
     row = lambda b: [b["date"], _r(b["open"]), _r(b["high"]), _r(b["low"]), _r(b["close"]), int(b["volume"] or 0)]  # noqa: E731
     long_bars = [b for b in bars if b["date"] >= l_start]
+    ten_years = (last_day - dt.timedelta(days=365 * LONG_YEARS)).isoformat()
     same_ccy = currency == r.get("price_ccy")
     lv = L.levels(bars)
     out = {
         "symbol": symbol, "currency": currency, "same_currency": same_ccy,
         "D": [row(b) for b in bars if b["date"] >= d_start],
-        "W": [row(b) for b in pricedb.resample(long_bars, "W")],
-        "M": [row(b) for b in pricedb.resample(long_bars, "M")],
+        "W": [row(b) for b in pricedb.resample([b for b in long_bars if b["date"] >= ten_years], "W")],
+        "M": _with_history([row(b) for b in pricedb.resample(long_bars, "M")], long_monthly),
         "show_from": (last_day - dt.timedelta(days=365)).isoformat(),
         "levels": [{"price": _r(x["price"]), "kind": side, "touches": x["touches"]} for side in ("support", "resistance") for x in lv[side]],
-        "trends": [{"kind": t["kind"], "from": [t["from"][0], _r(t["from"][1])], "to": [t["to"][0], _r(t["to"][1])], "touches": t["touches"]}
+        "trends": [{"kind": t["kind"], "from": [t["from"][0], _r(t["from"][1])], "to": [t["to"][0], _r(t["to"][1])], "touches": t["touches"],
+                    "tentative": t.get("tentative", False)}
                    for t in L.trend_lines(bars)],
         "values": value_lines(r) if same_ccy else [],
         "markers": _markers(con, symbol, c, factor, l_start),
         "summary": {k: (_r(v) if isinstance(v, float) else v) for k, v in L.summary(bars).items()},
         "signal": r.get("signal"), "action": r.get("action"),
-        "watched": [{"lo": _r(x["lo"]), "hi": _r(x["hi"]), "kind": x["kind"]} for x in (watched or [])],
-        "watched_label": watched_label,
+        "watched": [{"lo": _r(x["lo"]), "hi": _r(x["hi"]), "kind": x["kind"], "tf": x.get("tf", "D")} for x in (watched or [])],
+        "watched_label": watched_label, "mode": mode, "patterns": patterns or [],
     }
     return out
 
@@ -124,6 +128,29 @@ def payload(con, symbol: str, r: dict, c: dict, watched: list | None = None, wat
 def nearest_levels(p: dict) -> list[dict]:
     """The nearest support below and the nearest resistance above the price (levels come nearest first)."""
     return [x for k in ("support", "resistance") for x in [next((l for l in p["levels"] if l["kind"] == k), None)] if x]
+
+
+def _with_history(monthly_rows: list, long_monthly: list | None) -> list:
+    """Monthly bars, preceded by a long monthly series (date, price) for the months before the daily data starts.
+    The earlier months have no high / low – each is drawn as a flat bar at the monthly average."""
+    if not long_monthly or not monthly_rows:
+        return monthly_rows
+    first = monthly_rows[0][0][:7]
+    early = [[d, _r(v), _r(v), _r(v), _r(v), 0] for d, v in long_monthly if d[:7] < first]
+    return early + monthly_rows
+
+
+def payload_monthly(name: str, points: list, note: str = "", watched: list | None = None, mode: str = "research") -> dict | None:
+    """A monthly-only chart (no daily data – e.g. the IMF uranium series): one bar per month at the monthly price."""
+    if len(points) < 24:
+        return None
+    rows = [[d, _r(v), _r(v), _r(v), _r(v), 0] for d, v in points]
+    closes = [v for _, v in points]
+    return {"symbol": name, "currency": "USD", "same_currency": True, "D": [], "W": [], "M": rows, "show_from": rows[0][0],
+            "levels": [], "trends": [], "values": [], "markers": [],
+            "summary": {"last": _r(closes[-1]), "date": rows[-1][0], "high52": _r(max(closes[-12:])), "low52": _r(min(closes[-12:]))},
+            "signal": None, "action": None, "watched": watched or [], "watched_label": "Their levels", "mode": mode,
+            "note": note, "monthly_only": True}
 
 
 def caption(p: dict) -> str:
@@ -136,6 +163,8 @@ def caption(p: dict) -> str:
     if s.get("rsi") is not None:
         rsi = s["rsi"]
         parts.append(f"RSI {rsi:.0f}" + (" (oversold)" if rsi < 30 else " (overbought)" if rsi > 70 else ""))
+    if p.get("monthly_only"):
+        return f"monthly series to {s['date'][:7]}, last {s['last']:,.2f} · " + (p.get("note") or "")
     parts.append(f"52-week {s['low52']:,.2f}–{s['high52']:,.2f}")
     sup = [x for x in p["levels"] if x["kind"] == "support"]
     res = [x for x in p["levels"] if x["kind"] == "resistance"]

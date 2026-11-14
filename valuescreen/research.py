@@ -42,23 +42,26 @@ def _band(x):
     return float(lo), float(hi)
 
 
-def levels(item: dict, kinds=("support", "resistance")) -> list[dict]:
+def levels(item: dict, kinds=("support", "resistance"), tfs=None) -> list[dict]:
+    """[{"lo", "hi", "mid", "kind", "tf", "public"}]. Levels sit under `timeframes: {D: {...}, M: {...}}` (D = daily
+    chart, M = monthly / long term) as the report draws them; plain `support` / `resistance` count as daily."""
+    groups = item.get("timeframes") or {"D": {k: item.get(k) for k in kinds}}
     out = []
-    for kind in kinds:
-        for x in item.get(kind) or []:
-            if isinstance(x, dict) and x.get("public") is False:
-                public = False
-            else:
-                public = True
-            lo, hi = _band(x)
-            out.append({"lo": lo, "hi": hi, "mid": (lo + hi) / 2, "kind": kind, "public": public})
+    for tf, block in groups.items():
+        if tfs and tf not in tfs:
+            continue
+        for kind in kinds:
+            for x in (block or {}).get(kind) or []:
+                public = not (isinstance(x, dict) and x.get("public") is False)
+                lo, hi = _band(x)
+                out.append({"lo": lo, "hi": hi, "mid": (lo + hi) / 2, "kind": kind, "tf": tf, "public": public})
     return out
 
 
 def nearest(price: float, item: dict) -> tuple[dict | None, dict | None]:
     """The nearest support at or below the price and the nearest resistance at or above it (zones count when the
     price is inside them)."""
-    lv = levels(item)
+    lv = levels(item, tfs=("D", "W")) or levels(item)
     sup = [x for x in lv if x["lo"] <= price * (1 + NEAR / 3)]
     res = [x for x in lv if x["hi"] >= price * (1 - NEAR / 3)]
     s = max(sup, key=lambda x: x["hi"], default=None)
@@ -96,7 +99,7 @@ def public_levels(weeks: list[dict], ticker: str, symbol: str | None = None) -> 
     for w in reversed(weeks):
         for key, item in w["assets"].items():
             if key.upper() == ticker.upper() or (symbol and str(item.get("symbol", "")).upper() == symbol.upper()):
-                return [{"lo": x["lo"], "hi": x["hi"], "kind": x["kind"]} for x in levels(item) if x["public"]]
+                return [{"lo": x["lo"], "hi": x["hi"], "kind": x["kind"], "tf": x["tf"]} for x in levels(item) if x["public"]]
     return []
 
 
@@ -111,7 +114,7 @@ def changes(week: dict, previous: dict | None) -> dict:
             out[key] = ["new this week"]
             continue
         now = {(x["kind"], round(x["lo"], 2), round(x["hi"], 2)) for x in levels(item)}
-        before = {(x["kind"], round(x["lo"], 2), round(x["hi"], 2)) for x in levels(old)}
+        before = {(x["kind"], round(x["lo"], 2), round(x["hi"], 2)) for x in levels(old)}   # timeframe moves are not changes
         notes = [f"new {k} {fmt(lo, hi)}" for k, lo, hi in sorted(now - before)]
         notes += [f"dropped {k} {fmt(lo, hi)}" for k, lo, hi in sorted(before - now)]
         if (item.get("stance") or "") != (old.get("stance") or ""):
@@ -189,8 +192,16 @@ def _gap(g):
     return "–" if g is None else ("in zone" if g == 0 else f"{g * 100:+.1f}%")
 
 
+TF_NAME = {"D": "daily", "W": "weekly", "M": "monthly"}
+
+
 def _lv_list(item, kind):
-    return ", ".join(fmt(x["lo"], x["hi"]) for x in levels(item, (kind,))) or "–"
+    parts = []
+    for tf in ("D", "W", "M"):
+        lv = levels(item, (kind,), tfs=(tf,))
+        if lv:
+            parts.append(f"{TF_NAME[tf]}: " + ", ".join(fmt(x["lo"], x["hi"]) for x in lv))
+    return " · ".join(parts) or "–"
 
 
 def build_html(week: dict, rows: list[dict], changed: dict, charts: dict, links: dict, path: Path, weeks: list[dict]) -> Path:
@@ -294,3 +305,59 @@ table.rt td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(page, encoding="utf-8")
     return path
+
+
+# ------------------------------------------------------------------------------------------------- chart patterns
+def _month(s) -> tuple[int, int]:
+    s = str(s)
+    return int(s[:4]), int(s[5:7])
+
+
+def _months_between(a, b):
+    (y0, m0), (y1, m1) = _month(a), _month(b)
+    out, y, m = [], y0, m0
+    while (y, m) <= (y1, m1):
+        out.append(f"{y:04d}-{m:02d}-01")
+        m += 1
+        if m > 12:
+            y, m = y + 1, 1
+    return out
+
+
+def _arc(left, bottom, right):
+    """Monthly points of a rounded bowl through left rim → bottom → right rim (parabolic in log price, as drawn on a
+    log chart)."""
+    import math  # noqa: PLC0415
+    (dl, pl), (db, pb), (dr, pr) = [(d, float(v)) for d, v in (left, bottom, right)]
+    months = _months_between(dl, dr)
+    bottom_month = _months_between(db, db)[0]
+    ib = months.index(bottom_month) if bottom_month in months else len(months) // 2
+    out = []
+    for i, d in enumerate(months):
+        if i <= ib:
+            f = ((ib - i) / ib) ** 2 if ib else 0
+            v = math.exp(math.log(pb) + (math.log(pl) - math.log(pb)) * f)
+        else:
+            span = len(months) - 1 - ib
+            f = ((i - ib) / span) ** 2 if span else 0
+            v = math.exp(math.log(pb) + (math.log(pr) - math.log(pb)) * f)
+        out.append([d, round(v, 4)])
+    return out
+
+
+def pattern_lines(item: dict) -> list[dict]:
+    """Lines to draw for the patterns in a capture: [{"tf", "kind", "label", "points": [[date, price], ...]}]."""
+    out = []
+    for pat in item.get("patterns") or []:
+        tf = pat.get("tf", "M")
+        if pat.get("type") in ("cup_handle", "rounding"):
+            out.append({"tf": tf, "kind": "cup", "label": pat.get("label", "cup"), "points": _arc(pat["left"], pat["bottom"], pat["right"])})
+        if pat.get("type") == "cup_handle" and pat.get("handle_low") and pat.get("breakout"):
+            out.append({"tf": tf, "kind": "handle", "label": "handle", "points": _arc(pat["right"], pat["handle_low"], pat["breakout"])})
+        rim = pat.get("rim")
+        if rim is not None:
+            lo, hi = _band(rim)
+            start, end = pat["right"][0], pat.get("breakout", pat["right"])[0]   # the rim (breakout line) as drawn: right rim → breakout
+            for level in sorted({lo, hi}):
+                out.append({"tf": tf, "kind": "rim", "label": "rim", "points": [[f"{str(start)[:7]}-01", level], [f"{str(end)[:7]}-01", level]]})
+    return out

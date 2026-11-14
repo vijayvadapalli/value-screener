@@ -232,6 +232,10 @@ The valuation then applies the v2 rules (`valuescreen/v2.py`):
   seven and 1.6× its neighbours) with its neighbours' average.
 - Cyclicals (oil & gas, metals, cement, power, autos, airlines – lists in `config.yaml`): average of the 12-month EPS and
   the 5-year average. Shown blue at most.
+- A broken history (a demerger, or a past year holding a one-off gain): set `v2.history_not_comparable: "<why>"` in
+  the company file. The 5-year average is then not used, only the 12-month EPS, and the profit-vs-price row shows n/m
+  with that reason. `fetch_screener.py` keeps this key, and `kind` and `flags`, when it re-fetches. TMPV uses it: FY22–FY25
+  are the old combined Tata Motors, and FY26 holds the demerger gain.
 - Financials: average of the 12-month EPS and book value × 5-year ROE, no net cash, and price-to-book against the fair
   multiple (5-yr ROE × the no-growth multiple).
 - Lenders (banks, NBFCs): book value is first cut by the bad loans not yet provided for (net NPA % × loans, from
@@ -342,8 +346,13 @@ time `python -m valuescreen run` runs – update the history first.
   6M · 1Y · 3Y · 5Y · 10Y ranges and the 20-, 50- and 200-day averages; a crosshair shows open, high, low, close, change
   and volume.
 - **Found automatically (marked auto):** support and resistance levels (where the price turned at least twice),
-  and trend lines – a rising one through higher lows, a falling one through lower highs – drawn only when at least
-  three turning points line up and no close has broken through since.
+  and trend lines – a rising one through higher lows, a falling one through lower highs – drawn when at least
+  three turning points line up and no close has broken through since. The other edge of a channel – a rising
+  resistance through higher highs, or a falling support through lower lows – is drawn the same way when it is within
+  15% of the price and moves at least 5%. Also drawn: the line a chartist draws from the
+  year's highest high or lowest low to the latest lower high or higher low (the next most extreme turn when that one
+  has been broken) – two touches are enough, at least 5% apart, the latest turn counts after 3 bars instead of 5, and
+  again no close through it. All trend lines are solid: purple for resistance, blue for support.
 - **Buttons, all off at first** (so the default chart is just price, averages, trend lines and RSI):
   *Value lines* – thick lines for the 15x value / buy level (green), 12x value / NAV (dark green) and 25x sell zone
   (red), with the price scale stretched so all of them show (the values are also listed under the chart);
@@ -354,6 +363,23 @@ time `python -m valuescreen run` runs – update the history first.
 - Charts use TradingView's open-source [Lightweight Charts](https://github.com/tradingview/lightweight-charts)
   (Apache 2.0, `valuescreen/vendor/`), embedded so reports work offline and on GitHub Pages. A company without price
   history simply has no chart; the run log says which.
+
+### Markets in a list (price only)
+
+A list can also hold things that have no earnings to value – commodities, an index, ETFs. Mark the entry `market: true`
+and give it either a Yahoo symbol or a long-term series:
+
+```yaml
+- {ticker: GOLD, name: Gold (COMEX futures), yahoo: GC=F, unit: US$/oz, market: true}
+- {ticker: URANIUM, name: Uranium spot (Cameco month-end), series: uranium_spot, unit: US$/lb, market: true}
+```
+
+The report then has a **Markets** section (and a table in the PDF): price and date, change over a week, a month and a
+year, the price against its 50- and 200-day averages, RSI, the 52-week range, and a chart for each – not valued, no
+signal. The core list holds gold, silver, uranium, WTI crude, the US dollar index (DXY), GDX, SILJ and XLE this way.
+Uranium has no daily series on Yahoo, so it uses Cameco's month-end spot price from 1988
+(`python -m valuescreen.longterm` refreshes it; the weekly routine does this). `tools/update_history.py` downloads the
+history for every `yahoo` market in the lists.
 
 ## Private research (your weekly report – never committed)
 
@@ -370,8 +396,15 @@ open output/private/research.html
 - **Report:** how close each IF / THEN rule is to triggering (triggered / near within 3% / waiting); every asset's
   price against its nearest support and resistance next to our signal, with **agree** (their support within 5% of our
   buy level or value) and **conflict** (they are keen while our valuation says expensive, or the reverse); a section
-  per asset with their levels, our valuation, what changed since the previous week, history across weeks, and a chart
-  with a *Their levels* button (dashed teal support, orange resistance) beside our value lines and averages.
+  per asset with their levels, our valuation, what changed since the previous week, history across weeks, and a chart.
+- **Charts, private view:** clean by default – candles, RSI and their levels as solid lines (dark green support, dark
+  red resistance). Levels follow the timeframe they were drawn on (`timeframes: {D: …, M: …}` in the capture): the daily
+  and weekly views show the daily levels, the monthly view the long-term ones (log scale, *Max* range – gold, silver and
+  oil from 2000, the dollar index from 1971; before 2000, gold and silver come from the World Bank's monthly prices back
+  to 1960; ETFs from their launch (XLE 1998, GDX 2006, SILJ 2012); uranium is Cameco's month-end spot price from 1988,
+  so its levels are drawn too, with the IMF's monthly series as a fallback – see `data/longterm/`). Chart patterns he draws (cup and
+  handle, rounding bottoms) are captured as points under `patterns:` and drawn on their timeframe (*Patterns* button).
+  Averages and trend lines, our value lines, automatic levels and volume sit behind buttons.
 - **Public charts:** only the plain support / resistance prices – no source, stance, notes, targets or positions –
   appear on the public charts behind a *Watched levels* button. Mark a level `{price: 90, public: false}` to keep it off.
 
@@ -432,6 +465,7 @@ companies use their Toronto listing, so price and results are both in C$. Files 
 | Share prices | before each scan | `python tools/update_prices.py` (add `--dry-run` to preview) |
 | Metal prices | before each scan | gold, silver, copper: add `--live` to a run. Uranium, zinc, lead: edit `spot` in `config.yaml` |
 | Company results | when a company reports | `python tools/update_results.py --all --check`, then see below |
+| Uranium price history | weekly (in `/weekly`) | `python -m valuescreen.longterm` (Cameco's month-end spot, for the Markets chart) |
 
 **Share prices.** `tools/update_prices.py` saves Yahoo's latest close into each company file's `price` block (value, date
 and source only). It skips a company if Yahoo has no price, quotes another currency, or the price moved more than 50%,
@@ -594,6 +628,8 @@ valuescreen/miner_screen.py, etf_holdings.py   the miners quick screen and the E
 valuescreen/pricedb.py   daily price history (output/prices.sqlite) for charts and technical analysis
 valuescreen/chart_levels.py, price_chart.py   moving averages, RSI, support / resistance, trend lines; the chart data (HTML) and static chart (PDF)
 valuescreen/vendor/         Lightweight Charts (TradingView, Apache 2.0) for the interactive charts
+valuescreen/longterm.py   long-term monthly gold, silver (World Bank), uranium (IMF) and uranium spot (Cameco) for the long-term charts
+valuescreen/markets.py    price-only list entries (commodities, DXY, ETFs): price facts and charts for the Markets section
 valuescreen/research.py   private weekly research: levels, rules, agree / conflict with our valuation, the private report
 valuescreen/model_portfolio.py   the model portfolios: candidates from every screen, scoring, sleeves, sizing, report
 valuescreen/us_screen.py, us_universe.py, us_fundamentals.py, sec.py, factsdb.py   the S&P 500 / Nasdaq-100 screen:

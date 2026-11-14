@@ -30,7 +30,7 @@ def main():
     args = ap.parse_args()
     name = args.list.lower()
     folder = loader.list_folder(name)
-    entries = loader.load_list_entries(name)
+    entries = [e for e in loader.load_list_entries(name) if not e.get("market")]   # markets are price-only
     companies = loader.load_companies(loader.companies_folder(folder))
     cfg = loader.load_config()
     out_dir = loader.output_folder(folder)

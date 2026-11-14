@@ -53,7 +53,23 @@ def test_trend_lines_rising_support_and_falling_resistance():
     assert "resistance" in kinds and kinds["resistance"]["to"][1] < kinds["resistance"]["from"][1]
     assert L.trend_lines(make_bars([50.0] * 10)) == []          # too short
     noise = make_bars([50 + (7 if i % 13 == 0 else 0) - (7 if i % 17 == 0 else 0) for i in range(260)])
-    assert all(t["touches"] >= 3 for t in L.trend_lines(noise))  # never a two-point line
+    assert all(t["touches"] >= 3 or t["tentative"] for t in L.trend_lines(noise))  # never a loose two-point line
+
+
+def test_two_touch_line_from_the_six_month_low_to_the_latest_higher_low():
+    """WPM, Nov 2026: a low at 100, a rally, a higher low at 112 near the end – a chartist's rising line, two touches."""
+    closes = [140.0] * 60 + [140 - i for i in range(40)] + [100 + i for i in range(50)] + [150 - i * 1.1 for i in range(35)] \
+        + [112 + i * 0.8 for i in range(15)]
+    lines = [t for t in L.trend_lines(make_bars(closes)) if t["kind"] == "support"]
+    assert lines and lines[-1]["tentative"] and lines[-1]["from"][1] == pytest.approx(99.0, rel=0.01)
+    assert lines[-1]["to"][1] > lines[-1]["from"][1]
+
+
+def test_rising_resistance_is_the_top_of_a_channel():
+    """RGLD, Nov 2026: higher highs on one rising line – a resistance that rises, found as the channel's top edge."""
+    closes = [100 + 0.12 * i + 6 * math.sin(i / 7) for i in range(260)]
+    tops = [t for t in L.trend_lines(make_bars(closes)) if t["kind"] == "resistance" and t.get("channel")]
+    assert tops and tops[0]["to"][1] > tops[0]["from"][1] and tops[0]["touches"] >= 3 and not tops[0]["tentative"]
 
 
 def test_value_lines_by_model():
@@ -104,3 +120,34 @@ def test_chart_block_and_static_png(con, tmp_path):
     assert html_report.chart_block("YCA", None) == ""
     assert PC.static_png(p, tmp_path / "c.png").exists()
     assert PC.static_png(None, tmp_path / "d.png") is None
+
+
+def test_cameco_uranium_table_parses_month_end_spot():
+    from valuescreen import longterm
+    rows = "".join(f"<tr><td>{y}/{m:02d}/28</td><td>{50 + m}.25</td><td>60.00</td></tr>" for y in range(2010, 2021) for m in range(1, 13))
+    page = f"<table><tr><th></th><th>Uranium Spot Price</th><th>Long-term</th></tr>{rows}</table><table><tr><td>Jan</td></tr></table>"
+    out = longterm.parse_cameco(page)
+    assert out[0] == ("2010-01", 51.25) and out[-1] == ("2020-12", 62.25) and len(out) == 132
+    with pytest.raises(ValueError):
+        longterm.parse_cameco("<table><tr><td>2020/01/31</td><td>25.0</td></tr></table>")   # too short: layout changed
+
+
+def test_market_rows_from_daily_history_and_a_monthly_series(tmp_path, monkeypatch):
+    from valuescreen import longterm, markets
+    con = pricedb.connect(tmp_path / "p.sqlite")
+    bars = make_bars([100 + i * 0.1 for i in range(400)], start=dt.date(2025, 1, 1))
+    pricedb.save_bars(con, "GC=F", [(b["date"], b["open"], b["high"], b["low"], b["close"], b["adj_close"], b["volume"]) for b in bars])
+    pricedb.save_symbol(con, "GC=F", "USD", "core")
+    monkeypatch.setattr(pricedb, "DB", tmp_path / "p.sqlite")
+    monkeypatch.setattr(pricedb, "connect", lambda path=None: con)
+    monkeypatch.setattr(longterm, "series", lambda name: [(f"{2000 + i // 12}-{i % 12 + 1:02d}-01", 50.0 + i) for i in range(60)])
+    log = []
+    rows = markets.rows([{"ticker": "GOLD", "yahoo": "GC=F", "unit": "US$/oz", "market": True},
+                         {"ticker": "URANIUM", "series": "uranium_spot", "market": True},
+                         {"ticker": "NONE", "yahoo": "XX=F", "market": True}], log.append)
+    gold, uranium = rows
+    assert gold["price"] == pytest.approx(139.9) and gold["chg_1y"] > 0 and gold["vs200"] > 0 and gold["chart"]["D"]
+    assert uranium["monthly"] and uranium["price"] == 109.0 and uranium["chg_1w"] is None and uranium["chart"]["monthly_only"]
+    assert any("XX=F" in x for x in log)
+    html = html_report.markets_html(rows)
+    assert 'id="markets"' in html and "pcd-M-GOLD" in html and "pcd-M-URANIUM" in html

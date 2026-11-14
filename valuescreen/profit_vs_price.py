@@ -64,6 +64,10 @@ def evaluate(rec: dict) -> dict:
         return dict(out, years=years, sales_growth=None, profit_growth=None, pe_change=None, grade="n/m",
                     price_growth=rec.get("price_growth_3y") or cagr(rec.get("price_then"), rec.get("price"), years),
                     nm_reason=ASSET_MODELS[model])
+    if rec.get("not_comparable"):   # the company file says the past years are a different company or hold a one-off
+        return dict(out, years=years, sales_growth=None, profit_growth=None, pe_change=None, grade="n/m",
+                    price_growth=rec.get("price_growth_3y") or cagr(rec.get("price_then"), rec.get("price"), years),
+                    nm_reason=f"profit history not comparable ({rec['not_comparable']})")
     if rec.get("source") == "screener":
         sales, profit, price = rec.get("sales_growth_3y"), rec.get("profit_growth_3y"), rec.get("price_growth_3y")
         if rec.get("profit_then") is not None and rec["profit_then"] <= 0:
@@ -110,7 +114,8 @@ def rows(entries: list[dict], raw: dict, results: dict, companies: dict) -> list
         out.append(evaluate({**raw[t], "ticker": t, "quantity": entry.get("quantity"),
                              "name": company.get("name") or entry.get("name") or raw[t].get("name", t),
                              "price_date": dt.date.fromisoformat(price_date) if isinstance(price_date, str) else price_date,
-                             "value": value_summary(results[t]) if t in results else None}))
+                             "value": value_summary(results[t]) if t in results else None,
+                             "not_comparable": (company.get("v2") or {}).get("history_not_comparable")}))
     return sorted(out, key=sort_key)
 
 
@@ -130,7 +135,9 @@ def comment(r: dict) -> str:
         text = (f"Profits {r['profit_growth']*100:+.0f}%/yr vs price {r['price_growth']*100:+.0f}%/yr – P/E {direction} "
                 f"{abs(r['pe_change'])*100:.0f}% in {r['years']:.0f} years.")
     value = r.get("value")
-    if value:
+    if value and value.get("action") == "No valid value":
+        text += " No valid value on the value report."
+    elif value:
         text += {"green": " Cheap on the value report.", "red": " Expensive on the value report.",
                  "blue": " Watch / hold on the value report."}.get(value["signal"], "")
     return text + (f" {esc(r['note'])}" if r.get("note") else "")

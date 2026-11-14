@@ -274,7 +274,9 @@ def chart_block(t: str, p: dict | None) -> str:
            '</i>trend lines (auto) · E results · D dividend · S split')
     return f"""<div class="pc" id="pc-{e(t)}" data-pc="pcd-{e(t)}">
 <div class="pc-bar"><button data-iv="D">D</button><button data-iv="W">W</button><button data-iv="M">M</button><span class="sep"></span>
-{''.join(f'<button data-rg="{x}">{x}</button>' for x in ('6M', '1Y', '3Y', '5Y', '10Y'))}<span class="sep"></span>
+{''.join(f'<button data-rg="{x}">{x}</button>' for x in ('6M', '1Y', '3Y', '5Y', '10Y') + (('Max',) if p.get('mode') == 'research' else ()))}<span class="sep"></span>
+<button data-ma title="20-, 50- and 200-day averages and the automatic trend lines">Averages &amp; trends</button>
+<button data-pat title="Chart patterns drawn in the report (shown on the monthly view)">Patterns</button>
 <button data-val title="{e(values_tip)}">Value lines</button>
 <button data-sr title="The nearest support below and resistance above the price (found automatically)">Support / resistance</button>
 <button data-lv title="Every support and resistance level found, not just the nearest">All levels</button>
@@ -391,6 +393,8 @@ font-weight:400;line-height:1.45;box-shadow:0 4px 16px rgba(0,0,0,.18)}} .tip>sp
 img{{max-width:100%;height:auto;display:block;margin:6px 0;border-radius:4px;background:#fff}}
 table.kv{{border-collapse:collapse;width:100%;font-size:13px}} table.kv td{{padding:4px 0;border-bottom:1px solid var(--line)}}
 table.kv td:last-child{{text-align:right}} table.kv tr.b td{{font-weight:600}}
+table.mk{{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}} table.mk th,table.mk td{{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right}}
+table.mk th:nth-child(-n+2),table.mk td:nth-child(-n+2){{text-align:left}} table.mk th{{font-weight:600;color:var(--ink2,inherit)}}
 ol{{padding-left:20px;margin:6px 0}} ol li{{margin:3px 0}}
 .pvp{{display:flex;gap:18px;align-items:flex-start}} .pvp>div:last-child{{flex:1}} .pvp p{{margin:0 0 6px}}
 .bigrade{{font-size:44px;font-weight:700;line-height:1;min-width:56px;text-align:center}}
@@ -413,8 +417,8 @@ table.gt th{{cursor:default}} table.gt th:after{{content:none}}
 VENDOR = Path(__file__).parent / "vendor" / "lightweight-charts.standalone.production.js"
 CHART_JS = r"""
 const PC_SMA = window.PC_SMA_COLOURS;
-const PC_RANGE = {'6M': 0.5, '1Y': 1, '3Y': 3, '5Y': 5, '10Y': 10};
-const PC_AUTO_IV = {'6M': 'D', '1Y': 'D', '3Y': 'W', '5Y': 'W', '10Y': 'M'};
+const PC_RANGE = {'6M': 0.5, '1Y': 1, '3Y': 3, '5Y': 5, '10Y': 10, 'Max': 100};
+const PC_AUTO_IV = {'6M': 'D', '1Y': 'D', '3Y': 'W', '5Y': 'W', '10Y': 'M', 'Max': 'M'};
 function pcColours() {
   const cs = getComputedStyle(document.documentElement), v = n => cs.getPropertyValue(n).trim();
   return {bg: v('--bg') || '#fff', ink: v('--ink2') || '#444', muted: v('--muted') || '#888', line: v('--line') || '#eee',
@@ -434,7 +438,7 @@ const pcDays = s => Date.parse(s) / 864e5;
 function pcInit(box) {
   if (box.dataset.ready) return; box.dataset.ready = 1;
   const d = JSON.parse(document.getElementById(box.dataset.pc).textContent), col = pcColours(), LC = LightweightCharts;
-  const last = d.D[d.D.length - 1][4], prec = last < 1 ? 4 : last < 10 ? 3 : 2;
+  const base0 = d.D.length ? d.D : d.M, last = base0[base0.length - 1][4], prec = last < 1 ? 4 : last < 10 ? 3 : 2;
   const base = {autoSize: true, layout: {background: {type: 'solid', color: col.bg}, textColor: col.ink, fontSize: 11,
                 fontFamily: 'Inter, -apple-system, system-ui, sans-serif'},
                 grid: {vertLines: {color: col.line}, horzLines: {color: col.line}}, rightPriceScale: {borderColor: col.line, minimumWidth: 74},
@@ -454,9 +458,24 @@ function pcInit(box) {
     if (b) b.classList.toggle('on', !!vol); };
   const quiet = {priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false};
   const noScale = {autoscaleInfoProvider: () => null};   // averages and trend lines never stretch the price scale
+  const avgLine = main.addLineSeries({color: col.ink, lineWidth: 1, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false});
+  const isAvg = r => r[5] === 0 && r[1] === r[2] && r[2] === r[3];   // a monthly average (long-term series), not a real bar
   const smaWidth = {20: 1, 50: 2, 200: 3};
   const smas = {}; for (const n in PC_SMA) smas[n] = main.addLineSeries({color: PC_SMA[n], lineWidth: smaWidth[n] || 1, ...quiet, ...noScale});
   const trends = d.trends.map(t => [t, main.addLineSeries({color: t.kind === 'resistance' ? '#B794F4' : '#4299E1', lineWidth: 2, ...quiet, ...noScale})]);
+  const research = d.mode === 'research';
+  // chart patterns drawn in the report (cup & handle, rounding bottoms): shown on their own timeframe, Patterns button
+  const patCol = {cup: '#2F855A', handle: '#38A169', rim: '#22543D'};
+  const pats = (d.patterns || []).map(p => [p, main.addLineSeries({color: patCol[p.kind] || '#2F855A', lineWidth: p.kind === 'rim' ? 2 : 3,
+    lineStyle: p.kind === 'rim' ? LC.LineStyle.Dashed : LC.LineStyle.Solid, ...quiet, ...noScale})]);
+  let showPats = true;
+  const drawPatterns = () => pats.forEach(([p, s]) => {
+    if (!showPats || p.tf !== iv) { s.setData([]); return; }
+    const seen = new Set(), pts = [];
+    p.points.forEach(([date, v]) => { const i = snap(date); if (i < 0 || seen.has(i)) return; seen.add(i); pts.push({time: rows[i][0], value: v}); });
+    s.setData(pts); });   // private report: clean by default – their levels on, averages and trend lines behind a button
+  const setOverlays = on => { for (const n in smas) smas[n].applyOptions({visible: on});
+    trends.forEach(([, s]) => s.applyOptions({visible: on})); btn('data-ma')?.classList.toggle('on', on); };
   // buttons, all off at first: support / resistance (nearest), every level, and our value lines
   const nearest = ['support', 'resistance'].map(k => d.levels.find(l => l.kind === k)).filter(Boolean);
   let levelLines = [], valueLines = [], showValues = false, watchedLines = [], showWatched = false;
@@ -475,7 +494,8 @@ function pcInit(box) {
   // value lines: shown on request, thick, and the price scale stretches so every one (25x too) is in view
   const valuePrices = d.values.map(v => v.price);
   candle.applyOptions({autoscaleInfoProvider: original => { const r = original();
-    const extra = [...(showValues ? valuePrices : []), ...(showWatched ? watchedPrices : [])];
+    const tfPrices = (d.watched || []).filter(w => (({D: ['D', 'W'], W: ['D', 'W'], M: ['M']})[iv] || []).includes(w.tf || 'D')).flatMap(w => [w.lo, w.hi]);
+    const extra = [...(showValues ? valuePrices : []), ...(showWatched ? tfPrices : [])];
     if (!r || !extra.length) return r;
     return {...r, priceRange: {minValue: Math.min(r.priceRange.minValue, ...extra) * 0.97,
                                maxValue: Math.max(r.priceRange.maxValue, ...extra) * 1.03}}; }});
@@ -486,13 +506,16 @@ function pcInit(box) {
     btn('data-val').classList.toggle('on', showValues); main.timeScale().applyOptions({}); candle.applyOptions({}); };
   if (d.values.length) btn('data-val').onclick = toggleValues; else btn('data-val').style.display = 'none';
   // levels someone else is watching (plain support / resistance, zones as two lines): off at first
-  const toggleWatched = () => { showWatched = !showWatched;
-    watchedLines.forEach(x => candle.removePriceLine(x));
-    watchedLines = showWatched ? d.watched.flatMap(w => { const c = w.kind === 'support' ? '#2C9C94' : '#DD6B20';
+  const WATCH_TF = {D: ['D', 'W'], W: ['D', 'W'], M: ['M']};   // each chart shows the levels drawn on that timeframe
+  const drawWatched = () => { watchedLines.forEach(x => candle.removePriceLine(x));
+    const shown = (d.watched || []).filter(w => (WATCH_TF[iv] || []).includes(w.tf || 'D'));
+    watchedLines = showWatched ? shown.flatMap(w => {
+      const c = research ? (w.kind === 'support' ? '#1E6B3A' : '#9B2C2C') : (w.kind === 'support' ? '#2C9C94' : '#DD6B20');
       const t = w.kind === 'support' ? 'support' : 'resistance';
-      return (w.hi - w.lo > 1e-9 ? [w.lo, w.hi] : [w.lo]).map(p => candle.createPriceLine({price: p, color: c, lineWidth: 2,
-        lineStyle: LC.LineStyle.LargeDashed, axisLabelVisible: true, title: t})); }) : [];
-    btn('data-wl').classList.toggle('on', showWatched); candle.applyOptions({}); };
+      return (w.hi - w.lo > 1e-9 ? [w.lo, w.hi] : [w.lo]).map(p => candle.createPriceLine({price: p, color: c, lineWidth: research ? 2 : 2,
+        lineStyle: research ? LC.LineStyle.Solid : LC.LineStyle.LargeDashed, axisLabelVisible: true, title: t})); }) : [];
+    candle.applyOptions({}); };
+  const toggleWatched = () => { showWatched = !showWatched; btn('data-wl').classList.toggle('on', showWatched); drawWatched(); };
   if (watchedPrices.length) btn('data-wl').onclick = toggleWatched; else btn('data-wl').style.display = 'none';
   const rsi = osc.addLineSeries({color: col.blue, lineWidth: 1, priceLineVisible: false, lastValueVisible: true,
     autoscaleInfoProvider: () => ({priceRange: {minValue: 0, maxValue: 100}})});
@@ -514,7 +537,9 @@ function pcInit(box) {
   const snap = date => { const i = rows.findIndex(x => x[0] >= date); return i < 0 ? -1 : i; };
   function setIv(next) {
     iv = next; rows = d[iv]; const c = rows.map(r => r[4]);
-    candle.setData(rows.map(r => ({time: r[0], open: r[1], high: r[2], low: r[3], close: r[4]})));
+    candle.setData(rows.map(r => isAvg(r) ? {time: r[0]} : {time: r[0], open: r[1], high: r[2], low: r[3], close: r[4]}));
+    const avg = rows.map((r, i) => isAvg(r) || (i > 0 && isAvg(rows[i - 1])) ? {time: r[0], value: r[4]} : {time: r[0]});
+    avgLine.setData(avg);
     for (const n in PC_SMA) { const s = pcSma(c, +n); smas[n].setData(rows.map((r, i) => s[i] == null ? {time: r[0]} : {time: r[0], value: s[i]})); }
     if (vol) vol.setData(volData());
     const rs = pcRsi(c); rsi.setData(rows.map((r, i) => rs[i] == null ? {time: r[0]} : {time: r[0], value: rs[i]}));
@@ -529,6 +554,9 @@ function pcInit(box) {
                   color: m.kind === 'E' ? col.blue : m.kind === 'S' ? col.red : col.muted, text: m.kind}); });
     candle.setMarkers(marks.sort((a, b) => a.time < b.time ? -1 : 1));
     box.querySelectorAll('[data-iv]').forEach(b => b.classList.toggle('on', b.dataset.iv === iv));
+    candle.priceScale().applyOptions({mode: iv === 'M' ? 1 : 0});   // monthly = log scale, like long-term charts
+    if (showWatched) drawWatched();
+    drawPatterns();
     show(rows[rows.length - 1]);
   }
   function setRange(next) {
@@ -539,7 +567,13 @@ function pcInit(box) {
   box.querySelectorAll('[data-iv]').forEach(b => b.onclick = () => { setIv(b.dataset.iv); setRange(range); });
   box.querySelectorAll('[data-rg]').forEach(b => b.onclick = () => { if (PC_AUTO_IV[b.dataset.rg] !== iv) setIv(PC_AUTO_IV[b.dataset.rg]); setRange(b.dataset.rg); });
   const vb = box.querySelector('[data-vol]'); if (vb) vb.onclick = toggleVol;
-  setIv('D'); setRange('1Y');
+  const mab = btn('data-ma'); if (mab) mab.onclick = () => setOverlays(!mab.classList.contains('on'));
+  const pb = btn('data-pat');
+  if (pb) { if (!pats.length) pb.style.display = 'none'; else { pb.classList.add('on');
+    pb.onclick = () => { showPats = !showPats; pb.classList.toggle('on', showPats); drawPatterns(); }; } }
+  if (!d.D.length) { box.querySelectorAll('[data-iv=D],[data-iv=W],[data-rg="6M"],[data-rg="1Y"],[data-rg="3Y"]').forEach(b => b.style.display = 'none');
+    setIv('M'); setRange('Max'); } else { setIv('D'); setRange('1Y'); }
+  if (research) { setOverlays(false); if (watchedPrices.length) toggleWatched(); } else if (mab) mab.style.display = 'none';
 }
 if (window.LightweightCharts) {
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { pcInit(x.target); io.unobserve(x.target); } }),
@@ -580,11 +614,43 @@ apply();
 """
 
 
+MARKETS_NOTE = ("Price only – commodities, an index and ETFs have no earnings, so they are not valued. Daily prices from Yahoo "
+                "(futures for gold, silver and oil); uranium is Cameco's month-end spot price, so it has no daily figures. "
+                "vs 50-day / 200-day = price against that moving average.")
+
+
+def markets_html(rows: list[dict]) -> str:
+    """The Markets section: one table of price facts, then a chart for each."""
+    if not rows:
+        return ""
+
+    def num(x, nd=1):
+        return "–" if x is None else f"{x:,.{nd}f}"
+
+    def signed(x):
+        return "–" if x is None else f'<span class="{"pos" if x >= 0 else "neg"}">{pct(x, 1)}</span>'
+
+    body = "".join(
+        f'<tr><td><a href="#m-{e(r["ticker"])}"><b>{e(r["ticker"])}</b></a></td><td>{e(r["name"])}</td>'
+        f'<td>{num(r["price"], 2)} <span class="small">{e(r["unit"] or r["currency"] or "")}</span></td><td>{e(r["date"])}</td>'
+        f'<td>{signed(r["chg_1w"])}</td><td>{signed(r["chg_1m"])}</td><td>{signed(r["chg_1y"])}</td>'
+        f'<td>{signed(r["vs50"])}</td><td>{signed(r["vs200"])}</td><td>{num(r["rsi"], 0)}</td>'
+        f'<td>{num(r["low52"], 2)}–{num(r["high52"], 2)}</td></tr>' for r in rows)
+    head = "".join(f"<th>{h}</th>" for h in ("Market", "Name", "Price", "Date", "1 week", "1 month", "1 year", "vs 50-day",
+                                             "vs 200-day", "RSI", "52-week range"))
+    charts_ = "".join(f'<h3 id="m-{e(r["ticker"])}">{e(r["ticker"])} – {e(r["name"])}</h3>'
+                      + (f'<p class="small">{e(r["note"])}</p>' if r["note"] else "") + chart_block(f"M-{r['ticker']}", r["chart"])
+                      for r in rows)
+    return (f'<section class="company" id="markets"><h2>Markets – price only, not valued</h2><p class="notes">{MARKETS_NOTE}</p>'
+            f'<div class="wrap"><table class="mk"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>{charts_}</section>')
+
+
 def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], path: Path, title: str,
           previous: dict | None = None, tech: dict | None = None, lookthroughs=(), heatmaps=(None, None), log_lines=(),
-          price_charts: dict | None = None):
+          price_charts: dict | None = None, market_rows: list[dict] | None = None):
     previous, tech, price_charts = previous or {}, tech or {}, price_charts or {}
     profit = {p["ticker"]: p for p in profit_rows}
+    market_html = markets_html(market_rows or [])
     ordered = sorted(results.values(), key=lambda r: r["display_ticker"])
     tickers = [r["ticker"] for r in ordered]
     sp = cfg["spot"]
@@ -615,7 +681,7 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     chart_scripts = (f"<script>{VENDOR.read_text(encoding='utf-8')}</script>"
                      f"<script>window.PC_SMA_COLOURS = {json.dumps({str(k): v for k, v in price_chart.SMA_COLOURS.items()})};</script>"
                      f"<script>{CHART_JS}</script>"
-                     if price_charts and VENDOR.exists() else "")
+                     if (price_charts or market_rows) and VENDOR.exists() else "")
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} – value vs price</title><style>{CSS}</style></head><body><main>
 <h1 id="summary">{e(title)} – value vs price</h1>
@@ -627,7 +693,7 @@ with today's price: owner earnings at today's metal prices × 12 / 15 / 25 + net
 and physical holders, and for growth companies the yearly growth the price needs (5 years, 15x exit, 10% US / 12% India).
 <b>Profit vs price.</b> Growth in profit and in the share price over about three years; the grade says whether the P/E fell
 (A ≤ −25%, B ≤ 0) or rose (C ≤ +33%, D above). Click a ticker for the full working; click a column to sort.</p>
-<nav class="toc">Companies: {toc}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
+<nav class="toc">Companies: {toc}{' · <a href="#markets">Markets</a>' if market_html else ''}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
 <div class="controls">
 <span class="lab">Signal</span><button class="on" data-sig="all">All</button><button data-sig="green">Green</button>
 <button data-sig="blue">Blue</button><button data-sig="red">Red</button>
@@ -639,7 +705,7 @@ and physical holders, and for growth companies the yearly growth the price needs
 <p class="notes">{RULES_NOTE}</p>
 {pvp_html}
 {growth_html}
-{''.join(sections)}{etf_html}{heat_html}
+{market_html}{''.join(sections)}{etf_html}{heat_html}
 <section class="company"><h2>Run log</h2><ul class="small">{log}</ul></section>
 <footer>Educational framework, not investment advice. Previous run's figures in (brackets). Prices in each exchange's currency;
 sales and profits as the company reports them.</footer>

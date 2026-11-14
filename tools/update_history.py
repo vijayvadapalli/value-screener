@@ -41,7 +41,7 @@ def symbols_for(lists) -> dict[str, list[str]]:
         companies = loader.load_companies(loader.companies_folder(folder))
         for e in loader.load_list_entries(name):
             c = companies.get(e["ticker"])
-            if folder and c is None:
+            if (folder and c is None) or e.get("series"):   # a series entry (uranium spot) has no Yahoo history
                 continue
             symbol = ((c or {}).get("yahoo") or e.get("yahoo") or e["ticker"]).strip()
             out.setdefault(symbol, [])
@@ -98,7 +98,8 @@ def update(con, wanted: dict[str, list[str]], years: int, refresh: bool, log=pri
     last = {s: (None if refresh else pricedb.last_date(con, s)) for s in wanted}
     fresh = [s for s in wanted if last[s] is None]
     known = [s for s in wanted if last[s] is not None]
-    jobs = [(fresh[i:i + CHUNK], {"period": f"{years}y"}) for i in range(0, len(fresh), CHUNK)]
+    period = f"{years}y" if years else "max"   # --years 0 = all the history Yahoo has
+    jobs = [(fresh[i:i + CHUNK], {"period": period}) for i in range(0, len(fresh), CHUNK)]
     for i in range(0, len(known), CHUNK):
         part = known[i:i + CHUNK]
         start = dt.date.fromisoformat(min(last[s] for s in part)) - dt.timedelta(days=OVERLAP_DAYS)
@@ -128,7 +129,7 @@ def update(con, wanted: dict[str, list[str]], years: int, refresh: bool, log=pri
         if n < len(jobs):
             time.sleep(2)
     for s in reload:   # a new split: Yahoo has restated the whole history
-        rows, splits, divs = parse(download([s], period=f"{years}y"), s)
+        rows, splits, divs = parse(download([s], period=period), s)
         if rows:
             pricedb.replace_bars(con, s, rows)
             pricedb.save_actions(con, s, splits + divs)
@@ -139,7 +140,7 @@ def update(con, wanted: dict[str, list[str]], years: int, refresh: bool, log=pri
         time.sleep(10)
         retry, stats["missing"] = stats["missing"], []
         for s in retry:
-            kw = {"period": f"{years}y"} if last[s] is None else {"start": last[s]}
+            kw = {"period": period} if last[s] is None else {"start": last[s]}
             rows, splits, divs = parse(download([s], **kw), s)
             if not rows:
                 stats["missing"].append(s)
@@ -157,12 +158,18 @@ def main():
     ap = argparse.ArgumentParser(description="Daily price history from Yahoo into output/prices.sqlite")
     ap.add_argument("--lists", default=",".join(DEFAULT_LISTS), help="comma-separated lists (default: core,tech,oil,miners,watchlist)")
     ap.add_argument("--tickers", help="comma-separated Yahoo symbols instead of lists")
-    ap.add_argument("--years", type=int, default=10, help="history for a symbol seen for the first time (default 10)")
+    ap.add_argument("--years", type=int, default=10, help="history for a symbol seen for the first time (default 10; 0 = all Yahoo has)")
     ap.add_argument("--refresh", action="store_true", help="download every history again")
     ap.add_argument("--db", help="database file (default output/prices.sqlite)")
     args = ap.parse_args()
     wanted = ({t.strip(): ["manual"] for t in args.tickers.split(",") if t.strip()} if args.tickers
               else symbols_for([x.strip().lower() for x in args.lists.split(",") if x.strip()]))
+    if not args.tickers:   # symbols in the private research captures (metals, indices, ETFs) are kept current too
+        from valuescreen import research  # noqa: PLC0415
+        for week in research.load_weeks()[-4:]:
+            for item in week["assets"].values():
+                if item.get("symbol"):
+                    wanted.setdefault(item["symbol"], []).append("research") if "research" not in wanted.get(item["symbol"], []) else None
     con = pricedb.connect(Path(args.db) if args.db else None)
     print(f"{len(wanted)} symbols")
     t0 = time.time()

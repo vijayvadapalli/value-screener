@@ -30,6 +30,7 @@ COLUMNS = [
         ("Screener.in", ["Indian companies (Nifty v2),", "lenders' NPA"], BUILT),
         ("Index & ETF lists", ["Wikipedia, NSE, VanEck,", "Global X, Amplify, Sprott"], BUILT),
         ("Your weekly report", ["levels, targets, stance"], PRIVATE),
+        ("Long-term series", ["Cameco uranium spot,", "World Bank, IMF (monthly)"], BUILT),
     ]),
     ("STORES", PURPLE, [
         ("Company files (YAML)", ["core, tech, oil, miners,", "nifty50 – in git"], BUILT),
@@ -45,7 +46,7 @@ COLUMNS = [
         ("Profit vs price", ["grades A–D"], BUILT),
         ("Quick screens", ["miners ~270, S&P 500 +", "Nasdaq-100, NSE"], BUILT),
         ("Model portfolios", ["balanced, resources", "value-first, ≤ 15 names"], BUILT),
-        ("Chart analytics", ["SMA 20/50/200, RSI,", "trend lines, levels"], BUILT),
+        ("Chart analytics", ["SMA, RSI, trend lines,", "levels; markets (price only)"], BUILT),
         ("Research merge", ["their levels vs our value"], PRIVATE),
     ]),
     ("OUTPUTS", GREEN, [

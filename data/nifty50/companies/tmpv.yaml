@@ -5,28 +5,34 @@ sector: Automobile and Auto Components
 model: growth
 currency: INR
 period:
-  label: TTM to Jun 2026
-  end: '2026-06-30'
+  label: TTM to Sep 2026
+  end: '2026-09-30'
   per_year: 4
-shares_m: 3686.094
+shares_m: 3688.118
 balance:
   cash: 478280.0
   debt: 813950.0
 price:
-  value: 287.4
+  value: 287.0
   currency: INR
   date: '2026-11-13'
-  source: yfinance TMPV.NS
+  source: Screener.in (13 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TMPV/consolidated/'
+- 'Q2 FY27 results (13 Nov 2026), loss ₹5,531 cr, exceptional charges ₹6,738 cr, JLR FY27 EBIT guidance cut to 2–3%: https://www.freepressjournal.in/business/tata-motors-pv-swings-to-5531-crore-q2-loss-jlr-restructuring-weighs'
+- 'Business Standard reports the Q2 loss as ₹5,451 cr: https://www.business-standard.com/companies/quarterly-results/tata-motors-pv-q2-net-loss-at-5-531-cr-revenue-misses-estimates-126111301014_1.html'
+- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/TMPV/consolidated/'
 assumptions:
-- 'CHECK before relying on it: year''s EPS 223.7 vs Yahoo trailing EPS -9.2: a one-off or corporate action? check the filing'
+- 'Checked 13 Nov 2026: FY26 EPS 223.7 holds the one-off demerger gain in the Sep 2025 quarter (EPS 206.85, ≈ ₹76,248 cr). Valued on reported 12-month EPS only (v2.history_not_comparable)'
+- 'Net cash (cash ₹4,78,280 cr − debt ₹8,13,950 cr = −₹91/share) is from the earlier balance sheet; JLR guides about £1.25bn cash outflow in FY27, so net debt is likely to rise'
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-notes: []
+notes:
+- 'Reported 12-month EPS −6.69 (Dec 25 −9.47, Mar 26 15.70, Jun 26 2.10, Sep 26 −15.02): no positive earnings, so not valued (red).'
+- 'Derived, for scale only: adding back the Sep 2026 quarter''s ₹6,738 cr exceptional charge (pre-tax, ≈ ₹18.3/share) gives 12-month EPS ≈ ₹11.6 and a no-growth value ≈ ₹49 (11.6 × 12.1 − 91) against the ₹287 price.'
+- 'The price is a bet on a JLR margin recovery (company target 6–8%, FY27 guidance 2–3%) and on the Indian car business. Both are forecasts and are not in the value.'
+- 'Watch: whether "exceptional" charges keep recurring (cyberattack, restructuring, write-downs), and free cash flow / net debt, not just profit.'
 v2:
   eps_quarters:
-  - 9.36
   - 14.69
   - 23.01
   - 10.66
@@ -34,6 +40,7 @@ v2:
   - -9.47
   - 15.7
   - 2.1
+  - -15.02
   eps_annual:
   - 25.82
   - 31.13
@@ -68,5 +75,6 @@ v2:
   - 67915.0
   - 63102.0
   - 13041.0
-  book_value_ps: 304.0
+  book_value_ps: 285.0
   roe_5y: 0.37
+  history_not_comparable: FY22–FY25 are the old combined Tata Motors incl. commercial vehicles, and FY26 holds the ₹76,248 cr demerger gain

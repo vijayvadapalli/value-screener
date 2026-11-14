@@ -270,6 +270,8 @@ def _growth_figures(r):
         rows.append(("12-month EPS (one-offs removed)", money(v2["ttm"], ccy), False))
         if v2.get("eps_5y_avg") is not None:
             rows.append(("5-year average EPS", money(v2["eps_5y_avg"], ccy), False))
+        elif v2.get("history_not_comparable"):
+            rows.append(("5-year average EPS", "not used – history not comparable", False))
         rows += [("One-off quarter replaced", f"{old:,.2f} → {new:,.2f}", False) for _, old, new in v2.get("one_offs", [])]
     rows += [("Net cash per share", money(r["nc"], ccy), False),
              ("Discount rate · no-growth multiple", f"{r['discount_rate']*100:.0f}% · {r['no_growth_multiple']:.1f}x", False),

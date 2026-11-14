@@ -30,6 +30,7 @@ flowchart LR
     SEC["SEC EDGAR bulk facts<br/>(weekly, ~1.4 GB)"]:::done
     SIN["Screener.in<br/>(Indian companies · lenders' NPA)"]:::done
     IDX["Index & ETF lists<br/>Wikipedia · NSE · VanEck · Global X · Amplify · Sprott"]:::done
+    LT["Long-term monthly series<br/>Cameco uranium spot · World Bank · IMF"]:::done
     WR["Your weekly research report"]:::priv
   end
 
@@ -48,7 +49,7 @@ flowchart LR
     PVP["Profit vs price<br/>grades A–D"]:::done
     QS["Quick screens<br/>miners (~270) · S&P 500 + Nasdaq-100 · NSE"]:::done
     MP["Model portfolios<br/>balanced · resources value-first"]:::done
-    TA["Chart analytics<br/>SMA 20/50/200 · RSI · swing levels · auto trend lines"]:::done
+    TA["Chart analytics<br/>SMA 20/50/200 · RSI · swing levels · auto trend lines<br/>markets: commodities, DXY, ETFs (price only)"]:::done
     MRG["Research merge<br/>their levels vs our value"]:::priv
   end
 
@@ -74,7 +75,7 @@ flowchart LR
   CF --> PVP --> FULL
   FDB & CACHE --> QS --> SCR
   QS & RUL --> MP --> MPR
-  PDB --> TA --> CH
+  PDB & LT --> TA --> CH
   RUL --> CH
   RES -- "public levels only" --> CH
   RES & RUL --> MRG --> PRIV
@@ -91,13 +92,15 @@ flowchart LR
 | SEC EDGAR bulk "company facts" | official US filings, incl. lenders' loans, allowance, nonaccrual loans, charge-offs | S&P 500 / Nasdaq-100 screen | weekly |
 | Screener.in | Indian consolidated figures (Nifty v2); for lenders, quarterly gross / net NPA % (standalone page for banks) and loans | Nifty 50 company files | quarterly |
 | Wikipedia, NSE, ETF providers | index and ETF membership | universes for the quick screens | when refreshed |
+| Cameco uranium price page; World Bank, IMF (`data/longterm`) | month-end uranium spot from 1988; monthly gold, silver from 1960 | Markets charts (uranium), long-term charts in the research report | weekly (uranium, in `/weekly`) |
 | Your weekly research report | support / resistance, targets, stance, notes | private research report; plain levels on public charts | weekly, **private** |
 
 ### Stores
 | Store | Contents | In git? |
 |---|---|---|
 | `data/companies/*.yaml`, `data/miners/companies`, `data/nifty50/companies` | one file per company: the reported quarter, shares, balance, metals, sources, assumptions | yes |
-| `data/lists/*.yaml`, `data/etfs/*.yaml`, `config.yaml` | lists, ETF look-throughs, spot, FX, tiers, zones, multiples | yes |
+| `data/lists/*.yaml`, `data/etfs/*.yaml`, `config.yaml` | lists (incl. price-only markets), ETF look-throughs, spot, FX, tiers, zones, multiples | yes |
+| `data/longterm/*.csv` | monthly gold and silver (World Bank), uranium (IMF), uranium spot (Cameco) | yes |
 | `output/us/us_facts.sqlite` | SEC facts with filing dates (point-in-time), 6 years of closes, splits, each run's verdicts | no (rebuildable) |
 | `output/*/screen_cache`, `runs.json`, `signals_log.csv` | cached Yahoo figures, previous-run figures, signal history | no |
 | `output/prices.sqlite` | 10 years of daily open/high/low/close/volume, splits, dividends, currency – core, tech, oil, promoted miners | no (rebuildable, ~12 MB) |
@@ -116,13 +119,14 @@ flowchart LR
 | `model_portfolio.py` | candidates from every screen, value / quality / momentum scores, sleeves, sizing, report |
 | `technicals.py`, `prices.py`, `history.py` | 200-day average, RSI, MACD; live prices; previous-run figures |
 | `pricedb.py` | the price-history database: bars, splits and dividends, weekly / monthly resampling |
-| `chart_levels.py`, `price_chart.py` | SMA 20/50/200, RSI(14), swing highs and lows, support / resistance, automatic trend lines; the chart data for HTML and the static chart for PDF |
+| `chart_levels.py`, `price_chart.py` | SMA 20/50/200, RSI(14), swing highs and lows, support / resistance, automatic trend lines (incl. channel edges and two-touch lines); the chart data for HTML and the static chart for PDF |
+| `markets.py`, `longterm.py` | price-only list entries (gold, silver, uranium, WTI, DXY, ETFs): price facts and charts for the Markets section; the long-term monthly series and the Cameco uranium refresh |
 | `research.py` | private: the weekly capture's levels, rules and stance against today's price and our valuation; the private report |
 
 ### Outputs (`valuescreen/`)
 | Module | Output |
 |---|---|
-| `html_report.py` | the full report per list: summary table, company sections, profit vs price, links |
+| `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links |
 | `pdf.py`, `charts.py`, `style.py`, `wording.py` | bookmarked PDF with charts; one look (Inter, palette); the words in every report |
 | `report.py` | ranked CSV, signal log, heatmaps |
 | `html_report.chart_block` + `vendor/` | per company: RSI on top, candles (D / W / M, 6M–10Y), SMA 20/50/200, nearest auto support / resistance (all on request) and trend lines, value / buy / add / sell lines, E / D / S markers (Lightweight Charts, Apache 2.0) |

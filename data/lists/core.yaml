@@ -1,4 +1,4 @@
-# Core list (20 companies), from the Valuation Playbook, Nov 2026.
+# Core list, from the Valuation Playbook, Nov 2026: 21 companies, then markets shown price-only.
 # Optional: add a share quantity, e.g. {ticker: FNV, quantity: 35}. The profit-vs-price report then shows
 # each position's value in the share's own currency. Quantities are never used in the valuations.
 # Tier A = large low-cost producers / royalties with strong balance sheets: start at or below 15x, add at or below 12x.
@@ -24,13 +24,24 @@ tickers:
   - {ticker: FSM}
   # Copper
   - {ticker: IVN}     # held as IVPAF
-  # Uranium: producer, developer, physical, explorers (not valued)
+  # Uranium: producer, developer, physical holders (UEC and UUUU moved to the tech list, Nov 2026)
   - {ticker: CCJ}
   - {ticker: NXE}
   - {ticker: YCA}
-  - {ticker: UEC}
-  - {ticker: UUUU}
+  - {ticker: SPUT}
   # Silver developer
   - {ticker: ABRA}
-  # Other
-  - {ticker: HUT}
+  # Oil (HUT moved to the tech list, Nov 2026)
+  - {ticker: XOM}
+  - {ticker: CVX}
+  - {ticker: SLB}
+  # Markets: price and chart only, not valued (valuescreen/markets.py). `yahoo` = daily history from Yahoo;
+  # `series` = a monthly series in data/longterm (uranium has no daily series on Yahoo).
+  - {ticker: GOLD, name: Gold (COMEX futures), yahoo: GC=F, unit: US$/oz, market: true}
+  - {ticker: SILVER, name: Silver (COMEX futures), yahoo: SI=F, unit: US$/oz, market: true}
+  - {ticker: URANIUM, name: Uranium spot (Cameco month-end), series: uranium_spot, unit: US$/lb, market: true}
+  - {ticker: WTI, name: Crude oil WTI (NYMEX futures), yahoo: CL=F, unit: US$/bbl, market: true}
+  - {ticker: DXY, name: US dollar index, yahoo: DX-Y.NYB, unit: index, market: true}
+  - {ticker: GDX, name: VanEck Gold Miners ETF, yahoo: GDX, unit: US$, market: true}
+  - {ticker: SILJ, name: Amplify Junior Silver Miners ETF, yahoo: SILJ, unit: US$, market: true}
+  - {ticker: XLE, name: Energy Select Sector SPDR ETF, yahoo: XLE, unit: US$, market: true}

@@ -30,6 +30,8 @@ sys.path.insert(0, str(ROOT))
 from valuescreen import loader  # noqa: E402
 from valuescreen import screener  # noqa: E402
 
+HAND_SET_V2 = ("kind", "flags", "history_not_comparable", "eps_currency")   # kept when the v2 block is re-fetched
+
 
 def fetch(symbol: str, lender: bool = False) -> tuple[dict, str]:
     """(figures, page URL): the consolidated page, or the standalone one when the consolidated page has no quarterly EPS
@@ -85,7 +87,9 @@ def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, 
     c["price"] = {"value": data["price"], "currency": "INR", "date": today.isoformat(), "source": f"Screener.in ({today:%d %b %Y})"}
     c["shares_m"] = round(data["market_cap_cr"] * 10 / data["price"], 3)
     c.pop("earnings", None)   # the v2 block replaces the draft's yearly net income
+    kept = {k: v for k, v in (c.get("v2") or {}).items() if k in HAND_SET_V2}   # your judgement, not Screener's figures
     c["v2"] = {k: data[k] for k in ("eps_quarters", "eps_annual", "years", "profit_annual", "cfo_annual", "book_value_ps", "roe_5y")}
+    c["v2"].update(kept)
     if data.get("asset_quality"):
         c["v2"]["asset_quality"] = data["asset_quality"]
     c.setdefault("balance", {"net_cash": 0.0})

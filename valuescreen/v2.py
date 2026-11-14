@@ -11,6 +11,10 @@ A company file opts in with a `v2:` block, usually written by tools/fetch_screen
       roe_5y: 0.32                             # average return on equity over 5 years, as a fraction
       asset_quality: {quarters, gross_npa_pct, net_npa_pct, loans_cr, loans_basis}   # lenders; see asset_quality.py
       flags: [conglomerate, insurer]           # optional, also set from config.yaml lists
+      history_not_comparable: "why"            # optional: past years are a different company (demerger) or hold a
+                                               # one-off gain, so no 5-year average; the profit-vs-price row is n/m
+
+Hand-set keys (kind, flags, history_not_comparable, eps_currency) survive a re-fetch by tools/fetch_screener.py.
 
 Rules:
 - Last 12 months = the latest four quarters, after removing a one-off quarter: one that is more than 2x the median of
@@ -100,8 +104,15 @@ def base_eps(c, cfg):
     out["ttm"] = ttm
     annual = [float(x) for x in v.get("eps_annual", []) if x is not None]
     avg5 = sum(annual[-5:]) / len(annual[-5:]) if annual else None
+    broken = v.get("history_not_comparable")
+    if broken:   # e.g. a demerger: the past years belong to a different company, or hold a one-off gain
+        avg5 = None
+        out["history_not_comparable"] = broken
     out["eps_5y_avg"] = avg5
-    if kind == "cyclical" and avg5 is not None:
+    if kind == "cyclical" and broken:
+        out["eps"] = ttm
+        out["how"] = f"cyclical, but the 5-year average is not used ({broken}): 12-month EPS {ttm:,.2f}"
+    elif kind == "cyclical" and avg5 is not None:
         out["eps"] = (ttm + avg5) / 2
         out["how"] = f"cyclical: average of 12-month EPS {ttm:,.2f} and 5-year average {avg5:,.2f}"
     elif kind == "financial" and v.get("book_value_ps") and v.get("roe_5y") is not None:

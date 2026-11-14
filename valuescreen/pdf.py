@@ -432,8 +432,39 @@ def new_document(path: Path, title: str, footer: str, st: Styles):
     return doc
 
 
+MARKETS_NOTE = ("Price only – commodities, an index and ETFs have no earnings, so they are not valued. Daily prices from Yahoo "
+                "(futures for gold, silver and oil); uranium is Cameco's month-end spot price. Charts are in the HTML report.")
+
+
+def markets_table(rows, st):
+    """Markets (price only): price, date, changes, price vs the 50- and 200-day averages, RSI, 52-week range."""
+    def num(x, nd=1):
+        return "–" if x is None else f"{x:,.{nd}f}"
+
+    def signed(x):
+        if x is None:
+            return "–"
+        return f"<font color='{S.SIGNAL['green'] if x >= 0 else S.SIGNAL['red']}'>{x*100:+.1f}%</font>"
+
+    names = ["Market", "Price", "Date", "1 week", "1 month", "1 year", "vs 50-day", "vs 200-day", "RSI", "52-week range"]
+    numeric = set(range(1, len(names)))
+    data = [_header(names, numeric, st)]
+    for r in rows:
+        cells = [f"{num(r['price'], 2)} <font size='5.8' color='{S.MUTED}'>{esc(r['unit'] or r['currency'] or '')}</font>",
+                 esc(r["date"]), signed(r["chg_1w"]), signed(r["chg_1m"]), signed(r["chg_1y"]), signed(r["vs50"]),
+                 signed(r["vs200"]), num(r["rsi"], 0), f"{num(r['low52'], 2)}–{num(r['high52'], 2)}"]
+        data.append([Paragraph(f"{st.bold(esc(r['ticker']))}<br/><font size='6.2' color='{S.INK2}'>{esc(r['name'])}</font>", st.td)]
+                    + [Paragraph(c, st.td_right) for c in cells])
+    table = Table(data, colWidths=_widths([16, 13, 9, 8, 8, 8, 8, 8, 5, 15]), repeatRows=1)
+    table.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE"), ("TOPPADDING", (0, 0), (-1, -1), 0.8),
+                               ("BOTTOMPADDING", (0, 0), (-1, -1), 1.1), ("LEFTPADDING", (0, 0), (-1, -1), 4),
+                               ("RIGHTPADDING", (0, 0), (-1, -1), 4), ("BACKGROUND", (0, 0), (-1, 0), hexc("#EEF0F4")),
+                               ("LINEBELOW", (0, 0), (-1, 0), 0.8, hexc(S.INK2)), ("LINEBELOW", (0, 1), (-1, -1), 0.4, hexc(S.LINE))]))
+    return table
+
+
 def build(results: dict, companies: dict, cfg: dict, path: Path, title: str, previous: dict | None = None,
-          tech: dict | None = None, log_lines=(), price_charts: dict | None = None):
+          tech: dict | None = None, log_lines=(), price_charts: dict | None = None, market_rows: list | None = None):
     previous, tech, price_charts = previous or {}, tech or {}, price_charts or {}
     st = Styles()
     doc = new_document(path, f"{title} – value vs price", f"{title} · value vs price · {day(cfg['as_of'])}", st)
@@ -454,6 +485,10 @@ def build(results: dict, companies: dict, cfg: dict, path: Path, title: str, pre
             story += [CondPageBreak(60 * mm), Spacer(1, 8), Paragraph("Growth companies – reverse DCF", st.h2),
                       legend(st, growth), Spacer(1, 4)]
         story += [growth_table(growth, st, previous, tech), Spacer(1, 4), Paragraph(GROWTH_NOTE, st.tiny)]
+    if market_rows:
+        story += [CondPageBreak(50 * mm), Spacer(1, 8), Bookmark("markets", "Markets", 0),
+                  Paragraph("Markets – price only, not valued", st.h2), Spacer(1, 3), markets_table(market_rows, st),
+                  Spacer(1, 2), Paragraph(MARKETS_NOTE, st.tiny)]
     if log_lines:
         story += [Spacer(1, 4), Paragraph("Run notes: " + esc(" · ".join(log_lines)), st.tiny)]
     story.append(Bookmark("companies", "Companies", 0))

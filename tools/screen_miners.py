@@ -32,6 +32,8 @@ def add_list(entries: list[dict], list_name: str) -> tuple[list[dict], set]:
     by_symbol = {e["yahoo"].upper(): e for e in entries}
     held = set()
     for h in loader.load_list_entries(list_name):
+        if h.get("market"):   # gold, oil, ETFs shown price-only in the list – not companies
+            continue
         c = companies.get(h["ticker"], {})
         symbol = (c.get("yahoo") or h["ticker"]).upper()
         match = by_symbol.get(symbol) or by_symbol.get(h["ticker"])

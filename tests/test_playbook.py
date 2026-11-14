@@ -138,6 +138,17 @@ def test_cyclical_and_financial_earnings():
     assert fin["eps"] == pytest.approx((20 + 15) / 2)
 
 
+def test_a_history_break_drops_the_5_year_average():
+    """A demerger (TMPV): the old years belong to another company or hold the one-off gain, so only the 12 months count."""
+    cfg = cfg_with()
+    c = indian([15, 20, 10, 200, -9, 15, 2, -15], kind="cyclical", eps_annual=[-34, 7, 94, 76, 224],
+               history_not_comparable="demerger")
+    w = v2.base_eps(c, cfg)
+    assert w["eps"] == pytest.approx(-7) and w["eps_5y_avg"] is None and "demerger" in w["how"]
+    r = run({"TEST": c}, ["TEST"], cfg)["TEST"]
+    assert r["signal"] == "red" and r["implied_growth"] is None
+
+
 def test_financials_get_no_net_cash_and_a_price_to_book_check():
     c = indian([5] * 8, kind="financial", book_value_ps=100.0, roe_5y=0.15)
     c["balance"] = {"net_cash": 50000.0}
@@ -239,6 +250,9 @@ def test_screener_page_parsing():
     c = fs.update_file(None, entry, d, dt.date(2026, 11, 12))
     assert c["period"]["end"] == "2025-12-31" and c["shares_m"] == pytest.approx(100.0)
     loader.validate_company(yaml.safe_load(yaml.safe_dump(c)))
+    c["v2"].update(kind="cyclical", history_not_comparable="demerger")
+    again = fs.update_file(c, entry, d, dt.date(2026, 11, 13))
+    assert again["v2"]["kind"] == "cyclical" and again["v2"]["history_not_comparable"] == "demerger"
 
 
 def test_cash_conversion_is_not_used_for_financials():
@@ -262,6 +276,8 @@ def test_profit_vs_price_grades():
     nav = pvp.evaluate({"source": "yahoo", "years": 3.0, "eps_then": 1.0, "eps_now": 2.0, "price_then": 10.0, "price": 11.0,
                         "value": {"model": "physical"}})
     assert nav["grade"] == "n/m" and "NAV" in nav["nm_reason"]
+    demerged = pvp.evaluate({"source": "screener", "profit_growth_3y": 2.32, "price_growth_3y": 0.05, "not_comparable": "demerger"})
+    assert demerged["grade"] == "n/m" and "demerger" in demerged["nm_reason"] and demerged["price_growth"] == 0.05
 
 
 def test_combined_html_links_every_company(tmp_path):
