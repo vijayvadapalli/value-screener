@@ -15,7 +15,7 @@ balance:
   cash: 15776
   debt: 7079
 price:
-  value: 529.74
+  value: 534.06
   currency: USD
   date: '2026-11-13'
   source: yfinance AMD

@@ -15,7 +15,7 @@ balance:
   cash: 64509
   debt: 35481
 price:
-  value: 524.0752
+  value: 523.88
   currency: USD
   date: '2026-11-13'
   source: yfinance MSFT

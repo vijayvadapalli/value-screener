@@ -28,6 +28,7 @@ TINT = {
 TIER_STRENGTH = {"A": 0, "B": 1, "C": 2}
 SHADE_STRENGTH = {"darkest": 0, "medium": 1, "light": 2, "lightest": 3}
 BAND = {"buy": "#DDF1E7", "watch": "#E3EBFA", "hold": "#EEF0F3", "sell": "#F8E0DD"}
+VALUE_LIGHT, VALUE_DARK = "#2FA36B", "#0B5D3F"   # our value lines on the price chart: fair / buy, cautious / NAV
 
 _registered = {}
 

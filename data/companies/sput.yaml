@@ -17,7 +17,7 @@ nav_ref:
   value: 22.22
   spot: 93.6
 price:
-  value: 18.11
+  value: 18.34
   currency: USD
   date: '2026-11-13'
   source: yfinance U-U.TO

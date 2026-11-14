@@ -26,7 +26,7 @@ metals:
   realised: 62.22
 tax_rate: 0.372522
 price:
-  value: 14.0684
+  value: 13.98
   currency: USD
   date: '2026-11-13'
   source: yfinance CDE

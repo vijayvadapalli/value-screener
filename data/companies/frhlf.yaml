@@ -16,7 +16,7 @@ shares_m: 166
 balance:
   net_cash: -251
 price:
-  value: 12.05
+  value: 12.11
   currency: USD
   date: '2026-11-13'
   source: yfinance FRHLF

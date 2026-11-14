@@ -16,7 +16,7 @@ shares_m: 1497
 balance:
   net_cash: -9249
 price:
-  value: 51.33
+  value: 51.67
   currency: USD
   date: '2026-11-13'
   source: yfinance SLB

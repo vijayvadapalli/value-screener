@@ -17,7 +17,7 @@ balance:
   cash: 114.1
   debt: 467.5
 price:
-  value: 41.37
+  value: 41.42
   currency: CAD
   date: '2026-11-13'
   source: yfinance ERO.TO

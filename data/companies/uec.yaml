@@ -21,7 +21,7 @@ holdings:
   units: 1.256
 debt: 0
 price:
-  value: 6.635
+  value: 6.66
   currency: USD
   date: '2026-11-13'
   source: yfinance UEC

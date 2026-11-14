@@ -1,0 +1,4 @@
+
+.pill.grey{background:var(--muted)} .tag{font-size:10.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:0 6px;color:var(--ink2)}
+main{max-width:1640px} .tag.held{background:var(--ink);color:var(--bg);border-color:var(--ink)} .flags{font-size:11px;color:var(--muted)} table.sum td{white-space:nowrap} table.sum td:first-child{white-space:normal;min-width:190px}
+.short{background:var(--soft);border-left:3px solid var(--green);padding:9px 13px;margin:10px 0;font-size:13.5px}

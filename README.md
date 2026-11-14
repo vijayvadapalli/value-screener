@@ -608,13 +608,23 @@ LFS: GitHub Pages cannot serve LFS files.)
 The full picture, with diagrams and status: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ```
-valuescreen/loader.py      read and check company, list and config files (also last-12-month earnings, tiers)
+valuescreen/loader.py      read and check company, list and config files (also last-12-month earnings); each model
+                           checks its own fields (kinds/). settings.py: FX and tiers, which the models need
+valuescreen/types.py       the shape of a valuation result (typed – for editors and type checkers; a test keeps it current)
 valuescreen/models.py      the valuation models; leases.py (Hut 8) and v2.py (Nifty v2 rules) beside it
-valuescreen/rules.py       zones, signals, buy levels, flags, stale checks
+valuescreen/rules.py       zones (band + details, written as text by zone_text), signals, buy levels, flags, stale checks
+valuescreen/screening.py   the screening rules shared by the full valuation and the US / miners screens: earnings basis,
+                           growth and multiple bands, blue caps, colours – one copy
+valuescreen/kinds/        one class per valuation model (producer, developer, physical, growth, leases, liquid): its zone,
+                           headline, steps, worked example, key figures, cards, chart, heatmap and price-chart lines.
+                           A new model is one new file here, registered in kinds/__init__.py
 valuescreen/engine.py      runs models + rules over a set of companies
-valuescreen/wording.py     what the report says: headlines, steps, worked examples, key figures, cards
-valuescreen/charts.py      the charts; style.py holds the fonts and colours
+valuescreen/wording.py     the shared parts of what the report says (the model's own words come from kinds/)
+valuescreen/charts.py      the band, heatmap and EPS charts (the model draws its own curve); plot.py the chart basics,
+                           fmt.py the text formatting, style.py the fonts and colours
 valuescreen/html_report.py the HTML report;  profit_vs_price.py the profit-vs-price method and grades
+valuescreen/page.py        the page shell every report shares; valuescreen/assets/ holds all the CSS and JavaScript
+                           (report.css is filled with the palette from style.py)
 valuescreen/growth_data.py profit-vs-price figures from Yahoo / Screener.in (screener.py reads Screener pages)
 valuescreen/report.py      ranked CSV, signal log, cross-company heatmaps
 valuescreen/technicals.py  200-day average, RSI, MACD;  history.py  previous-run figures

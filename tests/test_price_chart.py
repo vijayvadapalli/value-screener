@@ -149,3 +149,8 @@ def test_market_rows_from_daily_history_and_a_monthly_series(tmp_path, monkeypat
     assert any("XX=F" in x for x in log)
     html = html_report.markets_html(rows)
     assert 'id="markets"' in html and "pcd-M-GOLD" in html and "pcd-M-URANIUM" in html
+
+
+def test_no_value_lines_for_a_symbol_we_do_not_value():
+    """Research and Markets charts (gold, oil, ETFs) have no model: no value lines, no error."""
+    assert PC.value_lines({"model": None, "price_ccy": "USD"}) == []

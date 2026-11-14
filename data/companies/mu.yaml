@@ -15,7 +15,7 @@ balance:
   cash: 73480
   debt: 5180
 price:
-  value: 766.26
+  value: 778.31
   currency: USD
   date: '2026-11-13'
   source: yfinance MU

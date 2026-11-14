@@ -206,9 +206,8 @@ def _lv_list(item, kind):
 
 def build_html(week: dict, rows: list[dict], changed: dict, charts: dict, links: dict, path: Path, weeks: list[dict]) -> Path:
     """output/private/research.html – private; never published."""
-    from .html_report import CSS, CHART_JS, VENDOR, chart_block  # noqa: PLC0415
-    from . import price_chart  # noqa: PLC0415
-    import json  # noqa: PLC0415
+    from . import page  # noqa: PLC0415
+    from .html_report import chart_block  # noqa: PLC0415
     rules = [dict(rule, asset=row["key"], price=row["price"]) for row in rows for rule in row["rules"]]
     order = {"triggered": 0, "near": 1, "waiting": 2, "no price": 3}
     rules.sort(key=lambda r: (order[r["status"]], abs(r["gap"]) if r["gap"] is not None else 9))
@@ -279,15 +278,8 @@ def build_html(week: dict, rows: list[dict], changed: dict, charts: dict, links:
     themes = "".join(f"<li>{_e(t)}</li>" for t in week.get("themes") or [])
     macro = "".join(f"<li><b>{_e(k)}:</b> {_e(v)}</li>" for k, v in (week.get("macro") or {}).items())
     toc = " ".join(f'<a href="#a-{_e(r["key"])}">{_e(r["key"])}</a>' for r in rows)
-    scripts = (f"<script>{VENDOR.read_text(encoding='utf-8')}</script>"
-               f"<script>window.PC_SMA_COLOURS = {json.dumps({str(k): v for k, v in price_chart.SMA_COLOURS.items()})};</script>"
-               f"<script>{CHART_JS}</script>") if charts and VENDOR.exists() else ""
-    page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex"><title>Research – {week['date']:%d %b %Y} (private)</title><style>{CSS}
-.st{{display:inline-block;padding:1px 8px;border-radius:9px;font-size:11.5px;font-weight:600;color:#fff}} .st.red{{background:var(--red)}}
-.st.amber{{background:#B7791F}} .st.grey{{background:var(--muted)}} .private{{background:#FDECEC;color:#9B2C2C;padding:6px 10px;border-radius:4px;font-size:12.5px}}
-table.rt{{border-collapse:collapse;width:100%;font-size:13px}} table.rt th{{text-align:left;background:var(--soft);padding:6px 8px;font-size:12px}}
-table.rt td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}}</style></head><body><main id="top">
+    scripts = page.chart_scripts() if charts else ""
+    body = f"""
 <p class="private">PRIVATE – your own research notes. Not committed, not published.</p>
 <h1>Research – week of {week['date']:%d %B %Y}</h1>
 <p class="sub">{_e(week.get('title', ''))} · {len(rows)} assets · prices as of the latest close</p>
@@ -301,9 +293,11 @@ table.rt td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:
 <nav class="toc">Assets: {toc}</nav>
 {''.join(sections)}
 <footer>Private research notes next to our own valuation. Educational, not investment advice.</footer>
-</main>{scripts}</body></html>"""
+"""
+    html_page = page.document(f"Research – {week['date']:%d %b %Y} (private)", page.report_css() + page.asset("research.css"), body,
+                              scripts=scripts, head='<meta name="robots" content="noindex">', main_attrs=' id="top"')
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(page, encoding="utf-8")
+    path.write_text(html_page, encoding="utf-8")
     return path
 
 

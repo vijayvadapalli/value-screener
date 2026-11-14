@@ -28,7 +28,7 @@ balance:
   amount: 75.563
   currency: CAD
 price:
-  value: 10.54
+  value: 10.41
   currency: CAD
   date: '2026-11-13'
   source: yfinance ABRA.TO

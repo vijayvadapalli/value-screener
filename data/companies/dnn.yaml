@@ -29,7 +29,7 @@ balance:
   amount: -345
   currency: USD
 price:
-  value: 2.0501
+  value: 2.06
   currency: USD
   date: '2026-11-13'
   source: yfinance DNN

@@ -25,7 +25,7 @@ metals:
   aisc: 1947
 tax_rate: 0.28
 price:
-  value: 20.765
+  value: 20.76
   currency: USD
   date: '2026-11-13'
   source: yfinance KGC

@@ -3,9 +3,10 @@ from __future__ import annotations
 
 from .models import value_company, etf_lookthrough
 from .rules import stale_check, zone
+from .types import Result
 
 
-def run(companies: dict, tickers: list[str], cfg: dict) -> dict:
+def run(companies: dict, tickers: list[str], cfg: dict) -> dict[str, Result]:
     results = {}
     for t in tickers:
         c = companies[t]

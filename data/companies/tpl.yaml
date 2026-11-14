@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 292.48
+  value: 291.91
   currency: USD
   date: '2026-11-13'
   source: yfinance TPL

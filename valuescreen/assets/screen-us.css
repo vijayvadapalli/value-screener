@@ -1,0 +1,7 @@
+
+main{max-width:1640px} .pill.grey{background:var(--muted)} .flags{font-size:11px;color:var(--muted)}
+.tag{font-size:10.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:0 6px;color:var(--ink2)}
+table.sum td{white-space:nowrap} table.sum td:first-child{white-space:normal;min-width:200px}
+.short{background:var(--soft);border-left:3px solid var(--green);padding:9px 13px;margin:10px 0;font-size:13.5px}
+table.sectors{border-collapse:collapse;font-size:13px;margin:6px 0 14px} table.sectors td,table.sectors th{padding:4px 12px;text-align:right;
+border-bottom:1px solid var(--line)} table.sectors td:first-child,table.sectors th:first-child{text-align:left}

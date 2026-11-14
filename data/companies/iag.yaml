@@ -23,7 +23,7 @@ metals:
   aisc: 2184
 tax_rate: 0.3
 price:
-  value: 17.37
+  value: 17.32
   currency: USD
   date: '2026-11-13'
   source: yfinance IAG

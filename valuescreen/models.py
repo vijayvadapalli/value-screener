@@ -10,7 +10,8 @@ from scipy.optimize import brentq
 
 from . import v2 as v2rules
 from .leases import value_leases
-from .loader import ValidationError, fx, tier_of
+from .settings import ValidationError, fx, tier_of
+from .types import Result
 
 
 # ---------------------------------------------------------------- helpers
@@ -283,7 +284,7 @@ def shade(mv_bn, cfg, sector=""):
     return "darkest" if mv_bn >= top else "medium" if mv_bn >= s["medium"] else "light" if mv_bn >= s["light"] else "lightest"
 
 
-def value_company(c, cfg, spot=None):
+def value_company(c: dict, cfg: dict, spot: dict | None = None) -> Result:
     spot = {**cfg["spot"], **(spot or {})}
     r = MODEL_FN[c["model"]](c, cfg, spot)
     p = c["price"]

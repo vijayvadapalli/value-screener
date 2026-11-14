@@ -16,7 +16,7 @@ balance:
   cash: 12735.099999999999
   debt: 1963.0
 price:
-  value: 1484.96
+  value: 1495.16
   currency: USD
   date: '2026-11-13'
   source: yfinance ASML

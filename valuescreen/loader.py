@@ -7,12 +7,12 @@ from pathlib import Path
 
 import yaml
 
+from .settings import ValidationError, fx, tier_of  # noqa: F401 (re-exported: tools and tests use loader.*)
+
 ROOT = Path(__file__).resolve().parent.parent
 MODELS = {"producer", "cashflow", "developer", "physical", "growth", "leases", "liquid"}
 
 
-class ValidationError(ValueError):
-    pass
 
 
 def _date(x, field, ticker):
@@ -55,24 +55,10 @@ def validate_company(c: dict, src: str = "") -> dict:
         if f not in pr:
             raise ValidationError(f"{t}: price.{f} is required")
     pr["date"] = _date(pr["date"], "price.date", t)
-    m = c["model"]
-    if m in ("producer", "cashflow", "growth") and "shares_m" not in c and "eps_per_period" not in c.get("earnings", {}):
-        raise ValidationError(f"{t}: shares_m is required for model {m}")
-    if m == "developer" and "npv_curve" not in c:
-        raise ValidationError(f"{t}: developer model needs npv_curve")
-    if m == "physical" and "holdings" not in c:
-        raise ValidationError(f"{t}: physical model needs holdings")
-    if m == "leases":
-        for f in ("projects", "scenarios", "balance", "shares_m"):
-            if f not in c:
-                raise ValidationError(f"{t}: leases model needs {f}")
-        for s in ("Cautious", "Base", "Fair"):
-            if s not in c["scenarios"]:
-                raise ValidationError(f"{t}: leases model needs a {s} scenario")
-    if m == "liquid" and not (c.get("liquid_assets") or c.get("holdings")):
-        raise ValidationError(f"{t}: liquid model needs liquid_assets (and shares_m)")
-    if m == "liquid" and "shares_m" not in c:
-        raise ValidationError(f"{t}: liquid model needs shares_m")
+    from . import kinds  # noqa: PLC0415 - imported here: the models need numpy and matplotlib, most file reads do not
+    problem = kinds.of(c["model"]).check(c)   # what this model needs in the file
+    if problem:
+        raise ValidationError(f"{t}: {problem}")
     if c.get("ltm"):
         apply_ltm(c)
     for x in c.get("metals", []):
@@ -123,14 +109,6 @@ def apply_ltm(c: dict) -> dict:
     return c
 
 
-def tier_of(c: dict, cfg: dict) -> str | None:
-    """A, B or C from the company file's `tier:`, else from config `tiers:`; None when untiered."""
-    if c.get("tier"):
-        return str(c["tier"]).upper()
-    for tier, tickers in (cfg.get("tiers") or {}).items():
-        if c["ticker"].upper() in {str(x).upper() for x in tickers}:
-            return str(tier).upper()
-    return None
 
 
 def _folder_name(folder: str) -> str:
@@ -208,11 +186,3 @@ def load_list(name: str, folder: Path | None = None) -> list[str]:
     return [x["ticker"] for x in load_list_entries(name, folder)]
 
 
-def fx(cfg: dict, frm: str, to: str) -> float:
-    """Multiplier converting an amount in `frm` currency into `to` currency."""
-    if frm == to:
-        return 1.0
-    table = cfg["fx_usd_per_unit"]
-    if frm not in table or to not in table:
-        raise ValidationError(f"FX rate needed for {frm}->{to}; add it to config.yaml fx_usd_per_unit")
-    return table[frm] / table[to]

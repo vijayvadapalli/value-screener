@@ -25,7 +25,7 @@ metals:
   aisc: 2602
 tax_rate: 0.3
 price:
-  value: 4.945
+  value: 4.91
   currency: USD
   date: '2026-11-13'
   source: yfinance BTG

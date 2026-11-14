@@ -9,7 +9,7 @@ A list entry is a market when it has `market: true`:
 `yahoo` entries take their daily history from output/prices.sqlite (tools/update_history.py fills it from the lists);
 `series` entries use a monthly series from data/longterm (see longterm.py) – uranium has no daily series on Yahoo.
 
-    rows(entries, log) → [{ticker, name, unit, symbol, price, currency, date, chg_1w, chg_1m, chg_1y, vs50, vs200, rsi,
+    rows(entries, log, con=None) → [{ticker, name, unit, symbol, price, currency, date, chg_1w, chg_1m, chg_1y, vs50, vs200, rsi,
                            low52, high52, monthly, note, chart}]
 """
 from __future__ import annotations
@@ -63,8 +63,10 @@ def _monthly(entry, log):
                 low52=min(year), high52=max(year), note=note, chart=chart)
 
 
-def rows(entries: list[dict], log=print) -> list[dict]:
-    con = pricedb.connect() if pricedb.DB.exists() else None
+def rows(entries: list[dict], log=print, con=None) -> list[dict]:
+    """`con`: the price-history database; opened here when not given (None when there is no database yet)."""
+    if con is None and pricedb.DB.exists():
+        con = pricedb.connect()
     out = []
     for e in entries:
         r = _monthly(e, log) if e.get("series") else _daily(con, e, log)

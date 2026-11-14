@@ -11,6 +11,7 @@ from __future__ import annotations
 import datetime as dt
 
 from . import chart_levels as L
+from . import kinds
 from . import pricedb
 from . import style as S
 
@@ -38,7 +39,7 @@ def _scaled(con, symbol):
     return bars, major, factor
 
 
-LIGHT_GREEN, DARK_GREEN = "#2FA36B", "#0B5D3F"
+LIGHT_GREEN, DARK_GREEN = S.VALUE_LIGHT, S.VALUE_DARK
 
 
 def value_lines(r: dict) -> list[dict]:
@@ -46,25 +47,8 @@ def value_lines(r: dict) -> list[dict]:
     developers and holders) in green, the cautious value (12x, 10x; NAV; value with no growth) in darker green, and
     the start of the sell zone (25x) in red. A separate buy level (20% below the cautious value, tiers B and C) is
     dashed green. [{"price", "label", "kind", "color", "solid"}]."""
-    m = r["model"]
-    sell = f"{r['sell_multiple']:g}x sell zone" if r.get("sell_multiple") else "Sell zone"
-    if m in ("producer", "cashflow"):
-        lo, hi = r.get("mult_lo"), r.get("mult_hi")
-        items = [(r.get("v_high"), f"{hi:g}x value" if hi else "Fair value", "value", LIGHT_GREEN, True),
-                 (r.get("v_low"), f"{lo:g}x value" if lo else "Value", "value", DARK_GREEN, True),
-                 (r.get("buy_level"), "start" if r.get("tier") == "A" else "Buy (20% below)", "buy", LIGHT_GREEN, False),
-                 (r.get("add_level"), "add", "add", DARK_GREEN, False),
-                 (r.get("call_level"), sell, "sell", S.SIGNAL["red"], True)]
-    elif m == "growth":
-        items = [(r.get("buy_level"), f"Buy (≤ {r.get('growth_buy', 0.05) * 100:.0f}% growth)", "buy", LIGHT_GREEN, True),
-                 (r.get("v0"), "Value, no growth", "value", DARK_GREEN, True),
-                 (r.get("call_level"), "Sell zone (25% growth)", "sell", S.SIGNAL["red"], True)]
-    elif m in ("developer", "physical", "leases"):
-        items = [(r.get("buy_level"), "Buy", "buy", LIGHT_GREEN, True),
-                 (r.get("nav") or r.get("v_low"), "NAV" if m != "leases" else "Value", "value", DARK_GREEN, True),
-                 (r.get("call_level"), "Sell zone", "sell", S.SIGNAL["red"], True)]
-    else:
-        items = []
+    kind = kinds.KINDS.get(r.get("model"))   # none for a symbol we do not value (a commodity, an ETF)
+    items = kind.value_lines(r) if kind else []
     merged = {}   # tier A: the start and add levels are the 15x and 12x values – one line, both labels
     for price, label, kind, colour, solid in items:
         if price and price > 0:

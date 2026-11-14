@@ -1,0 +1,8 @@
+
+main{max-width:1500px} .r{text-align:right} .flags{font-size:11px;color:var(--muted)}
+table.mp{border-collapse:collapse;width:100%;font-size:13px} table.mp th{text-align:left;background:var(--soft);color:var(--ink2);padding:7px 8px;
+border-bottom:1px solid var(--ink2);font-size:12px} table.mp td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr[data-sleeve=us] td:first-child{box-shadow:inset 3px 0 var(--blue)} tr[data-sleeve=mining] td:first-child{box-shadow:inset 3px 0 #B7791F}
+tr[data-sleeve=energy] td:first-child{box-shadow:inset 3px 0 var(--red)} tr[data-sleeve=uranium] td:first-child{box-shadow:inset 3px 0 var(--green)}
+tr[data-sleeve=defensive] td:first-child{box-shadow:inset 3px 0 var(--muted)}
+table.sl{border-collapse:collapse;font-size:13px;margin:6px 0 14px} table.sl td,table.sl th{padding:4px 12px;border-bottom:1px solid var(--line)}

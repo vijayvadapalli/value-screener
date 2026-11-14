@@ -17,9 +17,9 @@ balance:
   cash: 14137.5
   debt: 746.8
 price:
-  value: 31.62
+  value: 30.54
   currency: HKD
-  date: '2026-11-12'
+  date: '2026-11-13'
   source: yfinance 6693.HK
 sources:
 - Chifeng Jilong Gold Q3-2026 report, 23 Oct 2026 (9M net profit RMB 2,285m, +11%; Q3 RMB 553m, −42% on lower gold sales)

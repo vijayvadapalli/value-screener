@@ -5,8 +5,10 @@ zone() returns, for one valued company: zone (BUY / WATCH / HOLD / SELL and vari
 """
 from __future__ import annotations
 
-GREEN, BLUE, RED = "green", "blue", "red"
-NO_LEVELS = dict(margin_of_safety=None, put_level=None, call_level=None, buy_level=None, add_level=None)
+from . import kinds, screening
+from .types import Result
+
+GREEN, BLUE, RED = screening.GREEN, screening.BLUE, screening.RED
 FLAG_TEXT = {"conglomerate": "conglomerate / finance arm", "insurer": "insurer: earnings a weak guide"}
 
 
@@ -32,71 +34,32 @@ def stale_check(c, cfg):
                 price_age_days=(as_of - c["price"]["date"]).days)
 
 
-# ------------------------------------------------------------------------------------------------- zones per model
-def _producer_zone(r, z):
-    """Tier A: start at or below 15x, add at or below 12x. Others: BUY with a 20% margin at 12x. AISC ≤ 60% of spot."""
-    price = r["price"]
-    if r["oe"] <= 0:
-        return dict(zone="NO EARNINGS", **NO_LEVELS)
-    mos = 1 - price / r["v_low"] if r["v_low"] > 0 else -9.99
-    cost_ok = r.get("cost_ratio") is None or r["cost_ratio"] <= z["max_cost_ratio"]
-    out = dict(margin_of_safety=mos, put_level=max(r["v_low"], 0.0), call_level=r["v_sell"])
-    if r.get("tier") == "A":
-        out.update(buy_level=r["v_high"], add_level=r["v_low"])
-        if price <= r["v_high"]:
-            zn = ("BUY (add)" if price <= r["v_low"] else "BUY (start)") if cost_ok else "WATCH (high cost)"
-        else:
-            zn = "SELL" if price >= r["v_sell"] else "HOLD"
-    else:
-        out.update(buy_level=(1 - z["buy_margin_of_safety"]) * r["v_low"], add_level=None)
-        if mos >= z["buy_margin_of_safety"]:
-            zn = "BUY" if cost_ok else "WATCH (high cost)"
-        elif mos >= 0:
-            zn = "WATCH"
-        else:
-            zn = "SELL" if price >= r["v_sell"] else "HOLD"
-    return dict(out, zone=zn)
+# ------------------------------------------------------------------------------------------------- zones
+# Each model gives its band (BUY / WATCH / HOLD / SELL / NO EARNINGS / NO VALUE / NOT VALUED) with its details –
+# buy_step ("add" / "start", tier A) and high_cost (a buy held back by AISC above 60% of spot) – and the levels
+# (kinds/<model>.py). The zone text the reports show is written from these by zone_text(); signal and action are
+# decided on the fields, not the text.
+def zone_text(band, buy_step=None, high_cost=False, stale=False, cyclical=False):
+    """The zone as the reports and the signals log show it, e.g. "BUY (add)", "WATCH (high cost)", "HOLD · stale",
+    "STALE (would be BUY)", "WATCH · cyclical: check the cycle"."""
+    if stale and band == "BUY":
+        return "STALE (would be BUY)"
+    text = f"BUY ({buy_step})" if band == "BUY" and buy_step else "WATCH (high cost)" if high_cost else band
+    if stale:
+        text += " · stale"
+    if cyclical and band in ("BUY", "WATCH"):
+        text += " · cyclical: check the cycle"
+    return text
 
 
-def _nav_zone(r, buy, sell):
-    """Developers, physical holders and the lease model: price ÷ NAV (or ÷ the cautious value)."""
-    p = r["pnav"]
-    if p is None or r["nav"] <= 0:
-        return dict(zone="NO VALUE", **NO_LEVELS)
-    zn = "BUY" if p <= buy else "WATCH" if p <= 1.0 else "SELL" if p >= sell else "HOLD"
-    return dict(zone=zn, margin_of_safety=1 - p, put_level=buy * r["nav"], call_level=sell * r["nav"],
-                buy_level=buy * r["nav"], add_level=None)
-
-
-def _growth_zone(r, z):
-    g = r["implied_growth"]
-    if g is None:
-        zn = "NO EARNINGS"
-    else:
-        zn = "BUY" if g <= r["growth_buy"] else "WATCH" if g <= z["growth_watch"] else "SELL" if g >= z["growth_sell"] else "HOLD"
-    return dict(zone=zn, margin_of_safety=1 - r["price"] / r["v0"] if r["v0"] > 0 else None,
-                put_level=r["v_buy"], call_level=r["v_sell"], buy_level=r["v_buy"], add_level=None)
-
-
-def zone(r, c, cfg):
-    z, m = cfg["zones"], c["model"]
-    if m in ("producer", "cashflow"):
-        out = _producer_zone(r, z)
-    elif m == "physical":
-        out = _nav_zone(r, z["physical_buy_pnav"], z["physical_sell_pnav"])
-    elif m in ("developer", "leases"):
-        out = _nav_zone(r, z["developer_buy_pnav"], z["developer_sell_pnav"])
-    elif m == "liquid":
-        out = dict(zone="NOT VALUED", **NO_LEVELS)
-    else:
-        out = _growth_zone(r, z)
+def zone(r: Result, c: dict, cfg: dict) -> dict:
+    out = kinds.of(c["model"]).zone(r, cfg["zones"])
+    out.setdefault("buy_step", None)
+    out.setdefault("high_cost", False)
     for level in ("buy_level", "add_level"):   # heavy net debt can push a level below zero, which means no buy level
         if out.get(level) is not None and out[level] <= 0:
             out[level] = None
-    if r.get("stale"):
-        out["zone"] = "STALE (would be BUY)" if out["zone"].startswith("BUY") else out["zone"] + " · stale"
-    if r.get("cyclical") and out["zone"].startswith(("BUY", "WATCH")):
-        out["zone"] += " · cyclical: check the cycle"
+    out["zone"] = zone_text(out["band"], out["buy_step"], out["high_cost"], bool(r.get("stale")), bool(r.get("cyclical")))
     full = {**r, **out}
     out["signal"], out["signal_caps"] = signal(full, cfg)
     out["flags"] = flags(full, cfg)
@@ -118,20 +81,21 @@ def _bad_loan_flags(r):
     return list((r.get("asset_quality") or {}).get("flags", []))
 
 
-def signal(r, cfg):
+def _buyable(r):
+    """In the buy band with current results – a stale buy waits for a refresh."""
+    return r["band"] == "BUY" and not r.get("stale")
+
+
+def signal(r: Result, cfg: dict) -> tuple[str, list[str]]:
     """(colour, caps): green = buy / start, blue = watch / hold, red = expensive or no valid value.
     A cheap cyclical, cash conversion below 70%, or a lender showing bad-loan warning signs is capped at blue."""
-    zn = r["zone"]
-    if zn.startswith(("SELL", "NO EARNINGS", "NO VALUE", "NOT VALUED")):
-        return RED, []
-    if not zn.startswith("BUY"):
-        return BLUE, []
-    caps = ((["cyclical"] if _is_cyclical(r) else []) + (["cash conversion"] if _low_cash_conversion(r, cfg) else [])
-            + (["bad loans"] if _bad_loan_flags(r) else []))
-    return (BLUE if caps else GREEN), caps
+    if not _buyable(r):   # a stale buy is blue until the results are refreshed
+        return (BLUE if r["band"] == "BUY" else screening.colour(r["band"])), []
+    caps = screening.caps(_is_cyclical(r), _low_cash_conversion(r, cfg), bool(_bad_loan_flags(r)))
+    return screening.colour("BUY", caps), caps
 
 
-def flags(r, cfg):
+def flags(r: Result, cfg: dict) -> list[str]:
     """Short warnings for the comment column, shown in [brackets]."""
     out = ["STALE"] if r.get("stale") else []
     if r.get("price_undated"):
@@ -145,7 +109,7 @@ def flags(r, cfg):
     if _low_cash_conversion(r, cfg):
         out.append(f"cash conversion {r['cash_conversion']*100:.0f}%")
     out += _bad_loan_flags(r)
-    if "high cost" in r["zone"]:
+    if r.get("high_cost"):
         out.append("AISC > 60% of spot")
     v2 = r.get("v2") or {}
     if v2.get("one_offs"):
@@ -156,20 +120,20 @@ def flags(r, cfg):
     return out + list(r.get("flags_file", []))
 
 
-def action_text(r):
-    zn, sig = r["zone"], r["signal"]
-    if zn.startswith("NOT VALUED"):
+def action_text(r: Result) -> str:
+    band, sig = r["band"], r["signal"]
+    if band == "NOT VALUED":
         return "No value – don't add"
-    if zn.startswith(("NO EARNINGS", "NO VALUE")):
+    if band in ("NO EARNINGS", "NO VALUE"):
         return "No valid value"
-    if zn.startswith("STALE"):
+    if band == "BUY" and r.get("stale"):
         return "Would be buy – refresh data"
     if sig == GREEN:
-        return {"BUY (add)": "Buy – add (≤ 12x)", "BUY (start)": "Buy – start (≤ 15x)"}.get(zn.split(" ·")[0], "Buy")
+        return {"add": "Buy – add (≤ 12x)", "start": "Buy – start (≤ 15x)"}.get(r.get("buy_step"), "Buy")
     if sig == RED:
         return "Expensive – don't add"
     if r.get("signal_caps"):
         return "Watch – capped at blue"
-    if r.get("tier") == "A" and zn.startswith("HOLD"):
+    if r.get("tier") == "A" and band == "HOLD":
         return "Watch – above 15x"
     return "Watch / hold"

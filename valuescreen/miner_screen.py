@@ -22,9 +22,10 @@ from pathlib import Path
 
 import yaml
 
+from . import page
 from . import profit_vs_price as pvp
+from . import screening
 from . import style as S
-from .html_report import CSS as BASE_CSS
 from .wording import money
 
 PRODUCER_REVENUE_SHARE = 0.02   # revenue below this share of market value → developer / explorer
@@ -78,16 +79,9 @@ def evaluate(raw: dict, entry: dict) -> dict:
         r["flags"].append("capex above operating cash flow")
     if ebitda and ebitda > 0 and debt / ebitda > 3:
         r["flags"].append("debt > 3× EBITDA")
-    if eps <= 0:
-        r.update(signal="red", action="No earnings")
-    elif r["mos"] is not None and r["mos"] >= 0.20:
-        r.update(signal="green", action="Cheap")
-    elif price <= r["v15"]:
-        r.update(signal="blue", action="Fair")
-    elif price >= r["v25"]:
-        r.update(signal="red", action="Expensive")
-    else:
-        r.update(signal="blue", action="Watch")
+    band = screening.multiple_band(price, eps, r["v12"], r["v25"])
+    label = {"BUY": "Cheap", "SELL": "Expensive", "NO EARNINGS": "No earnings"}.get(band)
+    r.update(signal=screening.colour(band), action=label or ("Fair" if price <= r["v15"] else "Watch"))
     return r
 
 
@@ -201,38 +195,6 @@ HEAD = """<tr><th>Ticker</th><th>Signal</th><th>Margin of safety</th><th>Metal /
 <th>Value 12x–15x</th><th>Price ÷ op. cash</th><th>FCF yield</th><th>EV / EBITDA</th><th>P/B</th><th>Net cash ÷ price</th><th>Grade</th>
 <th>1 yr</th></tr>"""
 
-JS = """
-const rows = () => [...document.querySelectorAll('#sum tbody tr')];
-const pick = {signal: 'all', metal: 'all', stage: 'all', held: 'all'};
-function apply() {
-  const q = document.getElementById('q').value.toLowerCase(); let n = 0;
-  rows().forEach(r => {
-    const ok = (pick.signal === 'all' || r.dataset.signal === pick.signal) && (pick.metal === 'all' || r.dataset.metal.includes(pick.metal))
-            && (pick.stage === 'all' || r.dataset.stage === pick.stage) && (pick.held === 'all' || r.dataset.held === pick.held)
-            && (!q || r.dataset.text.includes(q));
-    r.style.display = ok ? '' : 'none'; if (ok) n++; });
-  document.getElementById('count').textContent = n + ' shown';
-}
-document.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
-  pick[b.dataset.k] = b.dataset.v;
-  document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach(x => x.classList.toggle('on', x === b)); apply(); });
-document.getElementById('q').oninput = apply;
-document.querySelectorAll('#sum th').forEach((th, i) => th.onclick = () => {
-  const asc = !th.classList.contains('asc');
-  document.querySelectorAll('#sum th').forEach(x => x.classList.remove('asc', 'desc')); th.classList.add(asc ? 'asc' : 'desc');
-  const key = r => { const v = r.children[i].dataset.v ?? ''; const n = parseFloat(v); return v === '' ? null : isNaN(n) ? v : n; };
-  const body = document.querySelector('#sum tbody');
-  rows().sort((a, b) => { const x = key(a), y = key(b); if (x === null) return 1; if (y === null) return -1;
-    return (x < y ? -1 : x > y ? 1 : 0) * (asc ? 1 : -1); }).forEach(r => body.appendChild(r)); });
-apply();
-"""
-CSS = BASE_CSS + """
-.pill.grey{background:var(--muted)} .tag{font-size:10.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:0 6px;color:var(--ink2)}
-main{max-width:1640px} .tag.held{background:var(--ink);color:var(--bg);border-color:var(--ink)} .flags{font-size:11px;color:var(--muted)} table.sum td{white-space:nowrap} table.sum td:first-child{white-space:normal;min-width:190px}
-.short{background:var(--soft);border-left:3px solid var(--green);padding:9px 13px;margin:10px 0;font-size:13.5px}
-"""
-
-
 def build(rows: list[dict], path: Path, title: str, as_of: dt.date, etfs: list[str], in_files: set, missing: list[str]):
     metals = sorted({m for r in rows for m in r["metals"]})
     counts = {s: sum(1 for r in rows if r["signal"] == s) for s in ("green", "blue", "red", "grey")}
@@ -241,8 +203,7 @@ def build(rows: list[dict], path: Path, title: str, as_of: dt.date, etfs: list[s
     def buttons(key, values):
         return f'<button class="on" data-k="{key}" data-v="all">All</button>' + "".join(
             f'<button data-k="{key}" data-v="{_e(v)}">{_e(label)}</button>' for v, label in values)
-    page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{_e(title)} – quick screen</title><style>{CSS}</style></head><body><main>
+    body = f"""
 <h1>{_e(title)} – quick screen</h1>
 <p class="sub">{len(rows)} companies from {_e(', '.join(e for e in etfs if not e.endswith(' list')))}
 {f"plus {sum(1 for r in rows if any(e.endswith(' list') for e in r['etfs']))} from your {next(e for r in rows for e in r['etfs'] if e.endswith(' list'))} not in them" if any(e.endswith(' list') for r in rows for e in r['etfs']) else ''} · run {as_of:%d %b %Y} · <span class="pos">{counts['green']} cheap</span>,
@@ -267,9 +228,11 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <p class="small">No figures from Yahoo for: {_e(', '.join(missing)) or 'none'}.</p>
 <footer>Prices in each exchange's currency; values converted from the statements' currency where it differs (flagged). Market value in
 US$. Educational framework, not investment advice.</footer>
-</main><script>{JS}</script></body></html>"""
+"""
+    html_page = page.document(f"{_e(title)} – quick screen", page.report_css() + page.asset("screen-miners.css"), body,
+                              scripts=f"<script>{page.asset('screen-miners.js')}</script>")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(page, encoding="utf-8")
+    path.write_text(html_page, encoding="utf-8")
     return path
 
 

@@ -15,7 +15,7 @@ shares_m: 1073
 balance:
   net_cash: -7430
 price:
-  value: 172.585
+  value: 172.47
   currency: USD
   date: '2026-11-13'
   source: yfinance QCOM

@@ -29,7 +29,7 @@ from __future__ import annotations
 
 from statistics import median
 
-from . import asset_quality
+from . import asset_quality, screening
 
 
 def clean_quarters(q, median_x=2.0, neighbour_x=1.6):
@@ -109,23 +109,23 @@ def base_eps(c, cfg):
         avg5 = None
         out["history_not_comparable"] = broken
     out["eps_5y_avg"] = avg5
-    if kind == "cyclical" and broken:
-        out["eps"] = ttm
-        out["how"] = f"cyclical, but the 5-year average is not used ({broken}): 12-month EPS {ttm:,.2f}"
-    elif kind == "cyclical" and avg5 is not None:
-        out["eps"] = (ttm + avg5) / 2
-        out["how"] = f"cyclical: average of 12-month EPS {ttm:,.2f} and 5-year average {avg5:,.2f}"
-    elif kind == "financial" and v.get("book_value_ps") and v.get("roe_5y") is not None:
+    aq, bad = None, 0.0
+    if kind == "financial" and v.get("book_value_ps") and v.get("roe_5y") is not None:
         aq = asset_quality.india(v.get("asset_quality"), c.get("shares_m"), cfg)
         bad = (aq or {}).get("bad_loans_ps") or 0.0
+    eps, basis, norm = screening.earnings_basis(kind, ttm, avg5, v.get("book_value_ps"), v.get("roe_5y"), bad, broken)
+    out["eps"] = eps
+    if basis == screening.HISTORY_BREAK:
+        out["how"] = f"cyclical, but the 5-year average is not used ({broken}): 12-month EPS {ttm:,.2f}"
+    elif basis == screening.CYCLICAL:
+        out["how"] = f"cyclical: average of 12-month EPS {ttm:,.2f} and 5-year average {avg5:,.2f}"
+    elif basis == screening.FINANCIAL:
         book = v["book_value_ps"] - bad
-        norm = book * v["roe_5y"]
-        out.update(asset_quality=aq, book_value_ps=v["book_value_ps"], adjusted_book_ps=book, normal_eps=norm, eps=(ttm + norm) / 2)
+        out.update(asset_quality=aq, book_value_ps=v["book_value_ps"], adjusted_book_ps=book, normal_eps=norm)
         book_text = (f"adjusted book {book:,.2f} (book {v['book_value_ps']:,.2f} − bad loans not provided for {bad:,.2f})"
                      if bad else f"book value {book:,.2f}")
         out["how"] = f"financial: average of 12-month EPS {ttm:,.2f} and {book_text} × 5-year ROE {v['roe_5y']*100:.1f}% = {norm:,.2f}"
     else:
-        out["eps"] = ttm
         out["how"] = f"12-month EPS {ttm:,.2f}"
     # A bank's or insurer's operating cash flow mixes in deposits and loans, so it says nothing about earnings quality;
     # financials are checked on price-to-book instead.

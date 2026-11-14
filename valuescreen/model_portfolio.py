@@ -345,7 +345,7 @@ def _row(i, c):
 
 
 def report(result: dict, risk: dict, path: Path, as_of: dt.date, notes: list[str]):
-    from .html_report import CSS as BASE_CSS  # noqa: PLC0415
+    from . import page  # noqa: PLC0415
     h, p = result["holdings"], PROFILES[result["profile"]]
     w = p["weights"]
     sleeve_mix = " · ".join(f"{SLEEVE_NAMES[k].lower()} {v[0]*100:.0f}%" for k, v in p["sleeves"].items())
@@ -365,16 +365,7 @@ def report(result: dict, risk: dict, path: Path, as_of: dt.date, notes: list[str
                   ("Worst fall in the past year", S.pct(risk["max_fall"]), "today's mix, backward-looking")]
     cards_html = "".join(f'<div class="card" style="border-top-color:{S.SIGNAL["blue"]}"><div class="lbl">{_e(a)}</div>'
                          f'<div class="val">{_e(b)}</div><div class="cap">{_e(c)}</div></div>' for a, b, c in cards)
-    page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{_e(p['title'].split(' – ')[0] + ' ' + result['profile'])}</title><style>{BASE_CSS}
-main{{max-width:1500px}} .r{{text-align:right}} .flags{{font-size:11px;color:var(--muted)}}
-table.mp{{border-collapse:collapse;width:100%;font-size:13px}} table.mp th{{text-align:left;background:var(--soft);color:var(--ink2);padding:7px 8px;
-border-bottom:1px solid var(--ink2);font-size:12px}} table.mp td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}}
-tr[data-sleeve=us] td:first-child{{box-shadow:inset 3px 0 var(--blue)}} tr[data-sleeve=mining] td:first-child{{box-shadow:inset 3px 0 #B7791F}}
-tr[data-sleeve=energy] td:first-child{{box-shadow:inset 3px 0 var(--red)}} tr[data-sleeve=uranium] td:first-child{{box-shadow:inset 3px 0 var(--green)}}
-tr[data-sleeve=defensive] td:first-child{{box-shadow:inset 3px 0 var(--muted)}}
-table.sl{{border-collapse:collapse;font-size:13px;margin:6px 0 14px}} table.sl td,table.sl th{{padding:4px 12px;border-bottom:1px solid var(--line)}}</style>
-</head><body><main>
+    body = f"""
 <h1>{_e(p['title'])}</h1>
 <p class="sub">{len(h)} positions across {len(result['sleeves'])} sleeves · built {as_of:%d %b %Y} from today's reports · educational framework, not investment advice</p>
 <div class="cards">{cards_html}</div>
@@ -395,7 +386,8 @@ holding's signal turns red.</p>
 <ul class="small">{''.join(f'<li>{_e(n)}</li>' for n in notes)}</ul>
 <footer>Volatility and worst fall use the past year's daily closes and describe what today's mix would have done – not a forecast.
 Prices in each listing's currency. Educational framework, not investment advice.</footer>
-</main></body></html>"""
+"""
+    html_page = page.document(_e(p['title'].split(' – ')[0] + ' ' + result['profile']), page.report_css() + page.asset("portfolio.css"), body)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(page, encoding="utf-8")
+    path.write_text(html_page, encoding="utf-8")
     return path

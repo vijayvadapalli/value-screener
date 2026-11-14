@@ -18,13 +18,11 @@ from __future__ import annotations
 
 import datetime as dt
 
+from . import kinds
 from . import style as S
-from .wording import esc, money
+from .wording import esc
 
-ASSET_MODELS = {"developer": "a developer, valued on its study NAV, not profits",
-                "physical": "holds the metal; profits are revaluations, so it is valued on NAV",
-                "leases": "valued on contracted lease cash, not today's profits",
-                "liquid": "no meaningful profits; not valued"}
+ASSET_MODELS = {m: k.profit_note for m, k in kinds.KINDS.items() if k.profit_note}   # valued on assets, not profits
 GRADE_COLOUR = {"A": S.SIGNAL["green"], "B": "#4FA884", "C": "#B7791F", "D": S.SIGNAL["red"], "n/m": S.MUTED}
 
 
@@ -80,21 +78,7 @@ def evaluate(rec: dict) -> dict:
 
 def value_summary(r: dict) -> dict:
     """The value report's verdict for one company, as shown next to its grade."""
-    m = r["model"]
-    if m == "growth":
-        g = r.get("implied_growth")
-        detail = "no valid earnings" if g is None else f"needs {g*100:+.1f}%/yr"
-    elif m in ("developer", "physical"):
-        detail = f"{r['pnav']:.2f}× NAV"
-    elif m == "leases":
-        detail = f"{r['pnav']:.2f}× cautious value"
-    elif m == "liquid":
-        detail = "not valued"
-    elif r.get("margin_of_safety") is None:
-        detail = "no earnings"
-    else:
-        detail = f"price vs 15x: {money(r['price'], r['price_ccy'])} vs {money(r['v_high'], r['price_ccy'])}"
-    return {"signal": r["signal"], "action": r["action"], "detail": detail, "model": m}
+    return {"signal": r["signal"], "action": r["action"], "detail": kinds.of(r["model"]).summary_detail(r), "model": r["model"]}
 
 
 def rows(entries: list[dict], raw: dict, results: dict, companies: dict) -> list[dict]:

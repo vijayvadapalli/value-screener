@@ -15,7 +15,7 @@ balance:
   cash: 37080
   debt: 125340
 price:
-  value: 125.125
+  value: 125.35
   currency: USD
   date: '2026-11-13'
   source: yfinance ORCL

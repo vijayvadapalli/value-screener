@@ -17,7 +17,7 @@ balance:
   cash: 4396.3
   debt: 3036.3
 price:
-  value: 753.91
+  value: 758.73
   currency: MXN
   date: '2026-11-13'
   source: yfinance PE&OLES.MX

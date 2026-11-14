@@ -109,9 +109,11 @@ flowchart LR
 ### Engine (`valuescreen/`)
 | Module | Job |
 |---|---|
-| `loader.py` | read and validate company files, lists, config; last-12-month earnings; tiers; publish to `reports/` |
+| `loader.py`, `settings.py` | read and validate company files, lists, config (each model checks its own fields); last-12-month earnings; publish to `reports/`. `settings.py`: FX and tiers – the lookups the models need, kept apart from file reading |
+| `types.py` | the shape of a valuation result as typed dicts – for editors and type checkers; a test fails if the engine produces an undeclared key |
 | `models.py`, `leases.py` | the valuation models (producer / streamer / royalty, oil cash-flow, developer NAV, physical NAV, growth reverse DCF at 10% US / 12% India, contracted leases, liquid assets) |
-| `rules.py`, `v2.py` | zones, signals (green / blue / red), buy and add levels, caps, flags, stale-data check; Nifty v2 earnings rules |
+| `rules.py`, `v2.py` | zones (a band plus details; the text is written from them), signals (green / blue / red), buy and add levels, flags, stale-data check; Nifty v2 earnings data |
+| `screening.py` | the screening rules, one copy for the full valuation and the US / miners screens: earnings basis (cyclical, financial, history break), growth and multiple bands, blue caps, colours |
 | `asset_quality.py` | bad loans at banks and other lenders: adjusted book value, warning signs that cap at blue (India and US) |
 | `profit_vs_price.py`, `growth_data.py`, `screener.py` | profit growth vs price growth and its A–D grade; Yahoo and Screener.in fetching |
 | `miner_screen.py`, `etf_holdings.py` | miners quick screen from ETF holdings |
@@ -126,8 +128,10 @@ flowchart LR
 ### Outputs (`valuescreen/`)
 | Module | Output |
 |---|---|
-| `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links |
-| `charts.py`, `style.py`, `wording.py` | the report's charts; one look (Inter, palette); the words and notes in every report |
+| `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links; optional parts passed as one `ReportExtras` |
+| `page.py`, `assets/` | the page shell every report shares (value report, screens, model portfolios, research) and all their CSS and JavaScript as files |
+| `kinds/` | one class per valuation model – producer (and cash-flow), developer, physical, growth, leases, liquid – owning its zone, headline, calculation steps, worked example, key figures, cards, main chart, heatmap grid and price-chart lines; the reports ask the model instead of checking which one it is |
+| `charts.py`, `plot.py`, `fmt.py`, `style.py`, `wording.py` | the shared charts (band, heatmap, EPS history) and chart basics; text formatting; one look (Inter, palette); the shared words and notes |
 | `report.py` | ranked CSV, signal log, heatmaps |
 | `html_report.chart_block` + `vendor/` | per company: RSI on top, candles (D / W / M, 6M–10Y), SMA 20/50/200, nearest auto support / resistance (all on request) and trend lines, value / buy / add / sell lines, E / D / S markers (Lightweight Charts, Apache 2.0) |
 
@@ -214,6 +218,7 @@ flowchart TD
 | **Stage 3** – private research: weekly capture, private report (rules near / triggered, agree / conflict with our valuation, charts with their levels), plain watched levels on public charts | built |
 | **Stage 4** – weekly routine: `tools/weekly.py` (all steps + brief) and the `/weekly` skill (results, news, capture) | built |
 | Later – capital ratios for lenders (CAR / CET1: not in Screener.in or the SEC bulk facts), US tangible book (less goodwill) | ideas |
+| To do – gaps against paid services: mine life, fully diluted shares, cash runway, sensitivity, alerts, insiders, portfolio tracking (see [section 10](#10-to-do--gaps-against-paid-services)) | to do |
 | Later – Markets page (ratios such as SILJ/GDXJ, URNM/GLD, gold/silver; weekly and YTD change), "after a sell-off" forward returns, signal scorecard, thesis tracker, price history for Nifty 50 and the S&P 500 | ideas |
 
 ## 8. Principles
@@ -270,3 +275,40 @@ flowchart LR
 | Support / resistance | Prices where the share has repeatedly stopped falling / rising | Places to start or add (support), or where a rally may stall (resistance) |
 | Trend line | A line through rising lows or falling highs | Shows whether the trend is still intact |
 | Volume | Shares traded each day | Moves on high volume matter more than on thin trading |
+
+## 10. To do – gaps against paid services
+
+Compared with paid services (Morningstar, Simply Wall St, Seeking Alpha, GuruFocus, Koyfin, TIKR, Stock Rover) and
+specialist mining data (S&P Capital IQ Pro, Mining Intelligence), Nov 2026. The paid tools win on clean data and
+coverage; this tool wins on miners at today's metal prices, developers and physical holders, and a full calculation
+behind every signal. The list is in order: the gaps most likely to make a company look green when it should not come
+first.
+
+### Build
+| Gap | Who has it | Here today | What to build |
+|---|---|---|---|
+| **Mine life and reserves** | Capital IQ, Mining Intelligence | None – owner earnings × a fixed multiple | `mine_life` (and reserves) in producer files; cap the multiple when the life is short |
+| **Fully diluted shares** | Capital IQ, company filings | Basic shares only | Warrants and options in company files; value per fully diluted share for juniors |
+| **Cash runway** | Specialist mining data | Partly (`liquid` model) | Cash ÷ quarterly burn for explorers and developers, with a flag under ~4 quarters |
+| **Metal-price sensitivity** | Broker models | `--spot` overrides, one run at a time | Value at −20% / spot / +20% metal prices in each miner's section |
+| **Signal scorecard** | Seeking Alpha Quant, Stock Rover (vendor backtests) | None | Score past signals from the dated reports in `output/` against what the price did next |
+| **Price alerts** | All | Weekly brief only | Daily check of prices against buy / add / sell levels, with a notification |
+| **Insider buying and selling** | GuruFocus, Seeking Alpha, OpenInsider | None | US Form 4 filings through `sec.py`; Canada (SEDI) later |
+| **Portfolio tracking** | Stock Rover, Morningstar, Sharesight | Share quantity only | Cost basis, profit and loss, dividends received, against a benchmark (private) |
+| Peer comparison for miners | Capital IQ, broker research | Cross-company heatmaps | EV per ounce and price ÷ NAV across producers and developers |
+| Jurisdiction risk | Fraser Institute survey, specialist data | Manual flags | A jurisdiction field that feeds the tier |
+| Debt maturities | Capital IQ, Koyfin | Net debt only | Maturity schedule for indebted producers |
+| Historical valuation range | GuruFocus, Koyfin | None | Each company's own 10-year P/E or EV/EBITDA band (needs long history) |
+
+### Buy, not build
+| Gap | Why |
+|---|---|
+| Clean, standardised fundamentals with 10–20 years of history | yfinance is unofficial and sometimes wrong; a low-cost plan (Koyfin, TIKR) is enough to check the core list each quarter |
+| Small-cap listings in Canada and Australia (TSX-V, ASX juniors) | Patchy in yfinance |
+| Earnings call transcripts and full-text filing search | Paid sources only |
+| Institutional holders (13F), short interest | Low priority |
+| Fundamentals as they stood on past dates | Expensive; the dated reports in `output/` build this up over time |
+
+### Not wanted
+Analyst price targets, forward DCFs with forecast growth, and ratings driven by estimate revisions or momentum – they
+go against the method (reported numbers only, no forecasts).

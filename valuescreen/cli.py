@@ -202,9 +202,11 @@ def main(argv=None):
     title = list_title(name)
     files = []
     if results:
+        extras = html_report.ReportExtras(previous=previous or {}, tech=tech, lookthroughs=lookthroughs,
+                                          heatmaps=report.make_heatmaps(vals, grow, cfg, out), log_lines=log,
+                                          price_charts=pcharts, market_rows=market_rows)
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
-                                       previous, tech, lookthroughs, report.make_heatmaps(vals, grow, cfg, out), log, pcharts,
-                                       market_rows))
+                                       extras))
     if not a.out:   # the latest report, under a fixed name, for git and GitHub Pages
         for f in list(files):
             files.append(loader.publish(f, name, ".html"))

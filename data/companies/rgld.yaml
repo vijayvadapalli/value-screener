@@ -20,7 +20,7 @@ metals:
   realised: 4262
 tax_rate: 0.202
 price:
-  value: 256.465
+  value: 256.89
   currency: USD
   date: '2026-11-13'
   source: yfinance RGLD

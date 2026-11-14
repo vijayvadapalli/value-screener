@@ -23,10 +23,9 @@ from pathlib import Path
 
 from scipy.optimize import brentq
 
-from . import asset_quality
+from . import asset_quality, page, screening
 from . import profit_vs_price as pvp
 from . import style as S
-from .html_report import CSS as BASE_CSS
 from .models import dcf_factor
 from .wording import money
 
@@ -47,36 +46,29 @@ def _growth_needed(eps, nc, price, cfg):
 
 def _signal(r, cfg):
     z = cfg["zones"]
-    g = r.get("implied_growth")
     if r["sector"] in NOT_VALUED:
         return "grey", "Not valued"
-    if g is None:
-        return "red", "No earnings"
-    if g >= z["growth_sell"]:
-        return "red", "Expensive"
-    if g <= z["growth_buy"]:
-        caps = ((["cyclical"] if r["sector"] in CYCLICAL else []) + (["cash conversion"] if r.get("low_cash") else [])
-                + (["bad loans"] if (r.get("asset_quality") or {}).get("flags") else []))
-        if caps:
-            r["caps"] = caps
-            return "blue", "Cheap – capped"
-        return "green", "Cheap"
-    return "blue", "Watch" if g <= z["growth_watch"] else "Hold"
+    band = screening.growth_band(r.get("implied_growth"), z["growth_buy"], z)
+    caps = (screening.caps(r["sector"] in CYCLICAL, bool(r.get("low_cash")), bool((r.get("asset_quality") or {}).get("flags")))
+            if band == "BUY" else [])
+    if caps:
+        r["caps"] = caps
+    label = {"NO EARNINGS": "No earnings", "SELL": "Expensive", "WATCH": "Watch", "HOLD": "Hold"}.get(band)
+    return screening.colour(band, caps), label or ("Cheap – capped" if caps else "Cheap")
 
 
 def finish(r: dict, eps_ttm, eps_5y, bvps, roe_5y, nc, cfg):
     """Common part: the sector rule, value, growth needed, signal."""
     price = r["price"]
-    eps = eps_ttm
-    if r["sector"] in FINANCIAL and bvps and roe_5y is not None and eps_ttm is not None:
-        bad = (r.get("asset_quality") or {}).get("bad_loans_ps") or 0.0
-        book = bvps - bad   # less nonaccrual loans the allowance doesn't cover
-        eps, nc = (eps_ttm + book * roe_5y) / 2, 0.0
+    kind = "financial" if r["sector"] in FINANCIAL else "cyclical" if r["sector"] in CYCLICAL else "normal"
+    bad = (r.get("asset_quality") or {}).get("bad_loans_ps") or 0.0   # nonaccrual loans the allowance doesn't cover
+    eps, basis, _ = screening.earnings_basis(kind, eps_ttm, eps_5y, bvps, roe_5y, bad)
+    if basis == screening.FINANCIAL:
+        book, nc = bvps - bad, 0.0
         r["pb"], r["fair_pb"] = (price / book if book > 0 else None), roe_5y * dcf_factor(0.0, cfg, RATE)
         r["basis"] = ("financial: average of 12-month EPS and " + ("adjusted book (less uncovered bad loans)" if bad else "book value")
                       + " × 5-year ROE, no net cash")
-    elif r["sector"] in CYCLICAL and eps_5y is not None and eps_ttm is not None:
-        eps = (eps_ttm + eps_5y) / 2
+    elif basis == screening.CYCLICAL:
         r["basis"] = "cyclical: average of 12-month and 5-year average EPS"
     else:
         r["basis"] = "12-month EPS"
@@ -292,40 +284,6 @@ HEAD = """<tr><th>Ticker</th><th>Signal</th><th>Growth needed</th><th>Sector / i
 <th>No-growth value</th><th>P/E</th><th>FCF yield</th><th>ROE</th><th>Quality</th><th>Shares 3 yrs</th><th>Debt / EBITDA</th>
 <th>Grade</th><th>1 yr</th></tr>"""
 
-JS = """
-const rows = () => [...document.querySelectorAll('#sum tbody tr')];
-const pick = {signal: 'all', sector: 'all', index: 'all'};
-function apply() {
-  const q = document.getElementById('q').value.toLowerCase(); let n = 0;
-  rows().forEach(r => {
-    const ok = (pick.signal === 'all' || r.dataset.signal === pick.signal) && (pick.sector === 'all' || r.dataset.sector === pick.sector)
-            && (pick.index === 'all' || r.dataset.index.includes(pick.index)) && (!q || r.dataset.text.includes(q));
-    r.style.display = ok ? '' : 'none'; if (ok) n++; });
-  document.getElementById('count').textContent = n + ' shown';
-}
-document.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
-  pick[b.dataset.k] = b.dataset.v;
-  document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach(x => x.classList.toggle('on', x === b)); apply(); });
-document.getElementById('q').oninput = apply;
-document.querySelectorAll('#sum th').forEach((th, i) => th.onclick = () => {
-  const asc = !th.classList.contains('asc');
-  document.querySelectorAll('#sum th').forEach(x => x.classList.remove('asc', 'desc')); th.classList.add(asc ? 'asc' : 'desc');
-  const key = r => { const v = r.children[i].dataset.v ?? ''; const n = parseFloat(v); return v === '' ? null : isNaN(n) ? v : n; };
-  const body = document.querySelector('#sum tbody');
-  rows().sort((a, b) => { const x = key(a), y = key(b); if (x === null) return 1; if (y === null) return -1;
-    return (x < y ? -1 : x > y ? 1 : 0) * (asc ? 1 : -1); }).forEach(r => body.appendChild(r)); });
-apply();
-"""
-CSS = BASE_CSS + """
-main{max-width:1640px} .pill.grey{background:var(--muted)} .flags{font-size:11px;color:var(--muted)}
-.tag{font-size:10.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:0 6px;color:var(--ink2)}
-table.sum td{white-space:nowrap} table.sum td:first-child{white-space:normal;min-width:200px}
-.short{background:var(--soft);border-left:3px solid var(--green);padding:9px 13px;margin:10px 0;font-size:13.5px}
-table.sectors{border-collapse:collapse;font-size:13px;margin:6px 0 14px} table.sectors td,table.sectors th{padding:4px 12px;text-align:right;
-border-bottom:1px solid var(--line)} table.sectors td:first-child,table.sectors th:first-child{text-align:left}
-"""
-
-
 def sector_table(rows):
     """Median growth needed by sector – where the market is cheap or stretched."""
     out = []
@@ -350,8 +308,7 @@ def build(rows, path: Path, as_of: dt.date, in_files: set, notes: list[str], cfg
     def buttons(key, values):
         return f'<button class="on" data-k="{key}" data-v="all">All</button>' + "".join(
             f'<button data-k="{key}" data-v="{_e(v)}">{_e(label)}</button>' for v, label in values)
-    page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>US large caps – quick screen</title><style>{CSS}</style></head><body><main>
+    body = f"""
 <h1>S&amp;P 500 and Nasdaq-100 – quick screen</h1>
 <p class="sub">{len(rows)} companies · run {as_of:%d %b %Y} · <span class="pos">{counts['green']} cheap</span>, {counts['blue']} watch / hold,
 <span class="neg">{counts['red']} expensive or loss-making</span>, {counts['grey']} not valued</p>
@@ -372,7 +329,9 @@ Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … 
 <div class="wrap"><table class="sum" id="sum"><thead>{HEAD}</thead><tbody>{''.join(_row(r, in_files) for r in rows)}</tbody></table></div>
 <ul class="small">{''.join(f'<li>{_e(n)}</li>' for n in notes)}</ul>
 <footer>Prices in US$ from Yahoo; fundamentals from SEC EDGAR company facts. Educational framework, not investment advice.</footer>
-</main><script>{JS}</script></body></html>"""
+"""
+    html_page = page.document("US large caps – quick screen", page.report_css() + page.asset("screen-us.css"), body,
+                              scripts=f"<script>{page.asset('screen-us.js')}</script>")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(page, encoding="utf-8")
+    path.write_text(html_page, encoding="utf-8")
     return path
