@@ -1,0 +1,96 @@
+ticker: NTPCGREEN
+yahoo: NTPCGREEN.NS
+name: NTPC Green Energy Ltd.
+sector: Power
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 82.3
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 8429.405
+v2:
+  eps_quarters:
+  - 0.08
+  - 0.28
+  - 0.26
+  - 0.1
+  - 0.02
+  - 0.23
+  - 0.36
+  - 0.16
+  eps_annual:
+  - 0.23
+  - 0.46
+  - 0.56
+  - 0.62
+  years:
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 171.0
+  - 343.0
+  - 474.0
+  - 521.0
+  cfo_annual:
+  - 17.0
+  - 1616.0
+  - 2051.0
+  - 2386.0
+  book_value_ps: 23.0
+  roe_5y: null
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.8901
+    - 0.8901
+    - 0.8901
+    - 0.8901
+    - 0.8901
+    - 0.8901
+    - 0.8901
+    - 0.8901
+    fii:
+    - 0.0218
+    - 0.0198
+    - 0.0185
+    - 0.0179
+    - 0.0161
+    - 0.0161
+    - 0.0167
+    - 0.0158
+    dii:
+    - 0.0528
+    - 0.0487
+    - 0.0466
+    - 0.0463
+    - 0.048
+    - 0.0507
+    - 0.0521
+    - 0.0529
+balance:
+  cash: 14181.4
+  debt: 377421.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/NTPCGREEN/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,418 cr − total debt ₹37,742 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

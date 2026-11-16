@@ -1,0 +1,108 @@
+ticker: MANKIND
+yahoo: MANKIND.NS
+name: Mankind Pharma Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2627.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 410.803
+v2:
+  eps_quarters:
+  - 9.22
+  - 10.2
+  - 10.62
+  - 12.39
+  - 9.9
+  - 13.43
+  - 13.75
+  - 17.23
+  eps_annual:
+  - 10.97
+  - 25.72
+  - 31.59
+  - 35.78
+  - 32.0
+  - 47.75
+  - 48.26
+  - 46.34
+  years:
+  - Mar 2015
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1453.0
+  - 1310.0
+  - 1942.0
+  - 2011.0
+  - 1938.0
+  cfo_annual:
+  - 920.0
+  - 1813.0
+  - 2152.0
+  - 2413.0
+  - 3121.0
+  book_value_ps: 426.0
+  roe_5y: 0.17
+  profit_growth_5y: 0.11
+  sales_growth_5y: 0.18
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7271
+    - 0.727
+    - 0.7267
+    - 0.7267
+    - 0.7266
+    - 0.7266
+    - 0.7263
+    - 0.7262
+    fii:
+    - 0.1334
+    - 0.1292
+    - 0.1307
+    - 0.1283
+    - 0.1134
+    - 0.1024
+    - 0.0945
+    - 0.0937
+    dii:
+    - 0.1105
+    - 0.1147
+    - 0.115
+    - 0.1191
+    - 0.1326
+    - 0.1446
+    - 0.1539
+    - 0.1554
+balance:
+  cash: 26602.0
+  debt: 54216.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MANKIND/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,660 cr − total debt ₹5,422 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

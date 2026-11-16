@@ -79,6 +79,8 @@ def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, 
     """The company file with the new v2 block, price, share count and period; other fields kept."""
     if None in data["eps_quarters"] or len(data["eps_quarters"]) < 4:
         raise ValueError("fewer than 4 quarters of EPS")
+    if not data.get("price") or not data.get("market_cap_cr"):   # Screener blanks the figures when it throttles
+        raise ValueError("the page came without its price / market value (Screener throttling?) – re-run these later")
     c = dict(existing or {})
     c.update(ticker=entry["ticker"], yahoo=entry.get("yahoo", c.get("yahoo")), name=entry.get("name", c.get("name")),
              sector=entry.get("industry", c.get("sector", "")), model="growth", currency="INR")
@@ -89,6 +91,7 @@ def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, 
     c.pop("earnings", None)   # the v2 block replaces the draft's yearly net income
     kept = {k: v for k, v in (c.get("v2") or {}).items() if k in HAND_SET_V2}   # your judgement, not Screener's figures
     c["v2"] = {k: data[k] for k in ("eps_quarters", "eps_annual", "years", "profit_annual", "cfo_annual", "book_value_ps", "roe_5y")}
+    c["v2"].update({k: data[k] for k in ("profit_growth_5y", "sales_growth_5y", "shareholding") if data.get(k) is not None})
     c["v2"].update(kept)
     if data.get("asset_quality"):
         c["v2"]["asset_quality"] = data["asset_quality"]
@@ -100,7 +103,11 @@ def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, 
     if aq and aq["page"] != url:
         source += f"; NPA figures from the standalone page: {aq['page']}"
     c["sources"] = [s for s in c.get("sources", []) if not str(s).startswith(("Screener.in", "Yahoo Finance annual"))] + [source]
-    assumptions = [a for a in c.get("assumptions", []) if not str(a).startswith(("DRAFT", "Placeholder", "Nifty v2:", "Shares derived"))]
+    assumptions = [a for a in c.get("assumptions", [])
+                   if not str(a).startswith(("DRAFT", "Placeholder", "Nifty v2:", "Shares derived", "Standalone quarters"))]
+    if data.get("standalone_quarters"):
+        assumptions.append(f"Standalone quarters: Screener shows {data['standalone_quarters']} of the last 4 quarters standalone "
+                           "(marked (S) – no consolidated figures for them), so the 12-month EPS mixes the two")
     assumptions += ["Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in",
                     "Shares derived from Screener's market value ÷ price"]
     if existing is None or "balance" not in existing:
@@ -118,7 +125,7 @@ def main():
     args = ap.parse_args()
     lst = yaml.safe_load((ROOT / "data" / "lists" / f"{args.list.lower()}.yaml").read_text(encoding="utf-8"))
     folder = loader.companies_folder(lst.get("folder"))
-    entries = [e for e in lst["tickers"] if isinstance(e, dict)]
+    entries = [e for e in lst["tickers"] if isinstance(e, dict) and not e.get("market")]   # indices: price only
     if args.tickers:
         wanted = {t.strip().upper() for t in args.tickers.split(",")}
         entries = [e for e in entries if e["ticker"].upper() in wanted]

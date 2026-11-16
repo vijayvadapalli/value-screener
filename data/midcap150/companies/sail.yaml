@@ -1,0 +1,112 @@
+ticker: SAIL
+yahoo: SAIL.NS
+name: Steel Authority of India Ltd.
+sector: Metals & Mining
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 169.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 4119.763
+v2:
+  eps_quarters:
+  - 0.34
+  - 3.03
+  - 1.8
+  - 1.01
+  - 0.91
+  - 4.44
+  - 3.98
+  - 4.24
+  eps_annual:
+  - -6.67
+  - -0.68
+  - 5.69
+  - 5.13
+  - 10.04
+  - 29.64
+  - 5.27
+  - 7.42
+  - 5.74
+  - 8.17
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 12243.0
+  - 2177.0
+  - 3067.0
+  - 2372.0
+  - 3373.0
+  cfo_annual:
+  - 30987.0
+  - -5290.0
+  - 2911.0
+  - 9914.0
+  - 19039.0
+  book_value_ps: 151.0
+  roe_5y: 0.09
+  profit_growth_5y: -0.01
+  sales_growth_5y: 0.1
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.65
+    - 0.65
+    - 0.65
+    - 0.65
+    - 0.65
+    - 0.65
+    - 0.65
+    - 0.65
+    fii:
+    - 0.0259
+    - 0.0321
+    - 0.0365
+    - 0.0376
+    - 0.0454
+    - 0.0501
+    - 0.0709
+    - 0.073
+    dii:
+    - 0.1586
+    - 0.1575
+    - 0.173
+    - 0.181
+    - 0.1784
+    - 0.184
+    - 0.1687
+    - 0.1649
+balance:
+  cash: 31076.7
+  debt: 314644.6
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/SAIL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,108 cr − total debt ₹31,464 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

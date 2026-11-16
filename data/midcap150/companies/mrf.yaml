@@ -1,0 +1,112 @@
+ticker: MRF
+yahoo: MRF.NS
+name: MRF Ltd.
+sector: Automobile and Auto Components
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 128085.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 4.244
+v2:
+  eps_quarters:
+  - 743.79
+  - 1203.7
+  - 1183.23
+  - 1243.62
+  - 1637.78
+  - 1655.82
+  - 1167.98
+  - 912.48
+  eps_annual:
+  - 3504.33
+  - 2668.2
+  - 2665.82
+  - 3354.22
+  - 3011.15
+  - 1577.96
+  - 1813.04
+  - 4907.26
+  - 4416.97
+  - 5720.43
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 669.0
+  - 769.0
+  - 2081.0
+  - 1873.0
+  - 2426.0
+  cfo_annual:
+  - -578.0
+  - 2755.0
+  - 3303.0
+  - 1865.0
+  - 4590.0
+  book_value_ps: 51340.0
+  roe_5y: 0.1
+  profit_growth_5y: 0.14
+  sales_growth_5y: 0.14
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.278
+    - 0.2778
+    - 0.2778
+    - 0.2775
+    - 0.2773
+    - 0.2777
+    - 0.2776
+    - 0.2761
+    fii:
+    - 0.182
+    - 0.1754
+    - 0.1867
+    - 0.1827
+    - 0.1818
+    - 0.1798
+    - 0.1743
+    - 0.171
+    dii:
+    - 0.12
+    - 0.1222
+    - 0.1166
+    - 0.1238
+    - 0.125
+    - 0.1225
+    - 0.1211
+    - 0.127
+balance:
+  cash: 79289.9
+  debt: 42185.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MRF/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹7,929 cr − total debt ₹4,219 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

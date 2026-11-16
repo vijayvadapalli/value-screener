@@ -1,0 +1,142 @@
+ticker: HUDCO
+yahoo: HUDCO.NS
+name: Housing & Urban Development Corporation Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 163.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 2006.442
+v2:
+  eps_quarters:
+  - 3.67
+  - 3.64
+  - 3.15
+  - 3.55
+  - 3.56
+  - 9.9
+  - 4.25
+  - 4.55
+  eps_annual:
+  - 4.21
+  - 5.04
+  - 5.89
+  - 8.53
+  - 7.89
+  - 8.57
+  - 8.5
+  - 10.57
+  - 13.53
+  - 20.15
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1716.0
+  - 1701.0
+  - 2117.0
+  - 2709.0
+  - 4034.0
+  cfo_annual:
+  - -806.0
+  - -851.0
+  - -10287.0
+  - -31421.0
+  - -33912.0
+  book_value_ps: 115.0
+  roe_5y: 0.15
+  profit_growth_5y: 0.2
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    fii:
+    - 0.0208
+    - 0.0246
+    - 0.0196
+    - 0.0194
+    - 0.0197
+    - 0.0222
+    - 0.024
+    - 0.024
+    dii:
+    - 0.0974
+    - 0.0969
+    - 0.1026
+    - 0.1092
+    - 0.1146
+    - 0.1103
+    - 0.1009
+    - 0.0952
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 1.88
+    - 1.67
+    - 1.34
+    - 1.21
+    - 1.08
+    - 1.04
+    - 0.96
+    - 0.71
+    net_npa_pct:
+    - 0.27
+    - 0.25
+    - 0.09
+    - 0.07
+    - 0.06
+    - 0.05
+    - 0.05
+    - 0.04
+    loans_cr: 186502.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/HUDCO/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/HUDCO/consolidated/; NPA figures from the standalone page:
+  https://www.screener.in/company/HUDCO/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

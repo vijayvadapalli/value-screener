@@ -1,0 +1,141 @@
+ticker: INDUSINDBK
+yahoo: INDUSINDBK.NS
+name: IndusInd Bank Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 915.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 774.863
+v2:
+  eps_quarters:
+  - 18.0
+  - -29.89
+  - 7.75
+  - -5.61
+  - 1.64
+  - 7.63
+  - 13.31
+  - 15.94
+  eps_annual:
+  - 47.95
+  - 60.08
+  - 54.77
+  - 64.28
+  - 37.89
+  - 62.03
+  - 95.93
+  - 115.34
+  - 33.06
+  - 11.41
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 4805.0
+  - 7444.0
+  - 8977.0
+  - 2576.0
+  - 889.0
+  cfo_annual:
+  - 16672.0
+  - -12442.0
+  - -16925.0
+  - 18278.0
+  - 993.0
+  book_value_ps: 870.0
+  roe_5y: 0.09
+  profit_growth_5y: -0.21
+  sales_growth_5y: 0.1
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.1629
+    - 0.1583
+    - 0.1582
+    - 0.1582
+    - 0.1582
+    - 0.1582
+    - 0.1582
+    - 0.1582
+    fii:
+    - 0.2474
+    - 0.2953
+    - 0.3368
+    - 0.3432
+    - 0.316
+    - 0.2857
+    - 0.2917
+    - 0.3047
+    dii:
+    - 0.4243
+    - 0.3632
+    - 0.3318
+    - 0.3157
+    - 0.35
+    - 0.4013
+    - 0.4186
+    - 0.4128
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 2.25
+    - 3.13
+    - 3.64
+    - 3.6
+    - 3.56
+    - 3.43
+    - 3.25
+    - 2.73
+    net_npa_pct:
+    - 0.68
+    - 0.95
+    - 1.12
+    - 1.04
+    - 1.04
+    - 1.0
+    - 0.95
+    - 0.83
+    loans_cr: 363104.0
+    loans_basis: Screener.in consolidated balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/INDUSINDBK/consolidated/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/INDUSINDBK/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

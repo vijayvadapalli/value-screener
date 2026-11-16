@@ -44,7 +44,7 @@ COLUMNS = [
         ("Valuation models", ["producer, cash-flow, NAV,", "growth DCF, leases"], BUILT),
         ("Rules", ["zones, signals, tiers, caps,", "flags, Nifty v2, bad loans"], BUILT),
         ("Profit vs price", ["grades A–D"], BUILT),
-        ("Quick screens", ["miners ~270, S&P 500 +", "Nasdaq-100, NSE"], BUILT),
+        ("Quick screens", ["miners ~270, S&P 500 +", "Nasdaq-100, NSE, Midcap 150"], BUILT),
         ("Model portfolios", ["balanced, resources", "value-first, ≤ 15 names"], BUILT),
         ("Chart analytics", ["SMA, RSI, trend lines,", "levels; markets (price only)"], BUILT),
         ("Research merge", ["their levels vs our value"], PRIVATE),

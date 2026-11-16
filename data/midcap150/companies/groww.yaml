@@ -1,0 +1,82 @@
+ticker: GROWW
+yahoo: GROWW.NS
+name: Billionbrains Garage Ventures Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 225.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 6272.756
+v2:
+  eps_quarters:
+  - 1.25
+  - 0.51
+  - 0.62
+  - 0.78
+  - 0.89
+  - 1.09
+  - 1.17
+  - 1.16
+  eps_annual:
+  - -0.39
+  - 0.75
+  - -1.33
+  - 3.01
+  - 3.32
+  years:
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -239.0
+  - 458.0
+  - -805.0
+  - 1824.0
+  - 2083.0
+  cfo_annual:
+  - -349.0
+  - 548.0
+  - 885.0
+  - -962.0
+  - -21.0
+  book_value_ps: 18.4
+  roe_5y: 0.25
+  shareholding:
+    quarters:
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.2781
+    - 0.2738
+    - 0.2714
+    - 0.2714
+    fii:
+    - 0.0313
+    - 0.0251
+    - 0.0689
+    - 0.109
+    dii:
+    - 0.0492
+    - 0.0592
+    - 0.1008
+    - 0.1273
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GROWW/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

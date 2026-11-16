@@ -27,6 +27,7 @@ shows whenever the data is out of date.
 | Model portfolio – balanced | [model-portfolio.html](https://vijayvadapalli.github.io/value-screener/reports/model-portfolio.html) |
 | Model portfolio – resources, value first | [model-resources.html](https://vijayvadapalli.github.io/value-screener/reports/model-resources.html) |
 | Nifty 50 | [nifty50.html](https://vijayvadapalli.github.io/value-screener/reports/nifty50.html) |
+| Nifty Midcap 150 – growth screen | [midcap150.html](https://vijayvadapalli.github.io/value-screener/reports/midcap150.html) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
 
@@ -242,6 +243,55 @@ The valuation then applies the v2 rules (`valuescreen/v2.py`):
 
 The AI updater (`update_results.py`) also works on these files, but `fetch_screener.py` is the quicker way to refresh
 them each quarter. NSE / BSE results filings remain the authority – check the key figures before acting.
+
+## Nifty Midcap 150 – the growth screen
+
+Every company in the Nifty Midcap 150 (plus any you add by hand) gets the full Nifty v2 valuation, and on top of it a
+**growth-at-a-value-price screen** (`valuescreen/growth_screen.py`, thresholds under `growth_screen:` in `config.yaml`):
+
+| Condition | Rule |
+|---|---|
+| **P/E ≤ 15** | price minus net cash ÷ the EPS the valuation uses (one-off quarters removed, cyclicals averaged); the plain trailing P/E is shown beside it. For Indian stocks P/E 15 is exactly "the price needs 5% growth a year", the green line |
+| **EPS growth ≥ 20% a year** | over **both** 5 and 3 years, and EPS positive in every year of the window – a 5-year window that starts in a bad year (2021) flatters the rate |
+| **5-year hold** | expected return a year if growth runs at **half** the past rate (at most 15%) and the shares are sold at 15x after 5 years; the shortlist needs at least **12% a year** (dividends not counted) |
+| **Guards** | cash conversion ≥ 70%, no demerger or one-off history, no bad-loan warning signs (lenders), current results |
+| **Flags** | promoters below 60% or their holding down more than 2 points in a year; cyclicals; your own additions. Pledged shares are not in the data yet – Screener's public page does not show them |
+
+**Shortlist** = passes everything. **Near miss** = one thing short: a P/E of 15–20 with growth met, growth of 15–20%
+with the P/E met, or only the return bar. The screen sits at the top of `reports/midcap150.html`; every company's full
+working follows. The usual green / blue / red signal is unchanged and shown beside it.
+
+```bash
+python tools/make_nse_list.py niftymidcap150 --name midcap150   # the constituents (keeps the stocks you added)
+python tools/fetch_screener.py midcap150                       # Screener.in figures, about 15 minutes (quarterly)
+python tools/fill_net_cash.py midcap150                        # net cash from Yahoo's balance sheet, marked derived
+python -m valuescreen run --list midcap150                     # the valuation, the screen and the report
+```
+
+**Adding a stock that is not in the index:** add it to `data/lists/midcap150.yaml` with an `extra:` note, e.g.
+`{ticker: DEEPAKFERT, yahoo: DEEPAKFERT.NS, name: ..., industry: Chemicals, extra: small cap – added by you}`, then
+run `fetch_screener.py midcap150 --tickers DEEPAKFERT`. Refreshing the list from NSE keeps these entries. The list
+holds three small caps added this way: Jyoti Resins, Deepak Fertilisers and Ujjivan Small Finance Bank.
+
+**Net cash** for 150 companies comes from Yahoo's latest quarterly balance sheet (cash & short-term investments −
+total debt), written into each file with its date and marked as derived. Yahoo's debt can be lower than the
+StockAnalysis figure used for the Nifty 50 (it does not always include every lease), so check the shortlisted names
+against their annual report. Banks, lenders and insurers use no net cash. Companies whose statements Yahoo shows in
+another currency are skipped and listed.
+
+**Also flagged: state-owned companies** (a hand-kept list, `growth_screen.state_owned` in `config.yaml`): their promoter
+is the government, so a high promoter holding means government control rather than a founder with money at stake – and
+a state-owned bank's growth since 2021 is mostly the bad-loan clean-up, a cycle rather than a franchise.
+
+The report also carries 10 years of daily prices for every company (`update_history.py` now covers the Nifty 50 and
+Midcap 150) and the Nifty Midcap 150 and Midcap 50 indexes (the 150 from 2019 – all Yahoo has). With 150 companies
+its chart images are drawn lighter (`chart_dpi: 100` in the list file) to keep the page about 25 MB. It has no
+profit-vs-price section: that would ask Screener.in for 150 more pages a run.
+
+**Screener.in throttles heavy use**: after about 170 pages it sends pages with the figures left blank.
+`fetch_screener.py` refuses those pages and lists them as failed – re-run just those later with `--tickers`.
+
+`/weekly` refreshes the prices and the report (the Screener figures themselves are refreshed each quarter).
 
 ## Screening all the miners (ETF holdings)
 
@@ -615,6 +665,7 @@ valuescreen/models.py      the valuation models; leases.py (Hut 8) and v2.py (Ni
 valuescreen/rules.py       zones (band + details, written as text by zone_text), signals, buy levels, flags, stale checks
 valuescreen/screening.py   the screening rules shared by the full valuation and the US / miners screens: earnings basis,
                            growth and multiple bands, blue caps, colours – one copy
+valuescreen/growth_screen.py  the Midcap 150 growth screen: P/E, 5- and 3-year EPS growth, 5-year return, guards, promoter flags
 valuescreen/kinds/        one class per valuation model (producer, developer, physical, growth, leases, liquid): its zone,
                            headline, steps, worked example, key figures, cards, chart, heatmap and price-chart lines.
                            A new model is one new file here, registered in kinds/__init__.py
@@ -639,7 +690,7 @@ valuescreen/model_portfolio.py   the model portfolios: candidates from every scr
 valuescreen/us_screen.py, us_universe.py, us_fundamentals.py, sec.py, factsdb.py   the S&P 500 / Nasdaq-100 screen:
                            index lists, SEC download, figures from filings, the SQLite database
 tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us, model_portfolio, update_history, research, weekly,
-                           screen_universe, make_nse_list
+                           screen_universe, make_nse_list, fill_net_cash
 ```
 
 Educational framework, not investment advice.

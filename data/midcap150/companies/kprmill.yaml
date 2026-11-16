@@ -1,0 +1,112 @@
+ticker: KPRMILL
+yahoo: KPRMILL.NS
+name: K.P.R. Mill Ltd.
+sector: Textiles
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1211.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 341.817
+v2:
+  eps_quarters:
+  - 5.92
+  - 5.98
+  - 6.22
+  - 6.38
+  - 6.1
+  - 6.65
+  - 7.56
+  - 10.09
+  eps_annual:
+  - 7.76
+  - 7.86
+  - 9.23
+  - 10.95
+  - 14.97
+  - 24.47
+  - 23.82
+  - 23.56
+  - 23.85
+  - 25.35
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 842.0
+  - 814.0
+  - 805.0
+  - 815.0
+  - 866.0
+  cfo_annual:
+  - 494.0
+  - 299.0
+  - 678.0
+  - 1401.0
+  - 1108.0
+  book_value_ps: 182.0
+  roe_5y: 0.2
+  profit_growth_5y: 0.1
+  sales_growth_5y: 0.14
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7068
+    - 0.7068
+    - 0.6752
+    - 0.6752
+    - 0.6752
+    - 0.6752
+    - 0.6752
+    - 0.6752
+    fii:
+    - 0.0614
+    - 0.0625
+    - 0.0655
+    - 0.0645
+    - 0.0649
+    - 0.0664
+    - 0.0702
+    - 0.0701
+    dii:
+    - 0.167
+    - 0.1647
+    - 0.1898
+    - 0.1938
+    - 0.1918
+    - 0.1947
+    - 0.1925
+    - 0.1915
+balance:
+  cash: 25276.4
+  debt: 3402.5
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/KPRMILL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,528 cr − total debt ₹340 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

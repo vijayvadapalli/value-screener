@@ -1,0 +1,112 @@
+ticker: OIL
+yahoo: OIL.NS
+name: Oil India Ltd.
+sector: Oil Gas & Consumable Fuels
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 441.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1623.129
+v2:
+  eps_quarters:
+  - 8.23
+  - 8.05
+  - 11.66
+  - 8.78
+  - 7.35
+  - 12.91
+  - 22.32
+  - 14.2
+  eps_annual:
+  - 8.85
+  - 16.06
+  - 19.91
+  - 28.9
+  - 21.69
+  - 34.56
+  - 53.66
+  - 38.95
+  - 40.27
+  - 40.7
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 6719.0
+  - 9854.0
+  - 6980.0
+  - 7040.0
+  - 7551.0
+  cfo_annual:
+  - 9310.0
+  - 11410.0
+  - 10933.0
+  - 11332.0
+  - 10684.0
+  book_value_ps: 393.0
+  roe_5y: 0.17
+  profit_growth_5y: 0.12
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5666
+    - 0.5666
+    - 0.5666
+    - 0.5666
+    - 0.5666
+    - 0.5666
+    - 0.5666
+    - 0.5666
+    fii:
+    - 0.0942
+    - 0.0851
+    - 0.0816
+    - 0.0756
+    - 0.0754
+    - 0.0767
+    - 0.0728
+    - 0.0715
+    dii:
+    - 0.1726
+    - 0.1831
+    - 0.1841
+    - 0.1921
+    - 0.1944
+    - 0.1943
+    - 0.2013
+    - 0.2066
+balance:
+  cash: 93494.8
+  debt: 413019.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/OIL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹9,349 cr − total debt ₹41,302 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

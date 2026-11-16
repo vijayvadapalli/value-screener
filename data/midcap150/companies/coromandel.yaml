@@ -1,0 +1,112 @@
+ticker: COROMANDEL
+yahoo: COROMANDEL.NS
+name: Coromandel International Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1968.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 291.809
+v2:
+  eps_quarters:
+  - 17.37
+  - 19.67
+  - 17.13
+  - 27.31
+  - 17.15
+  - 4.74
+  - 12.91
+  - 18.11
+  eps_annual:
+  - 16.35
+  - 23.64
+  - 24.63
+  - 36.36
+  - 45.3
+  - 52.08
+  - 68.46
+  - 55.78
+  - 70.14
+  - 66.31
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1528.0
+  - 2013.0
+  - 1641.0
+  - 2055.0
+  - 1898.0
+  cfo_annual:
+  - 2078.0
+  - 591.0
+  - 1428.0
+  - 2464.0
+  - 1558.0
+  book_value_ps: 455.0
+  roe_5y: 0.2
+  profit_growth_5y: 0.08
+  sales_growth_5y: 0.17
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5696
+    - 0.5696
+    - 0.569
+    - 0.5688
+    - 0.5686
+    - 0.5635
+    - 0.5635
+    - 0.5634
+    fii:
+    - 0.0833
+    - 0.1061
+    - 0.1428
+    - 0.1451
+    - 0.1379
+    - 0.1302
+    - 0.115
+    - 0.1134
+    dii:
+    - 0.2101
+    - 0.1897
+    - 0.1586
+    - 0.1578
+    - 0.1669
+    - 0.1819
+    - 0.1992
+    - 0.2048
+balance:
+  cash: 20795.7
+  debt: 95128.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/COROMANDEL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,080 cr − total debt ₹9,513 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

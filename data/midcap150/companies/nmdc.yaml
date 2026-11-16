@@ -1,0 +1,112 @@
+ticker: NMDC
+yahoo: NMDC.NS
+name: NMDC Ltd.
+sector: Metals & Mining
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 68.9
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 8781.858
+v2:
+  eps_quarters:
+  - 2.14
+  - 1.68
+  - 2.24
+  - 1.93
+  - 2.0
+  - 2.31
+  - 2.25
+  - 1.9
+  eps_annual:
+  - 2.68
+  - 4.01
+  - 5.03
+  - 3.89
+  - 7.14
+  - 10.72
+  - 6.37
+  - 6.34
+  - 7.43
+  - 8.47
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 9429.0
+  - 5601.0
+  - 5567.0
+  - 6520.0
+  - 7450.0
+  cfo_annual:
+  - 6942.0
+  - 1838.0
+  - 7394.0
+  - 1894.0
+  - 4996.0
+  book_value_ps: 41.9
+  roe_5y: 0.26
+  profit_growth_5y: 0.04
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6079
+    - 0.6079
+    - 0.6079
+    - 0.6079
+    - 0.6079
+    - 0.6079
+    - 0.6079
+    - 0.6079
+    fii:
+    - 0.1212
+    - 0.1172
+    - 0.1221
+    - 0.1304
+    - 0.1348
+    - 0.136
+    - 0.1359
+    - 0.1491
+    dii:
+    - 0.1446
+    - 0.1512
+    - 0.1448
+    - 0.1438
+    - 0.1406
+    - 0.1376
+    - 0.138
+    - 0.1251
+balance:
+  cash: 110981.6
+  debt: 64068.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/NMDC/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (31 Mar 2026): cash & short-term investments ₹11,098 cr − total debt ₹6,407 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

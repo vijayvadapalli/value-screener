@@ -1,0 +1,134 @@
+ticker: FEDERALBNK
+yahoo: FEDERALBNK.NS
+name: Federal Bank Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 362.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 2469.834
+v2:
+  eps_quarters:
+  - 3.85
+  - 4.44
+  - 3.74
+  - 4.03
+  - 4.44
+  - 5.44
+  - 5.09
+  - 6.06
+  eps_annual:
+  - 5.03
+  - 4.74
+  - 6.63
+  - 7.93
+  - 8.34
+  - 9.37
+  - 14.95
+  - 15.93
+  - 16.93
+  - 17.63
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1996.0
+  - 3210.0
+  - 3964.0
+  - 4234.0
+  - 4491.0
+  cfo_annual:
+  - -7774.0
+  - 489.0
+  - 6431.0
+  - 8801.0
+  - 4349.0
+  book_value_ps: 173.0
+  roe_5y: 0.13
+  profit_growth_5y: 0.21
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.2632
+    - 0.2628
+    - 0.2686
+    - 0.2554
+    - 0.2494
+    - 0.2605
+    - 0.2771
+    - 0.2854
+    dii:
+    - 0.489
+    - 0.4907
+    - 0.4817
+    - 0.4971
+    - 0.511
+    - 0.5039
+    - 0.4927
+    - 0.4928
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 1.95
+    - 1.84
+    - 1.91
+    - 1.83
+    - 1.72
+    - 1.62
+    - 1.52
+    - 1.32
+    net_npa_pct:
+    - 0.49
+    - 0.44
+    - 0.48
+    - 0.48
+    - 0.42
+    - 0.2
+    - 0.18
+    - 0.17
+    loans_cr: 298226.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/FEDERALBNK/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/FEDERALBNK/consolidated/; NPA figures from the standalone
+  page: https://www.screener.in/company/FEDERALBNK/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

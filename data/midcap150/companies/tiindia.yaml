@@ -1,0 +1,110 @@
+ticker: TIINDIA
+yahoo: TIINDIA.NS
+name: Tube Investments of India Ltd.
+sector: Automobile and Auto Components
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2237.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 193.084
+v2:
+  eps_quarters:
+  - 10.01
+  - 2.4
+  - 10.28
+  - 9.65
+  - 8.57
+  - 4.41
+  - 8.71
+  - 12.87
+  eps_annual:
+  - 7.86
+  - 12.81
+  - 16.31
+  - 14.28
+  - 39.85
+  - 49.48
+  - 62.08
+  - 34.82
+  - 32.9
+  years:
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 991.0
+  - 1325.0
+  - 1723.0
+  - 1054.0
+  - 1118.0
+  cfo_annual:
+  - 896.0
+  - 1386.0
+  - 675.0
+  - 1185.0
+  - 1161.0
+  book_value_ps: 419.0
+  roe_5y: 0.19
+  profit_growth_5y: 0.17
+  sales_growth_5y: 0.3
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4411
+    - 0.4411
+    - 0.4409
+    - 0.4409
+    - 0.4406
+    - 0.4405
+    - 0.4411
+    - 0.441
+    fii:
+    - 0.2825
+    - 0.2693
+    - 0.2631
+    - 0.2545
+    - 0.2315
+    - 0.2142
+    - 0.2235
+    - 0.215
+    dii:
+    - 0.1504
+    - 0.1612
+    - 0.1678
+    - 0.1771
+    - 0.1968
+    - 0.2175
+    - 0.2101
+    - 0.2163
+balance:
+  cash: 41519.1
+  debt: 9097.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/TIINDIA/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹4,152 cr − total debt ₹910 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

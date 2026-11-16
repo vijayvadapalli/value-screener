@@ -1,0 +1,110 @@
+ticker: ABCAPITAL
+yahoo: ABCAPITAL.NS
+name: Aditya Birla Capital Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 408.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 2741.52
+v2:
+  eps_quarters:
+  - 2.72
+  - 3.32
+  - 3.21
+  - 3.57
+  - 3.61
+  - 3.86
+  - 4.3
+  - 4.7
+  eps_annual:
+  - 4.3
+  - 3.15
+  - 3.96
+  - 3.81
+  - 4.66
+  - 7.06
+  - 19.83
+  - 12.83
+  - 12.97
+  - 14.75
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1660.0
+  - 4824.0
+  - 3439.0
+  - 3382.0
+  - 3864.0
+  cfo_annual:
+  - -5070.0
+  - -24029.0
+  - -24100.0
+  - -27935.0
+  - -36544.0
+  book_value_ps: 156.0
+  roe_5y: 0.15
+  profit_growth_5y: 0.28
+  sales_growth_5y: 0.19
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6885
+    - 0.6884
+    - 0.6876
+    - 0.687
+    - 0.6857
+    - 0.6851
+    - 0.6881
+    - 0.6882
+    fii:
+    - 0.0857
+    - 0.0783
+    - 0.0647
+    - 0.061
+    - 0.0515
+    - 0.0701
+    - 0.0794
+    - 0.0826
+    dii:
+    - 0.0952
+    - 0.0979
+    - 0.1206
+    - 0.1282
+    - 0.1467
+    - 0.1371
+    - 0.1336
+    - 0.1328
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/ABCAPITAL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

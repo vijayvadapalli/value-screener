@@ -1,0 +1,112 @@
+ticker: JKCEMENT
+yahoo: JKCEMENT.NS
+name: J.K. Cement Ltd.
+sector: Construction Materials
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 5253.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 77.379
+v2:
+  eps_quarters:
+  - 24.54
+  - 46.64
+  - 41.99
+  - 20.78
+  - 22.6
+  - 43.08
+  - 35.91
+  - 22.39
+  eps_annual:
+  - 25.42
+  - 41.41
+  - 34.99
+  - 64.25
+  - 91.85
+  - 88.93
+  - 54.82
+  - 102.35
+  - 111.45
+  - 128.45
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 679.0
+  - 416.0
+  - 790.0
+  - 872.0
+  - 988.0
+  cfo_annual:
+  - 878.0
+  - 1377.0
+  - 1959.0
+  - 1939.0
+  - 1873.0
+  book_value_ps: 951.0
+  roe_5y: 0.15
+  profit_growth_5y: 0.07
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4568
+    - 0.4568
+    - 0.4566
+    - 0.4566
+    - 0.4566
+    - 0.4566
+    - 0.4566
+    - 0.4566
+    fii:
+    - 0.1688
+    - 0.1614
+    - 0.1756
+    - 0.1857
+    - 0.1789
+    - 0.1686
+    - 0.1685
+    - 0.1835
+    dii:
+    - 0.237
+    - 0.245
+    - 0.2305
+    - 0.2174
+    - 0.2249
+    - 0.2375
+    - 0.2372
+    - 0.2234
+balance:
+  cash: 18249.2
+  debt: 74903.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/JKCEMENT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,825 cr − total debt ₹7,490 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

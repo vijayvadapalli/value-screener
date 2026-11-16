@@ -1,0 +1,112 @@
+ticker: GODFRYPHLP
+yahoo: GODFRYPHLP.NS
+name: Godfrey Phillips India Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1812.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 156.153
+v2:
+  eps_quarters:
+  - 20.25
+  - 17.9
+  - 22.84
+  - 19.56
+  - 22.01
+  - 33.43
+  - 12.72
+  - 12.18
+  eps_annual:
+  - 8.8
+  - 10.2
+  - 16.69
+  - 24.67
+  - 24.14
+  - 28.08
+  - 44.26
+  - 56.61
+  - 68.72
+  - 97.84
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 438.0
+  - 690.0
+  - 884.0
+  - 1072.0
+  - 1526.0
+  cfo_annual:
+  - 479.0
+  - 736.0
+  - 290.0
+  - 107.0
+  - 518.0
+  book_value_ps: 391.0
+  roe_5y: 0.2
+  profit_growth_5y: 0.36
+  sales_growth_5y: 0.2
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7258
+    - 0.7258
+    - 0.7258
+    - 0.7258
+    - 0.7258
+    - 0.7258
+    - 0.7258
+    - 0.7258
+    fii:
+    - 0.1063
+    - 0.0972
+    - 0.0932
+    - 0.0794
+    - 0.0815
+    - 0.0791
+    - 0.078
+    - 0.0786
+    dii:
+    - 0.0199
+    - 0.0329
+    - 0.0385
+    - 0.0412
+    - 0.0421
+    - 0.0328
+    - 0.0366
+    - 0.0349
+balance:
+  cash: 18204.7
+  debt: 2224.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GODFRYPHLP/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,820 cr − total debt ₹222 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: DALBHARAT
+yahoo: DALBHARAT.NS
+name: Dalmia Bharat Ltd.
+sector: Construction Materials
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1515.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 188.277
+v2:
+  eps_quarters:
+  - 3.25
+  - 23.19
+  - 20.95
+  - 12.58
+  - 6.5
+  - 20.63
+  - 10.02
+  - -11.04
+  eps_annual:
+  - 8800.0
+  - 58400.0
+  - 15.96
+  - 11.61
+  - 62.58
+  - 43.55
+  - 55.21
+  - 44.04
+  - 36.41
+  - 60.73
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 845.0
+  - 1079.0
+  - 853.0
+  - 699.0
+  - 1157.0
+  cfo_annual:
+  - 1932.0
+  - 2252.0
+  - 2635.0
+  - 2117.0
+  - 2278.0
+  book_value_ps: 952.0
+  roe_5y: 0.05
+  profit_growth_5y: -0.02
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5584
+    - 0.5584
+    - 0.5584
+    - 0.5584
+    - 0.5584
+    - 0.5584
+    - 0.5584
+    - 0.5584
+    fii:
+    - 0.0908
+    - 0.0829
+    - 0.0823
+    - 0.0875
+    - 0.0792
+    - 0.0715
+    - 0.0681
+    - 0.0741
+    dii:
+    - 0.1469
+    - 0.1643
+    - 0.1737
+    - 0.1781
+    - 0.1899
+    - 0.2025
+    - 0.1995
+    - 0.1891
+balance:
+  cash: 42990.0
+  debt: 102840.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/DALBHARAT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹4,299 cr − total debt ₹10,284 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

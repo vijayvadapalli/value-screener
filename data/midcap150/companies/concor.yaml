@@ -1,0 +1,112 @@
+ticker: CONCOR
+yahoo: CONCOR.NS
+name: Container Corporation of India Ltd.
+sector: Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 442.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 763.597
+v2:
+  eps_quarters:
+  - 4.81
+  - 3.94
+  - 3.5
+  - 4.97
+  - 4.38
+  - 3.45
+  - 3.5
+  - 4.64
+  eps_annual:
+  - 11.26
+  - 14.04
+  - 16.14
+  - 5.3
+  - 6.63
+  - 13.85
+  - 15.41
+  - 16.55
+  - 16.94
+  - 16.3
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1052.0
+  - 1173.0
+  - 1262.0
+  - 1293.0
+  - 1246.0
+  cfo_annual:
+  - 1369.0
+  - 1406.0
+  - 1388.0
+  - 1712.0
+  - 1482.0
+  book_value_ps: 176.0
+  roe_5y: 0.1
+  profit_growth_5y: 0.17
+  sales_growth_5y: 0.07
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.548
+    - 0.548
+    - 0.548
+    - 0.548
+    - 0.548
+    - 0.548
+    - 0.548
+    - 0.548
+    fii:
+    - 0.1347
+    - 0.131
+    - 0.1274
+    - 0.1238
+    - 0.0905
+    - 0.0832
+    - 0.0785
+    - 0.0809
+    dii:
+    - 0.257
+    - 0.2619
+    - 0.2612
+    - 0.2582
+    - 0.2868
+    - 0.2977
+    - 0.2985
+    - 0.3001
+balance:
+  cash: 40541.1
+  debt: 11137.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/CONCOR/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹4,054 cr − total debt ₹1,114 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: LODHA
+yahoo: LODHA.NS
+name: Lodha Developers Ltd.
+sector: Realty
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1193.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 996.471
+v2:
+  eps_quarters:
+  - 9.47
+  - 9.24
+  - 6.76
+  - 7.9
+  - 9.58
+  - 10.09
+  - 13.73
+  - 10.14
+  eps_annual:
+  - 7.38
+  - 10.03
+  - 20.66
+  - 9.19
+  - 0.51
+  - 12.49
+  - 5.05
+  - 15.58
+  - 27.71
+  - 34.32
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1208.0
+  - 490.0
+  - 1554.0
+  - 2767.0
+  - 3431.0
+  cfo_annual:
+  - 1998.0
+  - 2750.0
+  - 2512.0
+  - 1566.0
+  - 959.0
+  book_value_ps: 253.0
+  roe_5y: 0.13
+  profit_growth_5y: 0.59
+  sales_growth_5y: 0.25
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7198
+    - 0.7194
+    - 0.719
+    - 0.7187
+    - 0.7185
+    - 0.7227
+    - 0.7031
+    - 0.7029
+    fii:
+    - 0.2445
+    - 0.2464
+    - 0.2489
+    - 0.2411
+    - 0.2349
+    - 0.2124
+    - 0.2365
+    - 0.2533
+    dii:
+    - 0.0263
+    - 0.0236
+    - 0.0219
+    - 0.0273
+    - 0.0317
+    - 0.0462
+    - 0.0356
+    - 0.0255
+balance:
+  cash: 107110.0
+  debt: 104288.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LODHA/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹10,711 cr − total debt ₹10,429 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

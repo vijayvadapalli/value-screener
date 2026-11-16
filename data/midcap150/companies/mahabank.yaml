@@ -1,0 +1,141 @@
+ticker: MAHABANK
+yahoo: MAHABANK.NS
+name: Bank of Maharashtra
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 92.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 7691.522
+v2:
+  eps_quarters:
+  - 1.84
+  - 1.95
+  - 1.96
+  - 2.17
+  - 2.34
+  - 2.66
+  - 2.63
+  - 2.78
+  eps_annual:
+  - -11.61
+  - -4.28
+  - -17.3
+  - 0.68
+  - 0.87
+  - 1.71
+  - 3.87
+  - 5.75
+  - 7.21
+  - 9.12
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1153.0
+  - 2605.0
+  - 4072.0
+  - 5542.0
+  - 7017.0
+  cfo_annual:
+  - 6896.0
+  - -1440.0
+  - 11581.0
+  - 7628.0
+  - -11336.0
+  book_value_ps: 48.6
+  roe_5y: 0.2
+  profit_growth_5y: 0.65
+  sales_growth_5y: 0.2
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.796
+    - 0.796
+    - 0.796
+    - 0.796
+    - 0.736
+    - 0.736
+    - 0.736
+    - 0.736
+    fii:
+    - 0.0154
+    - 0.0172
+    - 0.0189
+    - 0.0235
+    - 0.0492
+    - 0.0555
+    - 0.0582
+    - 0.065
+    dii:
+    - 0.1088
+    - 0.1067
+    - 0.104
+    - 0.1006
+    - 0.135
+    - 0.1393
+    - 0.1428
+    - 0.1376
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 1.8
+    - 1.74
+    - 1.74
+    - 1.72
+    - 1.6
+    - 1.45
+    - 1.45
+    - 1.25
+    net_npa_pct:
+    - 0.2
+    - 0.18
+    - 0.18
+    - 0.18
+    - 0.15
+    - 0.13
+    - 0.13
+    - 0.12
+    loans_cr: 325641.0
+    loans_basis: Screener.in consolidated balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/MAHABANK/consolidated/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MAHABANK/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

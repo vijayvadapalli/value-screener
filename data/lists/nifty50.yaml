@@ -1,6 +1,8 @@
 # Written by tools/make_nse_list.py from niftyindices.com. Re-run it to refresh the constituents.
+# Entries with `extra:` were added by hand and are kept when the list is refreshed.
 name: NIFTY50 constituents
 folder: nifty50
+screen: growth
 tickers:
 - ticker: ADANIENT
   yahoo: ADANIENT.NS
@@ -202,3 +204,9 @@ tickers:
   yahoo: ULTRACEMCO.NS
   name: UltraTech Cement Ltd.
   industry: Construction Materials
+- ticker: NIFTY50
+  name: Nifty 50 index
+  yahoo: ^NSEI
+  unit: index
+  market: true
+  extra: benchmark index

@@ -1,0 +1,100 @@
+ticker: LICI
+yahoo: LICI.NS
+name: Life Insurance Corporation of India
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 400.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 12634.175
+v2:
+  eps_quarters:
+  - 8.7
+  - 15.05
+  - 8.66
+  - 7.98
+  - 10.22
+  - 18.55
+  - 10.74
+  - 9.58
+  eps_annual:
+  - 3.26
+  - 28.46
+  - 32.34
+  - 38.2
+  - 45.42
+  years:
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 4125.0
+  - 35997.0
+  - 40916.0
+  - 48320.0
+  - 57453.0
+  cfo_annual:
+  - -3783.0
+  - 54519.0
+  - 26548.0
+  - -9721.0
+  - -26211.0
+  book_value_ps: 150.0
+  roe_5y: 0.52
+  profit_growth_5y: 0.81
+  sales_growth_5y: 0.07
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.965
+    - 0.965
+    - 0.965
+    - 0.965
+    - 0.965
+    - 0.965
+    - 0.965
+    - 0.9
+    fii:
+    - 0.0007
+    - 0.001
+    - 0.0011
+    - 0.0013
+    - 0.002
+    - 0.0031
+    - 0.0044
+    - 0.0155
+    dii:
+    - 0.0126
+    - 0.0127
+    - 0.0137
+    - 0.0135
+    - 0.0133
+    - 0.0127
+    - 0.0099
+    - 0.0618
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LICI/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

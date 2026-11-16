@@ -1,0 +1,112 @@
+ticker: PHOENIXLTD
+yahoo: PHOENIXLTD.NS
+name: Phoenix Mills Ltd.
+sector: Realty
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2202.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 362.025
+v2:
+  eps_quarters:
+  - 7.41
+  - 7.52
+  - 6.73
+  - 8.5
+  - 7.71
+  - 11.28
+  - 8.3
+  - 9.11
+  eps_annual:
+  - 5.49
+  - 7.91
+  - 13.73
+  - 10.91
+  - 1.68
+  - 6.65
+  - 37.37
+  - 30.76
+  - 27.53
+  - 34.22
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 268.0
+  - 1478.0
+  - 1333.0
+  - 1307.0
+  - 1557.0
+  cfo_annual:
+  - 781.0
+  - 1356.0
+  - 2161.0
+  - 2084.0
+  - 2426.0
+  book_value_ps: 254.0
+  roe_5y: 0.1
+  profit_growth_5y: 0.81
+  sales_growth_5y: 0.34
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4726
+    - 0.4726
+    - 0.4726
+    - 0.4725
+    - 0.4725
+    - 0.4725
+    - 0.4725
+    - 0.4724
+    fii:
+    - 0.3566
+    - 0.3614
+    - 0.3627
+    - 0.3345
+    - 0.3385
+    - 0.3297
+    - 0.3173
+    - 0.3162
+    dii:
+    - 0.1303
+    - 0.1259
+    - 0.1272
+    - 0.1547
+    - 0.1526
+    - 0.1614
+    - 0.1738
+    - 0.173
+balance:
+  cash: 24544.0
+  debt: 61161.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/PHOENIXLTD/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,454 cr − total debt ₹6,116 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

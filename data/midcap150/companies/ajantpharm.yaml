@@ -1,0 +1,112 @@
+ticker: AJANTPHARM
+yahoo: AJANTPHARM.NS
+name: Ajanta Pharmaceuticals Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 3361.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 124.93
+v2:
+  eps_quarters:
+  - 18.64
+  - 18.03
+  - 20.44
+  - 20.83
+  - 21.91
+  - 21.35
+  - 26.75
+  - 31.06
+  eps_annual:
+  - 38.4
+  - 35.5
+  - 29.56
+  - 35.73
+  - 50.38
+  - 55.63
+  - 45.89
+  - 63.7
+  - 73.68
+  - 84.52
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 713.0
+  - 588.0
+  - 816.0
+  - 920.0
+  - 1056.0
+  cfo_annual:
+  - 562.0
+  - 792.0
+  - 785.0
+  - 1157.0
+  - 529.0
+  book_value_ps: 389.0
+  roe_5y: 0.23
+  profit_growth_5y: 0.12
+  sales_growth_5y: 0.14
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6626
+    - 0.6626
+    - 0.6626
+    - 0.6625
+    - 0.6625
+    - 0.6625
+    - 0.6349
+    - 0.6347
+    fii:
+    - 0.0926
+    - 0.0886
+    - 0.0886
+    - 0.0853
+    - 0.0797
+    - 0.0826
+    - 0.0768
+    - 0.0762
+    dii:
+    - 0.1702
+    - 0.1748
+    - 0.175
+    - 0.179
+    - 0.1858
+    - 0.1836
+    - 0.218
+    - 0.2194
+balance:
+  cash: 6834.8
+  debt: 1541.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/AJANTPHARM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹683 cr − total debt ₹154 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,86 @@
+ticker: MEESHO
+yahoo: MEESHO.NS
+name: Meesho Ltd.
+sector: Consumer Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 251.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 4633.068
+v2:
+  eps_quarters:
+  - -0.09
+  - -3.37
+  - -0.7
+  - -1.0
+  - -1.09
+  - -0.36
+  - -0.29
+  - -0.29
+  eps_annual:
+  - -1.21
+  - -7.86
+  - -4.06
+  - -0.79
+  - -9.54
+  - -2.97
+  years:
+  - "Mar 2021\n            \n            (S)"
+  - "Mar 2022\n            \n            (S)"
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -3248.0
+  - -1675.0
+  - -328.0
+  - -3942.0
+  - -1358.0
+  cfo_annual:
+  - -2113.0
+  - -2303.0
+  - 220.0
+  - 539.0
+  - -3875.0
+  book_value_ps: 9.09
+  roe_5y: null
+  shareholding:
+    quarters:
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.1676
+    - 0.1657
+    - 0.1641
+    - 0.1634
+    fii:
+    - 0.0431
+    - 0.0417
+    - 0.0519
+    - 0.0984
+    dii:
+    - 0.0528
+    - 0.0556
+    - 0.0914
+    - 0.136
+balance:
+  cash: 56339.2
+  debt: 488.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MEESHO/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹5,634 cr − total debt ₹49 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

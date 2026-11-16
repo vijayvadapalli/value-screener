@@ -1,0 +1,110 @@
+ticker: LTF
+yahoo: LTF.NS
+name: L&T Finance Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 279.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 2510.538
+v2:
+  eps_quarters:
+  - 2.51
+  - 2.55
+  - 2.81
+  - 2.94
+  - 2.95
+  - 3.22
+  - 3.6
+  - 3.89
+  eps_annual:
+  - 5.52
+  - 5.85
+  - 10.36
+  - 7.89
+  - 3.93
+  - 4.33
+  - 6.55
+  - 9.32
+  - 10.6
+  - 11.9
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1049.0
+  - 1536.0
+  - 2317.0
+  - 2643.0
+  - 2983.0
+  cfo_annual:
+  - 6078.0
+  - 7490.0
+  - 686.0
+  - -16587.0
+  - -14189.0
+  book_value_ps: 117.0
+  roe_5y: 0.08
+  profit_growth_5y: 0.32
+  sales_growth_5y: 0.06
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6625
+    - 0.6624
+    - 0.6616
+    - 0.661
+    - 0.6603
+    - 0.6599
+    - 0.6596
+    - 0.6593
+    fii:
+    - 0.053
+    - 0.0548
+    - 0.0619
+    - 0.064
+    - 0.0666
+    - 0.0764
+    - 0.0771
+    - 0.0738
+    dii:
+    - 0.1217
+    - 0.1328
+    - 0.141
+    - 0.1433
+    - 0.1533
+    - 0.1491
+    - 0.149
+    - 0.158
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LTF/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

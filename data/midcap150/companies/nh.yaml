@@ -1,0 +1,112 @@
+ticker: NH
+yahoo: NH.NS
+name: Narayana Hrudayalaya Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1895.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 204.164
+v2:
+  eps_quarters:
+  - 9.44
+  - 9.65
+  - 9.62
+  - 12.64
+  - 6.2
+  - 10.96
+  - 10.14
+  - 14.73
+  eps_annual:
+  - 4.06
+  - 2.51
+  - 2.9
+  - 5.82
+  - -0.7
+  - 16.73
+  - 29.67
+  - 38.62
+  - 38.66
+  - 39.42
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 342.0
+  - 607.0
+  - 790.0
+  - 791.0
+  - 806.0
+  cfo_annual:
+  - 485.0
+  - 1085.0
+  - 1067.0
+  - 986.0
+  - 1621.0
+  book_value_ps: 245.0
+  roe_5y: 0.26
+  profit_growth_5y: 1.55
+  sales_growth_5y: 0.25
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6385
+    - 0.6385
+    - 0.6385
+    - 0.6385
+    - 0.6327
+    - 0.6327
+    - 0.6327
+    - 0.6327
+    fii:
+    - 0.0945
+    - 0.0966
+    - 0.1046
+    - 0.1049
+    - 0.111
+    - 0.0998
+    - 0.094
+    - 0.0901
+    dii:
+    - 0.0868
+    - 0.0852
+    - 0.0809
+    - 0.0776
+    - 0.0791
+    - 0.0914
+    - 0.0905
+    - 0.1068
+balance:
+  cash: 32551.7
+  debt: 60753.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/NH/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,255 cr − total debt ₹6,075 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

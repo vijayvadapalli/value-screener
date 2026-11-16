@@ -1,0 +1,112 @@
+ticker: ASTRAL
+yahoo: ASTRAL.NS
+name: Astral Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1257.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 267.796
+v2:
+  eps_quarters:
+  - 4.25
+  - 6.67
+  - 3.02
+  - 5.02
+  - 4.01
+  - 7.93
+  - 4.47
+  - 4.73
+  eps_annual:
+  - 5.44
+  - 6.58
+  - 7.36
+  - 9.25
+  - 15.1
+  - 18.06
+  - 17.0
+  - 20.33
+  - 19.5
+  - 19.97
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 490.0
+  - 472.0
+  - 546.0
+  - 519.0
+  - 535.0
+  cfo_annual:
+  - 543.0
+  - 557.0
+  - 823.0
+  - 630.0
+  - 1117.0
+  book_value_ps: 158.0
+  roe_5y: 0.17
+  profit_growth_5y: 0.06
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.541
+    - 0.541
+    - 0.541
+    - 0.5421
+    - 0.5422
+    - 0.5422
+    - 0.5422
+    - 0.5422
+    fii:
+    - 0.2107
+    - 0.2017
+    - 0.2015
+    - 0.1661
+    - 0.1521
+    - 0.145
+    - 0.1389
+    - 0.1109
+    dii:
+    - 0.1376
+    - 0.146
+    - 0.1471
+    - 0.1749
+    - 0.1919
+    - 0.2092
+    - 0.2093
+    - 0.2376
+balance:
+  cash: 4731.0
+  debt: 3334.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/ASTRAL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹473 cr − total debt ₹333 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

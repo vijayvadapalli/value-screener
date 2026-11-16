@@ -1,0 +1,112 @@
+ticker: UBL
+yahoo: UBL.NS
+name: United Breweries Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1196.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 264.457
+v2:
+  eps_quarters:
+  - 1.45
+  - 3.69
+  - 6.95
+  - 1.76
+  - 3.06
+  - 3.85
+  - 6.29
+  - 5.12
+  eps_annual:
+  - 8.68
+  - 14.91
+  - 21.29
+  - 16.18
+  - 4.28
+  - 13.82
+  - 11.5
+  - 15.51
+  - 16.71
+  - 15.63
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 366.0
+  - 305.0
+  - 411.0
+  - 442.0
+  - 413.0
+  cfo_annual:
+  - 900.0
+  - -120.0
+  - 70.0
+  - 214.0
+  - 435.0
+  book_value_ps: 172.0
+  roe_5y: 0.09
+  profit_growth_5y: 0.26
+  sales_growth_5y: 0.17
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7084
+    - 0.7084
+    - 0.7084
+    - 0.7084
+    - 0.7084
+    - 0.7084
+    - 0.7084
+    - 0.7084
+    fii:
+    - 0.0643
+    - 0.0692
+    - 0.0673
+    - 0.0626
+    - 0.055
+    - 0.0494
+    - 0.0487
+    - 0.0536
+    dii:
+    - 0.1652
+    - 0.1617
+    - 0.1637
+    - 0.1668
+    - 0.1745
+    - 0.1808
+    - 0.1779
+    - 0.1727
+balance:
+  cash: 6290.4
+  debt: 11190.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/UBL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹629 cr − total debt ₹1,119 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

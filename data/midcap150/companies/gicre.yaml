@@ -1,0 +1,110 @@
+ticker: GICRE
+yahoo: GICRE.NS
+name: General Insurance Corporation of India
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 344.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1759.564
+v2:
+  eps_quarters:
+  - 9.56
+  - 14.24
+  - 14.42
+  - 16.38
+  - 9.84
+  - 14.44
+  - 9.94
+  - 16.9
+  eps_annual:
+  - 21.35
+  - 17.93
+  - 15.72
+  - -1.06
+  - 11.35
+  - 13.6
+  - 39.37
+  - 38.11
+  - 42.36
+  - 55.08
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2386.0
+  - 6907.0
+  - 6686.0
+  - 7432.0
+  - 9662.0
+  cfo_annual:
+  - 9051.0
+  - 11722.0
+  - -212.0
+  - 1976.0
+  - 466.0
+  book_value_ps: 423.0
+  roe_5y: 0.13
+  profit_growth_5y: 0.37
+  sales_growth_5y: 0.02
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.824
+    - 0.824
+    - 0.824
+    - 0.824
+    - 0.824
+    - 0.824
+    - 0.774
+    - 0.774
+    fii:
+    - 0.018
+    - 0.0193
+    - 0.0212
+    - 0.0212
+    - 0.0212
+    - 0.0205
+    - 0.0243
+    - 0.024
+    dii:
+    - 0.137
+    - 0.1368
+    - 0.1329
+    - 0.131
+    - 0.1332
+    - 0.1355
+    - 0.1773
+    - 0.1771
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GICRE/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

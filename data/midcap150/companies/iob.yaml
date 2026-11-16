@@ -1,0 +1,134 @@
+ticker: IOB
+yahoo: IOB.NS
+name: Indian Overseas Bank
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 31.2
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 19238.141
+v2:
+  eps_quarters:
+  - 0.46
+  - 0.57
+  - 0.61
+  - 0.65
+  - 0.74
+  - 0.81
+  - 0.89
+  - 1.02
+  eps_annual:
+  - 0.46
+  - 0.9
+  - 1.11
+  - 1.41
+  - 1.76
+  - 2.81
+  years:
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1709.0
+  - 2104.0
+  - 2666.0
+  - 3396.0
+  - 5418.0
+  cfo_annual:
+  - 5539.0
+  - -13655.0
+  - -1119.0
+  - 2647.0
+  - 4780.0
+  book_value_ps: 21.0
+  roe_5y: 0.11
+  profit_growth_5y: 0.48
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.9638
+    - 0.9461
+    - 0.9461
+    - 0.9461
+    - 0.9244
+    - 0.9244
+    - 0.9244
+    - 0.9244
+    fii:
+    - 0.0002
+    - 0.0022
+    - 0.0008
+    - 0.0031
+    - 0.0035
+    - 0.0043
+    - 0.0047
+    - 0.0048
+    dii:
+    - 0.013
+    - 0.0259
+    - 0.0237
+    - 0.023
+    - 0.0426
+    - 0.0428
+    - 0.0429
+    - 0.0429
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 2.55
+    - 2.14
+    - 1.97
+    - 1.83
+    - 1.54
+    - 1.42
+    - 1.33
+    - 1.19
+    net_npa_pct:
+    - 0.42
+    - 0.37
+    - 0.32
+    - 0.28
+    - 0.24
+    - 0.21
+    - 0.18
+    - 0.16
+    loans_cr: 342061.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/IOB/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/IOB/consolidated/; NPA figures from the standalone page:
+  https://www.screener.in/company/IOB/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

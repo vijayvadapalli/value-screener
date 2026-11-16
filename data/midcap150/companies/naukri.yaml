@@ -1,0 +1,112 @@
+ticker: NAUKRI
+yahoo: NAUKRI.NS
+name: Info Edge (India) Ltd.
+sector: Consumer Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1170.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 652.538
+v2:
+  eps_quarters:
+  - 3.74
+  - 7.15
+  - 4.57
+  - 4.88
+  - 4.19
+  - 8.73
+  - 6.87
+  - 7.4
+  eps_annual:
+  - -0.39
+  - 8.41
+  - 9.89
+  - -3.88
+  - 22.0
+  - 198.16
+  - -1.66
+  - 8.89
+  - 14.85
+  - 22.36
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 12882.0
+  - -70.0
+  - 595.0
+  - 1310.0
+  - 1763.0
+  cfo_annual:
+  - 707.0
+  - 512.0
+  - 702.0
+  - 876.0
+  - 1076.0
+  book_value_ps: 712.0
+  roe_5y: 0.03
+  profit_growth_5y: 0.47
+  sales_growth_5y: 0.24
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.3763
+    - 0.3763
+    - 0.3763
+    - 0.3759
+    - 0.3759
+    - 0.375
+    - 0.3748
+    - 0.3719
+    fii:
+    - 0.3263
+    - 0.3325
+    - 0.3299
+    - 0.3033
+    - 0.2966
+    - 0.2797
+    - 0.2372
+    - 0.2546
+    dii:
+    - 0.1859
+    - 0.1818
+    - 0.1836
+    - 0.2101
+    - 0.2183
+    - 0.2343
+    - 0.2783
+    - 0.2681
+balance:
+  cash: 51832.5
+  debt: 2420.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/NAUKRI/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹5,183 cr − total debt ₹242 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

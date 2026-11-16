@@ -1,0 +1,110 @@
+ticker: LICHSGFIN
+yahoo: LICHSGFIN.NS
+name: LIC Housing Finance Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 606.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 549.703
+v2:
+  eps_quarters:
+  - 26.09
+  - 24.97
+  - 24.8
+  - 24.53
+  - 25.42
+  - 27.13
+  - 27.25
+  - 27.39
+  eps_annual:
+  - 38.49
+  - 39.79
+  - 48.23
+  - 47.62
+  - 54.31
+  - 41.55
+  - 52.55
+  - 86.59
+  - 98.94
+  - 101.87
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2286.0
+  - 2891.0
+  - 4763.0
+  - 5443.0
+  - 5604.0
+  cfo_annual:
+  - -16729.0
+  - -19632.0
+  - -7151.0
+  - -16978.0
+  - -8504.0
+  book_value_ps: 798.0
+  roe_5y: 0.14
+  profit_growth_5y: 0.15
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4524
+    - 0.4524
+    - 0.4524
+    - 0.4524
+    - 0.4524
+    - 0.4524
+    - 0.4524
+    - 0.4524
+    fii:
+    - 0.2124
+    - 0.2155
+    - 0.2025
+    - 0.2017
+    - 0.2036
+    - 0.2139
+    - 0.2147
+    - 0.1893
+    dii:
+    - 0.2144
+    - 0.2134
+    - 0.222
+    - 0.2214
+    - 0.2181
+    - 0.2089
+    - 0.2102
+    - 0.2163
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LICHSGFIN/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

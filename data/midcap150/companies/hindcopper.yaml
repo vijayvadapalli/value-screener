@@ -1,0 +1,112 @@
+ticker: HINDCOPPER
+yahoo: HINDCOPPER.NS
+name: Hindustan Copper Ltd.
+sector: Metals & Mining
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 431.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 965.8
+v2:
+  eps_quarters:
+  - 0.65
+  - 1.94
+  - 1.39
+  - 1.9
+  - 1.62
+  - 4.59
+  - 3.64
+  - 5.36
+  eps_annual:
+  - 0.67
+  - 0.86
+  - 1.57
+  - -6.16
+  - 1.19
+  - 3.87
+  - 3.06
+  - 3.05
+  - 4.81
+  - 9.5
+  years:
+  - "Mar 2017\n            \n            (S)"
+  - "Mar 2018\n            \n            (S)"
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 374.0
+  - 295.0
+  - 295.0
+  - 465.0
+  - 919.0
+  cfo_annual:
+  - 1052.0
+  - 674.0
+  - 341.0
+  - 544.0
+  - 1474.0
+  book_value_ps: 43.6
+  roe_5y: 0.22
+  profit_growth_5y: 0.55
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6614
+    - 0.6614
+    - 0.6614
+    - 0.6614
+    - 0.6614
+    - 0.6614
+    - 0.6614
+    - 0.6014
+    fii:
+    - 0.0341
+    - 0.0327
+    - 0.0371
+    - 0.0505
+    - 0.0656
+    - 0.0634
+    - 0.0596
+    - 0.0708
+    dii:
+    - 0.0906
+    - 0.0857
+    - 0.0824
+    - 0.06
+    - 0.0557
+    - 0.0539
+    - 0.0484
+    - 0.0502
+balance:
+  cash: 8084.3
+  debt: 1109.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/HINDCOPPER/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (31 Mar 2026): cash & short-term investments ₹808 cr − total debt ₹111 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: TORNTPOWER
+yahoo: TORNTPOWER.NS
+name: Torrent Power Ltd.
+sector: Power
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1225.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 503.184
+v2:
+  eps_quarters:
+  - 9.44
+  - 21.03
+  - 14.52
+  - 14.36
+  - 12.76
+  - 6.31
+  - 12.68
+  - 16.28
+  eps_annual:
+  - 8.92
+  - 19.61
+  - 18.7
+  - 24.43
+  - 26.86
+  - 9.45
+  - 44.06
+  - 38.14
+  - 59.31
+  - 47.95
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 459.0
+  - 2165.0
+  - 1896.0
+  - 3059.0
+  - 2469.0
+  cfo_annual:
+  - 3167.0
+  - 3456.0
+  - 4258.0
+  - 4805.0
+  - 5464.0
+  book_value_ps: 417.0
+  roe_5y: 0.15
+  profit_growth_5y: 0.13
+  sales_growth_5y: 0.19
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5109
+    - 0.5109
+    - 0.5109
+    - 0.5109
+    - 0.5109
+    - 0.5109
+    - 0.5109
+    - 0.5109
+    fii:
+    - 0.0993
+    - 0.0943
+    - 0.0979
+    - 0.0882
+    - 0.0832
+    - 0.084
+    - 0.0853
+    - 0.0836
+    dii:
+    - 0.2121
+    - 0.219
+    - 0.2141
+    - 0.2216
+    - 0.2274
+    - 0.2282
+    - 0.2269
+    - 0.2281
+balance:
+  cash: 50832.5
+  debt: 233872.4
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/TORNTPOWER/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹5,083 cr − total debt ₹23,387 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

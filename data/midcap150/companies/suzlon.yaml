@@ -1,0 +1,112 @@
+ticker: SUZLON
+yahoo: SUZLON.NS
+name: Suzlon Energy Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 37.4
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 13647.326
+v2:
+  eps_quarters:
+  - 0.29
+  - 0.87
+  - 0.24
+  - 0.94
+  - 0.33
+  - 0.82
+  - 0.22
+  - 0.29
+  eps_annual:
+  - 1.57
+  - -0.65
+  - -2.64
+  - -4.56
+  - 0.11
+  - -0.2
+  - 2.6
+  - 0.49
+  - 1.53
+  - 2.33
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -177.0
+  - 2887.0
+  - 660.0
+  - 2072.0
+  - 3163.0
+  cfo_annual:
+  - 1302.0
+  - 491.0
+  - 80.0
+  - 1092.0
+  - 1202.0
+  book_value_ps: 7.54
+  roe_5y: null
+  profit_growth_5y: 0.45
+  sales_growth_5y: 0.38
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.1325
+    - 0.1325
+    - 0.1175
+    - 0.1173
+    - 0.1173
+    - 0.1173
+    - 0.117
+    - 0.117
+    fii:
+    - 0.2287
+    - 0.2304
+    - 0.2302
+    - 0.227
+    - 0.2373
+    - 0.2385
+    - 0.2415
+    - 0.2363
+    dii:
+    - 0.0931
+    - 0.0873
+    - 0.1017
+    - 0.1014
+    - 0.0923
+    - 0.0918
+    - 0.1112
+    - 0.1024
+balance:
+  cash: 13931.8
+  debt: 6729.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/SUZLON/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,393 cr − total debt ₹673 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

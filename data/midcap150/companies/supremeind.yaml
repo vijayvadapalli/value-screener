@@ -1,0 +1,112 @@
+ticker: SUPREMEIND
+yahoo: SUPREMEIND.NS
+name: Supreme Industries Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 3266.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 125.799
+v2:
+  eps_quarters:
+  - 14.72
+  - 23.14
+  - 15.93
+  - 12.97
+  - 12.07
+  - 34.13
+  - 22.1
+  - 20.66
+  eps_annual:
+  - 33.88
+  - 33.99
+  - 35.32
+  - 36.8
+  - 77.0
+  - 76.24
+  - 68.12
+  - 84.21
+  - 75.64
+  - 75.1
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 968.0
+  - 865.0
+  - 1070.0
+  - 961.0
+  - 954.0
+  cfo_annual:
+  - 470.0
+  - 890.0
+  - 1413.0
+  - 1004.0
+  - 1225.0
+  book_value_ps: 503.0
+  roe_5y: 0.2
+  profit_growth_5y: -0.01
+  sales_growth_5y: 0.12
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4885
+    - 0.4885
+    - 0.489
+    - 0.489
+    - 0.4896
+    - 0.4896
+    - 0.4896
+    - 0.4896
+    fii:
+    - 0.2469
+    - 0.2294
+    - 0.2194
+    - 0.2066
+    - 0.1923
+    - 0.1712
+    - 0.1708
+    - 0.1657
+    dii:
+    - 0.1196
+    - 0.1325
+    - 0.1459
+    - 0.1596
+    - 0.1712
+    - 0.1914
+    - 0.1898
+    - 0.1961
+balance:
+  cash: 6986.1
+  debt: 795.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/SUPREMEIND/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹699 cr − total debt ₹80 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

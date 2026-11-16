@@ -1,0 +1,112 @@
+ticker: INDHOTEL
+yahoo: INDHOTEL.NS
+name: Indian Hotels Co. Ltd.
+sector: Consumer Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 886.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1423.916
+v2:
+  eps_quarters:
+  - 4.09
+  - 3.67
+  - 2.08
+  - 2.0
+  - 6.35
+  - 4.21
+  - 2.51
+  - 2.46
+  eps_annual:
+  - -0.58
+  - 0.82
+  - 2.34
+  - 2.89
+  - -5.87
+  - -1.74
+  - 7.06
+  - 8.85
+  - 13.4
+  - 14.64
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -265.0
+  - 1053.0
+  - 1330.0
+  - 2038.0
+  - 2247.0
+  cfo_annual:
+  - 672.0
+  - 1619.0
+  - 1935.0
+  - 2194.0
+  - 2471.0
+  book_value_ps: 95.8
+  roe_5y: 0.12
+  profit_growth_5y: 0.33
+  sales_growth_5y: 0.44
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.3812
+    - 0.3812
+    - 0.3812
+    - 0.3812
+    - 0.3812
+    - 0.3812
+    - 0.3812
+    - 0.3812
+    fii:
+    - 0.2778
+    - 0.2696
+    - 0.2718
+    - 0.2614
+    - 0.2509
+    - 0.2323
+    - 0.2171
+    - 0.2212
+    dii:
+    - 0.1844
+    - 0.1905
+    - 0.1839
+    - 0.194
+    - 0.2066
+    - 0.2258
+    - 0.2447
+    - 0.2446
+balance:
+  cash: 45831.3
+  debt: 34706.9
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/INDHOTEL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹4,583 cr − total debt ₹3,471 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

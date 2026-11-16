@@ -1,0 +1,112 @@
+ticker: COCHINSHIP
+yahoo: COCHINSHIP.NS
+name: Cochin Shipyard Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1158.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 262.971
+v2:
+  eps_quarters:
+  - 6.73
+  - 10.92
+  - 7.14
+  - 4.09
+  - 5.5
+  - 10.51
+  - 5.76
+  - 2.04
+  eps_annual:
+  - 14.19
+  - 14.58
+  - 18.17
+  - 24.02
+  - 23.13
+  - 21.44
+  - 11.58
+  - 29.77
+  - 31.45
+  - 27.24
+  years:
+  - "Mar 2017\n            \n            (S)"
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 564.0
+  - 305.0
+  - 783.0
+  - 827.0
+  - 717.0
+  cfo_annual:
+  - 1398.0
+  - 1889.0
+  - -172.0
+  - -284.0
+  - -1234.0
+  book_value_ps: 231.0
+  roe_5y: 0.13
+  profit_growth_5y: 0.04
+  sales_growth_5y: 0.12
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6791
+    - 0.6791
+    - 0.6791
+    - 0.6791
+    - 0.6791
+    - 0.6791
+    - 0.6791
+    - 0.6333
+    fii:
+    - 0.0291
+    - 0.0288
+    - 0.0387
+    - 0.0322
+    - 0.0274
+    - 0.031
+    - 0.0283
+    - 0.0307
+    dii:
+    - 0.0663
+    - 0.0682
+    - 0.0633
+    - 0.0648
+    - 0.0647
+    - 0.0605
+    - 0.0696
+    - 0.1126
+balance:
+  cash: 21541.5
+  debt: 23577.4
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/COCHINSHIP/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,154 cr − total debt ₹2,358 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

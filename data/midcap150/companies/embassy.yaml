@@ -1,0 +1,71 @@
+ticker: EMBASSY
+yahoo: EMBASSY.NS
+name: EMBASSY OFFICE PARKS REIT
+sector: Realty
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 420.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 947.024
+v2:
+  eps_quarters:
+  - 1.67
+  - -2.56
+  - 1.64
+  - 2.45
+  - 4.02
+  - -4.54
+  - 2.06
+  - 8.77
+  eps_annual:
+  - -0.12
+  - 9.92
+  - 7.37
+  - 9.37
+  - 5.34
+  - 10.17
+  - 17.14
+  - 3.57
+  years:
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 888.0
+  - 506.0
+  - 964.0
+  - 1624.0
+  - 339.0
+  cfo_annual:
+  - 2367.0
+  - 2566.0
+  - 2591.0
+  - 3079.0
+  - 3522.0
+  book_value_ps: 217.0
+  roe_5y: 0.04
+  profit_growth_5y: -0.17
+  sales_growth_5y: 0.13
+balance:
+  cash: 23303.0
+  debt: 244999.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/EMBASSY/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,330 cr − total debt ₹24,500 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

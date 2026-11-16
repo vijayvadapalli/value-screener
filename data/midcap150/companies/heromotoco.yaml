@@ -1,0 +1,112 @@
+ticker: HEROMOTOCO
+yahoo: HEROMOTOCO.NS
+name: Hero MotoCorp Ltd.
+sector: Automobile and Auto Components
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 5360.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 200.328
+v2:
+  eps_quarters:
+  - 55.38
+  - 58.06
+  - 85.26
+  - 65.42
+  - 63.35
+  - 72.97
+  - 70.59
+  - 93.0
+  eps_annual:
+  - 179.49
+  - 186.29
+  - 172.44
+  - 182.14
+  - 146.05
+  - 115.95
+  - 140.61
+  - 187.31
+  - 218.91
+  - 286.96
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2329.0
+  - 2800.0
+  - 3742.0
+  - 4376.0
+  - 5776.0
+  cfo_annual:
+  - 2104.0
+  - 2614.0
+  - 4923.0
+  - 4297.0
+  - 8315.0
+  book_value_ps: 1170.0
+  roe_5y: 0.21
+  profit_growth_5y: 0.16
+  sales_growth_5y: 0.09
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.3475
+    - 0.3474
+    - 0.3474
+    - 0.3473
+    - 0.3473
+    - 0.3473
+    - 0.3473
+    - 0.3472
+    fii:
+    - 0.2795
+    - 0.2743
+    - 0.2705
+    - 0.2876
+    - 0.2943
+    - 0.3115
+    - 0.3109
+    - 0.3222
+    dii:
+    - 0.277
+    - 0.2789
+    - 0.2777
+    - 0.2632
+    - 0.2628
+    - 0.2469
+    - 0.2426
+    - 0.2384
+balance:
+  cash: 100098.5
+  debt: 14188.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/HEROMOTOCO/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹10,010 cr − total debt ₹1,419 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

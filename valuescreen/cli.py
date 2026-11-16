@@ -24,7 +24,7 @@ import datetime as dt
 import sys
 from pathlib import Path
 
-from . import growth_data, history, html_report, loader, markets, price_chart, pricedb, prices, report, research, technicals
+from . import growth_data, growth_screen, history, html_report, loader, markets, price_chart, pricedb, prices, report, research, technicals
 from . import profit_vs_price as pvp
 from .wording import list_title
 from .engine import etf_lookthrough, ranked, run
@@ -193,6 +193,12 @@ def main(argv=None):
     tech = _technicals(tickers, companies, log) if a.technicals else {}
     pcharts = _price_charts(tickers, companies, results, log)
 
+    screen_rows = []
+    if a.list and loader.list_settings(a.list).get("screen") == "growth":
+        extras = {x["ticker"]: x["extra"] for x in loader.load_list_entries(a.list) if x.get("extra")}
+        screen_rows = growth_screen.rows(results, companies, cfg, extras)
+        n = {t: sum(1 for r in screen_rows if r["tier"] == t) for t in ("shortlist", "near miss")}
+        log.append(f"growth screen: {n['shortlist']} shortlisted, {n['near miss']} near misses of {len(screen_rows)}")
     market_rows = markets.rows([x for x in loader.load_list_entries(a.list) if markets.is_market(x)], log.append) if a.list else []
     profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
     lookthroughs = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]
@@ -204,7 +210,8 @@ def main(argv=None):
     if results:
         extras = html_report.ReportExtras(previous=previous or {}, tech=tech, lookthroughs=lookthroughs,
                                           heatmaps=report.make_heatmaps(vals, grow, cfg, out), log_lines=log,
-                                          price_charts=pcharts, market_rows=market_rows)
+                                          price_charts=pcharts, market_rows=market_rows, screen_rows=screen_rows,
+                                          chart_dpi=loader.list_settings(a.list).get("chart_dpi") if a.list else None)
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
                                        extras))
     if not a.out:   # the latest report, under a fixed name, for git and GitHub Pages

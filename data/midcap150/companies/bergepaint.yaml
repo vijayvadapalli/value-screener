@@ -1,0 +1,112 @@
+ticker: BERGEPAINT
+yahoo: BERGEPAINT.NS
+name: Berger Paints India Ltd.
+sector: Consumer Durables
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 470.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1166.255
+v2:
+  eps_quarters:
+  - 2.53
+  - 2.25
+  - 2.7
+  - 1.77
+  - 2.33
+  - 2.87
+  - 3.47
+  - 1.86
+  eps_annual:
+  - 4.07
+  - 3.95
+  - 4.24
+  - 5.64
+  - 6.17
+  - 7.14
+  - 7.37
+  - 10.02
+  - 10.12
+  - 9.66
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 833.0
+  - 860.0
+  - 1170.0
+  - 1183.0
+  - 1128.0
+  cfo_annual:
+  - 566.0
+  - 976.0
+  - 1591.0
+  - 1269.0
+  - 1540.0
+  book_value_ps: 60.7
+  roe_5y: 0.21
+  profit_growth_5y: 0.1
+  sales_growth_5y: 0.12
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7499
+    - 0.7499
+    - 0.7499
+    - 0.7499
+    - 0.7498
+    - 0.7498
+    - 0.7498
+    - 0.7498
+    fii:
+    - 0.0594
+    - 0.0575
+    - 0.0559
+    - 0.0535
+    - 0.0525
+    - 0.0468
+    - 0.0482
+    - 0.0496
+    dii:
+    - 0.096
+    - 0.1011
+    - 0.1045
+    - 0.1071
+    - 0.1108
+    - 0.1171
+    - 0.1178
+    - 0.1169
+balance:
+  cash: 12293.8
+  debt: 10665.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/BERGEPAINT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,229 cr − total debt ₹1,067 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

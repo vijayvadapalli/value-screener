@@ -1,0 +1,106 @@
+ticker: FLUOROCHEM
+yahoo: FLUOROCHEM.NS
+name: Gujarat Fluorochemicals Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 4824.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 109.84
+v2:
+  eps_quarters:
+  - 11.47
+  - 17.39
+  - 16.57
+  - 16.29
+  - 9.29
+  - 9.38
+  - 20.12
+  - 22.12
+  eps_annual:
+  - 17.87
+  - -19.91
+  - 71.66
+  - 120.97
+  - 39.59
+  - 49.71
+  - 52.56
+  years:
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 776.0
+  - 1323.0
+  - 435.0
+  - 546.0
+  - 574.0
+  cfo_annual:
+  - 741.0
+  - 739.0
+  - 626.0
+  - 545.0
+  - 961.0
+  book_value_ps: 764.0
+  roe_5y: 0.13
+  profit_growth_5y: 0.36
+  sales_growth_5y: 0.14
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6257
+    - 0.6257
+    - 0.6257
+    - 0.6139
+    - 0.6139
+    - 0.6139
+    - 0.6139
+    - 0.6139
+    fii:
+    - 0.0461
+    - 0.0463
+    - 0.0425
+    - 0.0436
+    - 0.0431
+    - 0.0428
+    - 0.0441
+    - 0.0453
+    dii:
+    - 0.1005
+    - 0.1074
+    - 0.1147
+    - 0.1273
+    - 0.1281
+    - 0.1348
+    - 0.1333
+    - 0.1332
+balance:
+  cash: 7640.0
+  debt: 23310.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/FLUOROCHEM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹764 cr − total debt ₹2,331 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,90 @@
+ticker: LENSKART
+yahoo: LENSKART.NS
+name: Lenskart Solutions Ltd.
+sector: Consumer Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 735.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1738.095
+v2:
+  eps_quarters:
+  - 0.01
+  - 1.3
+  - 0.36
+  - 0.61
+  - 0.76
+  - 1.15
+  - 1.28
+  - 1.31
+  eps_annual:
+  - 0.04
+  - 0.17
+  - -0.61
+  - -0.38
+  - -0.1
+  - 1.76
+  - 2.84
+  years:
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -102.0
+  - -64.0
+  - -10.0
+  - 297.0
+  - 501.0
+  cfo_annual:
+  - -183.0
+  - 95.0
+  - 487.0
+  - 1231.0
+  - 1670.0
+  book_value_ps: 53.6
+  roe_5y: 0.02
+  profit_growth_5y: 0.75
+  sales_growth_5y: 0.58
+  shareholding:
+    quarters:
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.1757
+    - 0.1755
+    - 0.1753
+    - 0.1752
+    fii:
+    - 0.0386
+    - 0.0426
+    - 0.1276
+    - 0.1826
+    dii:
+    - 0.1586
+    - 0.1548
+    - 0.2356
+    - 0.2681
+balance:
+  cash: 39478.8
+  debt: 34554.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LENSKART/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,948 cr − total debt ₹3,455 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

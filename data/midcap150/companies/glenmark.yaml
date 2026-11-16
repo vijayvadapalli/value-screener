@@ -1,0 +1,112 @@
+ticker: GLENMARK
+yahoo: GLENMARK.NS
+name: Glenmark Pharmaceuticals Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2633.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 281.895
+v2:
+  eps_quarters:
+  - 12.33
+  - 0.16
+  - 1.66
+  - 21.63
+  - 14.29
+  - 10.68
+  - 17.11
+  - 9.35
+  eps_annual:
+  - 39.29
+  - 28.49
+  - 32.78
+  - 27.5
+  - 34.38
+  - 33.37
+  - 10.53
+  - -53.22
+  - 37.11
+  - 48.26
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 994.0
+  - 377.0
+  - -1434.0
+  - 1047.0
+  - 1362.0
+  cfo_annual:
+  - 1109.0
+  - 625.0
+  - -265.0
+  - -828.0
+  - 3445.0
+  book_value_ps: 397.0
+  roe_5y: 0.02
+  profit_growth_5y: 0.19
+  sales_growth_5y: 0.09
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4665
+    - 0.4665
+    - 0.4664
+    - 0.4664
+    - 0.4665
+    - 0.4665
+    - 0.4665
+    - 0.4665
+    fii:
+    - 0.2351
+    - 0.2315
+    - 0.2062
+    - 0.2073
+    - 0.192
+    - 0.2035
+    - 0.2089
+    - 0.2151
+    dii:
+    - 0.1385
+    - 0.146
+    - 0.1764
+    - 0.1861
+    - 0.2009
+    - 0.1928
+    - 0.186
+    - 0.1763
+balance:
+  cash: 15035.0
+  debt: 14074.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GLENMARK/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,504 cr − total debt ₹1,407 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

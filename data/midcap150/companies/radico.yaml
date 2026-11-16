@@ -1,0 +1,112 @@
+ticker: RADICO
+yahoo: RADICO.NS
+name: Radico Khaitan Ltd
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 4665.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 134.163
+v2:
+  eps_quarters:
+  - 7.14
+  - 6.88
+  - 9.75
+  - 10.42
+  - 11.57
+  - 13.4
+  - 17.14
+  - 17.34
+  eps_annual:
+  - 6.03
+  - 9.3
+  - 14.55
+  - 17.16
+  - 20.75
+  - 19.69
+  - 16.48
+  - 19.61
+  - 25.83
+  - 45.14
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 263.0
+  - 220.0
+  - 262.0
+  - 346.0
+  - 604.0
+  cfo_annual:
+  - 222.0
+  - 239.0
+  - 166.0
+  - 363.0
+  - 743.0
+  book_value_ps: 274.0
+  roe_5y: 0.14
+  profit_growth_5y: 0.17
+  sales_growth_5y: 0.21
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4024
+    - 0.4023
+    - 0.4023
+    - 0.4021
+    - 0.4021
+    - 0.402
+    - 0.4019
+    - 0.4018
+    fii:
+    - 0.1771
+    - 0.1695
+    - 0.1777
+    - 0.18
+    - 0.1982
+    - 0.1763
+    - 0.182
+    - 0.1943
+    dii:
+    - 0.2556
+    - 0.2677
+    - 0.2596
+    - 0.2548
+    - 0.2403
+    - 0.2735
+    - 0.2808
+    - 0.2717
+balance:
+  cash: 980.3
+  debt: 6523.9
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/RADICO/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹98 cr − total debt ₹652 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

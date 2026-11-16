@@ -1,0 +1,112 @@
+ticker: FORTIS
+yahoo: FORTIS.NS
+name: Fortis Healthcare Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 803.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 754.159
+v2:
+  eps_quarters:
+  - 3.28
+  - 2.44
+  - 3.45
+  - 4.26
+  - 2.57
+  - 3.52
+  - 3.53
+  - 4.14
+  eps_annual:
+  - 8.14
+  - -19.46
+  - -3.96
+  - 0.77
+  - -1.45
+  - 7.35
+  - 7.8
+  - 7.93
+  - 10.26
+  - 13.8
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 790.0
+  - 633.0
+  - 645.0
+  - 809.0
+  - 1064.0
+  cfo_annual:
+  - 865.0
+  - 822.0
+  - 1100.0
+  - 1424.0
+  - 1601.0
+  book_value_ps: 139.0
+  roe_5y: 0.09
+  profit_growth_5y: 0.64
+  sales_growth_5y: 0.18
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.3117
+    - 0.3117
+    - 0.3117
+    - 0.3117
+    - 0.3117
+    - 0.3117
+    - 0.3117
+    - 0.3117
+    fii:
+    - 0.2677
+    - 0.274
+    - 0.2718
+    - 0.279
+    - 0.2784
+    - 0.2598
+    - 0.252
+    - 0.232
+    dii:
+    - 0.3005
+    - 0.2946
+    - 0.2979
+    - 0.2914
+    - 0.2933
+    - 0.3135
+    - 0.3223
+    - 0.3445
+balance:
+  cash: 3576.5
+  debt: 31644.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/FORTIS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹358 cr − total debt ₹3,164 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

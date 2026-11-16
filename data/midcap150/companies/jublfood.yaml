@@ -1,0 +1,112 @@
+ticker: JUBLFOOD
+yahoo: JUBLFOOD.NS
+name: Jubilant Foodworks Ltd.
+sector: Consumer Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 431.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 658.051
+v2:
+  eps_quarters:
+  - 0.65
+  - 0.73
+  - 1.39
+  - 2.82
+  - 1.07
+  - 1.21
+  - 1.47
+  - 1.64
+  eps_annual:
+  - 0.88
+  - 2.97
+  - 4.85
+  - 4.24
+  - 3.51
+  - 6.37
+  - 5.35
+  - 6.05
+  - 3.19
+  - 6.49
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 418.0
+  - 353.0
+  - 400.0
+  - 217.0
+  - 444.0
+  cfo_annual:
+  - 930.0
+  - 1026.0
+  - 1010.0
+  - 1658.0
+  - 1894.0
+  book_value_ps: 37.7
+  roe_5y: 0.17
+  profit_growth_5y: 0.14
+  sales_growth_5y: 0.23
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4194
+    - 0.4194
+    - 0.4027
+    - 0.4027
+    - 0.4027
+    - 0.4027
+    - 0.4027
+    - 0.4027
+    fii:
+    - 0.2126
+    - 0.2054
+    - 0.2105
+    - 0.2011
+    - 0.1859
+    - 0.1729
+    - 0.1332
+    - 0.1328
+    dii:
+    - 0.3018
+    - 0.3103
+    - 0.3232
+    - 0.3306
+    - 0.3479
+    - 0.3638
+    - 0.3959
+    - 0.4033
+balance:
+  cash: 3038.0
+  debt: 48499.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/JUBLFOOD/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹304 cr − total debt ₹4,850 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

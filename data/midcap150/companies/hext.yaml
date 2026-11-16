@@ -1,0 +1,112 @@
+ticker: HEXT
+yahoo: HEXT.NS
+name: Hexaware Technologies Ltd.
+sector: Information Technology
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 480.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 611.583
+v2:
+  eps_quarters:
+  - 5.25
+  - 5.38
+  - 6.24
+  - 6.08
+  - 4.78
+  - 5.75
+  - 5.4
+  - 7.05
+  eps_annual:
+  - 13.88
+  - 16.83
+  - 19.62
+  - 21.49
+  - 20.69
+  - 24.93
+  - 29.44
+  - 33.22
+  - 19.36
+  - 22.41
+  years:
+  - Dec 2016
+  - Dec 2017
+  - Dec 2018
+  - Dec 2019
+  - Dec 2020
+  - Dec 2021
+  - Dec 2022
+  - Dec 2023
+  - Dec 2024
+  - Dec 2025
+  profit_annual:
+  - 749.0
+  - 884.0
+  - 998.0
+  - 1174.0
+  - 1368.0
+  cfo_annual:
+  - 980.0
+  - 821.0
+  - 1516.0
+  - 1548.0
+  - 1739.0
+  book_value_ps: 110.0
+  roe_5y: 0.23
+  profit_growth_5y: 0.18
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Sep 2020
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.9116
+    - 0.7471
+    - 0.7457
+    - 0.7455
+    - 0.743
+    - 0.743
+    - 0.743
+    - 0.743
+    fii:
+    - 0.0294
+    - 0.1059
+    - 0.0976
+    - 0.0831
+    - 0.0815
+    - 0.042
+    - 0.0319
+    - 0.0325
+    dii:
+    - 0.0
+    - 0.0906
+    - 0.0987
+    - 0.1113
+    - 0.1131
+    - 0.1504
+    - 0.1606
+    - 0.1616
+balance:
+  cash: 19052.0
+  debt: 6524.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/HEXT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,905 cr − total debt ₹652 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

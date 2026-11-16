@@ -182,6 +182,13 @@ def load_list_entries(name: str, folder: Path | None = None) -> list[dict]:
     return [{**x, "ticker": x["ticker"].upper()} if isinstance(x, dict) else {"ticker": str(x).upper()} for x in d["tickers"]]
 
 
+def list_settings(name: str, folder: Path | None = None) -> dict:
+    """A list's settings – everything in its file except the tickers (name, folder, screen, ...)."""
+    folder = folder or ROOT / "data" / "lists"
+    d = yaml.safe_load(open(folder / f"{name.lower()}.yaml"))
+    return {k: v for k, v in d.items() if k != "tickers"}
+
+
 def load_list(name: str, folder: Path | None = None) -> list[str]:
     return [x["ticker"] for x in load_list_entries(name, folder)]
 

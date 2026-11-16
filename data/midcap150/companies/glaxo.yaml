@@ -1,0 +1,112 @@
+ticker: GLAXO
+yahoo: GLAXO.NS
+name: Glaxosmithkline Pharmaceuticals Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2652.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 169.581
+v2:
+  eps_quarters:
+  - 13.57
+  - 15.52
+  - 12.1
+  - 15.2
+  - 17.45
+  - 16.4
+  - 14.0
+  - 19.83
+  eps_annual:
+  - 19.88
+  - 20.7
+  - 26.29
+  - 5.5
+  - 21.14
+  - 100.04
+  - 36.05
+  - 34.83
+  - 54.75
+  - 61.15
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1695.0
+  - 611.0
+  - 590.0
+  - 928.0
+  - 1036.0
+  cfo_annual:
+  - 811.0
+  - 484.0
+  - 582.0
+  - 1290.0
+  - 903.0
+  book_value_ps: 111.0
+  roe_5y: 0.48
+  profit_growth_5y: 0.15
+  sales_growth_5y: 0.05
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    fii:
+    - 0.045
+    - 0.0452
+    - 0.0489
+    - 0.0479
+    - 0.0463
+    - 0.0462
+    - 0.0479
+    - 0.0475
+    dii:
+    - 0.073
+    - 0.0779
+    - 0.0771
+    - 0.0775
+    - 0.077
+    - 0.0768
+    - 0.0781
+    - 0.0847
+balance:
+  cash: 22871.2
+  debt: 392.5
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GLAXO/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,287 cr − total debt ₹39 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

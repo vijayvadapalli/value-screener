@@ -1,0 +1,86 @@
+ticker: GVT&D
+yahoo: GVT&D.NS
+name: GE Vernova T&D India Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 4337.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 256.341
+v2:
+  eps_quarters:
+  - 5.57
+  - 7.28
+  - 11.37
+  - 11.7
+  - 11.36
+  - 13.74
+  - 14.18
+  - 16.85
+  eps_annual:
+  - 7.81
+  years:
+  - Dec 2010
+  profit_annual:
+  - 187.0
+  cfo_annual:
+  - 108.0
+  book_value_ps: 41.9
+  roe_5y: null
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.51
+    - 0.51
+    - 0.51
+    - 0.51
+    - 0.51
+    - 0.51
+    - 0.51
+    - 0.51
+    fii:
+    - 0.1204
+    - 0.1304
+    - 0.1449
+    - 0.1615
+    - 0.1846
+    - 0.2039
+    - 0.2289
+    - 0.1916
+    dii:
+    - 0.284
+    - 0.2818
+    - 0.2675
+    - 0.252
+    - 0.2327
+    - 0.2139
+    - 0.1846
+    - 0.2218
+balance:
+  cash: 24634.0
+  debt: 275.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GVT%26D/consolidated/'
+assumptions:
+- 'Standalone quarters: Screener shows 4 of the last 4 quarters standalone (marked (S) – no consolidated figures for them), so the 12-month EPS
+  mixes the two'
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,463 cr − total debt ₹28 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

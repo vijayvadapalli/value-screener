@@ -1,0 +1,112 @@
+ticker: THERMAX
+yahoo: THERMAX.NS
+name: Thermax Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2759.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 119.101
+v2:
+  eps_quarters:
+  - 9.73
+  - 17.27
+  - 12.79
+  - 10.04
+  - 17.14
+  - 20.5
+  - 2.12
+  - 9.61
+  eps_annual:
+  - 18.72
+  - 19.48
+  - 27.31
+  - 17.83
+  - 17.34
+  - 26.21
+  - 37.79
+  - 54.15
+  - 53.25
+  - 60.47
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 312.0
+  - 451.0
+  - 643.0
+  - 627.0
+  - 720.0
+  cfo_annual:
+  - 325.0
+  - 460.0
+  - 247.0
+  - 1080.0
+  - 542.0
+  book_value_ps: 460.0
+  roe_5y: 0.12
+  profit_growth_5y: 0.21
+  sales_growth_5y: 0.18
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6199
+    - 0.6199
+    - 0.6199
+    - 0.6199
+    - 0.6199
+    - 0.6199
+    - 0.6199
+    - 0.6199
+    fii:
+    - 0.1549
+    - 0.1586
+    - 0.1602
+    - 0.1344
+    - 0.1236
+    - 0.1125
+    - 0.1146
+    - 0.113
+    dii:
+    - 0.1266
+    - 0.1225
+    - 0.1174
+    - 0.1395
+    - 0.1484
+    - 0.1549
+    - 0.1522
+    - 0.1494
+balance:
+  cash: 33602.8
+  debt: 29060.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/THERMAX/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,360 cr − total debt ₹2,906 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

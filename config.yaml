@@ -79,10 +79,10 @@ nifty_v2:                        # per-share rules for Indian companies valued f
   one_off_median_x: 2.0          # a quarter is a one-off if > 2x the median of the other 7 quarters ...
   one_off_neighbour_x: 1.6       # ... and > 1.6x its neighbours; it is replaced by the neighbours' average
   cyclical_industries: [Metals & Mining, Oil Gas & Consumable Fuels, Construction Materials, Power,
-                        Automobile and Auto Components]
+                        Automobile and Auto Components, Chemicals, Realty, Textiles]   # the last three: midcaps
   cyclical_tickers: [INDIGO]     # airlines sit under "Services"
   financial_industries: [Financial Services]
-  insurers: [HDFCLIFE, SBILIFE, ICICIPRULI, ICICIGI, LICI]
+  insurers: [HDFCLIFE, SBILIFE, ICICIPRULI, ICICILIFE, ICICIGI, LICI, GICRE, NIACL, STARHEALTH, MFSL]
   conglomerates: [LT, M&M, BAJAJ-AUTO, GRASIM]   # flagged: conglomerates and finance arms
 
 # Bad loans at banks and other lenders (valuescreen/asset_quality.py). Book value is cut by bad loans not yet provided
@@ -96,3 +96,22 @@ asset_quality:
   max_nonaccrual: 0.02           # US: nonaccrual loans above 2% of loans (an allowance below them is flagged too)
   max_nco_rise: 0.5              # US: net charge-off rate more than 50% above the twelve months before ...
   min_nco_for_rise: 0.002        # ... and at least 0.2% of loans (so a tiny base doesn't trigger it)
+
+# The growth-at-a-value-price screen (valuescreen/growth_screen.py) for lists with `screen: growth` – the Nifty
+# Midcap 150. On top of the valuation: P/E, EPS growth over 5 AND 3 years, and the expected return of a 5-year hold.
+growth_screen:
+  max_pe: 15                   # price minus net cash ÷ the EPS the valuation uses
+  min_eps_cagr: 0.20           # EPS growth a year, over both 5 and 3 years, every year profitable
+  years: 5                     # the holding period
+  growth_haircut: 0.5          # the 5-year return assumes growth at half the past rate ...
+  max_assumed_growth: 0.15     # ... and at most 15% a year
+  exit_multiple: 15            # sold at this P/E after the hold
+  min_return: 0.12             # shortlist needs at least this a year
+  near_max_pe: 20              # near miss: one thing short – a P/E of 15–20 with growth met, ...
+  near_min_eps_cagr: 0.15      # ... growth of 15–20% with the P/E met, or only the return bar
+  min_cash_conversion: 0.70    # guards: cash conversion, no history break, no bad-loan warning, current results
+  state_owned: [BANKINDIA, BDL, BEL, BHEL, COALINDIA, COCHINSHIP, CONCOR, GICRE, HINDCOPPER, HINDPETRO, HUDCO, INDIANB, IOB, IRCTC, IREDA, LICI, MAHABANK, NATIONALUM, NHPC, NLCINDIA, NMDC, NTPC, NTPCGREEN, OIL, ONGC, POWERGRID, RECLTD, RVNL, SAIL, SBIN]
+                               # flagged "state-owned": the promoter is the government, so a high promoter holding means
+                               # government control, not a founder with skin in the game (hand-kept list)
+  min_promoter: 0.60           # flag: promoters hold less than this ...
+  promoter_drop: 0.02          # ... or their holding fell more than 2 points over four quarters

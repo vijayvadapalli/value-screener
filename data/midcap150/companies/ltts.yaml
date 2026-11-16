@@ -1,0 +1,112 @@
+ticker: LTTS
+yahoo: LTTS.NS
+name: L&T Technology Services Ltd.
+sector: Information Technology
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 4226.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 106.157
+v2:
+  eps_quarters:
+  - 30.45
+  - 29.38
+  - 29.79
+  - 31.01
+  - 28.55
+  - 31.33
+  - 33.62
+  - 51.67
+  eps_annual:
+  - 41.78
+  - 49.39
+  - 73.61
+  - 78.33
+  - 63.14
+  - 90.68
+  - 110.77
+  - 123.28
+  - 119.64
+  - 120.68
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 961.0
+  - 1174.0
+  - 1306.0
+  - 1264.0
+  - 1281.0
+  cfo_annual:
+  - 1006.0
+  - 1305.0
+  - 1493.0
+  - 1481.0
+  - 1455.0
+  book_value_ps: 667.0
+  roe_5y: 0.23
+  profit_growth_5y: 0.16
+  sales_growth_5y: 0.15
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7366
+    - 0.7366
+    - 0.7359
+    - 0.7358
+    - 0.7358
+    - 0.7357
+    - 0.7352
+    - 0.7351
+    fii:
+    - 0.0419
+    - 0.0518
+    - 0.0484
+    - 0.0467
+    - 0.0422
+    - 0.0386
+    - 0.0413
+    - 0.0443
+    dii:
+    - 0.143
+    - 0.1367
+    - 0.1386
+    - 0.1413
+    - 0.1457
+    - 0.1464
+    - 0.1405
+    - 0.1376
+balance:
+  cash: 40661.0
+  debt: 5584.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LTTS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹4,066 cr − total debt ₹558 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

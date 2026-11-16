@@ -1,0 +1,104 @@
+ticker: 360ONE
+yahoo: 360ONE.NS
+name: 360 ONE WAM Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1179.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 428.711
+v2:
+  eps_quarters:
+  - 7.12
+  - 6.35
+  - 7.04
+  - 7.79
+  - 8.08
+  - 7.11
+  - 8.13
+  - 7.36
+  eps_annual:
+  - 5.77
+  - 10.5
+  - 16.28
+  - 18.48
+  - 22.41
+  - 25.83
+  - 29.94
+  years:
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 578.0
+  - 658.0
+  - 804.0
+  - 1015.0
+  - 1216.0
+  cfo_annual:
+  - 929.0
+  - -1323.0
+  - -470.0
+  - -2462.0
+  - -2921.0
+  book_value_ps: 254.0
+  roe_5y: 0.19
+  profit_growth_5y: 0.27
+  sales_growth_5y: 0.22
+  shareholding:
+    quarters:
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    - Oct 2026
+    promoters:
+    - 0.142
+    - 0.0627
+    - 0.0626
+    - 0.0625
+    - 0.0624
+    - 0.062
+    - 0.0618
+    - 0.0588
+    fii:
+    - 0.6722
+    - 0.6854
+    - 0.6587
+    - 0.6551
+    - 0.6333
+    - 0.5855
+    - 0.5397
+    - 0.56
+    dii:
+    - 0.0848
+    - 0.0787
+    - 0.1068
+    - 0.1082
+    - 0.1275
+    - 0.187
+    - 0.2366
+    - 0.2269
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/360ONE/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

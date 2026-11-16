@@ -1,0 +1,112 @@
+ticker: ATGL
+yahoo: ATGL.NS
+name: Adani Total Gas Ltd.
+sector: Oil Gas & Consumable Fuels
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 571.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1100.665
+v2:
+  eps_quarters:
+  - 1.29
+  - 1.41
+  - 1.5
+  - 1.49
+  - 1.44
+  - 1.53
+  - 1.29
+  - 1.58
+  eps_annual:
+  - 3.94
+  - 6.31
+  - 2.08
+  - 3.97
+  - 4.21
+  - 4.63
+  - 4.97
+  - 6.07
+  - 5.95
+  - 5.96
+  years:
+  - "Mar 2017\n            \n            (S)"
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 509.0
+  - 546.0
+  - 668.0
+  - 654.0
+  - 656.0
+  cfo_annual:
+  - 732.0
+  - 853.0
+  - 955.0
+  - 964.0
+  - 1149.0
+  book_value_ps: 47.1
+  roe_5y: 0.18
+  profit_growth_5y: 0.07
+  sales_growth_5y: 0.28
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.748
+    - 0.748
+    - 0.748
+    - 0.748
+    - 0.748
+    - 0.748
+    - 0.748
+    - 0.748
+    fii:
+    - 0.1306
+    - 0.1322
+    - 0.1302
+    - 0.1288
+    - 0.1281
+    - 0.1275
+    - 0.1277
+    - 0.1284
+    dii:
+    - 0.0627
+    - 0.0623
+    - 0.0631
+    - 0.0623
+    - 0.0625
+    - 0.0626
+    - 0.0634
+    - 0.0638
+balance:
+  cash: 6522.6
+  debt: 24270.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/ATGL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹652 cr − total debt ₹2,427 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

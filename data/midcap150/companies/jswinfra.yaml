@@ -1,0 +1,112 @@
+ticker: JSWINFRA
+yahoo: JSWINFRA.NS
+name: JSW Infrastructure Ltd.
+sector: Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 336.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 2331.696
+v2:
+  eps_quarters:
+  - 1.57
+  - 2.43
+  - 1.83
+  - 1.72
+  - 1.71
+  - 1.99
+  - 1.49
+  - 1.36
+  eps_annual:
+  - 1.66
+  - 1.44
+  - 1.43
+  - 1.02
+  - 1.56
+  - 1.76
+  - 3.97
+  - 5.5
+  - 7.16
+  - 7.25
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 330.0
+  - 750.0
+  - 1161.0
+  - 1521.0
+  - 1547.0
+  cfo_annual:
+  - 1176.0
+  - 1797.0
+  - 1803.0
+  - 2100.0
+  - 2022.0
+  book_value_ps: 77.3
+  roe_5y: 0.16
+  profit_growth_5y: 0.4
+  sales_growth_5y: 0.27
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.8561
+    - 0.8561
+    - 0.8361
+    - 0.8361
+    - 0.8361
+    - 0.8361
+    - 0.7393
+    - 0.7393
+    fii:
+    - 0.0407
+    - 0.0475
+    - 0.0664
+    - 0.073
+    - 0.0713
+    - 0.0692
+    - 0.1121
+    - 0.1248
+    dii:
+    - 0.0273
+    - 0.0269
+    - 0.0282
+    - 0.0254
+    - 0.0217
+    - 0.0243
+    - 0.0919
+    - 0.0852
+balance:
+  cash: 76727.1
+  debt: 84119.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/JSWINFRA/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹7,673 cr − total debt ₹8,412 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

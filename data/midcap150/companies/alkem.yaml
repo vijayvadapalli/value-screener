@@ -1,0 +1,112 @@
+ticker: ALKEM
+yahoo: ALKEM.NS
+name: Alkem Laboratories Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 5136.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 119.659
+v2:
+  eps_quarters:
+  - 52.34
+  - 25.58
+  - 55.56
+  - 63.99
+  - 53.19
+  - 19.78
+  - 43.49
+  - 56.48
+  eps_annual:
+  - 74.61
+  - 52.77
+  - 63.61
+  - 94.26
+  - 132.57
+  - 137.63
+  - 82.31
+  - 150.19
+  - 181.11
+  - 192.51
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1680.0
+  - 1007.0
+  - 1811.0
+  - 2215.0
+  - 2351.0
+  cfo_annual:
+  - 1111.0
+  - 1682.0
+  - 1948.0
+  - 1913.0
+  - 1963.0
+  book_value_ps: 1243.0
+  roe_5y: 0.18
+  profit_growth_5y: 0.09
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5566
+    - 0.5513
+    - 0.5304
+    - 0.512
+    - 0.512
+    - 0.512
+    - 0.497
+    - 0.497
+    fii:
+    - 0.1014
+    - 0.094
+    - 0.0911
+    - 0.0947
+    - 0.0997
+    - 0.1015
+    - 0.1042
+    - 0.1032
+    dii:
+    - 0.1801
+    - 0.1942
+    - 0.218
+    - 0.2193
+    - 0.2154
+    - 0.2139
+    - 0.2264
+    - 0.2283
+balance:
+  cash: 50524.2
+  debt: 23096.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/ALKEM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹5,052 cr − total debt ₹2,310 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

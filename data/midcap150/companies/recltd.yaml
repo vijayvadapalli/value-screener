@@ -1,0 +1,110 @@
+ticker: RECLTD
+yahoo: RECLTD.NS
+name: REC Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 298.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 2634.06
+v2:
+  eps_quarters:
+  - 15.48
+  - 16.37
+  - 16.96
+  - 16.77
+  - 15.39
+  - 12.82
+  - 15.92
+  - 13.21
+  eps_annual:
+  - 23.98
+  - 16.9
+  - 21.8
+  - 18.88
+  - 31.82
+  - 38.11
+  - 42.41
+  - 53.72
+  - 60.32
+  - 61.93
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 10036.0
+  - 11167.0
+  - 14145.0
+  - 15884.0
+  - 16308.0
+  cfo_annual:
+  - -3910.0
+  - -37360.0
+  - -57723.0
+  - -39064.0
+  - 5972.0
+  book_value_ps: 362.0
+  roe_5y: 0.21
+  profit_growth_5y: 0.14
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5263
+    - 0.5263
+    - 0.5263
+    - 0.5263
+    - 0.5263
+    - 0.5263
+    - 0.5263
+    - 0.5263
+    fii:
+    - 0.2174
+    - 0.2048
+    - 0.1916
+    - 0.1797
+    - 0.1646
+    - 0.1579
+    - 0.1576
+    - 0.1678
+    dii:
+    - 0.1391
+    - 0.1479
+    - 0.1551
+    - 0.1586
+    - 0.1621
+    - 0.1636
+    - 0.1698
+    - 0.1655
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/RECLTD/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

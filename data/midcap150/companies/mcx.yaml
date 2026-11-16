@@ -1,0 +1,102 @@
+ticker: MCX
+yahoo: MCX.NS
+name: Multi Commodity Exchange of India Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 3730.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 254.622
+v2:
+  eps_quarters:
+  - 6.28
+  - 5.31
+  - 7.97
+  - 7.74
+  - 15.73
+  - 20.78
+  - 16.21
+  - 17.83
+  eps_annual:
+  - 4.96
+  - 4.25
+  - 5.73
+  - 9.27
+  - 8.83
+  - 5.63
+  - 5.84
+  - 3.26
+  - 21.96
+  - 52.22
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 143.0
+  - 149.0
+  - 83.0
+  - 560.0
+  - 1332.0
+  cfo_annual:
+  - 391.0
+  - 141.0
+  - 442.0
+  - 950.0
+  - 3035.0
+  book_value_ps: 138.0
+  roe_5y: 0.28
+  profit_growth_5y: 0.49
+  sales_growth_5y: 0.43
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.2313
+    - 0.218
+    - 0.2169
+    - 0.19
+    - 0.2064
+    - 0.2607
+    - 0.2985
+    - 0.2706
+    dii:
+    - 0.5627
+    - 0.581
+    - 0.5909
+    - 0.605
+    - 0.5916
+    - 0.5435
+    - 0.508
+    - 0.5516
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MCX/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

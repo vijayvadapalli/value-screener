@@ -1,0 +1,142 @@
+ticker: BANKINDIA
+yahoo: BANKINDIA.NS
+name: Bank of India
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 153.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 4551.765
+v2:
+  eps_quarters:
+  - 5.79
+  - 5.72
+  - 4.02
+  - 5.66
+  - 6.18
+  - 6.78
+  - 7.25
+  - 7.27
+  eps_annual:
+  - -13.94
+  - -34.2
+  - -19.67
+  - -9.31
+  - 6.36
+  - 8.51
+  - 9.35
+  - 14.42
+  - 20.97
+  - 22.64
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 3487.0
+  - 3839.0
+  - 6567.0
+  - 9552.0
+  - 10309.0
+  cfo_annual:
+  - -35487.0
+  - -7045.0
+  - -4437.0
+  - 18534.0
+  - 4753.0
+  book_value_ps: 207.0
+  roe_5y: 0.1
+  profit_growth_5y: 0.39
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7338
+    - 0.7338
+    - 0.7338
+    - 0.7338
+    - 0.7338
+    - 0.7338
+    - 0.7338
+    - 0.7338
+    fii:
+    - 0.0292
+    - 0.0388
+    - 0.0353
+    - 0.0424
+    - 0.0582
+    - 0.0726
+    - 0.0687
+    - 0.0758
+    dii:
+    - 0.164
+    - 0.159
+    - 0.1597
+    - 0.1563
+    - 0.1518
+    - 0.1396
+    - 0.1396
+    - 0.1338
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 3.69
+    - 3.27
+    - 2.92
+    - 2.54
+    - 2.26
+    - 1.98
+    - 1.81
+    - 1.6
+    net_npa_pct:
+    - 0.85
+    - 0.82
+    - 0.75
+    - 0.65
+    - 0.6
+    - 0.56
+    - 0.51
+    - 0.42
+    loans_cr: 844980.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/BANKINDIA/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/BANKINDIA/consolidated/; NPA figures from the standalone
+  page: https://www.screener.in/company/BANKINDIA/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

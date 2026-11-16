@@ -1,0 +1,112 @@
+ticker: GMRAIRPORT
+yahoo: GMRAIRPORT.NS
+name: GMR Airports Ltd.
+sector: Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 102.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 10628.235
+v2:
+  eps_quarters:
+  - 0.25
+  - -0.23
+  - -0.2
+  - -0.04
+  - 0.12
+  - 0.29
+  - 0.09
+  - -0.01
+  eps_annual:
+  - -0.94
+  - -2.26
+  - -5.93
+  - -4.02
+  - -4.63
+  - -1.7
+  - -0.3
+  - -0.93
+  - -0.37
+  - 0.17
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -1131.0
+  - -840.0
+  - -828.0
+  - -817.0
+  - 472.0
+  cfo_annual:
+  - 3256.0
+  - 2199.0
+  - 3880.0
+  - 3443.0
+  - 4884.0
+  book_value_ps: -2.33
+  roe_5y: null
+  profit_growth_5y: 0.16
+  sales_growth_5y: 0.33
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6607
+    - 0.6624
+    - 0.6624
+    - 0.6624
+    - 0.6624
+    - 0.6633
+    - 0.6716
+    - 0.6748
+    fii:
+    - 0.1486
+    - 0.1509
+    - 0.1574
+    - 0.1708
+    - 0.1896
+    - 0.2017
+    - 0.2174
+    - 0.2295
+    dii:
+    - 0.0432
+    - 0.0413
+    - 0.0445
+    - 0.048
+    - 0.0459
+    - 0.0493
+    - 0.0514
+    - 0.048
+balance:
+  cash: 119980.9
+  debt: 474081.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/GMRAIRPORT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹11,998 cr − total debt ₹47,408 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

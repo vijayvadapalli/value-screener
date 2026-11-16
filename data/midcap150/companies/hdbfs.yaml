@@ -1,0 +1,90 @@
+ticker: HDBFS
+yahoo: HDBFS.NS
+name: HDB Financial Services Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 566.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 830.548
+v2:
+  eps_quarters:
+  - 5.94
+  - 6.67
+  - 6.84
+  - 7.01
+  - 7.76
+  - 9.04
+  - 9.46
+  - 9.39
+  eps_annual:
+  - 4.92
+  - 12.71
+  - 24.62
+  - 30.92
+  - 27.34
+  - 30.64
+  years:
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1011.0
+  - 1959.0
+  - 2461.0
+  - 2176.0
+  - 2544.0
+  cfo_annual:
+  - 1987.0
+  - -6851.0
+  - -16736.0
+  - -13626.0
+  - -8606.0
+  book_value_ps: 267.0
+  roe_5y: 0.16
+  profit_growth_5y: 0.45
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7419
+    - 0.7415
+    - 0.7412
+    - 0.7412
+    - 0.7408
+    fii:
+    - 0.0317
+    - 0.0332
+    - 0.0301
+    - 0.0355
+    - 0.0404
+    dii:
+    - 0.1093
+    - 0.1141
+    - 0.1229
+    - 0.121
+    - 0.1195
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in standalone page, fetched 16 Nov 2026: https://www.screener.in/company/HDBFS/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

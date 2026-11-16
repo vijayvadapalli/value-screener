@@ -47,7 +47,7 @@ flowchart LR
     MOD["Valuation models<br/>producer · cash-flow · developer NAV · physical NAV<br/>growth reverse DCF · leases · liquid"]:::done
     RUL["Rules<br/>zones · signals · tiers · caps · flags · Nifty v2 · bad loans"]:::done
     PVP["Profit vs price<br/>grades A–D"]:::done
-    QS["Quick screens<br/>miners (~270) · S&P 500 + Nasdaq-100 · NSE"]:::done
+    QS["Quick screens<br/>miners (~270) · S&P 500 + Nasdaq-100 · NSE<br/>Midcap 150 growth screen"]:::done
     MP["Model portfolios<br/>balanced · resources value-first"]:::done
     TA["Chart analytics<br/>SMA 20/50/200 · RSI · swing levels · auto trend lines<br/>markets: commodities, DXY, ETFs (price only)"]:::done
     MRG["Research merge<br/>their levels vs our value"]:::priv
@@ -90,7 +90,7 @@ flowchart LR
 | Company results releases | production, realised prices, AISC, earnings, D&A, sustaining capex, cash, debt | full company files | each quarter, via `update_results.py` or in chat |
 | Yahoo Finance (yfinance) | prices, statements, dividends, FX | prices, quick screens, profit vs price, model portfolios, price history (next) | daily |
 | SEC EDGAR bulk "company facts" | official US filings, incl. lenders' loans, allowance, nonaccrual loans, charge-offs | S&P 500 / Nasdaq-100 screen | weekly |
-| Screener.in | Indian consolidated figures (Nifty v2); for lenders, quarterly gross / net NPA % (standalone page for banks) and loans | Nifty 50 company files | quarterly |
+| Screener.in | Indian consolidated figures (Nifty v2), 5-year growth, the shareholding pattern (promoters, FIIs, DIIs); for lenders, quarterly gross / net NPA % (standalone page for banks) and loans | Nifty 50 and Midcap 150 company files | quarterly |
 | Wikipedia, NSE, ETF providers | index and ETF membership | universes for the quick screens | when refreshed |
 | Cameco uranium price page; World Bank, IMF (`data/longterm`) | month-end uranium spot from 1988; monthly gold, silver from 1960 | Markets charts (uranium), long-term charts in the research report | weekly (uranium, in `/weekly`) |
 | Your weekly research report | support / resistance, targets, stance, notes | private research report; plain levels on public charts | weekly, **private** |
@@ -113,6 +113,7 @@ flowchart LR
 | `types.py` | the shape of a valuation result as typed dicts – for editors and type checkers; a test fails if the engine produces an undeclared key |
 | `models.py`, `leases.py` | the valuation models (producer / streamer / royalty, oil cash-flow, developer NAV, physical NAV, growth reverse DCF at 10% US / 12% India, contracted leases, liquid assets) |
 | `rules.py`, `v2.py` | zones (a band plus details; the text is written from them), signals (green / blue / red), buy and add levels, flags, stale-data check; Nifty v2 earnings data |
+| `growth_screen.py` | the Midcap 150 growth screen: P/E ≤ 15, EPS growth ≥ 20% over 5 and 3 years, expected return of a 5-year hold ≥ 12%, guards, promoter flags; shortlist and near misses at the top of the list's report |
 | `screening.py` | the screening rules, one copy for the full valuation and the US / miners screens: earnings basis (cyclical, financial, history break), growth and multiple bands, blue caps, colours |
 | `asset_quality.py` | bad loans at banks and other lenders: adjusted book value, warning signs that cap at blue (India and US) |
 | `profit_vs_price.py`, `growth_data.py`, `screener.py` | profit growth vs price growth and its A–D grade; Yahoo and Screener.in fetching |

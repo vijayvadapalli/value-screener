@@ -1,0 +1,112 @@
+ticker: HAVELLS
+yahoo: HAVELLS.NS
+name: Havells India Ltd.
+sector: Consumer Durables
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1172.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 628.166
+v2:
+  eps_quarters:
+  - 4.44
+  - 8.26
+  - 5.55
+  - 5.09
+  - 4.8
+  - 11.53
+  - 4.63
+  - 5.57
+  eps_annual:
+  - 7.91
+  - 10.6
+  - 12.59
+  - 11.75
+  - 16.68
+  - 19.1
+  - 17.11
+  - 20.28
+  - 23.48
+  - 26.95
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1196.0
+  - 1072.0
+  - 1271.0
+  - 1470.0
+  - 1689.0
+  cfo_annual:
+  - 1728.0
+  - 565.0
+  - 1953.0
+  - 1523.0
+  - 1572.0
+  book_value_ps: 156.0
+  roe_5y: 0.19
+  profit_growth_5y: 0.11
+  sales_growth_5y: 0.17
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5941
+    - 0.5941
+    - 0.5938
+    - 0.5938
+    - 0.5938
+    - 0.5938
+    - 0.5935
+    - 0.5935
+    fii:
+    - 0.2346
+    - 0.2231
+    - 0.2159
+    - 0.1928
+    - 0.1796
+    - 0.1693
+    - 0.1591
+    - 0.1447
+    dii:
+    - 0.1143
+    - 0.1263
+    - 0.1318
+    - 0.1535
+    - 0.1653
+    - 0.175
+    - 0.1804
+    - 0.1987
+balance:
+  cash: 12121.8
+  debt: 2387.6
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/HAVELLS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,212 cr − total debt ₹239 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

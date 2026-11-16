@@ -238,7 +238,7 @@ def main():
     path = LISTS / f"{args.list.lower()}.yaml"
     if not path.exists():
         sys.exit(f"No list at {path}. For NSE indexes run: python tools/make_nse_list.py {args.list}")
-    entries = [e for e in yaml.safe_load(path.read_text(encoding="utf-8"))["tickers"] if isinstance(e, dict) and e.get("yahoo")]
+    entries = [e for e in yaml.safe_load(path.read_text(encoding="utf-8"))["tickers"] if isinstance(e, dict) and e.get("yahoo") and not e.get("market")]
     if not entries:
         sys.exit("This list has no entries with a yahoo symbol.")
     if importlib.util.find_spec("yfinance") is None:

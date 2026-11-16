@@ -1,0 +1,112 @@
+ticker: MARICO
+yahoo: MARICO.NS
+name: Marico Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 914.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1295.383
+v2:
+  eps_quarters:
+  - 3.08
+  - 2.65
+  - 3.89
+  - 3.24
+  - 3.44
+  - 3.01
+  - 4.85
+  - 4.23
+  eps_annual:
+  - 6.19
+  - 6.31
+  - 8.63
+  - 7.91
+  - 9.08
+  - 9.48
+  - 10.07
+  - 11.44
+  - 12.57
+  - 13.57
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1255.0
+  - 1322.0
+  - 1502.0
+  - 1658.0
+  - 1813.0
+  cfo_annual:
+  - 1016.0
+  - 1419.0
+  - 1387.0
+  - 1363.0
+  - 2084.0
+  book_value_ps: 36.4
+  roe_5y: 0.39
+  profit_growth_5y: 0.09
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5911
+    - 0.5905
+    - 0.5903
+    - 0.5894
+    - 0.5893
+    - 0.5893
+    - 0.5892
+    - 0.5884
+    fii:
+    - 0.2335
+    - 0.2209
+    - 0.2362
+    - 0.2421
+    - 0.2402
+    - 0.2408
+    - 0.234
+    - 0.2225
+    dii:
+    - 0.1276
+    - 0.1412
+    - 0.1261
+    - 0.1188
+    - 0.1223
+    - 0.1217
+    - 0.1287
+    - 0.1411
+balance:
+  cash: 30050.0
+  debt: 12380.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MARICO/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,005 cr − total debt ₹1,238 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

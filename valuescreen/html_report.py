@@ -353,6 +353,51 @@ def markets_html(rows: list[dict]) -> str:
             f'<div class="wrap"><table class="mk"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>{charts_}</section>')
 
 
+def growth_screen_html(rows: list[dict], cfg: dict) -> str:
+    """The growth-at-a-value-price screen (growth_screen.py): shortlist and near misses, then everyone else folded away."""
+    if not rows:
+        return ""
+    s = cfg["growth_screen"]
+
+    def p(x, nd=0):
+        return "–" if x is None else f'<span class="{"pos" if x >= 0 else "neg"}">{x*100:+.{nd}f}%</span>'
+
+    def row(r):
+        tier = {"shortlist": '<span class="pill green">Shortlist</span>', "near miss": '<span class="pill blue">Near miss</span>'}.get(r["tier"], "")
+        why = [{"pe": "P/E", "growth": "growth", "return": "5-yr return"}[m] for m in r["missed"]] if r["tier"] != "shortlist" else []
+        notes = ("misses: " + ", ".join(why) if why else "") + (" · " if why and r["guards"] else "") + ", ".join(r["guards"])
+        flags = " ".join(f"[{e(f)}]" for f in r["flags"])
+        pe = "–" if r["pe"] is None else f"{r['pe']:.1f}"
+        trailing = "" if r["pe_trailing"] is None else f"<br><small>trailing {r['pe_trailing']:.1f}</small>"
+        assumed = "" if r["assumed_growth"] is None else f"<br><small>at {r['assumed_growth']*100:.0f}%/yr growth</small>"
+        prom = "–" if r["promoters"] is None else f"{r['promoters']*100:.0f}%"
+        return (f'<tr><td><a href="#c-{e(r["ticker"])}"><b>{e(r["ticker"])}</b></a><br><small>{e(r["name"])}</small>'
+                f'{"<br><small class=late>" + flags + "</small>" if flags else ""}</td><td>{tier}</td>'
+                f'<td data-v="{_num(r["pe"])}">{pe}{trailing}</td><td>{p(r["eps_cagr_5y"])} / {p(r["eps_cagr_3y"])}'
+                f'{"" if r["every_year_positive"] else "<br><small class=neg>a loss year</small>"}</td>'
+                f'<td>{p(r["growth_needed"], 1)}</td><td>{p(r["expected_return"], 1)}{assumed}</td><td>{prom}</td>'
+                f'<td><span class="pill {r["signal"]}">{e(short_action(r["action"]))}</span></td><td><small>{e(notes)}</small></td></tr>')
+
+    head = ("<thead><tr><th>Company</th><th>Screen</th><th>P/E</th><th>EPS growth 5 / 3 yrs</th><th>Price needs</th>"
+            "<th>5-yr return a year</th><th>Promoters</th><th>Signal</th><th>Why not</th></tr></thead>")
+    top = [r for r in rows if r["tier"]]
+    rest = [r for r in rows if not r["tier"]]
+    n_short = sum(1 for r in rows if r["tier"] == "shortlist")
+    rule = (f"<b>Growth at a value price.</b> Shortlist: P/E ≤ {s['max_pe']:g} (price minus net cash ÷ the EPS the "
+            f"valuation uses), EPS growth ≥ {s['min_eps_cagr']*100:.0f}% a year over both 5 and 3 years with every year "
+            f"profitable, and at least {s['min_return']*100:.0f}% a year expected over a {s['years']}-year hold (growth at "
+            f"half the past rate, at most {s['max_assumed_growth']*100:.0f}%, sold at {s['exit_multiple']:g}x). Guards: cash "
+            f"conversion ≥ {s['min_cash_conversion']*100:.0f}%, no demerger or one-off history, no bad-loan warning, current "
+            f"results. Near miss: one thing short – a P/E of {s['max_pe']:g}–{s['near_max_pe']:g} (growth met), growth of "
+            f"{s['near_min_eps_cagr']*100:.0f}–{s['min_eps_cagr']*100:.0f}% (P/E met), or only the return bar. Flags: promoters below "
+            f"{s['min_promoter']*100:.0f}% or falling; pledged shares are not in the data yet. Dividends are not counted.")
+    table = lambda rs: f'<div class="wrap"><table class="sum">{head}<tbody>{"".join(row(r) for r in rs)}</tbody></table></div>'  # noqa: E731
+    return (f'<section class="company" id="screen"><h2>Screen – {n_short} shortlisted, {len(top) - n_short} near misses '
+            f'of {len(rows)}</h2><p class="notes">{rule}</p>'
+            + (table(top) if top else '<p class="notes">No company passes, or nearly passes, today.</p>')
+            + f'<details><summary>All {len(rest)} others</summary>{table(rest)}</details></section>')
+
+
 @dataclass
 class ReportExtras:
     """The optional parts of a list report: previous-run figures, technicals, ETF look-throughs, the cross-company
@@ -364,6 +409,8 @@ class ReportExtras:
     log_lines: list = field(default_factory=list)
     price_charts: dict = field(default_factory=dict)
     market_rows: list = field(default_factory=list)
+    screen_rows: list = field(default_factory=list)   # the growth screen (lists with `screen: growth`)
+    chart_dpi: int | None = None                      # lower for big lists (list setting `chart_dpi`) to keep the page light
 
 
 def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], path: Path, title: str,
@@ -371,6 +418,8 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     x = extras or ReportExtras()
     previous, tech, lookthroughs, heatmaps, log_lines, price_charts, market_rows = (
         x.previous, x.tech, x.lookthroughs, x.heatmaps, x.log_lines, x.price_charts, x.market_rows)
+    screen_html = growth_screen_html(x.screen_rows, cfg)
+    screen_block = screen_html + "\n" if screen_html else ""   # nothing at all for lists without a screen
     profit = {p["ticker"]: p for p in profit_rows}
     market_html = markets_html(market_rows or [])
     ordered = sorted(results.values(), key=lambda r: r["display_ticker"])
@@ -378,7 +427,7 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     sp = cfg["spot"]
     counts = {s: sum(1 for r in ordered if r["signal"] == s) for s in ("green", "blue", "red")}
     grades = {g: sum(1 for t in tickers if profit.get(t, {}).get("grade", "n/m") == g) for g in GRADE_ORDER}
-    with tempfile.TemporaryDirectory() as tmp, charts.resolution(HTML_DPI):
+    with tempfile.TemporaryDirectory() as tmp, charts.resolution(x.chart_dpi or HTML_DPI):
         sections = [company_section(r, companies[r["ticker"]], cfg, profit.get(r["ticker"]),
                                     (tickers[i - 1] if i else None, tickers[i + 1] if i + 1 < len(tickers) else None),
                                     Path(tmp), tech.get(r["ticker"]), price_charts.get(r["ticker"])) for i, r in enumerate(ordered)]
@@ -411,7 +460,7 @@ with today's price: owner earnings at today's metal prices × 12 / 15 / 25 + net
 and physical holders, and for growth companies the yearly growth the price needs (5 years, 15x exit, 10% US / 12% India).
 <b>Profit vs price.</b> Growth in profit and in the share price over about three years; the grade says whether the P/E fell
 (A ≤ −25%, B ≤ 0) or rose (C ≤ +33%, D above). Click a ticker for the full working; click a column to sort.</p>
-<nav class="toc">Companies: {toc}{' · <a href="#markets">Markets</a>' if market_html else ''}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
+{screen_block}<nav class="toc">Companies: {toc}{' · <a href="#screen">Screen</a>' if screen_html else ''}{' · <a href="#markets">Markets</a>' if market_html else ''}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
 <div class="controls">
 <span class="lab">Signal</span><button class="on" data-sig="all">All</button><button data-sig="green">Green</button>
 <button data-sig="blue">Blue</button><button data-sig="red">Red</button>

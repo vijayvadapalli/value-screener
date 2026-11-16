@@ -1,0 +1,112 @@
+ticker: LINDEINDIA
+yahoo: LINDEINDIA.NS
+name: Linde India Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 6912.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 85.288
+v2:
+  eps_quarters:
+  - 13.64
+  - 13.88
+  - 12.57
+  - 20.05
+  - 22.67
+  - 9.08
+  - 12.26
+  - 13.93
+  eps_annual:
+  - 2.23
+  - 1.9
+  - 3.01
+  - 85.27
+  - 17.72
+  - 59.47
+  - 63.09
+  - 50.9
+  - 53.33
+  - 64.37
+  years:
+  - Dec 2016
+  - Dec 2017
+  - Dec 2018
+  - Dec 2019
+  - Dec 2020
+  - Dec 2021
+  - Mar 202315m
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 151.0
+  - 507.0
+  - 434.0
+  - 455.0
+  - 549.0
+  cfo_annual:
+  - 339.0
+  - 589.0
+  - 437.0
+  - 584.0
+  - 786.0
+  book_value_ps: 515.0
+  roe_5y: 0.14
+  profit_growth_5y: 0.3
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    - 0.75
+    fii:
+    - 0.0227
+    - 0.0263
+    - 0.0251
+    - 0.0235
+    - 0.0203
+    - 0.0205
+    - 0.0203
+    - 0.0212
+    dii:
+    - 0.0681
+    - 0.0649
+    - 0.0662
+    - 0.0675
+    - 0.0695
+    - 0.0688
+    - 0.0679
+    - 0.0674
+balance:
+  cash: 2319.2
+  debt: 10261.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LINDEINDIA/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹232 cr − total debt ₹1,026 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

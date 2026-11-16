@@ -1,0 +1,112 @@
+ticker: OFSS
+yahoo: OFSS.NS
+name: Oracle Financial Services Software Ltd.
+sector: Information Technology
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 9963.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 87.154
+v2:
+  eps_quarters:
+  - 62.35
+  - 74.13
+  - 73.87
+  - 62.82
+  - 70.06
+  - 96.71
+  - 162.57
+  - 80.64
+  eps_annual:
+  - 139.28
+  - 144.82
+  - 161.57
+  - 170.26
+  - 204.72
+  - 219.0
+  - 209.05
+  - 256.07
+  - 273.95
+  - 303.25
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1889.0
+  - 1806.0
+  - 2219.0
+  - 2380.0
+  - 2639.0
+  cfo_annual:
+  - 1856.0
+  - 1758.0
+  - 1791.0
+  - 2199.0
+  - 2638.0
+  book_value_ps: 883.0
+  roe_5y: 0.29
+  profit_growth_5y: 0.08
+  sales_growth_5y: 0.09
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7262
+    - 0.7259
+    - 0.7256
+    - 0.7253
+    - 0.7246
+    - 0.7244
+    - 0.7241
+    - 0.7239
+    fii:
+    - 0.0848
+    - 0.0874
+    - 0.0855
+    - 0.0866
+    - 0.0836
+    - 0.0804
+    - 0.097
+    - 0.1143
+    dii:
+    - 0.0936
+    - 0.0869
+    - 0.085
+    - 0.0845
+    - 0.0882
+    - 0.0912
+    - 0.0879
+    - 0.0776
+balance:
+  cash: 60086.0
+  debt: 360.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/OFSS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹6,009 cr − total debt ₹36 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

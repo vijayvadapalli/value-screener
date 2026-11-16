@@ -1,0 +1,112 @@
+ticker: SHREECEM
+yahoo: SHREECEM.NS
+name: Shree Cement Ltd.
+sector: Construction Materials
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 24870.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 36.147
+v2:
+  eps_quarters:
+  - 53.6
+  - 159.18
+  - 178.12
+  - 85.51
+  - 73.92
+  - 145.7
+  - 146.67
+  - 72.57
+  eps_annual:
+  - 384.38
+  - 397.32
+  - 288.86
+  - 425.67
+  - 633.54
+  - 646.31
+  - 352.18
+  - 663.98
+  - 311.18
+  - 483.24
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2337.0
+  - 1269.0
+  - 2396.0
+  - 1124.0
+  - 1749.0
+  cfo_annual:
+  - 2668.0
+  - 2569.0
+  - 3347.0
+  - 4920.0
+  - 3794.0
+  book_value_ps: 6614.0
+  roe_5y: 0.09
+  profit_growth_5y: -0.06
+  sales_growth_5y: 0.09
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6256
+    - 0.6256
+    - 0.6256
+    - 0.6256
+    - 0.6256
+    - 0.6256
+    - 0.6256
+    - 0.6256
+    fii:
+    - 0.0988
+    - 0.097
+    - 0.1007
+    - 0.1034
+    - 0.1007
+    - 0.0894
+    - 0.0821
+    - 0.0845
+    dii:
+    - 0.1478
+    - 0.1507
+    - 0.1465
+    - 0.144
+    - 0.1459
+    - 0.1579
+    - 0.1642
+    - 0.1649
+balance:
+  cash: 79695.4
+  debt: 21790.6
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/SHREECEM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹7,970 cr − total debt ₹2,179 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

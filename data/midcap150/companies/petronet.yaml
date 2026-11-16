@@ -1,0 +1,112 @@
+ticker: PETRONET
+yahoo: PETRONET.NS
+name: Petronet LNG Ltd.
+sector: Oil Gas & Consumable Fuels
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 326.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1500.245
+v2:
+  eps_quarters:
+  - 6.01
+  - 7.3
+  - 5.61
+  - 5.54
+  - 5.8
+  - 9.14
+  - 7.58
+  - 8.38
+  eps_annual:
+  - 11.49
+  - 14.07
+  - 14.87
+  - 18.02
+  - 19.59
+  - 22.92
+  - 22.17
+  - 24.35
+  - 26.48
+  - 26.08
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 3438.0
+  - 3326.0
+  - 3652.0
+  - 3973.0
+  - 3913.0
+  cfo_annual:
+  - 3479.0
+  - 2519.0
+  - 4871.0
+  - 4398.0
+  - 4750.0
+  book_value_ps: 162.0
+  roe_5y: 0.22
+  profit_growth_5y: 0.06
+  sales_growth_5y: 0.11
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
+    fii:
+    - 0.2861
+    - 0.2877
+    - 0.2904
+    - 0.2803
+    - 0.263
+    - 0.2713
+    - 0.2627
+    - 0.2597
+    dii:
+    - 0.111
+    - 0.1118
+    - 0.1086
+    - 0.1165
+    - 0.1345
+    - 0.1294
+    - 0.1368
+    - 0.1421
+balance:
+  cash: 127732.5
+  debt: 21159.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/PETRONET/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹12,773 cr − total debt ₹2,116 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: LAURUSLABS
+yahoo: LAURUSLABS.NS
+name: Laurus Labs Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2220.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 541.207
+v2:
+  eps_quarters:
+  - 1.71
+  - 4.33
+  - 3.02
+  - 3.61
+  - 4.66
+  - 5.17
+  - 6.8
+  - 8.17
+  eps_annual:
+  - 3.6
+  - 3.16
+  - 1.76
+  - 4.77
+  - 18.33
+  - 15.4
+  - 14.67
+  - 2.98
+  - 6.64
+  - 16.46
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 832.0
+  - 793.0
+  - 162.0
+  - 358.0
+  - 890.0
+  cfo_annual:
+  - 911.0
+  - 994.0
+  - 666.0
+  - 602.0
+  - 1624.0
+  book_value_ps: 112.0
+  roe_5y: 0.15
+  profit_growth_5y: -0.02
+  sales_growth_5y: 0.07
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.2762
+    - 0.2762
+    - 0.276
+    - 0.276
+    - 0.2749
+    - 0.2749
+    - 0.2747
+    - 0.2747
+    fii:
+    - 0.2556
+    - 0.2551
+    - 0.257
+    - 0.2617
+    - 0.2652
+    - 0.2582
+    - 0.28
+    - 0.3084
+    dii:
+    - 0.1274
+    - 0.1178
+    - 0.1194
+    - 0.1172
+    - 0.1242
+    - 0.1396
+    - 0.1373
+    - 0.1186
+balance:
+  cash: 333.7
+  debt: 26251.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LAURUSLABS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹33 cr − total debt ₹2,625 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

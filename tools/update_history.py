@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from valuescreen import loader, pricedb  # noqa: E402
 
-DEFAULT_LISTS = ("core", "tech", "oil", "miners", "watchlist")
+DEFAULT_LISTS = ("core", "tech", "oil", "miners", "watchlist", "nifty50", "midcap150")
 CHUNK = 20          # symbols per Yahoo request
 OVERLAP_DAYS = 7    # re-read the last week on each update (late corrections, the latest day's final close)
 
@@ -41,7 +41,9 @@ def symbols_for(lists) -> dict[str, list[str]]:
         companies = loader.load_companies(loader.companies_folder(folder))
         for e in loader.load_list_entries(name):
             c = companies.get(e["ticker"])
-            if (folder and c is None) or e.get("series"):   # a series entry (uranium spot) has no Yahoo history
+            if e.get("series"):   # a series entry (uranium spot) has no Yahoo history
+                continue
+            if folder and c is None and not e.get("market"):   # an index has no company file, but a chart
                 continue
             symbol = ((c or {}).get("yahoo") or e.get("yahoo") or e["ticker"]).strip()
             out.setdefault(symbol, [])
@@ -156,7 +158,7 @@ def update(con, wanted: dict[str, list[str]], years: int, refresh: bool, log=pri
 
 def main():
     ap = argparse.ArgumentParser(description="Daily price history from Yahoo into output/prices.sqlite")
-    ap.add_argument("--lists", default=",".join(DEFAULT_LISTS), help="comma-separated lists (default: core,tech,oil,miners,watchlist)")
+    ap.add_argument("--lists", default=",".join(DEFAULT_LISTS), help="comma-separated lists (default: core,tech,oil,miners,watchlist,nifty50,midcap150)")
     ap.add_argument("--tickers", help="comma-separated Yahoo symbols instead of lists")
     ap.add_argument("--years", type=int, default=10, help="history for a symbol seen for the first time (default 10; 0 = all Yahoo has)")
     ap.add_argument("--refresh", action="store_true", help="download every history again")

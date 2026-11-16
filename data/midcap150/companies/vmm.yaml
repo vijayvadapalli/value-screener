@@ -1,0 +1,106 @@
+ticker: VMM
+yahoo: VMM.NS
+name: Vishal Mega Mart Ltd.
+sector: Consumer Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 94.9
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 4702.845
+v2:
+  eps_quarters:
+  - 0.58
+  - 0.25
+  - 0.44
+  - 0.33
+  - 0.67
+  - 0.36
+  - 0.55
+  - 0.34
+  eps_annual:
+  - 0.1
+  - 0.26
+  - 0.45
+  - 0.71
+  - 1.02
+  - 1.37
+  - 1.8
+  years:
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 203.0
+  - 321.0
+  - 462.0
+  - 632.0
+  - 839.0
+  cfo_annual:
+  - 657.0
+  - 636.0
+  - 830.0
+  - 1399.0
+  - 1621.0
+  book_value_ps: 16.8
+  roe_5y: 0.09
+  profit_growth_5y: 0.48
+  sales_growth_5y: 0.24
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7602
+    - 0.7455
+    - 0.5422
+    - 0.5411
+    - 0.5409
+    - 0.4012
+    - 0.4009
+    - 0.4002
+    fii:
+    - 0.0658
+    - 0.0703
+    - 0.1285
+    - 0.154
+    - 0.1552
+    - 0.2201
+    - 0.2043
+    - 0.1875
+    dii:
+    - 0.099
+    - 0.1222
+    - 0.2731
+    - 0.2542
+    - 0.2547
+    - 0.3274
+    - 0.348
+    - 0.3645
+balance:
+  cash: 23646.2
+  debt: 21229.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/VMM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,365 cr − total debt ₹2,123 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

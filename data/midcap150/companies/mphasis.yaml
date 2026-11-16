@@ -1,0 +1,112 @@
+ticker: MPHASIS
+yahoo: MPHASIS.NS
+name: MphasiS Ltd.
+sector: Information Technology
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 2433.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 190.785
+v2:
+  eps_quarters:
+  - 22.56
+  - 23.49
+  - 23.22
+  - 24.65
+  - 23.21
+  - 26.71
+  - 25.65
+  - 29.39
+  eps_annual:
+  - 37.62
+  - 43.34
+  - 57.64
+  - 63.52
+  - 65.06
+  - 76.19
+  - 86.94
+  - 82.27
+  - 89.55
+  - 97.61
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1431.0
+  - 1638.0
+  - 1555.0
+  - 1702.0
+  - 1863.0
+  cfo_annual:
+  - 1716.0
+  - 1462.0
+  - 2180.0
+  - 1905.0
+  - 1253.0
+  book_value_ps: 565.0
+  roe_5y: 0.2
+  profit_growth_5y: 0.09
+  sales_growth_5y: 0.1
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4023
+    - 0.4014
+    - 0.401
+    - 0.401
+    - 0.3059
+    - 0.3055
+    - 0.3054
+    - 0.3053
+    fii:
+    - 0.2078
+    - 0.2061
+    - 0.1899
+    - 0.1852
+    - 0.1979
+    - 0.1951
+    - 0.195
+    - 0.1939
+    dii:
+    - 0.3462
+    - 0.3491
+    - 0.3651
+    - 0.3708
+    - 0.4526
+    - 0.4565
+    - 0.4531
+    - 0.4586
+balance:
+  cash: 22071.4
+  debt: 31942.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MPHASIS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹2,207 cr − total debt ₹3,194 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

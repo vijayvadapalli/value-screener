@@ -1,0 +1,110 @@
+ticker: MFSL
+yahoo: MFSL.NS
+name: Max Financial Services Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1427.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 345.732
+v2:
+  eps_quarters:
+  - 1.62
+  - 0.91
+  - 2.02
+  - 0.12
+  - 1.06
+  - -0.76
+  - 2.77
+  - 2.32
+  eps_annual:
+  - 14.79
+  - 10.67
+  - 9.75
+  - 5.38
+  - 12.33
+  - 7.34
+  - 10.97
+  - 9.85
+  - 9.48
+  - 2.43
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 318.0
+  - 452.0
+  - 393.0
+  - 403.0
+  - 106.0
+  cfo_annual:
+  - 8496.0
+  - 9922.0
+  - 6104.0
+  - 8352.0
+  - 11473.0
+  book_value_ps: 166.0
+  roe_5y: 0.07
+  profit_growth_5y: -0.28
+  sales_growth_5y: 0.09
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.0334
+    - 0.0174
+    - 0.0174
+    - 0.0171
+    - 0.0125
+    - 0.0125
+    - 0.0125
+    - 0.0125
+    fii:
+    - 0.475
+    - 0.4475
+    - 0.4471
+    - 0.4478
+    - 0.4513
+    - 0.4788
+    - 0.4806
+    - 0.4861
+    dii:
+    - 0.4269
+    - 0.4729
+    - 0.4729
+    - 0.4726
+    - 0.4735
+    - 0.4474
+    - 0.4434
+    - 0.437
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/MFSL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

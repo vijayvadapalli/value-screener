@@ -1,0 +1,112 @@
+ticker: KALYANKJIL
+yahoo: KALYANKJIL.NS
+name: Kalyan Jewellers India Ltd.
+sector: Consumer Durables
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 708.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1032.966
+v2:
+  eps_quarters:
+  - 2.12
+  - 1.82
+  - 2.56
+  - 2.52
+  - 4.03
+  - 3.97
+  - 3.38
+  - 4.14
+  eps_annual:
+  - 1.22
+  - 1.52
+  - -0.04
+  - 1.52
+  - -0.06
+  - 2.18
+  - 4.2
+  - 5.8
+  - 6.93
+  - 13.08
+  years:
+  - "Mar 2017\n            \n            (S)"
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 224.0
+  - 432.0
+  - 596.0
+  - 714.0
+  - 1350.0
+  cfo_annual:
+  - 245.0
+  - 1013.0
+  - 1322.0
+  - 1209.0
+  - 1318.0
+  book_value_ps: 64.3
+  roe_5y: 0.17
+  profit_growth_5y: 1.95
+  sales_growth_5y: 0.33
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6285
+    - 0.6285
+    - 0.6281
+    - 0.6277
+    - 0.6275
+    - 0.6286
+    - 0.6286
+    - 0.6285
+    fii:
+    - 0.1637
+    - 0.1689
+    - 0.1683
+    - 0.1412
+    - 0.1411
+    - 0.1455
+    - 0.1082
+    - 0.1383
+    dii:
+    - 0.1357
+    - 0.1197
+    - 0.1334
+    - 0.1456
+    - 0.1523
+    - 0.1413
+    - 0.1583
+    - 0.1441
+balance:
+  cash: 12206.3
+  debt: 61273.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/KALYANKJIL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,221 cr − total debt ₹6,127 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: JSWENERGY
+yahoo: JSWENERGY.NS
+name: JSW Energy Ltd.
+sector: Power
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 513.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1839.922
+v2:
+  eps_quarters:
+  - 0.96
+  - 2.33
+  - 4.25
+  - 4.03
+  - 2.4
+  - 2.11
+  - 2.57
+  - 5.76
+  eps_annual:
+  - 3.84
+  - 0.48
+  - 4.24
+  - 6.7
+  - 4.84
+  - 10.51
+  - 8.99
+  - 10.47
+  - 11.16
+  - 12.74
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1743.0
+  - 1480.0
+  - 1725.0
+  - 1983.0
+  - 2762.0
+  cfo_annual:
+  - 2952.0
+  - 2084.0
+  - 6234.0
+  - 3838.0
+  - 9898.0
+  book_value_ps: 200.0
+  roe_5y: 0.08
+  profit_growth_5y: 0.23
+  sales_growth_5y: 0.22
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6932
+    - 0.6926
+    - 0.6926
+    - 0.6926
+    - 0.6926
+    - 0.6941
+    - 0.6653
+    - 0.6653
+    fii:
+    - 0.1457
+    - 0.1343
+    - 0.1236
+    - 0.1212
+    - 0.095
+    - 0.0974
+    - 0.1141
+    - 0.1091
+    dii:
+    - 0.1005
+    - 0.1094
+    - 0.1143
+    - 0.1156
+    - 0.1439
+    - 0.1429
+    - 0.1616
+    - 0.1668
+balance:
+  cash: 100636.5
+  debt: 825469.9
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/JSWENERGY/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹10,064 cr − total debt ₹82,547 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

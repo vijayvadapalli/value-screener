@@ -1,0 +1,112 @@
+ticker: FACT
+yahoo: FACT.NS
+name: Fertilisers and Chemicals Travancore Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Dec 2025
+  end: '2025-12-31'
+  per_year: 4
+price:
+  value: 794.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 645.277
+v2:
+  eps_quarters:
+  - -0.95
+  - -0.75
+  - 0.17
+  - 0.12
+  - 1.09
+  - 0.07
+  - 0.32
+  - -1.05
+  eps_annual:
+  - -7.09
+  - -4.06
+  - -1.99
+  - 2.51
+  - 15.08
+  - 5.42
+  - 5.35
+  - 9.47
+  - 1.98
+  - 0.64
+  years:
+  - Mar 2016
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  profit_annual:
+  - 350.0
+  - 346.0
+  - 613.0
+  - 128.0
+  - 41.0
+  cfo_annual:
+  - 1021.0
+  - 152.0
+  - 638.0
+  - 280.0
+  - 140.0
+  book_value_ps: 21.2
+  roe_5y: null
+  profit_growth_5y: 0.45
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.9
+    - 0.9
+    - 0.9
+    - 0.9
+    - 0.9
+    - 0.9
+    - 0.9
+    - 0.9
+    fii:
+    - 0.001
+    - 0.0014
+    - 0.002
+    - 0.0021
+    - 0.0021
+    - 0.0021
+    - 0.0016
+    - 0.0016
+    dii:
+    - 0.0861
+    - 0.0859
+    - 0.0861
+    - 0.0005
+    - 0.0005
+    - 0.0006
+    - 0.0007
+    - 0.0006
+balance:
+  cash: 1447.8
+  debt: 39854.5
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/FACT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (31 Mar 2026): cash & short-term investments ₹145 cr − total debt ₹3,985 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

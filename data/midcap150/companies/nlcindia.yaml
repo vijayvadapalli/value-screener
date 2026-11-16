@@ -1,0 +1,112 @@
+ticker: NLCINDIA
+yahoo: NLCINDIA.NS
+name: NLC India Ltd.
+sector: Power
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 236.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1386.356
+v2:
+  eps_quarters:
+  - 4.82
+  - 3.48
+  - 5.75
+  - 4.8
+  - 4.8
+  - 10.05
+  - 3.49
+  - 9.96
+  eps_annual:
+  - 16.01
+  - 12.71
+  - 10.87
+  - 10.39
+  - 9.47
+  - 7.88
+  - 10.07
+  - 13.37
+  - 18.9
+  - 25.4
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1116.0
+  - 1426.0
+  - 1868.0
+  - 2714.0
+  - 3769.0
+  cfo_annual:
+  - 7746.0
+  - 4171.0
+  - 5512.0
+  - 8977.0
+  - 5166.0
+  book_value_ps: 169.0
+  roe_5y: 0.11
+  profit_growth_5y: 0.18
+  sales_growth_5y: 0.12
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.722
+    - 0.722
+    - 0.722
+    - 0.722
+    - 0.722
+    - 0.722
+    - 0.6947
+    - 0.6947
+    fii:
+    - 0.0286
+    - 0.0291
+    - 0.0295
+    - 0.0325
+    - 0.0322
+    - 0.0361
+    - 0.0462
+    - 0.0461
+    dii:
+    - 0.1446
+    - 0.1463
+    - 0.1425
+    - 0.1386
+    - 0.1371
+    - 0.1397
+    - 0.1294
+    - 0.1364
+balance:
+  cash: 9251.4
+  debt: 282479.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/NLCINDIA/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹925 cr − total debt ₹28,248 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

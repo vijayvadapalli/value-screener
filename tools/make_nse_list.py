@@ -48,10 +48,16 @@ def main():
     if not re.fullmatch(r"[A-Za-z0-9_-]+", name):
         sys.exit("The list name may only use letters, digits, '-' and '_'.")
     path = LISTS / f"{name}.yaml"
+    old = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}) if path.exists() else {}
+    in_index = {e["ticker"] for e in entries}
+    # stocks you added by hand (`extra: ...`) and list settings (e.g. `screen: growth`) survive a refresh
+    kept = [e for e in old.get("tickers", []) if isinstance(e, dict) and e.get("extra") and e["ticker"].upper() not in in_index]
+    settings = {k: v for k, v in old.items() if k not in ("name", "folder", "tickers")}
     path.write_text("# Written by tools/make_nse_list.py from niftyindices.com. Re-run it to refresh the constituents.\n"
-                    + yaml.safe_dump({"name": f"{index.upper()} constituents", "folder": name, "tickers": entries},
+                    "# Entries with `extra:` were added by hand and are kept when the list is refreshed.\n"
+                    + yaml.safe_dump({"name": f"{index.upper()} constituents", "folder": name, **settings, "tickers": entries + kept},
                                      sort_keys=False, allow_unicode=True, width=140), encoding="utf-8")
-    print(f"{len(entries)} companies written to {path}")
+    print(f"{len(entries)} companies written to {path}" + (f", plus {len(kept)} added by hand" if kept else ""))
     print(f"Company files for this list go in data/{name}/companies and results in output/{name}.")
     return 0
 

@@ -1,0 +1,112 @@
+ticker: UNITDSPR
+yahoo: UNITDSPR.NS
+name: United Spirits Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1446.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 728.223
+v2:
+  eps_quarters:
+  - 4.61
+  - 5.79
+  - 5.73
+  - 6.38
+  - 5.75
+  - 7.41
+  - 6.37
+  - 5.88
+  eps_annual:
+  - 1.38
+  - 8.72
+  - 9.64
+  - 9.07
+  - 5.28
+  - 11.4
+  - 15.63
+  - 19.36
+  - 21.75
+  - 25.27
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 811.0
+  - 1126.0
+  - 1408.0
+  - 1582.0
+  - 1838.0
+  cfo_annual:
+  - 977.0
+  - 615.0
+  - 1118.0
+  - 1947.0
+  - 1459.0
+  book_value_ps: 125.0
+  roe_5y: 0.2
+  profit_growth_5y: 0.35
+  sales_growth_5y: 0.09
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5668
+    - 0.5668
+    - 0.5668
+    - 0.5668
+    - 0.5668
+    - 0.5668
+    - 0.5668
+    - 0.5668
+    fii:
+    - 0.1593
+    - 0.1498
+    - 0.1505
+    - 0.1438
+    - 0.1413
+    - 0.1441
+    - 0.1289
+    - 0.1285
+    dii:
+    - 0.1354
+    - 0.1459
+    - 0.144
+    - 0.149
+    - 0.1536
+    - 0.1536
+    - 0.1714
+    - 0.1765
+balance:
+  cash: 38250.0
+  debt: 4300.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/UNITDSPR/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,825 cr − total debt ₹430 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

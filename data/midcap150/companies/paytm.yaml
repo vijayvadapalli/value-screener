@@ -1,0 +1,102 @@
+ticker: PAYTM
+yahoo: PAYTM.NS
+name: One 97 Communications Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1891.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 640.624
+v2:
+  eps_quarters:
+  - -3.26
+  - -8.47
+  - 1.93
+  - 0.33
+  - 3.52
+  - 2.87
+  - 3.44
+  - 3.52
+  eps_annual:
+  - -6.1
+  - -25.18
+  - -68.59
+  - -46.62
+  - -27.82
+  - -36.9
+  - -28.02
+  - -22.3
+  - -10.33
+  - 8.64
+  years:
+  - Mar 2015
+  - Mar 2016
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -2396.0
+  - -1776.0
+  - -1422.0
+  - -663.0
+  - 552.0
+  cfo_annual:
+  - -1236.0
+  - 416.0
+  - 651.0
+  - -121.0
+  - -743.0
+  book_value_ps: 259.0
+  roe_5y: -0.09
+  profit_growth_5y: 0.19
+  sales_growth_5y: 0.25
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.562
+    - 0.5539
+    - 0.5487
+    - 0.5171
+    - 0.5175
+    - 0.494
+    - 0.4809
+    - 0.4352
+    dii:
+    - 0.1188
+    - 0.1402
+    - 0.1584
+    - 0.1995
+    - 0.2032
+    - 0.2308
+    - 0.2487
+    - 0.2951
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/PAYTM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

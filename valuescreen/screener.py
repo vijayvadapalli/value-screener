@@ -47,9 +47,14 @@ def number(text):
         return None
 
 
+def clean_label(header: str) -> str:
+    """'Sep 2026 (S)' → 'Sep 2026'. Screener marks a quarter it could only show standalone (no consolidated figures)."""
+    return " ".join(header.replace("(S)", " ").split())
+
+
 def month_end(label):
-    """'Sep 2026' → 2026-09-30."""
-    mon, year = label.split()
+    """'Sep 2026' (or 'Sep 2026 (S)') → 2026-09-30."""
+    mon, year = clean_label(label).split()[:2]
     y, m = int(year), MONTHS[mon[:3]]
     return dt.date(y, m, calendar.monthrange(y, m)[1])
 
@@ -104,13 +109,29 @@ def parse_v2(html: str) -> dict:
     years = [y for y in y_head if y != "TTM" and eps_by_year.get(y) is not None][-10:]   # skip blank years
     both = [y for y in years if profit_by_year.get(y) is not None and cfo_by_year.get(y) is not None][-5:]
     roe = growth_range(soup, "Return on Equity", "5 Years")
+    pct = lambda title, period: (lambda x: None if x is None else x / 100)(growth_range(soup, title, period))  # noqa: E731
     return {
         "price": top_ratio(soup, "Current Price"), "market_cap_cr": top_ratio(soup, "Market Cap"),
         "book_value_ps": top_ratio(soup, "Book Value"), "roe_5y": None if roe is None else roe / 100,
-        "quarters": q_head[-8:], "eps_quarters": quarters["EPS in Rs"][-8:],
+        "quarters": [clean_label(h) for h in q_head[-8:]], "eps_quarters": quarters["EPS in Rs"][-8:],
+        "standalone_quarters": sum("(S)" in h for h in q_head[-4:]),
         "years": years, "eps_annual": [eps_by_year[y] for y in years],
         "profit_annual": [profit_by_year[y] for y in both], "cfo_annual": [cfo_by_year[y] for y in both],
+        "profit_growth_5y": pct("Compounded Profit Growth", "5 Years"), "sales_growth_5y": pct("Compounded Sales Growth", "5 Years"),
+        "shareholding": parse_shareholding(soup),
     }
+
+
+def parse_shareholding(soup) -> dict | None:
+    """The last 8 quarters of the shareholding pattern as fractions: promoters, foreign and domestic institutions.
+    None when the page has no table. A company with no promoter group (some banks) has promoters None.
+    Pledged shares are not on Screener's public page."""
+    head, rows = table(soup, "shareholding")
+    if not head:
+        return None
+    frac = lambda name: [None if x is None else round(x / 100, 6) for x in rows.get(name, [None] * len(head))][-8:]  # noqa: E731
+    return {"quarters": head[-8:], "promoters": frac("Promoters") if "Promoters" in rows else None,
+            "fii": frac("FIIs"), "dii": frac("DIIs")}
 
 
 def parse_growth(html: str) -> dict:

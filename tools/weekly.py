@@ -1,7 +1,7 @@
 """The weekly routine in one command, then a short brief of what changed and what needs attention.
 
     python tools/weekly.py                 # prices, history, every report, screens, model portfolios, research, tests
-    python tools/weekly.py --quick         # skip the slow parts (Nifty 50, US screen, miners screen)
+    python tools/weekly.py --quick         # skip the slow parts (Nifty 50, Midcap 150, US screen, miners screen)
     python tools/weekly.py --brief-only    # just the brief, from what is already there
 
 Steps (each one is an existing command, run in order; a failure is reported and the rest carry on):
@@ -54,11 +54,15 @@ def steps(quick: bool):
            ("prices – promoted miners", ["tools/update_prices.py", "--folder", "miners"])]
     if not quick:
         out.append(("prices – Nifty 50", ["tools/update_prices.py", "--folder", "nifty50"]))
+        out.append(("prices – Midcap 150", ["tools/update_prices.py", "--folder", "midcap150"]))
     out.append(("price history", ["tools/update_history.py"]))
     out.append(("uranium spot history (Cameco)", ["-m", "valuescreen.longterm"]))
     out += [(f"report – {name}", ["-m", "valuescreen", "run", "--list", name, "--live"]) for name in LISTS]
     if not quick:
         out += [("report – nifty50", ["-m", "valuescreen", "run", "--list", "nifty50"]),
+                # no profit-vs-price section: it would ask Screener.in for 150 more pages a run (it throttles); the screen
+                # has its own 5- and 3-year EPS growth from the company files
+                ("report – midcap150 (growth screen)", ["-m", "valuescreen", "run", "--list", "midcap150", "--no-profit"]),
                 ("screen – miners", ["tools/screen_miners.py"]),
                 ("screen – S&P 500 / Nasdaq-100", ["tools/screen_us.py"])]
     out.append(("model portfolios", ["tools/model_portfolio.py"]))
@@ -145,7 +149,7 @@ def brief(today: dt.date) -> str:
 
 def main():
     ap = argparse.ArgumentParser(description="The weekly routine and brief")
-    ap.add_argument("--quick", action="store_true", help="skip Nifty 50, the US screen and the miners screen")
+    ap.add_argument("--quick", action="store_true", help="skip Nifty 50, Midcap 150, the US screen and the miners screen")
     ap.add_argument("--brief-only", action="store_true", help="only write the brief")
     args = ap.parse_args()
     today = dt.date.today()

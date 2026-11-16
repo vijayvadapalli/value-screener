@@ -1,0 +1,112 @@
+ticker: UPL
+yahoo: UPL.NS
+name: UPL Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 563.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 851.279
+v2:
+  eps_quarters:
+  - 10.58
+  - 11.45
+  - -1.12
+  - 6.56
+  - 4.7
+  - 12.57
+  - 0.12
+  - 4.99
+  eps_annual:
+  - 21.78
+  - 25.43
+  - 18.72
+  - 22.3
+  - 36.05
+  - 45.52
+  - 45.62
+  - -15.34
+  - 11.46
+  - 22.78
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 4437.0
+  - 4414.0
+  - -1878.0
+  - 820.0
+  - 2220.0
+  cfo_annual:
+  - 6496.0
+  - 7751.0
+  - 2321.0
+  - 10151.0
+  - 7855.0
+  book_value_ps: 413.0
+  roe_5y: 0.07
+  profit_growth_5y: -0.1
+  sales_growth_5y: 0.06
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.335
+    - 0.335
+    - 0.3349
+    - 0.3349
+    - 0.3349
+    - 0.335
+    - 0.335
+    - 0.335
+    fii:
+    - 0.3252
+    - 0.3422
+    - 0.349
+    - 0.3701
+    - 0.3884
+    - 0.4178
+    - 0.4239
+    - 0.4236
+    dii:
+    - 0.1889
+    - 0.1856
+    - 0.1809
+    - 0.1717
+    - 0.1671
+    - 0.1463
+    - 0.1432
+    - 0.143
+balance:
+  cash: 48610.0
+  debt: 342400.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/UPL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹4,861 cr − total debt ₹34,240 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

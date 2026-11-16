@@ -1,0 +1,96 @@
+ticker: ANTHEM
+yahoo: ANTHEM.NS
+name: Anthem Biosciences Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 931.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 564.082
+v2:
+  eps_quarters:
+  - 2.21
+  - 1.47
+  - 2.42
+  - 3.09
+  - 1.65
+  - 3.38
+  - 2.13
+  - 3.75
+  eps_annual:
+  - 1.37
+  - 1.65
+  - 4.83
+  - 7.22
+  - 6.86
+  - 6.54
+  - 8.04
+  - 10.54
+  years:
+  - "Mar 2019\n            \n            (S)"
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 406.0
+  - 385.0
+  - 367.0
+  - 451.0
+  - 592.0
+  cfo_annual:
+  - 333.0
+  - 306.0
+  - 140.0
+  - 271.0
+  - 844.0
+  book_value_ps: 58.2
+  roe_5y: 0.23
+  profit_growth_5y: 0.17
+  sales_growth_5y: 0.14
+  shareholding:
+    quarters:
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7469
+    - 0.7469
+    - 0.7467
+    - 0.7142
+    - 0.7139
+    fii:
+    - 0.0166
+    - 0.0137
+    - 0.0128
+    - 0.0257
+    - 0.0379
+    dii:
+    - 0.0721
+    - 0.076
+    - 0.1155
+    - 0.1348
+    - 0.121
+balance:
+  cash: 9985.9
+  debt: 411.7
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/ANTHEM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹999 cr − total debt ₹41 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

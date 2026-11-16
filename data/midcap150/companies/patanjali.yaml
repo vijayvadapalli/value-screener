@@ -1,0 +1,110 @@
+ticker: PATANJALI
+yahoo: PATANJALI.NS
+name: Patanjali Foods Ltd.
+sector: Fast Moving Consumer Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 401.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1087.307
+v2:
+  eps_quarters:
+  - 3.42
+  - 3.3
+  - 1.66
+  - 4.75
+  - 5.46
+  - 4.82
+  - 3.09
+  - 3.86
+  eps_annual:
+  - 0.87
+  - 2.73
+  - 0.0
+  - 0.8
+  - -12.71
+  - -13.09
+  - -56.25
+  - -0.1
+  - 11.97
+  - 16.68
+  years:
+  - Mar 2012
+  - Mar 2013
+  - Mar 2014
+  - Mar 2015
+  - Mar 2016
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -1363.0
+  - -5755.0
+  - -88.0
+  - 1301.0
+  - 1814.0
+  cfo_annual:
+  - 441.0
+  - 979.0
+  - 225.0
+  - 197.0
+  - -333.0
+  book_value_ps: 124.0
+  roe_5y: null
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6948
+    - 0.6945
+    - 0.6883
+    - 0.6881
+    - 0.6826
+    - 0.6825
+    - 0.6825
+    - 0.6825
+    fii:
+    - 0.1332
+    - 0.1342
+    - 0.1299
+    - 0.1224
+    - 0.1082
+    - 0.092
+    - 0.0853
+    - 0.0724
+    dii:
+    - 0.0628
+    - 0.0871
+    - 0.1122
+    - 0.1185
+    - 0.1304
+    - 0.1206
+    - 0.1105
+    - 0.1251
+balance:
+  cash: 7079.4
+  debt: 27888.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/PATANJALI/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (31 Mar 2026): cash & short-term investments ₹708 cr − total debt ₹2,789 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

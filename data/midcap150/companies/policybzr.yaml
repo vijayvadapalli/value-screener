@@ -1,0 +1,102 @@
+ticker: POLICYBZR
+yahoo: POLICYBZR.NS
+name: PB Fintech Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1081.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 465.199
+v2:
+  eps_quarters:
+  - 1.56
+  - 3.7
+  - 1.84
+  - 2.94
+  - 4.09
+  - 5.64
+  - 3.52
+  - 4.16
+  eps_annual:
+  - -2.68
+  - -1.44
+  - -8.43
+  - -7.39
+  - -3.65
+  - -18.53
+  - -10.82
+  - 1.48
+  - 7.67
+  - 14.48
+  years:
+  - Mar 2016
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -833.0
+  - -488.0
+  - 64.0
+  - 352.0
+  - 670.0
+  cfo_annual:
+  - -1568.0
+  - -299.0
+  - 9.0
+  - -183.0
+  - 41.0
+  book_value_ps: 168.0
+  roe_5y: -0.01
+  profit_growth_5y: 0.42
+  sales_growth_5y: 0.5
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.4778
+    - 0.4593
+    - 0.4678
+    - 0.4364
+    - 0.4077
+    - 0.3994
+    - 0.3729
+    - 0.2712
+    dii:
+    - 0.2057
+    - 0.2295
+    - 0.2327
+    - 0.2663
+    - 0.2954
+    - 0.3672
+    - 0.4042
+    - 0.4485
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/POLICYBZR/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

@@ -1,0 +1,112 @@
+ticker: LUPIN
+yahoo: LUPIN.NS
+name: Lupin Ltd.
+sector: Healthcare
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1977.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 457.294
+v2:
+  eps_quarters:
+  - 18.74
+  - 16.92
+  - 26.69
+  - 32.36
+  - 25.73
+  - 31.94
+  - 30.95
+  - 25.26
+  eps_annual:
+  - 56.63
+  - 5.56
+  - 13.4
+  - -5.95
+  - 26.81
+  - -33.62
+  - 9.45
+  - 42.01
+  - 71.88
+  - 116.65
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -1528.0
+  - 448.0
+  - 1936.0
+  - 3306.0
+  - 5355.0
+  cfo_annual:
+  - 367.0
+  - 1897.0
+  - 3648.0
+  - 3000.0
+  - 7334.0
+  book_value_ps: 526.0
+  roe_5y: 0.13
+  profit_growth_5y: 0.37
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4694
+    - 0.4691
+    - 0.469
+    - 0.4689
+    - 0.4689
+    - 0.4685
+    - 0.4685
+    - 0.4684
+    fii:
+    - 0.2204
+    - 0.2146
+    - 0.2125
+    - 0.205
+    - 0.215
+    - 0.217
+    - 0.2242
+    - 0.2328
+    dii:
+    - 0.2473
+    - 0.2541
+    - 0.2555
+    - 0.2656
+    - 0.2558
+    - 0.2532
+    - 0.2465
+    - 0.2378
+balance:
+  cash: 78532.5
+  debt: 61804.4
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/LUPIN/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹7,853 cr − total debt ₹6,180 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: NATIONALUM
+yahoo: NATIONALUM.NS
+name: National Aluminium Co. Ltd.
+sector: Metals & Mining
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 319.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 1836.332
+v2:
+  eps_quarters:
+  - 8.53
+  - 11.26
+  - 5.71
+  - 7.79
+  - 8.69
+  - 9.38
+  - 10.91
+  - 9.99
+  eps_annual:
+  - 3.45
+  - 6.94
+  - 9.29
+  - 0.73
+  - 7.07
+  - 16.07
+  - 7.81
+  - 10.83
+  - 28.68
+  - 31.56
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 2951.0
+  - 1435.0
+  - 1988.0
+  - 5268.0
+  - 5797.0
+  cfo_annual:
+  - 3958.0
+  - 908.0
+  - 2719.0
+  - 5806.0
+  - 6438.0
+  book_value_ps: 136.0
+  roe_5y: 0.23
+  profit_growth_5y: 0.35
+  sales_growth_5y: 0.15
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5128
+    - 0.5128
+    - 0.5128
+    - 0.5128
+    - 0.5128
+    - 0.5128
+    - 0.5128
+    - 0.5128
+    fii:
+    - 0.1413
+    - 0.1581
+    - 0.1506
+    - 0.1622
+    - 0.1967
+    - 0.2227
+    - 0.2199
+    - 0.2198
+    dii:
+    - 0.1799
+    - 0.157
+    - 0.1576
+    - 0.1545
+    - 0.1235
+    - 0.1075
+    - 0.1122
+    - 0.1171
+balance:
+  cash: 123692.3
+  debt: 579.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/NATIONALUM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹12,369 cr − total debt ₹58 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,112 @@
+ticker: APARINDS
+yahoo: APARINDS.NS
+name: Apar Industries Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 14831.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 41.877
+v2:
+  eps_quarters:
+  - 43.55
+  - 62.24
+  - 65.45
+  - 62.66
+  - 52.01
+  - 63.09
+  - 116.36
+  - 106.83
+  eps_annual:
+  - 46.14
+  - 37.82
+  - 35.55
+  - 35.32
+  - 41.94
+  - 67.09
+  - 166.64
+  - 205.41
+  - 204.46
+  - 243.21
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 257.0
+  - 638.0
+  - 825.0
+  - 821.0
+  - 977.0
+  cfo_annual:
+  - 244.0
+  - 698.0
+  - -283.0
+  - 1291.0
+  - 968.0
+  book_value_ps: 2035.0
+  roe_5y: 0.22
+  profit_growth_5y: 0.44
+  sales_growth_5y: 0.29
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5777
+    - 0.5777
+    - 0.5777
+    - 0.5777
+    - 0.5777
+    - 0.5777
+    - 0.5776
+    - 0.5542
+    fii:
+    - 0.1022
+    - 0.0987
+    - 0.0906
+    - 0.0924
+    - 0.0935
+    - 0.0938
+    - 0.1076
+    - 0.1255
+    dii:
+    - 0.2124
+    - 0.2063
+    - 0.2179
+    - 0.2264
+    - 0.232
+    - 0.2415
+    - 0.2302
+    - 0.2383
+balance:
+  cash: 16650.8
+  debt: 10137.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/APARINDS/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,665 cr − total debt ₹1,014 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

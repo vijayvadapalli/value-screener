@@ -1,0 +1,112 @@
+ticker: TATACOMM
+yahoo: TATACOMM.NS
+name: Tata Communications Ltd.
+sector: Telecommunication
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1850.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 285.162
+v2:
+  eps_quarters:
+  - 8.28
+  - 36.5
+  - 6.67
+  - 6.42
+  - 12.82
+  - 9.24
+  - 4.71
+  - 11.96
+  eps_annual:
+  - 43.26
+  - -11.53
+  - -2.89
+  - -3.02
+  - 43.88
+  - 51.99
+  - 63.02
+  - 33.98
+  - 64.43
+  - 35.14
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 1485.0
+  - 1801.0
+  - 970.0
+  - 1837.0
+  - 997.0
+  cfo_annual:
+  - 4204.0
+  - 4384.0
+  - 3182.0
+  - 2911.0
+  - 4479.0
+  book_value_ps: 119.0
+  roe_5y: 0.74
+  profit_growth_5y: -0.04
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5886
+    - 0.5886
+    - 0.5886
+    - 0.5886
+    - 0.5886
+    - 0.5886
+    - 0.5886
+    - 0.5885
+    fii:
+    - 0.178
+    - 0.1699
+    - 0.1717
+    - 0.1361
+    - 0.1446
+    - 0.1444
+    - 0.1375
+    - 0.1355
+    dii:
+    - 0.1366
+    - 0.1451
+    - 0.1483
+    - 0.1903
+    - 0.1849
+    - 0.1914
+    - 0.1985
+    - 0.2021
+balance:
+  cash: 8271.3
+  debt: 133693.3
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/TATACOMM/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹827 cr − total debt ₹13,369 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,106 @@
+ticker: PREMIERENE
+yahoo: PREMIERENE.NS
+name: Premier Energies Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 822.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 453.723
+v2:
+  eps_quarters:
+  - 5.66
+  - 6.16
+  - 6.83
+  - 7.8
+  - 8.65
+  - 10.08
+  - 10.2
+  - 10.09
+  eps_annual:
+  - 0.88
+  - 0.56
+  - -0.34
+  - -0.3
+  - 5.48
+  - 20.79
+  - 33.33
+  years:
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - -14.0
+  - -13.0
+  - 231.0
+  - 937.0
+  - 1510.0
+  cfo_annual:
+  - 5.0
+  - 37.0
+  - 90.0
+  - 1348.0
+  - 1261.0
+  book_value_ps: 114.0
+  roe_5y: 0.4
+  profit_growth_5y: 1.32
+  sales_growth_5y: 0.62
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6425
+    - 0.6425
+    - 0.6425
+    - 0.6394
+    - 0.6394
+    - 0.6394
+    - 0.5848
+    - 0.5848
+    fii:
+    - 0.0231
+    - 0.0295
+    - 0.0438
+    - 0.0423
+    - 0.0448
+    - 0.0572
+    - 0.0792
+    - 0.0712
+    dii:
+    - 0.0795
+    - 0.0866
+    - 0.1296
+    - 0.1326
+    - 0.1272
+    - 0.1369
+    - 0.1797
+    - 0.1888
+balance:
+  cash: 16293.5
+  debt: 37318.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/PREMIERENE/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹1,629 cr − total debt ₹3,732 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,110 @@
+ticker: CRISIL
+yahoo: CRISIL.NS
+name: CRISIL Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 4245.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 73.194
+v2:
+  eps_quarters:
+  - 30.72
+  - 21.86
+  - 23.46
+  - 26.41
+  - 33.02
+  - 31.9
+  - 29.6
+  - 27.97
+  eps_annual:
+  - 41.26
+  - 42.46
+  - 50.35
+  - 47.57
+  - 48.87
+  - 63.92
+  - 77.25
+  - 90.06
+  - 93.54
+  - 104.75
+  years:
+  - Dec 2016
+  - Dec 2017
+  - Dec 2018
+  - Dec 2019
+  - Dec 2020
+  - Dec 2021
+  - Dec 2022
+  - Dec 2023
+  - Dec 2024
+  - Dec 2025
+  profit_annual:
+  - 466.0
+  - 564.0
+  - 658.0
+  - 684.0
+  - 766.0
+  cfo_annual:
+  - 403.0
+  - 456.0
+  - 780.0
+  - 765.0
+  - 756.0
+  book_value_ps: 447.0
+  roe_5y: 0.29
+  profit_growth_5y: 0.16
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6664
+    - 0.6664
+    - 0.6664
+    - 0.6664
+    - 0.6664
+    - 0.6664
+    - 0.6664
+    - 0.6664
+    fii:
+    - 0.0755
+    - 0.0769
+    - 0.0808
+    - 0.0781
+    - 0.0767
+    - 0.0718
+    - 0.0638
+    - 0.0694
+    dii:
+    - 0.1269
+    - 0.1238
+    - 0.1206
+    - 0.1217
+    - 0.1209
+    - 0.1261
+    - 0.1295
+    - 0.1263
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/CRISIL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

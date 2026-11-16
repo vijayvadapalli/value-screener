@@ -1,0 +1,112 @@
+ticker: DEEPAKFERT
+yahoo: DEEPAKFERT.NS
+name: Deepak Fertilisers & Petrochemicals Corp Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1353.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 126.341
+v2:
+  eps_quarters:
+  - 19.86
+  - 21.96
+  - 19.26
+  - 16.89
+  - 11.21
+  - 11.04
+  - 38.82
+  - 31.19
+  eps_annual:
+  - 16.96
+  - 17.88
+  - 7.77
+  - 9.47
+  - 38.99
+  - 56.24
+  - 95.86
+  - 35.87
+  - 73.95
+  - 58.4
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 687.0
+  - 1221.0
+  - 468.0
+  - 945.0
+  - 739.0
+  cfo_annual:
+  - 1211.0
+  - 493.0
+  - 732.0
+  - 1880.0
+  - 206.0
+  book_value_ps: 601.0
+  roe_5y: 0.15
+  profit_growth_5y: 0.13
+  sales_growth_5y: 0.15
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4563
+    - 0.4563
+    - 0.4563
+    - 0.4563
+    - 0.4563
+    - 0.4563
+    - 0.4563
+    - 0.4563
+    fii:
+    - 0.1156
+    - 0.1073
+    - 0.1125
+    - 0.1094
+    - 0.1031
+    - 0.1031
+    - 0.1002
+    - 0.1014
+    dii:
+    - 0.0882
+    - 0.1133
+    - 0.1227
+    - 0.1261
+    - 0.1317
+    - 0.1324
+    - 0.1469
+    - 0.1447
+balance:
+  cash: 7094.7
+  debt: 56702.8
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/DEEPAKFERT/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (31 Mar 2026): cash & short-term investments ₹709 cr − total debt ₹5,670 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

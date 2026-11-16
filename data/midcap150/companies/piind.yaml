@@ -1,0 +1,112 @@
+ticker: PIIND
+yahoo: PIIND.NS
+name: PI Industries Ltd.
+sector: Chemicals
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 1680.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 151.72
+v2:
+  eps_quarters:
+  - 24.57
+  - 21.78
+  - 26.36
+  - 26.98
+  - 20.52
+  - 13.2
+  - 16.1
+  - 8.05
+  eps_annual:
+  - 33.39
+  - 26.66
+  - 29.72
+  - 33.06
+  - 48.66
+  - 55.62
+  - 81.04
+  - 110.83
+  - 109.43
+  - 87.06
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 844.0
+  - 1230.0
+  - 1682.0
+  - 1660.0
+  - 1321.0
+  cfo_annual:
+  - 529.0
+  - 1501.0
+  - 2036.0
+  - 1413.0
+  - 474.0
+  book_value_ps: 755.0
+  roe_5y: 0.16
+  profit_growth_5y: 0.1
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4609
+    - 0.4609
+    - 0.4609
+    - 0.4609
+    - 0.4609
+    - 0.4609
+    - 0.4609
+    - 0.4609
+    fii:
+    - 0.1846
+    - 0.1806
+    - 0.1698
+    - 0.1642
+    - 0.1597
+    - 0.1587
+    - 0.1483
+    - 0.1479
+    dii:
+    - 0.2707
+    - 0.2743
+    - 0.2921
+    - 0.3026
+    - 0.3094
+    - 0.312
+    - 0.315
+    - 0.3139
+balance:
+  cash: 37698.0
+  debt: 2996.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/PIIND/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,770 cr − total debt ₹300 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []

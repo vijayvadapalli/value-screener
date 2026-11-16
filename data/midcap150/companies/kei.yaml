@@ -1,0 +1,112 @@
+ticker: KEI
+yahoo: KEI.NS
+name: KEI Industries Ltd.
+sector: Capital Goods
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 4020.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 95.634
+v2:
+  eps_quarters:
+  - 17.25
+  - 23.71
+  - 20.49
+  - 21.29
+  - 24.57
+  - 29.74
+  - 28.68
+  - 27.45
+  eps_annual:
+  - 12.04
+  - 18.47
+  - 22.92
+  - 28.64
+  - 30.33
+  - 41.73
+  - 52.93
+  - 64.35
+  - 72.88
+  - 96.07
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 376.0
+  - 477.0
+  - 581.0
+  - 696.0
+  - 918.0
+  cfo_annual:
+  - 229.0
+  - 514.0
+  - 610.0
+  - -32.0
+  - 840.0
+  book_value_ps: 753.0
+  roe_5y: 0.17
+  profit_growth_5y: 0.27
+  sales_growth_5y: 0.23
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.3501
+    - 0.3501
+    - 0.3501
+    - 0.35
+    - 0.35
+    - 0.35
+    - 0.35
+    - 0.35
+    fii:
+    - 0.2975
+    - 0.2583
+    - 0.2659
+    - 0.2582
+    - 0.2549
+    - 0.2727
+    - 0.2732
+    - 0.2614
+    dii:
+    - 0.2072
+    - 0.2351
+    - 0.2563
+    - 0.2671
+    - 0.2727
+    - 0.2583
+    - 0.259
+    - 0.2626
+balance:
+  cash: 7178.9
+  debt: 3501.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/KEI/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹718 cr − total debt ₹350 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

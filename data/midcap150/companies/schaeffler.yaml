@@ -1,0 +1,110 @@
+ticker: SCHAEFFLER
+yahoo: SCHAEFFLER.NS
+name: Schaeffler India Ltd.
+sector: Automobile and Auto Components
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 3604.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 156.387
+v2:
+  eps_quarters:
+  - 15.18
+  - 16.1
+  - 18.37
+  - 18.51
+  - 20.62
+  - 20.22
+  - 20.84
+  - 22.33
+  eps_annual:
+  - 23.47
+  - 46.75
+  - 26.86
+  - 23.52
+  - 18.62
+  - 40.25
+  - 56.25
+  - 57.52
+  - 60.07
+  - 73.6
+  years:
+  - "Dec 2016\n            \n            (S)"
+  - "Dec 2017\n            \n            (S)"
+  - "Dec 2018\n            \n            (S)"
+  - "Dec 2019\n            \n            (S)"
+  - "Dec 2020\n            \n            (S)"
+  - "Dec 2021\n            \n            (S)"
+  - Dec 2022
+  - Dec 2023
+  - Dec 2024
+  - Dec 2025
+  profit_annual:
+  - 629.0
+  - 879.0
+  - 899.0
+  - 939.0
+  - 1150.0
+  cfo_annual:
+  - 465.0
+  - 751.0
+  - 884.0
+  - 840.0
+  - 1290.0
+  book_value_ps: 393.0
+  roe_5y: null
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.7413
+    - 0.7413
+    - 0.7413
+    - 0.7413
+    - 0.7413
+    - 0.7413
+    - 0.7413
+    - 0.7413
+    fii:
+    - 0.0472
+    - 0.0449
+    - 0.0457
+    - 0.0446
+    - 0.0445
+    - 0.0425
+    - 0.0436
+    - 0.0429
+    dii:
+    - 0.156
+    - 0.1603
+    - 0.1597
+    - 0.1613
+    - 0.1611
+    - 0.1632
+    - 0.1621
+    - 0.1635
+balance:
+  cash: 15363.4
+  debt: 481.1
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/SCHAEFFLER/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Jun 2026): cash & short-term investments ₹1,536 cr − total debt ₹48 cr (Yahoo''s figure; usually
+  includes leases) – check against the annual report'
+notes: []

@@ -1,0 +1,142 @@
+ticker: IDFCFIRSTB
+yahoo: IDFCFIRSTB.NS
+name: IDFC First Bank Ltd.
+sector: Financial Services
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 81.3
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 8613.161
+v2:
+  eps_quarters:
+  - 0.46
+  - 0.4
+  - 0.62
+  - 0.47
+  - 0.56
+  - 0.38
+  - 1.33
+  - 1.22
+  eps_annual:
+  - 3.0
+  - 2.58
+  - -3.99
+  - -5.91
+  - 0.85
+  - 0.21
+  - 3.75
+  - 4.16
+  - 2.04
+  - 1.87
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 132.0
+  - 2485.0
+  - 2942.0
+  - 1490.0
+  - 1611.0
+  cfo_annual:
+  - 2679.0
+  - 3563.0
+  - 11543.0
+  - 14465.0
+  - 6817.0
+  book_value_ps: 57.1
+  roe_5y: 0.06
+  profit_growth_5y: 0.28
+  sales_growth_5y: 0.2
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    fii:
+    - 0.2712
+    - 0.2568
+    - 0.238
+    - 0.2464
+    - 0.3676
+    - 0.3652
+    - 0.361
+    - 0.3667
+    dii:
+    - 0.1614
+    - 0.193
+    - 0.234
+    - 0.2433
+    - 0.2238
+    - 0.2273
+    - 0.2435
+    - 0.2542
+  asset_quality:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    gross_npa_pct:
+    - 1.94
+    - 1.87
+    - 1.97
+    - 1.86
+    - 1.69
+    - 1.61
+    - 1.51
+    - 1.32
+    net_npa_pct:
+    - 0.52
+    - 0.53
+    - 0.55
+    - 0.52
+    - 0.53
+    - 0.48
+    - 0.44
+    - 0.4
+    loans_cr: 335642.0
+    loans_basis: Screener.in standalone balance sheet, Loans n Advances, Sep 2026
+    page: https://www.screener.in/company/IDFCFIRSTB/
+balance:
+  net_cash: 0.0
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/IDFCFIRSTB/consolidated/; NPA figures from the standalone
+  page: https://www.screener.in/company/IDFCFIRSTB/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
+notes: []

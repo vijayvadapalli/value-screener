@@ -1,0 +1,112 @@
+ticker: JSL
+yahoo: JSL.NS
+name: Jindal Stainless Ltd.
+sector: Metals & Mining
+model: growth
+currency: INR
+period:
+  label: TTM to Sep 2026
+  end: '2026-09-30'
+  per_year: 4
+price:
+  value: 719.0
+  currency: INR
+  date: '2026-11-16'
+  source: Screener.in (16 Nov 2026)
+shares_m: 823.561
+v2:
+  eps_quarters:
+  - 7.95
+  - 7.17
+  - 8.67
+  - 9.79
+  - 10.05
+  - 10.23
+  - 9.33
+  - 10.85
+  eps_annual:
+  - 2.04
+  - 7.16
+  - 2.97
+  - 1.46
+  - 8.6
+  - 58.59
+  - 25.68
+  - 32.95
+  - 30.41
+  - 38.74
+  years:
+  - Mar 2017
+  - Mar 2018
+  - Mar 2019
+  - Mar 2020
+  - Mar 2021
+  - Mar 2022
+  - Mar 2023
+  - Mar 2024
+  - Mar 2025
+  - Mar 2026
+  profit_annual:
+  - 3109.0
+  - 2084.0
+  - 2693.0
+  - 2500.0
+  - 3185.0
+  cfo_annual:
+  - 1038.0
+  - 3096.0
+  - 4818.0
+  - 4718.0
+  - 3395.0
+  book_value_ps: 258.0
+  roe_5y: 0.21
+  profit_growth_5y: 0.55
+  sales_growth_5y: 0.29
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.607
+    - 0.6087
+    - 0.611
+    - 0.6123
+    - 0.6122
+    - 0.6204
+    - 0.6204
+    - 0.6254
+    fii:
+    - 0.2216
+    - 0.2137
+    - 0.2126
+    - 0.2142
+    - 0.2153
+    - 0.2087
+    - 0.2045
+    - 0.2007
+    dii:
+    - 0.0626
+    - 0.0691
+    - 0.0709
+    - 0.0708
+    - 0.0723
+    - 0.0715
+    - 0.0735
+    - 0.0773
+balance:
+  cash: 38614.7
+  debt: 76450.2
+sources:
+- 'Screener.in consolidated page, fetched 16 Nov 2026: https://www.screener.in/company/JSL/consolidated/'
+assumptions:
+- 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
+- Shares derived from Screener's market value ÷ price
+- 'Net cash derived from Yahoo''s balance sheet (30 Sep 2026): cash & short-term investments ₹3,861 cr − total debt ₹7,645 cr (Yahoo''s figure;
+  usually includes leases) – check against the annual report'
+notes: []
