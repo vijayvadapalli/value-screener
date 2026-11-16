@@ -1,0 +1,634 @@
+# Written by tools/make_nse_list.py from niftyindices.com. Re-run it to refresh the constituents.
+# Entries with `extra:` were added by hand and are kept when the list is refreshed.
+name: NIFTYMIDCAP150 constituents
+folder: midcap150
+screen: growth
+chart_dpi: 100       # 150+ companies: lighter chart images keep the page about 20 MB
+tickers:
+- ticker: 360ONE
+  yahoo: 360ONE.NS
+  name: 360 ONE WAM Ltd.
+  industry: Financial Services
+- ticker: AIAENG
+  yahoo: AIAENG.NS
+  name: AIA Engineering Ltd.
+  industry: Capital Goods
+- ticker: APLAPOLLO
+  yahoo: APLAPOLLO.NS
+  name: APL Apollo Tubes Ltd.
+  industry: Capital Goods
+- ticker: AUBANK
+  yahoo: AUBANK.NS
+  name: AU Small Finance Bank Ltd.
+  industry: Financial Services
+- ticker: ABBOTINDIA
+  yahoo: ABBOTINDIA.NS
+  name: Abbott India Ltd.
+  industry: Healthcare
+- ticker: ATGL
+  yahoo: ATGL.NS
+  name: Adani Total Gas Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: ABCAPITAL
+  yahoo: ABCAPITAL.NS
+  name: Aditya Birla Capital Ltd.
+  industry: Financial Services
+- ticker: AJANTPHARM
+  yahoo: AJANTPHARM.NS
+  name: Ajanta Pharmaceuticals Ltd.
+  industry: Healthcare
+- ticker: ALKEM
+  yahoo: ALKEM.NS
+  name: Alkem Laboratories Ltd.
+  industry: Healthcare
+- ticker: ANTHEM
+  yahoo: ANTHEM.NS
+  name: Anthem Biosciences Ltd.
+  industry: Healthcare
+- ticker: APARINDS
+  yahoo: APARINDS.NS
+  name: Apar Industries Ltd.
+  industry: Capital Goods
+- ticker: ASHOKLEY
+  yahoo: ASHOKLEY.NS
+  name: Ashok Leyland Ltd.
+  industry: Capital Goods
+- ticker: ASTERDM
+  yahoo: ASTERDM.NS
+  name: Aster DM Quality Care Ltd.
+  industry: Healthcare
+- ticker: ASTRAL
+  yahoo: ASTRAL.NS
+  name: Astral Ltd.
+  industry: Capital Goods
+- ticker: AUROPHARMA
+  yahoo: AUROPHARMA.NS
+  name: Aurobindo Pharma Ltd.
+  industry: Healthcare
+- ticker: AIIL
+  yahoo: AIIL.NS
+  name: Authum Investment & Infrastructure Ltd.
+  industry: Financial Services
+- ticker: BAJAJHFL
+  yahoo: BAJAJHFL.NS
+  name: Bajaj Housing Finance Ltd.
+  industry: Financial Services
+- ticker: BALKRISIND
+  yahoo: BALKRISIND.NS
+  name: Balkrishna Industries Ltd.
+  industry: Automobile and Auto Components
+- ticker: BANKINDIA
+  yahoo: BANKINDIA.NS
+  name: Bank of India
+  industry: Financial Services
+- ticker: MAHABANK
+  yahoo: MAHABANK.NS
+  name: Bank of Maharashtra
+  industry: Financial Services
+- ticker: BERGEPAINT
+  yahoo: BERGEPAINT.NS
+  name: Berger Paints India Ltd.
+  industry: Consumer Durables
+- ticker: BDL
+  yahoo: BDL.NS
+  name: Bharat Dynamics Ltd.
+  industry: Capital Goods
+- ticker: BHARATFORG
+  yahoo: BHARATFORG.NS
+  name: Bharat Forge Ltd.
+  industry: Automobile and Auto Components
+- ticker: BHEL
+  yahoo: BHEL.NS
+  name: Bharat Heavy Electricals Ltd.
+  industry: Capital Goods
+- ticker: BHARTIHEXA
+  yahoo: BHARTIHEXA.NS
+  name: Bharti Hexacom Ltd.
+  industry: Telecommunication
+- ticker: GROWW
+  yahoo: GROWW.NS
+  name: Billionbrains Garage Ventures Ltd.
+  industry: Financial Services
+- ticker: BIOCON
+  yahoo: BIOCON.NS
+  name: Biocon Ltd.
+  industry: Healthcare
+- ticker: BLUESTARCO
+  yahoo: BLUESTARCO.NS
+  name: Blue Star Ltd.
+  industry: Consumer Durables
+- ticker: CRISIL
+  yahoo: CRISIL.NS
+  name: CRISIL Ltd.
+  industry: Financial Services
+- ticker: COCHINSHIP
+  yahoo: COCHINSHIP.NS
+  name: Cochin Shipyard Ltd.
+  industry: Capital Goods
+- ticker: COFORGE
+  yahoo: COFORGE.NS
+  name: Coforge Ltd.
+  industry: Information Technology
+- ticker: COLPAL
+  yahoo: COLPAL.NS
+  name: Colgate Palmolive (India) Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: CONCOR
+  yahoo: CONCOR.NS
+  name: Container Corporation of India Ltd.
+  industry: Services
+- ticker: COROMANDEL
+  yahoo: COROMANDEL.NS
+  name: Coromandel International Ltd.
+  industry: Chemicals
+- ticker: DABUR
+  yahoo: DABUR.NS
+  name: Dabur India Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: DALBHARAT
+  yahoo: DALBHARAT.NS
+  name: Dalmia Bharat Ltd.
+  industry: Construction Materials
+- ticker: DIXON
+  yahoo: DIXON.NS
+  name: Dixon Technologies (India) Ltd.
+  industry: Consumer Durables
+- ticker: EMBASSY
+  yahoo: EMBASSY.NS
+  name: EMBASSY OFFICE PARKS REIT
+  industry: Realty
+- ticker: ENDURANCE
+  yahoo: ENDURANCE.NS
+  name: Endurance Technologies Ltd.
+  industry: Automobile and Auto Components
+- ticker: ESCORTS
+  yahoo: ESCORTS.NS
+  name: Escorts Kubota Ltd.
+  industry: Capital Goods
+- ticker: EXIDEIND
+  yahoo: EXIDEIND.NS
+  name: Exide Industries Ltd.
+  industry: Automobile and Auto Components
+- ticker: NYKAA
+  yahoo: NYKAA.NS
+  name: FSN E-Commerce Ventures Ltd.
+  industry: Consumer Services
+- ticker: FEDERALBNK
+  yahoo: FEDERALBNK.NS
+  name: Federal Bank Ltd.
+  industry: Financial Services
+- ticker: FACT
+  yahoo: FACT.NS
+  name: Fertilisers and Chemicals Travancore Ltd.
+  industry: Chemicals
+- ticker: FORTIS
+  yahoo: FORTIS.NS
+  name: Fortis Healthcare Ltd.
+  industry: Healthcare
+- ticker: GVT&D
+  yahoo: GVT&D.NS
+  name: GE Vernova T&D India Ltd.
+  industry: Capital Goods
+- ticker: GMRAIRPORT
+  yahoo: GMRAIRPORT.NS
+  name: GMR Airports Ltd.
+  industry: Services
+- ticker: GICRE
+  yahoo: GICRE.NS
+  name: General Insurance Corporation of India
+  industry: Financial Services
+- ticker: GLAXO
+  yahoo: GLAXO.NS
+  name: Glaxosmithkline Pharmaceuticals Ltd.
+  industry: Healthcare
+- ticker: GLENMARK
+  yahoo: GLENMARK.NS
+  name: Glenmark Pharmaceuticals Ltd.
+  industry: Healthcare
+- ticker: MEDANTA
+  yahoo: MEDANTA.NS
+  name: Global Health Ltd.
+  industry: Healthcare
+- ticker: GODFRYPHLP
+  yahoo: GODFRYPHLP.NS
+  name: Godfrey Phillips India Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: GODREJIND
+  yahoo: GODREJIND.NS
+  name: Godrej Industries Ltd.
+  industry: Diversified
+- ticker: GODREJPROP
+  yahoo: GODREJPROP.NS
+  name: Godrej Properties Ltd.
+  industry: Realty
+- ticker: FLUOROCHEM
+  yahoo: FLUOROCHEM.NS
+  name: Gujarat Fluorochemicals Ltd.
+  industry: Chemicals
+- ticker: HDBFS
+  yahoo: HDBFS.NS
+  name: HDB Financial Services Ltd.
+  industry: Financial Services
+- ticker: HAVELLS
+  yahoo: HAVELLS.NS
+  name: Havells India Ltd.
+  industry: Consumer Durables
+- ticker: HEROMOTOCO
+  yahoo: HEROMOTOCO.NS
+  name: Hero MotoCorp Ltd.
+  industry: Automobile and Auto Components
+- ticker: HEXT
+  yahoo: HEXT.NS
+  name: Hexaware Technologies Ltd.
+  industry: Information Technology
+- ticker: HINDCOPPER
+  yahoo: HINDCOPPER.NS
+  name: Hindustan Copper Ltd.
+  industry: Metals & Mining
+- ticker: HINDPETRO
+  yahoo: HINDPETRO.NS
+  name: Hindustan Petroleum Corporation Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: HUDCO
+  yahoo: HUDCO.NS
+  name: Housing & Urban Development Corporation Ltd.
+  industry: Financial Services
+- ticker: ICICILIFE
+  yahoo: ICICILIFE.NS
+  name: ICICI Life Insurance Ltd.
+  industry: Financial Services
+- ticker: ICICIGI
+  yahoo: ICICIGI.NS
+  name: ICICI Lombard General Insurance Company Ltd.
+  industry: Financial Services
+- ticker: ICICIAMC
+  yahoo: ICICIAMC.NS
+  name: ICICI Prudential Asset Management Company Ltd.
+  industry: Financial Services
+- ticker: IDFCFIRSTB
+  yahoo: IDFCFIRSTB.NS
+  name: IDFC First Bank Ltd.
+  industry: Financial Services
+- ticker: ITCHOTELS
+  yahoo: ITCHOTELS.NS
+  name: ITC Hotels Ltd.
+  industry: Consumer Services
+- ticker: INDIANB
+  yahoo: INDIANB.NS
+  name: Indian Bank
+  industry: Financial Services
+- ticker: INDHOTEL
+  yahoo: INDHOTEL.NS
+  name: Indian Hotels Co. Ltd.
+  industry: Consumer Services
+- ticker: IOB
+  yahoo: IOB.NS
+  name: Indian Overseas Bank
+  industry: Financial Services
+- ticker: IRCTC
+  yahoo: IRCTC.NS
+  name: Indian Railway Catering And Tourism Corporation Ltd.
+  industry: Consumer Services
+- ticker: IREDA
+  yahoo: IREDA.NS
+  name: Indian Renewable Energy Development Agency Ltd.
+  industry: Financial Services
+- ticker: INDUSTOWER
+  yahoo: INDUSTOWER.NS
+  name: Indus Towers Ltd.
+  industry: Telecommunication
+- ticker: INDUSINDBK
+  yahoo: INDUSINDBK.NS
+  name: IndusInd Bank Ltd.
+  industry: Financial Services
+- ticker: NAUKRI
+  yahoo: NAUKRI.NS
+  name: Info Edge (India) Ltd.
+  industry: Consumer Services
+- ticker: IPCALAB
+  yahoo: IPCALAB.NS
+  name: Ipca Laboratories Ltd.
+  industry: Healthcare
+- ticker: JKCEMENT
+  yahoo: JKCEMENT.NS
+  name: J.K. Cement Ltd.
+  industry: Construction Materials
+- ticker: JSWENERGY
+  yahoo: JSWENERGY.NS
+  name: JSW Energy Ltd.
+  industry: Power
+- ticker: JSWINFRA
+  yahoo: JSWINFRA.NS
+  name: JSW Infrastructure Ltd.
+  industry: Services
+- ticker: JSL
+  yahoo: JSL.NS
+  name: Jindal Stainless Ltd.
+  industry: Metals & Mining
+- ticker: JUBLFOOD
+  yahoo: JUBLFOOD.NS
+  name: Jubilant Foodworks Ltd.
+  industry: Consumer Services
+- ticker: KPRMILL
+  yahoo: KPRMILL.NS
+  name: K.P.R. Mill Ltd.
+  industry: Textiles
+- ticker: KEI
+  yahoo: KEI.NS
+  name: KEI Industries Ltd.
+  industry: Capital Goods
+- ticker: KALYANKJIL
+  yahoo: KALYANKJIL.NS
+  name: Kalyan Jewellers India Ltd.
+  industry: Consumer Durables
+- ticker: LTF
+  yahoo: LTF.NS
+  name: L&T Finance Ltd.
+  industry: Financial Services
+- ticker: LTTS
+  yahoo: LTTS.NS
+  name: L&T Technology Services Ltd.
+  industry: Information Technology
+- ticker: LGEINDIA
+  yahoo: LGEINDIA.NS
+  name: LG Electronics India Ltd.
+  industry: Consumer Durables
+- ticker: LICHSGFIN
+  yahoo: LICHSGFIN.NS
+  name: LIC Housing Finance Ltd.
+  industry: Financial Services
+- ticker: LAURUSLABS
+  yahoo: LAURUSLABS.NS
+  name: Laurus Labs Ltd.
+  industry: Healthcare
+- ticker: LENSKART
+  yahoo: LENSKART.NS
+  name: Lenskart Solutions Ltd.
+  industry: Consumer Services
+- ticker: LICI
+  yahoo: LICI.NS
+  name: Life Insurance Corporation of India
+  industry: Financial Services
+- ticker: LINDEINDIA
+  yahoo: LINDEINDIA.NS
+  name: Linde India Ltd.
+  industry: Chemicals
+- ticker: LLOYDSME
+  yahoo: LLOYDSME.NS
+  name: Lloyds Metals And Energy Ltd.
+  industry: Metals & Mining
+- ticker: LODHA
+  yahoo: LODHA.NS
+  name: Lodha Developers Ltd.
+  industry: Realty
+- ticker: LUPIN
+  yahoo: LUPIN.NS
+  name: Lupin Ltd.
+  industry: Healthcare
+- ticker: MRF
+  yahoo: MRF.NS
+  name: MRF Ltd.
+  industry: Automobile and Auto Components
+- ticker: M&MFIN
+  yahoo: M&MFIN.NS
+  name: Mahindra & Mahindra Financial Services Ltd.
+  industry: Financial Services
+- ticker: MANKIND
+  yahoo: MANKIND.NS
+  name: Mankind Pharma Ltd.
+  industry: Healthcare
+- ticker: MARICO
+  yahoo: MARICO.NS
+  name: Marico Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: MFSL
+  yahoo: MFSL.NS
+  name: Max Financial Services Ltd.
+  industry: Financial Services
+- ticker: MEESHO
+  yahoo: MEESHO.NS
+  name: Meesho Ltd.
+  industry: Consumer Services
+- ticker: MOTILALOFS
+  yahoo: MOTILALOFS.NS
+  name: Motilal Oswal Financial Services Ltd.
+  industry: Financial Services
+- ticker: MPHASIS
+  yahoo: MPHASIS.NS
+  name: MphasiS Ltd.
+  industry: Information Technology
+- ticker: MCX
+  yahoo: MCX.NS
+  name: Multi Commodity Exchange of India Ltd.
+  industry: Financial Services
+- ticker: NHPC
+  yahoo: NHPC.NS
+  name: NHPC Ltd.
+  industry: Power
+- ticker: NLCINDIA
+  yahoo: NLCINDIA.NS
+  name: NLC India Ltd.
+  industry: Power
+- ticker: NMDC
+  yahoo: NMDC.NS
+  name: NMDC Ltd.
+  industry: Metals & Mining
+- ticker: NTPCGREEN
+  yahoo: NTPCGREEN.NS
+  name: NTPC Green Energy Ltd.
+  industry: Power
+- ticker: NH
+  yahoo: NH.NS
+  name: Narayana Hrudayalaya Ltd.
+  industry: Healthcare
+- ticker: NATIONALUM
+  yahoo: NATIONALUM.NS
+  name: National Aluminium Co. Ltd.
+  industry: Metals & Mining
+- ticker: NAM-INDIA
+  yahoo: NAM-INDIA.NS
+  name: Nippon Life India Asset Management Ltd.
+  industry: Financial Services
+- ticker: OBEROIRLTY
+  yahoo: OBEROIRLTY.NS
+  name: Oberoi Realty Ltd.
+  industry: Realty
+- ticker: OIL
+  yahoo: OIL.NS
+  name: Oil India Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: PAYTM
+  yahoo: PAYTM.NS
+  name: One 97 Communications Ltd.
+  industry: Financial Services
+- ticker: OFSS
+  yahoo: OFSS.NS
+  name: Oracle Financial Services Software Ltd.
+  industry: Information Technology
+- ticker: POLICYBZR
+  yahoo: POLICYBZR.NS
+  name: PB Fintech Ltd.
+  industry: Financial Services
+- ticker: PIIND
+  yahoo: PIIND.NS
+  name: PI Industries Ltd.
+  industry: Chemicals
+- ticker: PAGEIND
+  yahoo: PAGEIND.NS
+  name: Page Industries Ltd.
+  industry: Textiles
+- ticker: PATANJALI
+  yahoo: PATANJALI.NS
+  name: Patanjali Foods Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: PERSISTENT
+  yahoo: PERSISTENT.NS
+  name: Persistent Systems Ltd.
+  industry: Information Technology
+- ticker: PETRONET
+  yahoo: PETRONET.NS
+  name: Petronet LNG Ltd.
+  industry: Oil Gas & Consumable Fuels
+- ticker: PHOENIXLTD
+  yahoo: PHOENIXLTD.NS
+  name: Phoenix Mills Ltd.
+  industry: Realty
+- ticker: PIRAMALFIN
+  yahoo: PIRAMALFIN.NS
+  name: Piramal Finance Ltd.
+  industry: Financial Services
+- ticker: PREMIERENE
+  yahoo: PREMIERENE.NS
+  name: Premier Energies Ltd.
+  industry: Capital Goods
+- ticker: PRESTIGE
+  yahoo: PRESTIGE.NS
+  name: Prestige Estates Projects Ltd.
+  industry: Realty
+- ticker: RECLTD
+  yahoo: RECLTD.NS
+  name: REC Ltd.
+  industry: Financial Services
+- ticker: RADICO
+  yahoo: RADICO.NS
+  name: Radico Khaitan Ltd
+  industry: Fast Moving Consumer Goods
+- ticker: RVNL
+  yahoo: RVNL.NS
+  name: Rail Vikas Nigam Ltd.
+  industry: Construction
+- ticker: SBICARD
+  yahoo: SBICARD.NS
+  name: SBI Cards and Payment Services Ltd.
+  industry: Financial Services
+- ticker: SRF
+  yahoo: SRF.NS
+  name: SRF Ltd.
+  industry: Chemicals
+- ticker: SCHAEFFLER
+  yahoo: SCHAEFFLER.NS
+  name: Schaeffler India Ltd.
+  industry: Automobile and Auto Components
+- ticker: SHREECEM
+  yahoo: SHREECEM.NS
+  name: Shree Cement Ltd.
+  industry: Construction Materials
+- ticker: SAIL
+  yahoo: SAIL.NS
+  name: Steel Authority of India Ltd.
+  industry: Metals & Mining
+- ticker: SUNDARMFIN
+  yahoo: SUNDARMFIN.NS
+  name: Sundaram Finance Ltd.
+  industry: Financial Services
+- ticker: SUPREMEIND
+  yahoo: SUPREMEIND.NS
+  name: Supreme Industries Ltd.
+  industry: Capital Goods
+- ticker: SUZLON
+  yahoo: SUZLON.NS
+  name: Suzlon Energy Ltd.
+  industry: Capital Goods
+- ticker: SWIGGY
+  yahoo: SWIGGY.NS
+  name: Swiggy Ltd.
+  industry: Consumer Services
+- ticker: TATACOMM
+  yahoo: TATACOMM.NS
+  name: Tata Communications Ltd.
+  industry: Telecommunication
+- ticker: TATAINVEST
+  yahoo: TATAINVEST.NS
+  name: Tata Investment Corporation Ltd.
+  industry: Financial Services
+- ticker: THERMAX
+  yahoo: THERMAX.NS
+  name: Thermax Ltd.
+  industry: Capital Goods
+- ticker: TORNTPOWER
+  yahoo: TORNTPOWER.NS
+  name: Torrent Power Ltd.
+  industry: Power
+- ticker: TIINDIA
+  yahoo: TIINDIA.NS
+  name: Tube Investments of India Ltd.
+  industry: Automobile and Auto Components
+- ticker: UNOMINDA
+  yahoo: UNOMINDA.NS
+  name: UNO Minda Ltd.
+  industry: Automobile and Auto Components
+- ticker: UPL
+  yahoo: UPL.NS
+  name: UPL Ltd.
+  industry: Chemicals
+- ticker: UBL
+  yahoo: UBL.NS
+  name: United Breweries Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: UNITDSPR
+  yahoo: UNITDSPR.NS
+  name: United Spirits Ltd.
+  industry: Fast Moving Consumer Goods
+- ticker: VMM
+  yahoo: VMM.NS
+  name: Vishal Mega Mart Ltd.
+  industry: Consumer Services
+- ticker: VOLTAS
+  yahoo: VOLTAS.NS
+  name: Voltas Ltd.
+  industry: Consumer Durables
+- ticker: WAAREEENER
+  yahoo: WAAREEENER.NS
+  name: Waaree Energies Ltd.
+  industry: Capital Goods
+- ticker: YESBANK
+  yahoo: YESBANK.NS
+  name: Yes Bank Ltd.
+  industry: Financial Services
+- ticker: JYOTIRES
+  yahoo: JYOTIRES.NS
+  name: Jyoti Resins and Adhesives Ltd.
+  industry: Chemicals
+  extra: small cap – added by you
+- ticker: DEEPAKFERT
+  yahoo: DEEPAKFERT.NS
+  name: Deepak Fertilisers & Petrochemicals Corp Ltd.
+  industry: Chemicals
+  extra: small cap – added by you
+- ticker: UJJIVANSFB
+  yahoo: UJJIVANSFB.NS
+  name: Ujjivan Small Finance Bank Ltd.
+  industry: Financial Services
+  extra: small cap – added by you
+- ticker: MIDCAP150
+  name: Nifty Midcap 150 index (Yahoo history from 2019)
+  yahoo: NIFTYMIDCAP150.NS
+  unit: index
+  market: true
+  extra: benchmark index
+- ticker: MIDCAP50
+  name: Nifty Midcap 50 index (10 years)
+  yahoo: ^NSEMDCP50
+  unit: index
+  market: true
+  extra: benchmark index
