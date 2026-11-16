@@ -13,9 +13,9 @@ balance:
   cash: 87814.0
   debt: 77341.0
 price:
-  value: 1380.0
+  value: 1377.9
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance DRREDDY.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/DRREDDY/consolidated/'

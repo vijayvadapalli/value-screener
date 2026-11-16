@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1789.9
+  value: 1827.7
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance SBILIFE.NS
 shares_m: 1003.132
 v2:

@@ -25,9 +25,9 @@ metals:
   aisc: 1947
 tax_rate: 0.28
 price:
-  value: 20.76
+  value: 20.64
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance KGC
 sources:
 - Kinross Q3-2026 results, 28 Oct 2026

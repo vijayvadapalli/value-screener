@@ -16,9 +16,9 @@ balance:
   cash: 12735.099999999999
   debt: 1963.0
 price:
-  value: 1495.16
+  value: 1439.38
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance ASML
 sources:
 - ASML Q3-2026 financial statements

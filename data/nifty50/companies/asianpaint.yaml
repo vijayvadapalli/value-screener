@@ -13,9 +13,9 @@ balance:
   cash: 86016.4
   debt: 39289.3
 price:
-  value: 2550.0
+  value: 2572.8999
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance ASIANPAINT.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ASIANPAINT/consolidated/'

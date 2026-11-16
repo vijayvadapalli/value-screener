@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 488.55
+  value: 494.2
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance KOTAKBANK.NS
 shares_m: 9973.763
 v2:

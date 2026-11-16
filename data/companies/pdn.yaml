@@ -20,9 +20,9 @@ balance:
 - label: 400k lb product loan at $92
   amount: -36.8
 price:
-  value: 7.17
+  value: 7.01
   currency: AUD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance PDN.AX
 sources:
 - Paladin September 2026 quarterly; FY2026 results

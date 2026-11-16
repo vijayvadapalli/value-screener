@@ -13,9 +13,9 @@ balance:
   cash: 110935.8
   debt: 226398.5
 price:
-  value: 10850.0
+  value: 10734.0
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance BAJAJ-AUTO.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/BAJAJ-AUTO/consolidated/'

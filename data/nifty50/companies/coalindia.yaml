@@ -13,9 +13,9 @@ balance:
   cash: 601489.4
   debt: 140721.8
 price:
-  value: 403.5
+  value: 397.5
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance COALINDIA.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/COALINDIA/consolidated/'

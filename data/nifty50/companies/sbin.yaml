@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1080.0
+  value: 1090.5
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance SBIN.NS
 shares_m: 9243.528
 v2:

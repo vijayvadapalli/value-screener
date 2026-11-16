@@ -35,9 +35,9 @@ balance:
   amount: -360
   currency: USD
 price:
-  value: 7.76
+  value: 7.595
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance NXE
 sources:
 - Rook I updated FS economics, 1 Aug 2024 (2023 dollars, after-tax NPV 8%)

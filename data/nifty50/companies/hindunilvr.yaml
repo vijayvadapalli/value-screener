@@ -13,9 +13,9 @@ balance:
   cash: 84090.0
   debt: 14780.0
 price:
-  value: 1992.9
+  value: 2000.3
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance HINDUNILVR.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HINDUNILVR/consolidated/'

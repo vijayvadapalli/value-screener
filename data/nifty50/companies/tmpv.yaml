@@ -13,9 +13,9 @@ balance:
   cash: 478280.0
   debt: 813950.0
 price:
-  value: 287.4
+  value: 262.4
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance TMPV.NS
 sources:
 - 'Q2 FY27 results (13 Nov 2026), loss ₹5,531 cr, exceptional charges ₹6,738 cr, JLR FY27 EBIT guidance cut to 2–3%: https://www.freepressjournal.in/business/tata-motors-pv-swings-to-5531-crore-q2-loss-jlr-restructuring-weighs'

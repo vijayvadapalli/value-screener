@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 3937.7
+  value: 3887.3999
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance BSE.NS
 shares_m: 407.895
 v2:

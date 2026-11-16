@@ -13,9 +13,9 @@ balance:
   cash: 38950.0
   debt: 306210.0
 price:
-  value: 4844.8999
+  value: 4910.0
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance TITAN.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TITAN/consolidated/'

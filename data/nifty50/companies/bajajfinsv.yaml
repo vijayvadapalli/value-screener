@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1865.0
+  value: 1848.2
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance BAJAJFINSV.NS
 shares_m: 1602.146
 v2:

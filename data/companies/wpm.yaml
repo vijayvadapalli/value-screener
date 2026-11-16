@@ -23,9 +23,9 @@ metals:
   realised: 62.13
 tax_rate: 0.1588
 price:
-  value: 131.45
+  value: 129.8625
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance WPM
 sources:
 - Wheaton Q3-2026 results and MD&A, SEC 6-K Ex 99.1/99.2, 5 Nov 2026 (2026 guidance unchanged)

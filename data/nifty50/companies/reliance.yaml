@@ -13,9 +13,9 @@ balance:
   cash: 2772120.0
   debt: 3980000.0
 price:
-  value: 1339.7
+  value: 1344.8
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance RELIANCE.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/RELIANCE/consolidated/'

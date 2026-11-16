@@ -13,9 +13,9 @@ balance:
   cash: 337814.6
   debt: 46273.2
 price:
-  value: 1880.0
+  value: 1867.5
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance SUNPHARMA.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/SUNPHARMA/consolidated/'

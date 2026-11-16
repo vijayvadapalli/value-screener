@@ -15,9 +15,9 @@ balance:
   cash: 860
   debt: 1000
 price:
-  value: 70.73
+  value: 68.85
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance CCJ
 sources:
 - Cameco Q3-2026 results, 30 Oct 2026

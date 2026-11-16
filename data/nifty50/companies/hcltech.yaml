@@ -13,9 +13,9 @@ balance:
   cash: 306150.0
   debt: 52150.0
 price:
-  value: 1378.0
+  value: 1384.6
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance HCLTECH.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HCLTECH/consolidated/'

@@ -15,9 +15,9 @@ balance:
   cash: 37080
   debt: 125340
 price:
-  value: 125.35
+  value: 122.33
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance ORCL
 sources:
 - Oracle FQ1-2027 release

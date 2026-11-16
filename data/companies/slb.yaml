@@ -16,9 +16,9 @@ shares_m: 1497
 balance:
   net_cash: -9249
 price:
-  value: 51.67
+  value: 50.905
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance SLB
 sources:
 - SLB Q3-2026 results, 23 Oct 2026

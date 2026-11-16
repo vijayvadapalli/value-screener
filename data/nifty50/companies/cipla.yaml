@@ -13,9 +13,9 @@ balance:
   cash: 100281.2
   debt: 6137.7
 price:
-  value: 1391.8
+  value: 1394.5
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance CIPLA.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/CIPLA/consolidated/'

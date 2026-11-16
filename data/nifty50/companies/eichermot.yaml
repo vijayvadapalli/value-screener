@@ -13,9 +13,9 @@ balance:
   cash: 60797.5
   debt: 5139.5
 price:
-  value: 7650.0
+  value: 7599.0
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance EICHERMOT.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/EICHERMOT/consolidated/'

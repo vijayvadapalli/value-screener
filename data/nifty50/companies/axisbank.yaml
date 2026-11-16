@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1331.0
+  value: 1342.4
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance AXISBANK.NS
 shares_m: 3125.883
 v2:

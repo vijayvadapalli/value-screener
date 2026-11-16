@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 970.0
+  value: 978.4
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance SHRIRAMFIN.NS
 shares_m: 2354.959
 v2:

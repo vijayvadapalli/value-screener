@@ -9,9 +9,9 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1583.6
+  value: 1585.0
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance ICICIBANK.NS
 shares_m: 7187.058
 v2:

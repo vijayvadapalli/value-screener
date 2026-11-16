@@ -21,9 +21,9 @@ holdings:
   units: 1.256
 debt: 0
 price:
-  value: 6.66
+  value: 6.4103
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance UEC
 comment: Speculative – most of the price pays for projects.
 sources:

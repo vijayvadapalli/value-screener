@@ -13,9 +13,9 @@ balance:
   cash: 9288.9
   debt: 25612.5
 price:
-  value: 3165.2
+  value: 3203.7
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance TRENT.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TRENT/consolidated/'

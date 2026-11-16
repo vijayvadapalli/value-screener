@@ -13,9 +13,9 @@ balance:
   cash: 227470.0
   debt: 991610.0
 price:
-  value: 943.6
+  value: 923.3
   currency: INR
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance HINDALCO.NS
 sources:
 - 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HINDALCO/consolidated/'

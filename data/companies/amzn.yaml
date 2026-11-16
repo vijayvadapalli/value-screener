@@ -15,9 +15,9 @@ balance:
   cash: 114200
   debt: 180300
 price:
-  value: 266.66
+  value: 261.25
   currency: USD
-  date: '2026-11-13'
+  date: '2026-11-16'
   source: yfinance AMZN
 sources:
 - Amazon Q3-2026 release; 10-Q analysis (sec-api)
