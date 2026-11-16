@@ -24,7 +24,8 @@ import datetime as dt
 import sys
 from pathlib import Path
 
-from . import growth_data, growth_screen, history, html_report, loader, markets, price_chart, pricedb, prices, report, research, technicals
+from . import growth_data, growth_screen, history, html_report, loader, longterm, markets, price_chart, pricedb, prices, report
+from . import research, resource_screen, technicals
 from . import profit_vs_price as pvp
 from .wording import list_title
 from .engine import etf_lookthrough, ranked, run
@@ -50,6 +51,9 @@ def _parser():
     r.add_argument("--config", help="path to config.yaml")
     r.add_argument("--no-profit", action="store_true", help="skip the profit-vs-price figures (no Yahoo / Screener.in calls)")
     sub.add_parser("validate", help="check every company file")
+    b = sub.add_parser("backtest", help="how the growth screen's rules did: picks on a past date, returns since")
+    b.add_argument("--list", required=True, help="a list with the growth screen, e.g. midcap150 or nifty50")
+    b.add_argument("--years", type=int, default=5, help="the earliest start, in years before today (default 5; then every year to 2)")
     return ap
 
 
@@ -100,8 +104,9 @@ def _technicals(tickers, companies, log):
     return found
 
 
-def _price_charts(tickers, companies, results, log):
-    """Chart data for each company from output/prices.sqlite (tools/update_history.py); {} when there is none."""
+def _price_charts(tickers, companies, results, log, years=None):
+    """Chart data for each company from output/prices.sqlite (tools/update_history.py); {} when there is none. A list
+    with `history_years:` above 10 gets that much monthly history and a Max button."""
     if not pricedb.DB.exists():
         log.append("no price charts: run python tools/update_history.py to download the price history")
         return {}
@@ -116,14 +121,73 @@ def _price_charts(tickers, companies, results, log):
             continue
         if (dt.date.today() - dt.date.fromisoformat(last)).days > 5:
             old.append(f"{symbol} {last}")
-        p = price_chart.payload(con, symbol, results[t], companies[t], watched=research.public_levels(weeks, t, symbol))
+        long = {"long_years": years} if years and years > price_chart.LONG_YEARS else {}
+        p = price_chart.payload(con, symbol, results[t], companies[t], watched=research.public_levels(weeks, t, symbol), **long)
         if p:
+            if long:
+                p["max_range"] = True
             out[t] = p
     if missing:
         log.append("no price history for " + ", ".join(missing) + " – python tools/update_history.py --tickers " + ",".join(missing))
     if old:
         log.append("price history not updated recently: " + ", ".join(old) + " – run python tools/update_history.py")
     return out
+
+
+METAL_SYMBOLS = {"gold": "GC=F", "silver": "SI=F", "copper": "HG=F", "oil": "CL=F"}
+
+
+def _metal_growth(metal):
+    """For the resource screen: a function years → the yearly change of `metal`'s price over that many years, from the
+    price history (futures) or, for uranium, Cameco's month-end spot series; None where there is no series."""
+    if metal == "uranium":
+        points = [(d[:10], v) for d, v in longterm.series("uranium_spot")]
+    elif metal in METAL_SYMBOLS and pricedb.DB.exists():
+        points = [(b["date"], b["close"]) for b in pricedb.bars(pricedb.connect(), METAL_SYMBOLS[metal])]
+    else:
+        points = []
+
+    def growth(years):
+        if not points or not years:
+            return None
+        last_day, last = points[-1]
+        start = (dt.date.fromisoformat(last_day) - dt.timedelta(days=round(365.25 * years))).isoformat()
+        then = [v for d, v in points if d <= start]
+        return (last / then[-1]) ** (1 / years) - 1 if then and then[-1] > 0 else None
+    return growth
+
+
+def _backtest(list_name, companies, cfg, settings, log):
+    """The growth screen's rules on past dates (list setting `backtest: [5, 4, 3, 2]`), for the report."""
+    years = settings.get("backtest")
+    if not years or not pricedb.DB.exists():
+        return []
+    from . import backtest  # noqa: PLC0415
+    results = backtest.run(list_name, loader.load_list_entries(list_name), companies, cfg, years=tuple(years))
+    log.append("backtest: " + " · ".join(f"since {b['start']:%b %Y} {len(b['picks'])} picks" for b in results))
+    return results
+
+
+def _us_growth_rows(results, companies, cfg, live, log):
+    """The growth screen with the US rules for a list of US companies (the tech list): the list's own valuation, with
+    the EPS history from the SEC figures the US screen keeps (output/us/us_facts.sqlite)."""
+    from . import factsdb, us_pages, us_screen  # noqa: PLC0415
+    db = loader.output_folder("us") / "us_facts.sqlite"
+    if not db.exists():
+        log.append("growth screen skipped: no SEC figures yet – run python tools/screen_us.py once")
+        return [], {}
+    con = factsdb.connect(db)
+    wanted = {t for t, r in results.items() if r["model"] == "growth"}
+    entries = [e for e in factsdb.companies(con) if e["ticker"] in wanted and not e["foreign"]]
+    us_rows, _ = us_screen.rows_from_db(con, entries, cfg, dt.date.today(), loader.output_folder("us") / "screen_cache",
+                                        log=lambda *_: None)
+    by_t = {r["ticker"]: r for r in us_rows}
+    if live and by_t:   # insider ownership from Yahoo, one call per company
+        held = us_pages.insiders([companies[t].get("yahoo") or t for t in by_t])
+        for t, r in by_t.items():
+            r["insiders"] = held.get(companies[t].get("yahoo") or t)
+    rows = sorted((growth_screen.evaluate_tech(results[t], by_t.get(t), cfg) for t in wanted), key=growth_screen.sort_key)
+    return rows, {"key": "us_growth_screen", "owners": "Insiders", "tail": us_screen.US_SCREEN_TAIL.split(" The shortlist")[0]}
 
 
 def _profit_rows(a, tickers, companies, results, folder, out, log):
@@ -172,6 +236,15 @@ def main(argv=None):
     a = _parser().parse_args(argv)
     if a.cmd == "validate":
         return _validate()
+    if a.cmd == "backtest":
+        from . import backtest  # noqa: PLC0415
+        cfg = loader.load_config()
+        companies = loader.load_companies(loader.companies_folder(loader.list_folder(a.list)))
+        results = backtest.run(a.list, loader.load_list_entries(a.list), companies, cfg, years=tuple(range(a.years, 1, -1)))
+        print("\n".join(backtest.summary_lines(results)))
+        print("\nToday's members only (survivorship bias); the latest yearly EPS for the last twelve months; no net cash. "
+              "Past performance only.")
+        return 0
     cfg = loader.load_config(Path(a.config) if a.config else None)
     folder = a.folder or (loader.list_folder(a.list) if a.list else None)
     companies = loader.load_companies(loader.companies_folder(folder))
@@ -196,16 +269,29 @@ def main(argv=None):
     if previous:
         log.append(f"previous figures in brackets are from the run of {previous['_date']}")
     tech = _technicals(tickers, companies, log) if a.technicals else {}
-    pcharts = _price_charts(tickers, companies, results, log)
+    pcharts = _price_charts(tickers, companies, results, log,
+                            loader.list_settings(a.list).get("history_years") if a.list else None)
 
-    screen_rows = []
-    if a.list and loader.list_settings(a.list).get("screen") == "growth":
+    screen = loader.list_settings(a.list).get("screen") if a.list else None
+    screen_rows, screen_style = [], {}
+    if screen == "growth":
         extras = {x["ticker"]: x["extra"] for x in loader.load_list_entries(a.list) if x.get("extra")}
         screen_rows = growth_screen.rows(results, companies, cfg, extras)
-        n = {t: sum(1 for r in screen_rows if r["tier"] == t) for t in ("shortlist", "near miss")}
-        log.append(f"growth screen: {n['shortlist']} shortlisted, {n['near miss']} near misses of {len(screen_rows)}")
+        lst = loader.list_settings(a.list)
+        if lst.get("screen_panel"):   # the settings panel; on a multi-page list its links go straight to the company pages
+            screen_style = {"panel": True}
+            if lst.get("layout") == "pages":
+                screen_style["href"] = lambda t, d=a.list: f"{d}/{t}.html"
+    elif screen == "us-growth":
+        screen_rows, screen_style = _us_growth_rows(results, companies, cfg, a.live, log)
     market_rows = markets.rows([x for x in loader.load_list_entries(a.list) if markets.is_market(x)], log.append) if a.list else []
     profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
+    resource_rows = (resource_screen.rows(results, {p["ticker"]: p for p in profit_rows}, _metal_growth, cfg)
+                     if screen == "resource" else [])
+    for label, rs in (("growth screen", screen_rows), ("resource screen", resource_rows)):
+        if rs:
+            n = {t: sum(1 for r in rs if r["tier"] == t) for t in ("shortlist", "near miss")}
+            log.append(f"{label}: {n['shortlist']} shortlisted, {n['near miss']} near misses of {len(rs)}")
     lookthroughs = [(e["ticker"], etf_lookthrough(e, results), e) for e in etfs]
     report.write_csv(vals, grow, out / "ranked.csv")
     report.append_signals(vals, grow, out / "signals_log.csv", cfg["as_of"])
@@ -217,6 +303,10 @@ def main(argv=None):
         extras = html_report.ReportExtras(previous=previous or {}, tech=tech, lookthroughs=lookthroughs,
                                           heatmaps=report.make_heatmaps(vals, grow, cfg, out), log_lines=log,
                                           price_charts=pcharts, market_rows=market_rows, screen_rows=screen_rows,
+                                          screen_style=screen_style, resource_rows=resource_rows,
+                                          hide_spot=bool(settings.get("hide_spot")),
+                                          backtest=_backtest(a.list, companies, cfg, settings, log),
+                                          index_name={"nifty50": "Nifty 50", "midcap150": "Nifty Midcap 150"}.get(a.list or "", "Index"),
                                           chart_dpi=settings.get("chart_dpi"),
                                           pages=name if settings.get("layout") == "pages" else None)
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,

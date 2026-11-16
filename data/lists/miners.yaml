@@ -1,5 +1,7 @@
 # Written by tools/make_etf_list.py from GDX, GDXJ, SIL, SILJ, COPX, URNM, URNJ holdings on 2026-11-13. Re-run it to refresh.
 name: miners (GDX, GDXJ, SIL, SILJ, COPX, URNM, URNJ)
+screen: resource        # resource_screen.py: value, metal −20%, volume growth, 5-year return
+history_years: 20   # price history for the charts (tools/update_history.py loads it once; Max button on the charts)
 folder: miners
 tickers:
 - ticker: WPM

@@ -119,6 +119,7 @@ def update(con, wanted: dict[str, list[str]], years: int, refresh: bool, log=pri
                 continue
             if last[s] is None:
                 pricedb.replace_bars(con, s, rows)
+                pricedb.set_depth(con, s, years)
                 stats["new"].append(s)
             else:
                 pricedb.save_bars(con, s, rows)
@@ -156,6 +157,31 @@ def update(con, wanted: dict[str, list[str]], years: int, refresh: bool, log=pri
     return stats
 
 
+def deeper_history(con, wanted: dict[str, list[str]]) -> dict[int, list[str]]:
+    """{years: [symbols]} for symbols in a list with `history_years:` above what was downloaded for them so far."""
+    want_years = {}
+    for name in {n for lists in wanted.values() for n in lists if n not in ("research", "manual", "us-screen")}:
+        try:
+            y = loader.list_settings(name).get("history_years")
+        except FileNotFoundError:
+            continue
+        if y:
+            want_years[name] = int(y)
+    out = {}
+    for s, lists in wanted.items():
+        years = max((want_years.get(n, 0) for n in lists), default=0)
+        have = pricedb.depth(con, s) or 10
+        if not years or years <= have:
+            continue
+        info = pricedb.info(con, s)
+        target = (dt.date.today() - dt.timedelta(days=round(365.25 * years))).isoformat()
+        if info and info["first_date"] and info["first_date"] <= target:   # already this deep (gold from 2000, DXY from 1971)
+            pricedb.set_depth(con, s, years)
+            continue
+        out.setdefault(years, []).append(s)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description="Daily price history from Yahoo into output/prices.sqlite")
     ap.add_argument("--lists", default=",".join(DEFAULT_LISTS), help="comma-separated lists (default: core,tech,oil,miners,watchlist,nifty50,midcap150)")
@@ -176,6 +202,12 @@ def main():
     print(f"{len(wanted)} symbols")
     t0 = time.time()
     stats = update(con, wanted, args.years, args.refresh)
+    if not args.tickers:   # lists that want a longer history (`history_years: 20`) get it once per symbol
+        deeper = deeper_history(con, wanted)
+        for years, symbols in deeper.items():
+            print(f"loading {years} years for {len(symbols)} symbols")
+            more = update(con, {s: wanted[s] for s in symbols}, years, True)
+            stats["rows"] += more["rows"]
     print(f"\n{stats['rows']:,} daily rows saved in {time.time() - t0:.0f}s · new {len(stats['new'])} · updated "
           f"{len(stats['updated'])} · reloaded after a split {len(stats['reloaded'])}")
     if stats["missing"]:

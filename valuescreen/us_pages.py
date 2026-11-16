@@ -8,7 +8,10 @@ page as us-screen/<ticker>.html, sharing assets/ (page.write_shared); tools/scre
 """
 from __future__ import annotations
 
+import logging
 import tempfile
+import time
+import warnings
 from pathlib import Path
 
 from . import charts, page, price_chart
@@ -18,6 +21,24 @@ from .models import dcf_factor
 
 FOLDER = "us-screen"
 TIER_PILL = {"shortlist": '<span class="pill green">Shortlist</span>', "near miss": '<span class="pill blue">Near miss</span>'}
+
+
+def insiders(symbols: list[str]) -> dict[str, float]:
+    """{Yahoo symbol: share of the company held by insiders} – only for the companies that get a page (one call each)."""
+    import yfinance as yf  # noqa: PLC0415
+    logging.getLogger("yfinance").setLevel(logging.CRITICAL)
+    out = {}
+    for sym in symbols:
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                v = (yf.Ticker(sym).info or {}).get("heldPercentInsiders")
+        except Exception:  # noqa: BLE001 - one missing figure must not stop the run
+            v = None
+        if v is not None:
+            out[sym] = float(v)
+        time.sleep(0.3)
+    return out
 
 
 def interesting(screen_rows: list[dict]) -> list[str]:

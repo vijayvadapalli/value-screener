@@ -3,6 +3,9 @@
 name: NIFTY50 constituents
 folder: nifty50
 screen: growth
+screen_panel: true   # a settings panel above the screen (assets/screen.js): change the rules, share the link
+hide_spot: true      # India-only: no gold / silver / copper / uranium prices in the header
+backtest: [5, 4, 3, 2]   # how the screen's rules did since 5, 4, 3 and 2 years ago (backtest.py)
 layout: pages        # a summary page plus one page per company (reports/nifty50/<ticker>.html)
 tickers:
 - ticker: ADANIENT

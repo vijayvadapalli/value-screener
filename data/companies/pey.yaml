@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 25.69
+  value: 25.79
   currency: CAD
   date: '2026-11-16'
   source: yfinance PEY.TO

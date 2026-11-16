@@ -25,7 +25,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 217.595
+  value: 217.4
   currency: USD
   date: '2026-11-16'
   source: yfinance CVX

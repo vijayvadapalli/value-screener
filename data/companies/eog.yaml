@@ -24,7 +24,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 156.45
+  value: 155.84
   currency: USD
   date: '2026-11-16'
   source: yfinance EOG

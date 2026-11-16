@@ -13,7 +13,7 @@ earnings:
   adj_net_income: 50.641
 shares_m: 1430
 price:
-  value: 7.415
+  value: 7.23
   currency: CAD
   date: '2026-11-16'
   source: yfinance IVN.TO

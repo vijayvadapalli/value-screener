@@ -11,7 +11,7 @@ period:
   reported: '2026-11-04'
 shares_m: 120.037556
 price:
-  value: 55.2
+  value: 53.595
   currency: USD
   date: '2026-11-16'
   source: yfinance HUT

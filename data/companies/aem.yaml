@@ -22,7 +22,7 @@ metals:
   aisc: 1648
 tax_rate: 0.35
 price:
-  value: 175.96
+  value: 171.97
   currency: USD
   date: '2026-11-16'
   source: yfinance AEM

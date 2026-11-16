@@ -15,7 +15,7 @@ balance:
   cash: 136935
   debt: 80111
 price:
-  value: 355.64
+  value: 351.96
   currency: USD
   date: '2026-11-16'
   source: yfinance AAPL

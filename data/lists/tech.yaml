@@ -1,2 +1,4 @@
 name: Big tech, chips & energy
+screen: us-growth       # the growth screen with the US rules (growth_screen.evaluate_tech)
+history_years: 20   # price history for the charts (tools/update_history.py loads it once; Max button on the charts)
 tickers: [AAPL, MSFT, GOOGL, AMZN, NVDA, QCOM, AVGO, ORCL, TSM, MU, AMD, ASML, CVX, SLB, HUT, UEC, UUUU]

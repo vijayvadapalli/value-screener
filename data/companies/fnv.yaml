@@ -22,7 +22,7 @@ metals:
   realised: 62.59
 tax_rate: 0.1302
 price:
-  value: 245.725
+  value: 242.28
   currency: USD
   date: '2026-11-16'
   source: yfinance FNV

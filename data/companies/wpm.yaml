@@ -23,7 +23,7 @@ metals:
   realised: 62.13
 tax_rate: 0.1588
 price:
-  value: 129.8625
+  value: 127.29
   currency: USD
   date: '2026-11-16'
   source: yfinance WPM

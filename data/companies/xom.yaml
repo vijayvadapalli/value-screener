@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 168.58
+  value: 167.01
   currency: USD
   date: '2026-11-16'
   source: yfinance XOM

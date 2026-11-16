@@ -188,3 +188,79 @@ def test_us_pages_go_to_the_interesting_companies_only():
     lines = us_pages.value_lines_input({"eps": 10.0, "nc": 5.0, "v0": 136.0}, cfg, 0.10)
     assert lines["model"] == "growth" and lines["buy_level"] > lines["v0"] > 0 and lines["call_level"] > lines["buy_level"]
     assert us_pages.value_lines_input({"eps": -1.0}, cfg, 0.10)["model"] is None
+
+
+def producer(price=10.0, oe=1.0, nc=0.0, exp=1.0, **kw):
+    r = {"ticker": "MIN", "name": "Miner", "model": "producer", "signal": "green", "action": "Buy", "price": price, "price_ccy": "USD",
+         "oe": oe, "nc": nc, "mult_hi": 15, "v_high": oe * 15 + nc, "exp": exp, "primary_metal": "gold", "cost_ratio": 0.5,
+         "stale": False, "tier": "B"}
+    r.update(kw)
+    return r
+
+
+def test_resource_screen_value_stress_growth_and_return():
+    from valuescreen import resource_screen as RS
+    cfg = loader.load_config()
+    profit = {"years": 3.0, "sales_then": 100.0, "sales_now": 160.0}      # +17%/yr revenue
+    row = RS.evaluate(producer(price=8.0), profit, lambda years: 0.05, cfg)   # metal +5%/yr → volume ≈ +11%/yr
+    assert row["fair"] == 15.0 and row["stress_value"] == pytest.approx((1.0 - 0.2) * 15)
+    assert row["volume_growth"] == pytest.approx((1.6 ** (1 / 3)) / 1.05 - 1) and row["tier"] == "shortlist"
+    assert row["expected_return"] == pytest.approx((15 / 8) ** 0.2 - 1)
+    # cheap at spot, not with the metal 20% lower: a near miss
+    assert RS.evaluate(producer(price=13.0, exp=2.0), profit, lambda y: 0.05, cfg)["missed"] == ["stress", "return"]
+    near = RS.evaluate(producer(price=11.5, exp=1.0), profit, lambda y: 0.05, cfg)   # passes −20%, return only 5.5%
+    assert near["tier"] == "near miss" and near["missed"] == ["return"]
+    assert RS.evaluate(producer(price=12.5, exp=1.0), profit, lambda y: 0.05, cfg)["tier"] == ""   # misses two
+    # growth that is only the metal price: volume flat
+    assert "growth" in RS.evaluate(producer(price=8.0), profit, lambda y: 0.17, cfg)["missed"]
+    # guards
+    assert RS.evaluate(producer(cost_ratio=0.7, price=8.0), profit, lambda y: 0.05, cfg)["tier"] == ""
+    assert RS.evaluate(producer(oe=-1.0, v_high=-15.0), profit, lambda y: 0.05, cfg)["guards"] == ["no positive owner earnings"]
+
+
+def test_resource_screen_keeps_nav_rules_for_developers_and_holders():
+    from valuescreen import resource_screen as RS
+    cfg = loader.load_config()
+    nav = {"ticker": "YCA", "name": "Yellow Cake", "model": "physical", "signal": "green", "action": "Buy", "price": 5.0,
+           "price_ccy": "GBP", "nav": 6.5, "pnav": 0.77, "band": "BUY", "zone": "BUY", "stale": False}
+    assert RS.evaluate(nav, None, lambda y: None, cfg)["tier"] == "shortlist"
+    assert RS.evaluate(dict(nav, band="WATCH", zone="WATCH"), None, lambda y: None, cfg)["tier"] == "near miss"
+    assert RS.rows({"X": dict(nav, ticker="X", model="liquid")}, {}, lambda m: (lambda y: None), cfg) == []
+
+
+def test_tech_screen_uses_the_reports_own_valuation_and_the_sec_history():
+    cfg = loader.load_config()
+    r = {"ticker": "NVDA", "name": "Nvidia", "price": 170.0, "price_ccy": "USD", "oe": 10.0, "nc": 0.0, "pe": 17.0,
+         "implied_growth": 0.07, "signal": "blue", "action": "Watch", "stale": False, "cyclical": False}
+    us_row = {"pe": 20.0, "eps_annual": [1.0, 1.5, 2.0, 3.0, 5.0, 8.0], "cash_conversion": 1.0}
+    row = G.evaluate_tech(r, us_row, cfg)
+    assert row["pe"] == 17.0 and row["pe_trailing"] == pytest.approx(20.0) and row["checks"]["growth"] and row["growth_needed"] == 0.07
+    assert "no SEC history (foreign filer)" in G.evaluate_tech(r, None, cfg)["flags"]
+
+
+def test_metal_price_growth_from_the_price_history(monkeypatch):
+    from valuescreen import cli, pricedb
+    bars = [{"date": f"{2020 + i}-11-16", "close": 100.0 * 1.1 ** i} for i in range(7)]
+    monkeypatch.setattr(pricedb, "bars", lambda con, sym: bars)
+    monkeypatch.setattr(pricedb, "connect", lambda *a, **k: None)
+    monkeypatch.setattr(pricedb.DB.__class__, "exists", lambda self: True)
+    assert cli._metal_growth("gold")(3.0) == pytest.approx(0.10, abs=1e-3)
+    assert cli._metal_growth("zinc")(3.0) is None
+
+
+def test_quality_cell_shows_roe_and_price_to_book_for_lenders():
+    from valuescreen import html_report as H
+    bank = {"quality_src": {"pb": 0.8, "fair_pb": 1.2, "no_growth_multiple": 12.0, "price": 150.0,
+                            "asset_quality": {"bad_loans_ps": 3.0, "gross_npa": 0.016, "net_npa": 0.0042}}}
+    cell = H.screen_quality(bank)
+    assert cell.startswith("ROE 10%<br>P/ABV 0.8") and "fair 1.2" in cell and "NPA 1.60% / 0.42%" in cell
+    assert H.screen_quality({"quality_src": {"cash_conversion": 0.55}}) == '<span class="neg">cash 55%</span>'
+    assert H.screen_quality({}) == "–"
+
+
+def test_cyclical_and_state_owned_show_as_pills_on_tiered_rows_only():
+    from valuescreen import html_report as H
+    row = {"tier": "shortlist", "flags": ["cyclical", "state-owned", "promoters 51% (< 60%)"]}
+    pills = H.screen_pills(row)
+    assert pills.count('class="pill"') == 2 and "cyclical" in pills and "state-owned" in pills
+    assert H.screen_pills(dict(row, tier="")) == ""

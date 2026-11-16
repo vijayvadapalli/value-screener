@@ -102,15 +102,19 @@ def judge(x: dict, s: dict) -> dict:
         tier = "near miss"
     else:
         tier = ""
+    state_owned = x["ticker"] in set(s.get("state_owned") or [])
     if x.get("cyclical"):
         flags.append("cyclical")
-    if x["ticker"] in set(s.get("state_owned") or []):
+    if state_owned:
         flags.append("state-owned")
     return {"ticker": x["ticker"], "name": x["name"], "tier": tier, "missed": missed, "guards": guards, "flags": flags,
             "pe": pe, "pe_trailing": price / ttm if ttm and ttm > 0 else None, "eps_cagr_5y": c5, "eps_cagr_3y": c3,
             "every_year_positive": positive, "growth_needed": x.get("growth_needed"), "assumed_growth": assumed,
             "expected_return": ret, "promoters": x.get("owners"), "signal": x["signal"], "action": x["action"],
-            "price": price, "price_ccy": x["price_ccy"], "checks": checks}
+            "price": price, "price_ccy": x["price_ccy"], "checks": checks,
+            # for the report's settings panel (assets/screen.js recomputes the tiers in the browser)
+            "eps": x.get("eps"), "nc": x.get("nc"), "state_owned": state_owned, "cyclical": bool(x.get("cyclical")),
+            "pledged": x.get("pledged"), "extra": None}
 
 
 def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
@@ -128,8 +132,11 @@ def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
          "cyclical": (r.get("v2") or {}).get("kind") == "cyclical" or bool(r.get("cyclical")),
          "signal": r["signal"], "action": r["action"], "owners": promoters, "flags": flags}
     row = judge(x, s)
+    src = r
+    row["quality_src"] = {k: src.get(k) for k in ("pb", "fair_pb", "asset_quality", "cash_conversion", "fcf_ps", "price", "no_growth_multiple")}   # the Quality column (html_report)
     if extra:
         row["flags"].append(extra)
+        row["extra"] = extra
     return row
 
 
@@ -145,7 +152,31 @@ def evaluate_us(r: dict, cfg: dict) -> dict:
          "stale": False, "bad_loans": bool((r.get("asset_quality") or {}).get("flags")), "history_break": None,
          "cyclical": bool(r.get("cyclical")), "signal": r["signal"], "action": r["action"],
          "owners": r.get("insiders"), "flags": []}
-    return judge(x, s)
+    row = judge(x, s)
+    from .models import dcf_factor  # noqa: PLC0415
+    from .us_screen import RATE  # noqa: PLC0415
+    src = dict(r, no_growth_multiple=dcf_factor(0.0, cfg, RATE))   # fair P/B = 5-yr ROE × this
+    row["quality_src"] = {k: src.get(k) for k in ("pb", "fair_pb", "asset_quality", "cash_conversion", "fcf_ps", "price", "no_growth_multiple")}
+    return row
+
+
+def evaluate_tech(r: dict, us_row: dict | None, cfg: dict) -> dict:
+    """A company in the tech list: the report's own valuation (`r`: P/E, growth needed, signal) with the EPS history
+    and cash conversion from the SEC figures (`us_row`, the US screen's row for the same ticker; None for foreign
+    filers, which then lack the history). The US thresholds apply."""
+    s = cfg["us_growth_screen"]
+    u = us_row or {}
+    x = {"ticker": r["ticker"], "name": r["name"], "price": r["price"], "price_ccy": r["price_ccy"], "eps": r.get("oe"),
+         "nc": r.get("nc"), "pe": r.get("pe"), "eps_ttm": r["price"] / u["pe"] if u.get("pe") else None,
+         "eps_annual": u.get("eps_annual"), "growth_needed": r.get("implied_growth"),
+         "cash_conversion": u.get("cash_conversion"), "stale": r.get("stale"),
+         "bad_loans": bool((u.get("asset_quality") or {}).get("flags")), "history_break": None,
+         "cyclical": bool(r.get("cyclical")), "signal": r["signal"], "action": r["action"], "owners": u.get("insiders"),
+         "flags": [] if us_row else ["no SEC history (foreign filer)"]}
+    row = judge(x, s)
+    src = dict(r, cash_conversion=u.get("cash_conversion"))
+    row["quality_src"] = {k: src.get(k) for k in ("pb", "fair_pb", "asset_quality", "cash_conversion", "fcf_ps", "price", "no_growth_multiple")}
+    return row
 
 
 def rows_us(us_rows: list[dict], cfg: dict) -> list[dict]:

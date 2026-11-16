@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 35.58
+  value: 35.51
   currency: CAD
   date: '2026-11-16'
   source: yfinance PSK.TO

@@ -16,7 +16,7 @@ shares_m: 259.356608
 balance:
   net_cash: 157121
 price:
-  value: 60.4
+  value: 60.1
   currency: USD
   date: '2026-11-16'
   source: yfinance KAP.IL

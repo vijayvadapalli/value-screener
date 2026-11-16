@@ -17,7 +17,7 @@ balance:
   cash: 4016980.0
   debt: 1031580.0
 price:
-  value: 383.7539
+  value: 375.2
   currency: USD
   date: '2026-11-16'
   source: yfinance TSM

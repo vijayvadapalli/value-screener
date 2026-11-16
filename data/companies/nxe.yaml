@@ -35,7 +35,7 @@ balance:
   amount: -360
   currency: USD
 price:
-  value: 7.595
+  value: 7.4
   currency: USD
   date: '2026-11-16'
   source: yfinance NXE

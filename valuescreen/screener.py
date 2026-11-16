@@ -106,7 +106,7 @@ def parse_v2(html: str) -> dict:
     eps_by_year = dict(zip(y_head, annual["EPS in Rs"]))
     profit_by_year = dict(zip(y_head, annual.get("Net Profit", [])))
     cfo_by_year = dict(zip(c_head, cash.get("Cash from Operating Activity", [])))
-    years = [y for y in y_head if y != "TTM" and eps_by_year.get(y) is not None][-10:]   # skip blank years
+    years = [y for y in y_head if y != "TTM" and eps_by_year.get(y) is not None][-12:]   # skip blank years; 12 for the backtest
     both = [y for y in years if profit_by_year.get(y) is not None and cfo_by_year.get(y) is not None][-5:]
     roe = growth_range(soup, "Return on Equity", "5 Years")
     pct = lambda title, period: (lambda x: None if x is None else x / 100)(growth_range(soup, title, period))  # noqa: E731

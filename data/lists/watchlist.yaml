@@ -1,3 +1,4 @@
 # Edit freely. Tickers must have a file in data/companies.
 name: Metals watchlist
+history_years: 20   # price history for the charts (tools/update_history.py loads it once; Max button on the charts)
 tickers: [AEM, NEM, AGI, CCJ, IVN, YCA, CDE, FSM, IAG, PAAS, RGLD, WPM, FNV, MTA, ABRA, NXE, HL, AG, DSV, KAP, SPUT, CGN, PDN, DNN, CVX, SLB]

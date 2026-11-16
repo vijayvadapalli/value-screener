@@ -15,7 +15,7 @@ balance:
   cash: 860
   debt: 1000
 price:
-  value: 68.85
+  value: 66.59
   currency: USD
   date: '2026-11-16'
   source: yfinance CCJ

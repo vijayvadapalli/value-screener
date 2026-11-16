@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 139.58
+  value: 140.57
   currency: USD
   date: '2026-11-16'
   source: yfinance COP

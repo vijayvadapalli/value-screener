@@ -28,7 +28,7 @@ metals:
   realised: 6.54
 tax_rate: 0.26
 price:
-  value: 26.685
+  value: 26.32
   currency: USD
   date: '2026-11-16'
   source: yfinance OGC

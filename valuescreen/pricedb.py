@@ -25,8 +25,19 @@ CREATE TABLE IF NOT EXISTS bars (ticker TEXT, date TEXT, open REAL, high REAL, l
 CREATE TABLE IF NOT EXISTS actions (ticker TEXT, date TEXT, kind TEXT, value REAL, PRIMARY KEY (ticker, date, kind));
 CREATE TABLE IF NOT EXISTS symbols (ticker TEXT PRIMARY KEY, currency TEXT, first_date TEXT, last_date TEXT,
                                     updated TEXT, lists TEXT);
+CREATE TABLE IF NOT EXISTS depth (ticker TEXT PRIMARY KEY, years INTEGER);   -- how far back a symbol was downloaded
 """
 MINOR_UNITS = {"GBp": ("GBP", 100.0), "GBX": ("GBP", 100.0), "ZAc": ("ZAR", 100.0), "ILA": ("ILS", 100.0)}
+
+
+def depth(con, ticker: str) -> int | None:
+    """How many years of history were asked for when the symbol was (re)loaded; None if not recorded (10 by default)."""
+    row = con.execute("SELECT years FROM depth WHERE ticker = ?", (ticker,)).fetchone()
+    return row[0] if row else None
+
+
+def set_depth(con, ticker: str, years: int):
+    con.execute("INSERT OR REPLACE INTO depth VALUES (?, ?)", (ticker, years))
 
 
 def connect(path: Path | None = None) -> sqlite3.Connection:

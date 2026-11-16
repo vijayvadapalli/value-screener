@@ -259,6 +259,7 @@ Every company in the Nifty Midcap 150 (plus any you add by hand) gets the full N
 | **5-year hold** | expected return a year if growth runs at **half** the past rate (at most 15%) and the shares are sold at 15x after 5 years; the shortlist needs at least **12% a year** (dividends not counted) |
 | **Guards** | cash conversion ≥ 70%, no demerger or one-off history, no bad-loan warning signs (lenders), current results |
 | **Flags** | promoters below 60% or their holding down more than 2 points in a year; cyclicals; your own additions. Pledged shares are not in the data yet – Screener's public page does not show them |
+| **Quality** (a column) | banks and NBFCs: 5-year ROE over P/B – or P/ABV, book less bad loans not provided for – against the fair multiple, and their NPA; the rest: 5-year cash conversion. Cyclicals and state-owned companies show as pills on shortlist and near-miss rows |
 
 **Shortlist** = passes everything. **Near miss** = one thing short: a P/E of 15–20 with growth met, growth of 15–20%
 with the P/E met, or only the return bar. The screen sits at the top of `reports/midcap150.html`; every company's full
@@ -289,8 +290,38 @@ a state-owned bank's growth since 2021 is mostly the bad-loan clean-up, a cycle 
 The report also carries 10 years of daily prices for every company (`update_history.py` now covers the Nifty 50 and
 Midcap 150) and the Nifty Midcap 150 and Midcap 50 indexes (the 150 from 2019 – all Yahoo has). With 150 companies
 its chart images are drawn lighter (`chart_dpi: 100` in the list file), and it is multi-page (`layout: pages`): the
-summary page is under half a MB and each company page about 100 KB. Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. It has no
-profit-vs-price section: that would ask Screener.in for 150 more pages a run.
+summary page is under half a MB and each company page about 100 KB. Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. Its profit-vs-price figures come from the Screener EPS already in
+the company files and the stored daily prices, so they cost no extra Screener requests.
+
+**Settings panel** (`screen_panel: true` in the Midcap 150 and Nifty 50 list files): above the screen, change the rules and the
+table re-sorts at once – max P/E, min EPS growth, min 5-year return, holding years, exit multiple, min promoter holding,
+and switches for a promoter rule, excluding government-owned companies, Midcap 150 only (leaving out the stocks you
+added), excluding cyclicals and showing every company. A funnel shows how many companies survive each step (start →
+after guards → + growth → + P/E → + 5-yr return → + promoters → + government-owned rule). The settings are kept in the
+address, so a link opens with them, e.g. `midcap150.html?pe=20&growth=15&promoters=50&prule=1&psu=1#screen`;
+**Reset to Dr. Gupta's rules** goes back to the defaults in `config.yaml`. The browser recomputes exactly as
+`growth_screen.py` does (`valuescreen/assets/screen.js`; `tests/test_screen_panel.py` runs it in Node against Python for
+many settings). *Holding years* change only the return of the hold – the growth figures stay 5 and 3 years. Without
+JavaScript, or at the default rules, the page shows the table the server wrote. Both headers leave out the metal
+spot prices (`hide_spot: true`) – they are India-only lists. The Midcap 150 only switch appears when the list has stocks
+you added.
+
+**How these rules did** (`backtest: [5, 4, 3, 2]` in the Nifty 50 and Midcap 150 list files; `valuescreen/backtest.py`):
+the screen's rules applied 5, 4, 3 and 2 years ago with only what was known then – the yearly EPS of the years whose
+results were out (60 days after March), the price that day, the promoter holding where the data reaches back – then each
+pick's return to today with dividends, the equal-weighted average, the same for every stock screened (mean and median),
+and the index's price return. On the command line:
+
+```bash
+python -m valuescreen backtest --list midcap150 --years 5     # starts 5, 4, 3 and 2 years ago
+```
+
+Read it with care: it uses **today's** index members (the index of five years ago is not in the data), so every average
+is flattered – compare the picks with *all screened*, not with the index; the latest yearly EPS stands in for the last
+twelve months; there is no net cash, cash conversion or bad-loan check then; the index is price only (no total-return
+index on Yahoo); demergers are not adjusted in the prices. The EPS history in the files starts at FY2017, so the 5-year
+start measures growth and the hold over 4 years (labelled); `fetch_screener.py` now keeps 12 years, so after the next
+quarterly fetch it is exact. Past performance only.
 
 **Screener.in throttles heavy use**: after about 170 pages it sends pages with the figures left blank.
 `fetch_screener.py` refuses those pages and lists them as failed – re-run just those later with `--tickers`.
@@ -368,6 +399,29 @@ open reports/us-screen.html
 - **Report:** filters by signal, index and sector; a table of the median growth needed by sector (where the market is
   cheap or stretched); a shortlist (green, grade A or B, cash conversion ≥ 70%, no debt or dilution flags); each ticker
   links to its Yahoo page and its SEC filings.
+
+### The resource screen (core, oil, miners) and the tech screen
+
+A miner's profit follows its metal, so a plain P/E and EPS-growth screen would mostly measure gold. Core, oil and the
+miners list (`screen: resource` in their list files; `valuescreen/resource_screen.py`, thresholds under
+`resource_screen:` in `config.yaml`) get the same idea translated:
+
+| Your rule | Resource version |
+|---|---|
+| P/E ≤ 15 | price ≤ **fair value**: 15x owner earnings at today's spot (13x cash flow for oil) |
+| – | still ≤ fair value with the metal **20% lower** (where the model knows its sensitivity to the metal) |
+| Growth | **volume growth ≥ 5% a year**: revenue growth over about 3 years with the metal-price change taken out (approximate: revenue is in the company's currency, acquisitions count as growth) |
+| 5-year hold | **≥ 10% a year** with earnings flat at today's spot, sold at fair value |
+| Guards | positive owner earnings, AISC ≤ 60% of spot where known, current results |
+
+Developers and physical holders keep their NAV rules (shortlist at the buy level, near miss up to 1.0× NAV). Share
+dilution is not checked yet (the yearly share counts are not in the data). The tech list (`screen: us-growth`) gets
+the US growth screen below, on its own valuation (owner earnings – so Alphabet's heavy capex shows) with the EPS history
+from the SEC filings; TSMC and ASML file abroad and have no SEC history.
+
+**20 years of prices:** core, tech, oil, miners and watchlist have `history_years: 20` in their list files.
+`update_history.py` loads the deeper history once per company (it remembers how far back it went, and leaves alone
+symbols that already go further – gold from 2000, the dollar index from 1971); their charts show it with a *Max* button.
 
 ### The growth screen for US companies
 
@@ -696,6 +750,7 @@ valuescreen/rules.py       zones (band + details, written as text by zone_text),
 valuescreen/screening.py   the screening rules shared by the full valuation and the US / miners screens: earnings basis,
                            growth and multiple bands, blue caps, colours – one copy
 valuescreen/growth_screen.py  the growth screen (Midcap 150, Nifty 50, US): P/E, 5- and 3-year EPS growth, 5-year return, guards, owner flags
+valuescreen/resource_screen.py  the resource screen (core, oil, miners): fair value, metal −20%, volume growth, 5-year return
 valuescreen/us_pages.py   pages for the interesting US companies: the screen's working, SEC figures, EPS and 20-year price charts
 valuescreen/kinds/        one class per valuation model (producer, developer, physical, growth, leases, liquid): its zone,
                            headline, steps, worked example, key figures, cards, chart, heatmap and price-chart lines.

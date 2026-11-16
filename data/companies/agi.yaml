@@ -22,7 +22,7 @@ metals:
   realised: 4258
 tax_rate: 0.361
 price:
-  value: 28.185
+  value: 28.145
   currency: USD
   date: '2026-11-16'
   source: yfinance AGI

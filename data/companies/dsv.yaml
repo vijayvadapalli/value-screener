@@ -27,7 +27,7 @@ metals:
   aisc: 2293
 tax_rate: 0.4366
 price:
-  value: 9.22
+  value: 9.165
   currency: CAD
   date: '2026-11-16'
   source: yfinance DSV.TO

@@ -76,31 +76,13 @@ def load_prices(con, entries, log=print):
     con.commit()
 
 
-def insiders(symbols: list[str]) -> dict[str, float]:
-    """{Yahoo symbol: share of the company held by insiders} – only for the companies that get a page (one call each)."""
-    import yfinance as yf  # noqa: PLC0415
-    logging.getLogger("yfinance").setLevel(logging.CRITICAL)
-    out = {}
-    for sym in symbols:
-        try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                v = (yf.Ticker(sym).info or {}).get("heldPercentInsiders")
-        except Exception:  # noqa: BLE001 - one missing figure must not stop the run
-            v = None
-        if v is not None:
-            out[sym] = float(v)
-        time.sleep(0.3)
-    return out
-
-
 def pages_for(rows: list[dict], screen_rows: list[dict], cfg: dict, today: dt.date) -> tuple[list[str], list]:
     """The interesting companies' pages: insider ownership, up to 20 years of prices (output/prices.sqlite), the pages."""
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import update_history  # noqa: PLC0415
     tickers = us_pages.interesting(screen_rows)
     by_t = {r["ticker"]: r for r in rows}
-    held = insiders([by_t[t]["yahoo"] for t in tickers])
+    held = us_pages.insiders([by_t[t]["yahoo"] for t in tickers])
     for sr in screen_rows:
         if sr["ticker"] in by_t and by_t[sr["ticker"]]["yahoo"] in held:
             sr["promoters"] = held[by_t[sr["ticker"]]["yahoo"]]   # the owners column: insiders for US companies

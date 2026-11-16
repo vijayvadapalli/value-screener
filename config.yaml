@@ -131,3 +131,13 @@ us_growth_screen:
   min_cash_conversion: 0.70
   page_years: 20               # price history on the pages of the interesting companies (shortlist, near miss, green)
 
+# The resource screen (valuescreen/resource_screen.py) for lists with `screen: resource` – core, oil, miners: the
+# growth screen translated for companies whose profit follows a metal or oil price.
+resource_screen:
+  fair_multiple: 15            # fair value = 15x owner earnings at today's spot (13x cash flow for oil, from the model)
+  metal_drop: 0.20             # still at or below fair value with the metal this much lower
+  min_volume_growth: 0.05      # revenue growth with the metal-price change taken out, a year, about 3 years
+  years: 5                     # the hold: earnings flat at today's spot, sold at fair value
+  min_return: 0.10
+  max_cost_ratio: 0.60         # AISC ÷ spot, where known
+

@@ -3,6 +3,9 @@
 name: NIFTYMIDCAP150 constituents
 folder: midcap150
 screen: growth
+screen_panel: true   # a settings panel above the screen (assets/screen.js): change the rules, share the link
+hide_spot: true      # India-only: no gold / silver / copper / uranium prices in the header
+backtest: [5, 4, 3, 2]   # how the screen's rules did since 5, 4, 3 and 2 years ago (backtest.py)
 layout: pages        # a summary page plus one page per company (reports/midcap150/<ticker>.html)
 chart_dpi: 100       # 150+ companies: lighter chart images keep the page about 15 MB
 profit: local        # profit vs price from the company files and price history – no extra Screener.in downloads

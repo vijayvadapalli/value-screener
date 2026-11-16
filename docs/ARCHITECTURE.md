@@ -39,7 +39,7 @@ flowchart LR
     CFG["config.yaml + lists<br/>spot · FX · tiers · zones"]:::done
     FDB["output/us/us_facts.sqlite<br/>SEC facts · 6y closes · runs"]:::done
     CACHE["Screen caches · runs.json · signals_log.csv"]:::done
-    PDB["output/prices.sqlite<br/>10y daily OHLCV · splits · dividends"]:::done
+    PDB["output/prices.sqlite<br/>10–20y daily OHLCV · splits · dividends"]:::done
     RES["data/private/research/*.yaml<br/>levels · stance · notes"]:::priv
   end
 
@@ -114,6 +114,8 @@ flowchart LR
 | `models.py`, `leases.py` | the valuation models (producer / streamer / royalty, oil cash-flow, developer NAV, physical NAV, growth reverse DCF at 10% US / 12% India, contracted leases, liquid assets) |
 | `rules.py`, `v2.py` | zones (a band plus details; the text is written from them), signals (green / blue / red), buy and add levels, flags, stale-data check; Nifty v2 earnings data |
 | `growth_screen.py` | the growth screen, one set of rules (`judge`) with an adapter per market: India (Midcap 150, Nifty 50 – P/E ≤ 15, EPS growth ≥ 20% over 5 and 3 years, 5-year return ≥ 12%, promoter flags) and the US (a little more liberal – P/E ≤ 18, growth ≥ 15%, return ≥ 10%, insiders shown); shortlist and near misses at the top of the report |
+| `resource_screen.py` | the resource screen for core, oil and miners: price ≤ fair value (15x owner earnings at spot), still ≤ it with the metal 20% lower, volume growth ≥ 5% (revenue growth less the metal-price change), ≥ 10% a year over a 5-year hold; NAV models on their NAV rules |
+| `backtest.py` | how the growth screen's rules did: picks 5, 4, 3 and 2 years ago with only the data known then, returns since (with dividends) against all screened and the index; `python -m valuescreen backtest` and a report section |
 | `us_pages.py` | pages for the interesting US companies (shortlist, near misses, green signals): the screen's working, SEC figures, a 10-year EPS chart and a 20-year price chart with our value lines |
 | `screening.py` | the screening rules, one copy for the full valuation and the US / miners screens: earnings basis (cyclical, financial, history break), growth and multiple bands, blue caps, colours |
 | `asset_quality.py` | bad loans at banks and other lenders: adjusted book value, warning signs that cap at blue (India and US) |
@@ -132,6 +134,7 @@ flowchart LR
 |---|---|
 | `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links; optional parts passed as one `ReportExtras`. Big lists (`layout: pages`: Nifty 50, Midcap 150) are multi-page – a summary page plus `<list>/<ticker>.html` per company and shared files in `assets/`, published with `loader.publish_dir` |
 | `page.py`, `assets/` | the page shell every report shares (value report, screens, model portfolios, research) and all their CSS and JavaScript as files |
+| `assets/screen.js` | the Midcap 150 screen's settings panel: recomputes the growth screen in the browser exactly as `growth_screen.py` does, keeps the settings in the address, draws the funnel (tested against Python in Node) |
 | `kinds/` | one class per valuation model – producer (and cash-flow), developer, physical, growth, leases, liquid – owning its zone, headline, calculation steps, worked example, key figures, cards, main chart, heatmap grid and price-chart lines; the reports ask the model instead of checking which one it is |
 | `charts.py`, `plot.py`, `fmt.py`, `style.py`, `wording.py` | the shared charts (band, heatmap, EPS history) and chart basics; text formatting; one look (Inter, palette); the shared words and notes |
 | `report.py` | ranked CSV, signal log, heatmaps |

@@ -20,7 +20,7 @@ balance:
   cash: 56586
   debt: 33366
 price:
-  value: 161.8214
+  value: 155.815
   currency: USD
   date: '2026-11-16'
   source: yfinance NVDA

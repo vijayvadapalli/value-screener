@@ -25,7 +25,7 @@ metals:
   realised: 4195
 tax_rate: 0.4654
 price:
-  value: 12.995
+  value: 12.785
   currency: USD
   date: '2026-11-16'
   source: yfinance AG

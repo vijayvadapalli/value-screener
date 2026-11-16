@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 69.59
+  value: 68.8
   currency: CAD
   date: '2026-11-16'
   source: yfinance CNQ.TO

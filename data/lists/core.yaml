@@ -6,6 +6,8 @@
 # (or at or below 0.8x NAV).
 # Tiers live in config.yaml (tiers:). IVPAF (Ivanhoe's US OTC line) is valued from the TSX file, IVN.
 name: Core
+screen: resource        # resource_screen.py: value, metal −20%, volume growth, 5-year return
+history_years: 20   # price history for the charts (tools/update_history.py loads it once; Max button on the charts)
 tickers:
   # Royalties
   - {ticker: FNV}
