@@ -130,6 +130,11 @@ def _profit_rows(a, tickers, companies, results, folder, out, log):
     """Profit-vs-price rows for the run's companies; figures cached per day in output/<folder>/profit_vs_price_cache/."""
     entries = loader.load_list_entries(a.list) if a.list else [{"ticker": t} for t in tickers]
     entries = [x for x in entries if x["ticker"] in results]
+    if a.list and loader.list_settings(a.list).get("profit") == "local":   # from the company files and price history
+        con = pricedb.connect() if pricedb.DB.exists() else None
+        raw = growth_data.collect_local(entries, companies, con)
+        log.append(f"profit vs price: {len(raw)} of {len(entries)} from the company files and price history (no downloads)")
+        return pvp.rows(entries, raw, results, companies)
     cache = out / "profit_vs_price_cache" / f"{a.list or folder or 'all'}-{dt.date.today().isoformat()}.json"
     raw = growth_data.collect(entries, companies, folder, cache, log=log.append)
     return pvp.rows(entries, raw, results, companies)

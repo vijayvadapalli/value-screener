@@ -164,6 +164,61 @@ def screener_record(symbol: str) -> dict:
             "base_label": f"FY{base[-2:]}" if base else None, "latest_label": "TTM"}
 
 
+# ------------------------------------------------------------------------------------------------- from data already held
+def local_record(company: dict, closes: list[tuple[dt.date, float]]) -> dict | None:
+    """Profit vs price with no downloads: yearly and quarterly EPS from the company file's `v2` block (Screener.in
+    figures, fetched for the valuation) and daily closes from the price history (output/prices.sqlite). The same method
+    as the Yahoo records: EPS about three years back against the latest twelve months. None without yearly EPS."""
+    v2 = company.get("v2") or {}
+    labels, eps_y = v2.get("years") or [], v2.get("eps_annual") or []
+    if not eps_y or len(labels) != len(eps_y):
+        return None
+    annual = {}
+    for lab, x in zip(labels, eps_y):
+        try:
+            if x is not None:
+                annual[screener.month_end(lab)] = x
+        except (ValueError, KeyError):   # an odd label, e.g. 'Mar 202315m' for a 15-month year: left out
+            pass
+    if not annual:
+        return None
+    quarters = [x for x in (v2.get("eps_quarters") or []) if x is not None]
+    end = dt.date.fromisoformat(str((company.get("period") or {}).get("end") or max(annual)))
+    if len(quarters) >= 4 and end > max(annual):
+        eps_now, latest = sum(quarters[-4:]), f"TTM {end:%b %y}"
+    else:
+        end = max(annual)
+        eps_now, latest = annual[end], f"FY{end:%y}"
+    price = (company.get("price") or {}).get("value")
+    rec = {"source": "v2", "symbol": company.get("yahoo") or company["ticker"], "currency": company.get("currency", "INR"),
+           "report_ccy": company.get("currency", "INR"), "name": company.get("name"), "price": price,
+           "price_date": str((company.get("price") or {}).get("date") or (closes[-1][0] if closes else dt.date.today())),
+           "roe": v2.get("roe_5y"), "pe_now": price / eps_now if price and eps_now and eps_now > 0 else None,
+           "eps_now": eps_now, "latest_label": latest}
+    if not closes or not price:
+        return {**rec, "nm_reason": "no price history"}
+    year_ago = _close_on_or_before(closes, closes[-1][0] - dt.timedelta(days=365))
+    rec["price_change_1y"] = closes[-1][1] / year_ago - 1 if year_ago else None
+    base, note = _base_year(annual, end)
+    if base is None:
+        return {**rec, "nm_reason": "less than two years of results"}
+    return {**rec, "years": (end - base).days / 365.25, "base_label": f"FY{base:%y}", "note": note,
+            "eps_then": annual[base], "price_then": _close_on_or_before(closes, base)}
+
+
+def collect_local(entries: list[dict], companies: dict, con) -> dict:
+    """{ticker: raw figures} from the company files and the price history – see local_record."""
+    from . import pricedb  # noqa: PLC0415
+    out = {}
+    for entry in entries:
+        c = companies.get(entry["ticker"]) or {}
+        bars = pricedb.bars(con, c.get("yahoo") or entry["ticker"]) if con else []
+        rec = local_record(c, [(dt.date.fromisoformat(b["date"]), b["close"]) for b in bars if b["close"]])
+        if rec:
+            out[entry["ticker"]] = rec
+    return out
+
+
 # ------------------------------------------------------------------------------------------------- one list
 def is_indian(entry: dict, company: dict | None, folder: str | None) -> bool:
     symbol = (company or {}).get("yahoo") or entry.get("yahoo") or ""

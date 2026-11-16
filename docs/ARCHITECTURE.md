@@ -117,7 +117,7 @@ flowchart LR
 | `us_pages.py` | pages for the interesting US companies (shortlist, near misses, green signals): the screen's working, SEC figures, a 10-year EPS chart and a 20-year price chart with our value lines |
 | `screening.py` | the screening rules, one copy for the full valuation and the US / miners screens: earnings basis (cyclical, financial, history break), growth and multiple bands, blue caps, colours |
 | `asset_quality.py` | bad loans at banks and other lenders: adjusted book value, warning signs that cap at blue (India and US) |
-| `profit_vs_price.py`, `growth_data.py`, `screener.py` | profit growth vs price growth and its A–D grade; Yahoo and Screener.in fetching |
+| `profit_vs_price.py`, `growth_data.py`, `screener.py` | profit growth vs price growth and its A–D grade; Yahoo and Screener.in fetching, or (`profit: local`, Midcap 150) the company files' EPS and the stored prices with no downloads |
 | `miner_screen.py`, `etf_holdings.py` | miners quick screen from ETF holdings |
 | `us_screen.py`, `us_fundamentals.py`, `us_universe.py`, `sec.py`, `factsdb.py` | S&P 500 / Nasdaq-100 screen from SEC figures, with its database |
 | `model_portfolio.py` | candidates from every screen, value / quality / momentum scores, sleeves, sizing, report |

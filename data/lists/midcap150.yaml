@@ -5,6 +5,7 @@ folder: midcap150
 screen: growth
 layout: pages        # a summary page plus one page per company (reports/midcap150/<ticker>.html)
 chart_dpi: 100       # 150+ companies: lighter chart images keep the page about 15 MB
+profit: local        # profit vs price from the company files and price history – no extra Screener.in downloads
 tickers:
 - ticker: 360ONE
   yahoo: 360ONE.NS

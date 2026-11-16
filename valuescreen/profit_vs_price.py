@@ -98,8 +98,13 @@ def rows(entries: list[dict], raw: dict, results: dict, companies: dict) -> list
     return sorted(out, key=sort_key)
 
 
+SOURCE_LABEL = {"screener": "Screener.in", "yahoo": "Yahoo Finance statements",
+                "v2": "Screener.in yearly and quarterly EPS in the company file, and the stored daily prices"}
+
+
 def sources_text(rows_: list[dict], as_of: dt.date) -> str:
     used = sorted({"Screener.in company pages (3-year compounded growth)" if r["source"] == "screener" else
+                   "Screener.in EPS in the company files and stored daily prices" if r["source"] == "v2" else
                    "Yahoo Finance annual and quarterly statements and prices" for r in rows_})
     return "; ".join(used) + f", fetched {as_of:%d %b %Y}; value signals from this project's company files."
 

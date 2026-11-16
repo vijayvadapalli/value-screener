@@ -62,7 +62,7 @@ def steps(quick: bool):
         out += [("report – nifty50", ["-m", "valuescreen", "run", "--list", "nifty50"]),
                 # no profit-vs-price section: it would ask Screener.in for 150 more pages a run (it throttles); the screen
                 # has its own 5- and 3-year EPS growth from the company files
-                ("report – midcap150 (growth screen)", ["-m", "valuescreen", "run", "--list", "midcap150", "--no-profit"]),
+                ("report – midcap150 (growth screen)", ["-m", "valuescreen", "run", "--list", "midcap150"]),
                 ("screen – miners", ["tools/screen_miners.py"]),
                 ("screen – S&P 500 / Nasdaq-100", ["tools/screen_us.py"])]
     out.append(("model portfolios", ["tools/model_portfolio.py"]))

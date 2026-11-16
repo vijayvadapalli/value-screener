@@ -627,7 +627,7 @@ sales, profit and the share price over the same years, and what that did to the 
 | D | rose more than a third | the price ran ahead of profits |
 | n/m | – | a loss at either end, missing figures, or valued on assets (developers, physical holders, leases) |
 
-Indian companies use Screener.in's 3-year compounded growth (net profit). Everything else uses Yahoo Finance statements
+Indian companies use Screener.in's 3-year compounded growth (net profit). The Midcap 150 (`profit: local` in its list file) needs no extra downloads: it compares yearly EPS from the company files with the stored daily prices, the same way as Yahoo below. Everything else uses Yahoo Finance statements
 from the financial year about three years back to the latest twelve months (diluted EPS, so buybacks count); if that year
 was a loss it starts from the next profitable year (about two years). Prices are in the exchange's currency, sales and
 profits as the company reports them – growth rates and the P/E change do not depend on the currency. Figures are cached

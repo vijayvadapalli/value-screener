@@ -182,21 +182,39 @@ def _pvp_block(p):
     ccy = p["report_ccy"]
     unit = "cr" if p.get("source") == "screener" else "m"
     amount = lambda x: pvp._amount(x, ccy, unit)  # noqa: E731
-    rows = [("Sales growth a year", pct(p["sales_growth"])),
-            ("Profit growth a year" + (" (EPS)" if p.get("source") == "yahoo" else ""), pct(p["profit_growth"])),
-            ("Net profit then → now", f"{amount(p.get('profit_then'))} → {amount(p.get('profit_now'))}"),
+    local = p.get("source") == "v2"
+    then_now = (("EPS then → now", f"{S.money(p['eps_then'], ccy, 2)} → {S.money(p['eps_now'], ccy, 2)}") if local else
+                ("Net profit then → now", f"{amount(p.get('profit_then'))} → {amount(p.get('profit_now'))}"))
+    rows = [*([] if local else [("Sales growth a year", pct(p["sales_growth"]))]),
+            ("Profit growth a year" + (" (EPS)" if p.get("source") in ("yahoo", "v2") else ""), pct(p["profit_growth"])),
+            then_now,
             ("Share price growth a year", pct(p["price_growth"])),
             ("Share price, last year", pct(p.get("price_change_1y"))),
             ("P/E change over the period", pct(p["pe_change"])),
             ("P/E now", "–" if not p.get("pe_now") else f"{p['pe_now']:.1f}"),
-            ("Return on equity", "–" if p.get("roe") is None else f"{p['roe']*100:.0f}%"),
+            ("Return on equity" + (" (5-year average)" if local else ""), "–" if p.get("roe") is None else f"{p['roe']*100:.0f}%"),
             ("Period", f"{e(p.get('base_label') or '?')} → {e(p.get('latest_label') or '?')} ({p['years']:.1f} years)")]
     table = "".join(f"<tr><td>{k}</td><td>{v}</td></tr>" for k, v in rows)
     source = p.get("page") or ""
     src = f' · <a href="{e(source)}" target="_blank" rel="noopener">Screener page</a>' if source else ""
     return (f'<div class="pvp"><div class="bigrade g{p["grade"].replace("/", "")}">{e(p["grade"])}</div><div>'
             f'<p>{pvp.comment(p)}</p><table class="kv">{table}</table>'
-            f'<p class="muted">Source: {"Screener.in" if p.get("source") == "screener" else "Yahoo Finance statements"}{src}</p></div></div>')
+            f'<p class="muted">Source: {pvp.SOURCE_LABEL.get(p.get("source"), "Yahoo Finance statements")}{src}</p></div></div>')
+
+
+SCREENER_RE = re.compile(r"https?://(?:www\.)?screener\.in/company/[^\s,;)]+", re.I)
+
+
+def screener_url(c: dict) -> str | None:
+    """The company's Screener.in page: the one named in its sources, else built from the NSE / BSE ticker; None for
+    companies not listed in India."""
+    for s in c.get("sources", []):
+        m = SCREENER_RE.search(str(s))
+        if m:
+            return m.group(0).rstrip(".")
+    if str(c.get("yahoo", "")).upper().endswith((".NS", ".BO")):
+        return f"https://www.screener.in/company/{c['ticker']}/consolidated/"
+    return None
 
 
 def company_section(r, c, cfg, p, neighbours, chart_dir, tech, pchart=None):
@@ -210,6 +228,8 @@ def company_section(r, c, cfg, p, neighbours, chart_dir, tech, pchart=None):
     meta = [kinds.of(r["model"]).label] + ([f"tier {r['tier']}"] if r.get("tier") else [])
     reported = f", reported {day(r['period_reported'])}" if r.get("period_reported") else ""
     meta += [f"results {e(r['period'])} (to {day(r['period_end'])}{reported})", f"price {price_date(r)} · {e(r.get('price_source', ''))}"]
+    if url := screener_url(c):
+        meta.append(f'<a href="{e(url)}" target="_blank" rel="noopener">Screener.in page – full financials ↗</a>')
     flags = " ".join(f"[{e(f)}]" for f in r.get("flags", []))
     band = charts.band(r, chart_dir / f"{t}_band.png")
     curve = charts.curve(r, c, cfg, chart_dir / f"{t}_curve.png")
