@@ -411,6 +411,7 @@ class ReportExtras:
     market_rows: list = field(default_factory=list)
     screen_rows: list = field(default_factory=list)   # the growth screen (lists with `screen: growth`)
     chart_dpi: int | None = None                      # lower for big lists (list setting `chart_dpi`) to keep the page light
+    pages: str | None = None                          # multi-page: a summary page plus <pages>/<ticker>.html per company
 
 
 def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], path: Path, title: str,
@@ -472,14 +473,53 @@ and physical holders, and for growth companies the yearly growth the price needs
 <p class="notes">{RULES_NOTE}</p>
 {pvp_html}
 {growth_html}
-{market_html}{''.join(sections)}{etf_html}{heat_html}
+{market_html}{'' if x.pages else ''.join(sections)}{etf_html}{'' if x.pages else heat_html}
 <section class="company"><h2>Run log</h2><ul class="small">{log}</ul></section>
 <footer>Educational framework, not investment advice. Previous run's figures in (brackets). Prices in each exchange's currency;
 sales and profits as the company reports them.</footer>
 """
+    if x.pages:
+        return write_pages(path, x.pages, title, body, sections, ordered, bool(price_charts or market_rows), heat_html)
     html = page.document(f"{e(title)} – value vs price", page.report_css(), body,
                          scripts=f"<script>{page.asset('report.js')}</script>{charts_js}")
     path.write_text(html, encoding="utf-8")
+    return path
+
+
+COMPANY_LINK = re.compile(r'href="#c-([^"]+)"')
+PAGE_FOOTER = "<footer>Educational framework, not investment advice. Prices in each exchange's currency; sales and profits as the company reports them.</footer>"
+
+
+def write_pages(path: Path, pages: str, title: str, body: str, sections: list[str], ordered: list[dict], charts_on: bool,
+                heat_html: str = "") -> Path:
+    """Multi-page report: `path` is the summary page (no company sections; its company links go to <pages>/<ticker>.html),
+    and each company gets its own page with the same section, linking back to the summary and to its neighbours. The
+    styles and scripts go to assets/ next to the summary page, loaded once and shared by every page, and the
+    cross-company heatmaps get a page of their own (<pages>/heatmaps.html). A copy of the summary page is also written
+    as <pages>.html, the name the company pages link back to."""
+    import shutil  # noqa: PLC0415
+    folder = path.parent
+    page.write_shared(folder / "assets")
+    body = COMPANY_LINK.sub(lambda m: f'href="{pages}/{m.group(1)}.html"', body).replace('href="#heatmaps"', f'href="{pages}/heatmaps.html"')
+    summary = page.document(f"{e(title)} – value vs price", "", body,
+                            scripts=page.shared_scripts("assets/", charts=charts_on, table=True), head=page.shared_style("assets/"))
+    path.write_text(summary, encoding="utf-8")
+    if path.name != f"{pages}.html":
+        (folder / f"{pages}.html").write_text(summary, encoding="utf-8")
+    company_dir = folder / pages
+    if company_dir.exists():
+        shutil.rmtree(company_dir)   # companies that left the list must not linger
+    company_dir.mkdir(parents=True)
+    for r, section in zip(ordered, sections):
+        section = section.replace('href="#summary"', f'href="../{pages}.html#summary"')
+        section = COMPANY_LINK.sub(lambda m: f'href="{m.group(1)}.html"', section)
+        html = page.document(f"{e(r['display_ticker'])} – {e(r['name'])} · {e(title)}", "", f"\n{section}\n{PAGE_FOOTER}\n",
+                             scripts=page.shared_scripts("../assets/", charts=charts_on), head=page.shared_style("../assets/"))
+        (company_dir / f"{r['ticker']}.html").write_text(html, encoding="utf-8")
+    if heat_html:   # the cross-company heatmaps are big with 150 companies: a page of their own
+        back = f'<nav class="crumbs"><a href="../{pages}.html#summary">↑ Summary</a></nav>'
+        (company_dir / "heatmaps.html").write_text(page.document(f"Scenario heatmaps · {e(title)}", "", f"\n{back}\n{heat_html}\n{PAGE_FOOTER}\n",
+                                                                 head=page.shared_style("../assets/")), encoding="utf-8")
     return path
 
 

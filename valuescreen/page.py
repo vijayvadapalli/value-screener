@@ -4,6 +4,7 @@
     asset(name)        → the text of valuescreen/assets/<name>
     report_css()       → assets/report.css with the palette filled in (the base style of every page)
     chart_scripts()    → Lightweight Charts, the average colours and assets/charts.js, for pages with price charts
+    write_shared(folder), shared_style(prefix), shared_scripts(prefix)   → the same as files, for multi-page reports
 
 assets/report.css uses $NAME placeholders for the colours in style.py (CSS itself never uses $).
 """
@@ -45,6 +46,34 @@ def chart_scripts() -> str:
     return (f"<script>{VENDOR.read_text(encoding='utf-8')}</script>"
             f"<script>window.PC_SMA_COLOURS = {json.dumps({str(k): v for k, v in SMA_COLOURS.items()})};</script>"
             f"<script>{asset('charts.js')}</script>")
+
+
+# ---- multi-page reports: the styles and scripts as files every page shares (the browser loads them once)
+
+def write_shared(folder: Path) -> Path:
+    """Writes the shared files into `folder` (reports/assets/ when published): the filled-in stylesheet, the table
+    script, the chart script, the charting library and the moving-average colours."""
+    from .price_chart import SMA_COLOURS  # noqa: PLC0415
+    folder.mkdir(parents=True, exist_ok=True)
+    files = {"report.css": report_css(), "report.js": asset("report.js"), "charts.js": asset("charts.js"),
+             "sma-colours.js": f"window.PC_SMA_COLOURS = {json.dumps({str(k): v for k, v in SMA_COLOURS.items()})};"}
+    if VENDOR.exists():
+        files["lightweight-charts.js"] = VENDOR.read_text(encoding="utf-8")
+    for name, text in files.items():
+        (folder / name).write_text(text, encoding="utf-8")
+    return folder
+
+
+def shared_style(prefix: str) -> str:
+    return f'<link rel="stylesheet" href="{prefix}report.css">'
+
+
+def shared_scripts(prefix: str, charts: bool = True, table: bool = False) -> str:
+    """Script tags for the shared files; `prefix` is the path to the assets folder ("assets/" or "../assets/")."""
+    out = f'<script src="{prefix}report.js"></script>' if table else ""
+    if charts and VENDOR.exists():
+        out += "".join(f'<script src="{prefix}{n}"></script>' for n in ("lightweight-charts.js", "sma-colours.js", "charts.js"))
+    return out
 
 
 def document(title: str, css: str, body: str, scripts: str = "", head: str = "", main_attrs: str = "") -> str:

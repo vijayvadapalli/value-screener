@@ -118,3 +118,40 @@ def test_state_owned_companies_are_flagged():
     cfg = {"growth_screen": dict(CFG["growth_screen"], state_owned=["TEST"])}
     assert "state-owned" in G.evaluate(result(), company(), cfg)["flags"]
     assert "state-owned" not in G.evaluate(result(), company(), CFG)["flags"] or "TEST" in CFG["growth_screen"].get("state_owned", [])
+
+
+def test_multi_page_report_splits_companies_and_shares_assets(tmp_path):
+    from test_playbook import COS, cfg_with
+    from valuescreen import html_report
+    from valuescreen.engine import run
+    cfg = cfg_with()
+    tickers = ["AEM", "CCJ", "YCA"]
+    res = run(COS, tickers, cfg)
+    (tmp_path / "single").mkdir()
+    single = html_report.build(res, COS, cfg, [], tmp_path / "single" / "s.html", "Test")
+    path = html_report.build(res, COS, cfg, [], tmp_path / "Test_16Nov2026.html", "Test", html_report.ReportExtras(pages="testlist"))
+    summary = path.read_text()
+    assert 'id="c-AEM"' not in summary and 'href="testlist/AEM.html"' in summary and 'href="assets/report.css"' in summary
+    assert (tmp_path / "testlist.html").read_text() == summary
+    aem = (tmp_path / "testlist" / "AEM.html").read_text()
+    assert 'id="c-AEM"' in aem and 'href="../testlist.html#summary"' in aem and 'href="CCJ.html"' in aem
+    assert {p.name for p in (tmp_path / "assets").iterdir()} >= {"report.css", "report.js", "charts.js", "sma-colours.js"}
+    # the company's section is the one the single page has, apart from the links
+    import re
+    old = re.search(r'<section class="company" id="c-AEM">.*?</section>', single.read_text(), re.S).group(0)
+    new = re.search(r'<section class="company" id="c-AEM">.*?</section>', aem, re.S).group(0)
+    new = re.sub(r'href="([^"/#]+)\.html"', r'href="#c-\1"', new.replace('href="../testlist.html#summary"', 'href="#summary"'))
+    assert new == old
+
+
+def test_publishing_a_folder_replaces_it_and_refuses_private_folders(tmp_path, monkeypatch):
+    monkeypatch.setattr(loader, "reports_folder", lambda: tmp_path / "reports")
+    src = tmp_path / "out" / "testlist"
+    src.mkdir(parents=True)
+    (src / "A.html").write_text("a")
+    (tmp_path / "reports" / "testlist").mkdir(parents=True)
+    (tmp_path / "reports" / "testlist" / "OLD.html").write_text("old")      # a company that left the list
+    target = loader.publish_dir(src, "testlist")
+    assert sorted(p.name for p in target.iterdir()) == ["A.html"]
+    with pytest.raises(loader.ValidationError):
+        loader.publish_dir(src, "private-notes")

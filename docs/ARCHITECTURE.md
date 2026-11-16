@@ -129,7 +129,7 @@ flowchart LR
 ### Outputs (`valuescreen/`)
 | Module | Output |
 |---|---|
-| `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links; optional parts passed as one `ReportExtras` |
+| `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links; optional parts passed as one `ReportExtras`. Big lists (`layout: pages`: Nifty 50, Midcap 150) are multi-page – a summary page plus `<list>/<ticker>.html` per company and shared files in `assets/`, published with `loader.publish_dir` |
 | `page.py`, `assets/` | the page shell every report shares (value report, screens, model portfolios, research) and all their CSS and JavaScript as files |
 | `kinds/` | one class per valuation model – producer (and cash-flow), developer, physical, growth, leases, liquid – owning its zone, headline, calculation steps, worked example, key figures, cards, main chart, heatmap grid and price-chart lines; the reports ask the model instead of checking which one it is |
 | `charts.py`, `plot.py`, `fmt.py`, `style.py`, `wording.py` | the shared charts (band, heatmap, EPS history) and chart basics; text formatting; one look (Inter, palette); the shared words and notes |

@@ -30,6 +30,9 @@ shows whenever the data is out of date.
 | Nifty Midcap 150 – growth screen | [midcap150.html](https://vijayvadapalli.github.io/value-screener/reports/midcap150.html) |
 
 Each run replaces these with the newest version, so the links never change; the date is inside each report.
+The two big lists – Nifty 50 and Midcap 150 – are **multi-page**: a light summary page (the screen, the summary table,
+the indexes; under half a MB) that links to one page per company (about 100 KB each), so they open quickly on a phone.
+The other reports are single files you can send as one attachment.
 
 ## How to read a report
 
@@ -285,7 +288,8 @@ a state-owned bank's growth since 2021 is mostly the bad-loan clean-up, a cycle 
 
 The report also carries 10 years of daily prices for every company (`update_history.py` now covers the Nifty 50 and
 Midcap 150) and the Nifty Midcap 150 and Midcap 50 indexes (the 150 from 2019 – all Yahoo has). With 150 companies
-its chart images are drawn lighter (`chart_dpi: 100` in the list file) to keep the page about 15 MB (8 MB to download). Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. It has no
+its chart images are drawn lighter (`chart_dpi: 100` in the list file), and it is multi-page (`layout: pages`): the
+summary page is under half a MB and each company page about 100 KB. Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. It has no
 profit-vs-price section: that would ask Screener.in for 150 more pages a run.
 
 **Screener.in throttles heavy use**: after about 170 pages it sends pages with the figures left blank.
@@ -639,7 +643,10 @@ Font License). Install these only if you use the feature:
 
 ## Publishing the reports
 
-`reports/` holds only the latest report for each list, so committing it publishes just those:
+`reports/` holds only the latest report for each list, so committing it publishes just those. A multi-page list
+(`layout: pages` in its list file) also has a folder of company pages, `reports/<list>/<ticker>.html` (plus
+`heatmaps.html`), and every multi-page list shares `reports/assets/` – the stylesheet, the scripts and the charting
+library, which the browser loads once. Each run replaces a list's folder, so companies that left the list disappear:
 
 ```bash
 git add reports/

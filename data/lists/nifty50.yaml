@@ -3,6 +3,7 @@
 name: NIFTY50 constituents
 folder: nifty50
 screen: growth
+layout: pages        # a summary page plus one page per company (reports/nifty50/<ticker>.html)
 tickers:
 - ticker: ADANIENT
   yahoo: ADANIENT.NS

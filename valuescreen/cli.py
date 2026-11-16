@@ -206,17 +206,22 @@ def main(argv=None):
     report.append_signals(vals, grow, out / "signals_log.csv", cfg["as_of"])
     name = a.list or folder
     title = list_title(name)
+    settings = loader.list_settings(a.list) if a.list else {}
     files = []
     if results:
         extras = html_report.ReportExtras(previous=previous or {}, tech=tech, lookthroughs=lookthroughs,
                                           heatmaps=report.make_heatmaps(vals, grow, cfg, out), log_lines=log,
                                           price_charts=pcharts, market_rows=market_rows, screen_rows=screen_rows,
-                                          chart_dpi=loader.list_settings(a.list).get("chart_dpi") if a.list else None)
+                                          chart_dpi=settings.get("chart_dpi"),
+                                          pages=name if settings.get("layout") == "pages" else None)
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
                                        extras))
     if not a.out:   # the latest report, under a fixed name, for git and GitHub Pages
         for f in list(files):
             files.append(loader.publish(f, name, ".html"))
+        if settings.get("layout") == "pages" and results:   # the company pages and the files they share
+            files.append(loader.publish_dir(out / name, name))
+            files.append(loader.publish_dir(out / "assets", "assets"))
     files.append(out / "ranked.csv")
     history.save(runs, cfg["as_of"], results)
     _print_summary(cfg, vals, grow, lookthroughs, log, files)

@@ -1,0 +1,1 @@
+window.PC_SMA_COLOURS = {"20": "#A0AEC0", "50": "#17895F", "200": "#9B2C2C"};

@@ -146,6 +146,21 @@ def publish(dated: Path, list_name: str | None, kind: str) -> Path:
     return target
 
 
+def publish_dir(src: Path, name: str) -> Path:
+    """Copies a folder of report files (a multi-page report's company pages, or its assets) to reports/<name>/,
+    replacing what was there so pages of companies that left a list do not linger."""
+    import shutil  # noqa: PLC0415
+    src = Path(src).resolve()
+    private_dirs = [(ROOT / "data" / "private").resolve(), (ROOT / "output" / "private").resolve()]
+    if any(d == src or d in src.parents for d in private_dirs) or "private" in name.lower():
+        raise ValidationError(f"refusing to publish a private folder: {src}")
+    target = reports_folder() / name
+    if target.exists():
+        shutil.rmtree(target)
+    shutil.copytree(src, target)
+    return target
+
+
 def company_folders() -> dict[str, Path]:
     """Every folder holding company files, keyed by its path relative to the project."""
     found = [ROOT / "data" / "companies"] + sorted((ROOT / "data").glob("*/companies"))

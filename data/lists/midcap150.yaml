@@ -3,6 +3,7 @@
 name: NIFTYMIDCAP150 constituents
 folder: midcap150
 screen: growth
+layout: pages        # a summary page plus one page per company (reports/midcap150/<ticker>.html)
 chart_dpi: 100       # 150+ companies: lighter chart images keep the page about 15 MB
 tickers:
 - ticker: 360ONE
