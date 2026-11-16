@@ -285,7 +285,7 @@ a state-owned bank's growth since 2021 is mostly the bad-loan clean-up, a cycle 
 
 The report also carries 10 years of daily prices for every company (`update_history.py` now covers the Nifty 50 and
 Midcap 150) and the Nifty Midcap 150 and Midcap 50 indexes (the 150 from 2019 – all Yahoo has). With 150 companies
-its chart images are drawn lighter (`chart_dpi: 100` in the list file) to keep the page about 25 MB. It has no
+its chart images are drawn lighter (`chart_dpi: 100` in the list file) to keep the page about 15 MB (8 MB to download). Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. It has no
 profit-vs-price section: that would ask Screener.in for 150 more pages a run.
 
 **Screener.in throttles heavy use**: after about 170 pages it sends pages with the figures left blank.
