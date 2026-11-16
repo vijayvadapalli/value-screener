@@ -155,3 +155,36 @@ def test_publishing_a_folder_replaces_it_and_refuses_private_folders(tmp_path, m
     assert sorted(p.name for p in target.iterdir()) == ["A.html"]
     with pytest.raises(loader.ValidationError):
         loader.publish_dir(src, "private-notes")
+
+
+@pytest.mark.parametrize("eps, ni, shares_then, shares_now, splits, expected", [
+    (49.16, 34.34e9, None, 12.37e9, [20.0], 2.458),       # Alphabet 2019: not restated – the 2022 split applies
+    (2.93, 40.27e9, None, 12.37e9, [20.0], 2.93),         # Alphabet 2020: already restated in a later filing
+    (1.73, 4.33e9, 2.51e9, 24.1e9, [4.0, 10.0], 0.173),   # Nvidia FY2021: restated for the 2021 split, not the 2024 one
+    (111.82, 4.87e9, 43.5e6, 743.7e6, [25.0], 4.4728),    # Booking 2019: not restated
+    (3.28, 57.4e9, 17.5e9, 14.5e9, [], 3.28),             # no split since
+])
+def test_past_eps_is_put_on_todays_share_basis(eps, ni, shares_then, shares_now, splits, expected):
+    from valuescreen.us_screen import eps_today_basis
+    assert eps_today_basis(eps, ni, shares_then, shares_now, splits) == pytest.approx(expected, rel=1e-3)
+
+
+def test_us_screen_uses_the_us_thresholds_and_shows_insiders():
+    cfg = loader.load_config()
+    r = {"ticker": "TEST", "name": "Test Inc", "price": 170.0, "eps": 10.0, "nc": 0.0, "pe": 17.0, "implied_growth": 0.06,
+         "cash_conversion": 1.1, "signal": "blue", "action": "Watch", "eps_annual": [5.0, 6.0, 7.0, 8.0, 9.0, 10.5],
+         "cyclical": False, "insiders": 0.02, "sector": "Industrials"}
+    row = G.evaluate_us(r, cfg)    # P/E 17: too dear for India (15), inside the US limit (18)
+    assert row["checks"]["pe"] and row["eps_cagr_5y"] == pytest.approx((10.5 / 5) ** 0.2 - 1) and row["promoters"] == 0.02
+    assert G.rows_us([r, dict(r, ticker="GREY", signal="grey")], cfg)[0]["ticker"] == "TEST"   # 'not valued' rows are left out
+
+
+def test_us_pages_go_to_the_interesting_companies_only():
+    from valuescreen import us_pages
+    rows = [{"ticker": "A", "tier": "shortlist", "signal": "blue"}, {"ticker": "B", "tier": "", "signal": "green"},
+            {"ticker": "C", "tier": "", "signal": "red"}, {"ticker": "D", "tier": "near miss", "signal": "red"}]
+    assert us_pages.interesting(rows) == ["A", "B", "D"]
+    cfg = loader.load_config()
+    lines = us_pages.value_lines_input({"eps": 10.0, "nc": 5.0, "v0": 136.0}, cfg, 0.10)
+    assert lines["model"] == "growth" and lines["buy_level"] > lines["v0"] > 0 and lines["call_level"] > lines["buy_level"]
+    assert us_pages.value_lines_input({"eps": -1.0}, cfg, 0.10)["model"] is None

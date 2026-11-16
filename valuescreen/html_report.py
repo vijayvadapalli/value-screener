@@ -256,7 +256,7 @@ def chart_block(t: str, p: dict | None) -> str:
            '</i>trend lines (auto) · E results · D dividend · S split')
     return f"""<div class="pc" id="pc-{e(t)}" data-pc="pcd-{e(t)}">
 <div class="pc-bar"><button data-iv="D">D</button><button data-iv="W">W</button><button data-iv="M">M</button><span class="sep"></span>
-{''.join(f'<button data-rg="{x}">{x}</button>' for x in ('6M', '1Y', '3Y', '5Y', '10Y') + (('Max',) if p.get('mode') == 'research' else ()))}<span class="sep"></span>
+{''.join(f'<button data-rg="{x}">{x}</button>' for x in ('6M', '1Y', '3Y', '5Y', '10Y') + (('Max',) if p.get('mode') == 'research' or p.get('max_range') else ()))}<span class="sep"></span>
 <button data-ma title="20-, 50- and 200-day averages and the automatic trend lines">Averages &amp; trends</button>
 <button data-pat title="Chart patterns drawn in the report (shown on the monthly view)">Patterns</button>
 <button data-val title="{e(values_tip)}">Value lines</button>
@@ -353,11 +353,20 @@ def markets_html(rows: list[dict]) -> str:
             f'<div class="wrap"><table class="mk"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>{charts_}</section>')
 
 
-def growth_screen_html(rows: list[dict], cfg: dict) -> str:
-    """The growth-at-a-value-price screen (growth_screen.py): shortlist and near misses, then everyone else folded away."""
+INDIA_SCREEN_TAIL = "Flags: promoters below {min_promoter:.0f}% or falling; pledged shares are not in the data yet."
+
+
+def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", owners: str = "Promoters",
+                       tail: str | None = None, href=None) -> str:
+    """The growth-at-a-value-price screen (growth_screen.py): shortlist and near misses, then everyone else folded away.
+    `key` picks the thresholds (growth_screen for India, us_growth_screen for the US), `owners` names the ownership
+    column, `tail` closes the explanation, `href(ticker)` gives a company's link (None: no link)."""
     if not rows:
         return ""
-    s = cfg["growth_screen"]
+    s = cfg[key]
+    href = href or (lambda t: f"#c-{t}")
+    if tail is None:
+        tail = INDIA_SCREEN_TAIL.format(min_promoter=s["min_promoter"] * 100)
 
     def p(x, nd=0):
         return "–" if x is None else f'<span class="{"pos" if x >= 0 else "neg"}">{x*100:+.{nd}f}%</span>'
@@ -371,7 +380,9 @@ def growth_screen_html(rows: list[dict], cfg: dict) -> str:
         trailing = "" if r["pe_trailing"] is None else f"<br><small>trailing {r['pe_trailing']:.1f}</small>"
         assumed = "" if r["assumed_growth"] is None else f"<br><small>at {r['assumed_growth']*100:.0f}%/yr growth</small>"
         prom = "–" if r["promoters"] is None else f"{r['promoters']*100:.0f}%"
-        return (f'<tr><td><a href="#c-{e(r["ticker"])}"><b>{e(r["ticker"])}</b></a><br><small>{e(r["name"])}</small>'
+        link = href(r["ticker"])
+        name = f'<a href="{e(link)}"><b>{e(r["ticker"])}</b></a>' if link else f'<b>{e(r["ticker"])}</b>'
+        return (f'<tr><td>{name}<br><small>{e(r["name"])}</small>'
                 f'{"<br><small class=late>" + flags + "</small>" if flags else ""}</td><td>{tier}</td>'
                 f'<td data-v="{_num(r["pe"])}">{pe}{trailing}</td><td>{p(r["eps_cagr_5y"])} / {p(r["eps_cagr_3y"])}'
                 f'{"" if r["every_year_positive"] else "<br><small class=neg>a loss year</small>"}</td>'
@@ -379,7 +390,7 @@ def growth_screen_html(rows: list[dict], cfg: dict) -> str:
                 f'<td><span class="pill {r["signal"]}">{e(short_action(r["action"]))}</span></td><td><small>{e(notes)}</small></td></tr>')
 
     head = ("<thead><tr><th>Company</th><th>Screen</th><th>P/E</th><th>EPS growth 5 / 3 yrs</th><th>Price needs</th>"
-            "<th>5-yr return a year</th><th>Promoters</th><th>Signal</th><th>Why not</th></tr></thead>")
+            f"<th>5-yr return a year</th><th>{e(owners)}</th><th>Signal</th><th>Why not</th></tr></thead>")
     top = [r for r in rows if r["tier"]]
     rest = [r for r in rows if not r["tier"]]
     n_short = sum(1 for r in rows if r["tier"] == "shortlist")
@@ -389,8 +400,8 @@ def growth_screen_html(rows: list[dict], cfg: dict) -> str:
             f"half the past rate, at most {s['max_assumed_growth']*100:.0f}%, sold at {s['exit_multiple']:g}x). Guards: cash "
             f"conversion ≥ {s['min_cash_conversion']*100:.0f}%, no demerger or one-off history, no bad-loan warning, current "
             f"results. Near miss: one thing short – a P/E of {s['max_pe']:g}–{s['near_max_pe']:g} (growth met), growth of "
-            f"{s['near_min_eps_cagr']*100:.0f}–{s['min_eps_cagr']*100:.0f}% (P/E met), or only the return bar. Flags: promoters below "
-            f"{s['min_promoter']*100:.0f}% or falling; pledged shares are not in the data yet. Dividends are not counted.")
+            f"{s['near_min_eps_cagr']*100:.0f}–{s['min_eps_cagr']*100:.0f}% (P/E met), or only the return bar. {tail} "
+            "Dividends are not counted.")
     table = lambda rs: f'<div class="wrap"><table class="sum">{head}<tbody>{"".join(row(r) for r in rs)}</tbody></table></div>'  # noqa: E731
     return (f'<section class="company" id="screen"><h2>Screen – {n_short} shortlisted, {len(top) - n_short} near misses '
             f'of {len(rows)}</h2><p class="notes">{rule}</p>'

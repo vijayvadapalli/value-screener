@@ -20,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from valuescreen import factsdb, loader, sec, us_universe  # noqa: E402
+from valuescreen import factsdb, growth_screen, loader, pricedb, sec, us_pages, us_universe  # noqa: E402
 from valuescreen import miner_screen  # noqa: E402
 from valuescreen import us_screen as us  # noqa: E402
 from valuescreen.us_fundamentals import wanted_tags  # noqa: E402
@@ -76,6 +76,42 @@ def load_prices(con, entries, log=print):
     con.commit()
 
 
+def insiders(symbols: list[str]) -> dict[str, float]:
+    """{Yahoo symbol: share of the company held by insiders} – only for the companies that get a page (one call each)."""
+    import yfinance as yf  # noqa: PLC0415
+    logging.getLogger("yfinance").setLevel(logging.CRITICAL)
+    out = {}
+    for sym in symbols:
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                v = (yf.Ticker(sym).info or {}).get("heldPercentInsiders")
+        except Exception:  # noqa: BLE001 - one missing figure must not stop the run
+            v = None
+        if v is not None:
+            out[sym] = float(v)
+        time.sleep(0.3)
+    return out
+
+
+def pages_for(rows: list[dict], screen_rows: list[dict], cfg: dict, today: dt.date) -> tuple[list[str], list]:
+    """The interesting companies' pages: insider ownership, up to 20 years of prices (output/prices.sqlite), the pages."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import update_history  # noqa: PLC0415
+    tickers = us_pages.interesting(screen_rows)
+    by_t = {r["ticker"]: r for r in rows}
+    held = insiders([by_t[t]["yahoo"] for t in tickers])
+    for sr in screen_rows:
+        if sr["ticker"] in by_t and by_t[sr["ticker"]]["yahoo"] in held:
+            sr["promoters"] = held[by_t[sr["ticker"]]["yahoo"]]   # the owners column: insiders for US companies
+    years = cfg["us_growth_screen"]["page_years"]
+    pcon = pricedb.connect()
+    update_history.update(pcon, {by_t[t]["yahoo"]: ["us-screen"] for t in tickers}, years, True, log=lambda *_: None)
+    pcon.commit()
+    written = us_pages.build(rows, screen_rows, tickers, pcon, cfg, OUT, years, us.RATE)
+    return tickers, written
+
+
 def main():
     ap = argparse.ArgumentParser(description="Quick screen of the S&P 500 and Nasdaq-100 from SEC figures")
     ap.add_argument("--refresh", action="store_true", help="download the SEC bulk file again now")
@@ -96,8 +132,14 @@ def main():
     con.commit()
 
     in_files = miner_screen.tickers_in_files(loader.company_folders().values())
-    path = us.build(rows, OUT / f"US_Screen_{today:%d%b%Y}.html", today, in_files, notes, cfg)
+    screen_rows = growth_screen.rows_us(rows, cfg)
+    tickers, written = pages_for(rows, screen_rows, cfg, today)
+    print(f"Growth screen: {sum(r['tier'] == 'shortlist' for r in screen_rows)} shortlisted, "
+          f"{sum(r['tier'] == 'near miss' for r in screen_rows)} near misses · {len(written)} company pages")
+    path = us.build(rows, OUT / f"US_Screen_{today:%d%b%Y}.html", today, in_files, notes, cfg, screen_rows, set(tickers))
     published = loader.publish(path, "us", "-screen.html")
+    loader.publish_dir(OUT / us_pages.FOLDER, us_pages.FOLDER)
+    loader.publish_dir(OUT / "assets", "assets")
     short = us.shortlist(rows)
     print(f"\n{len(rows)} screened. Shortlist ({len(short)}):")
     for r in short:

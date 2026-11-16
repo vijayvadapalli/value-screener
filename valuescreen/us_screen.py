@@ -82,6 +82,23 @@ def finish(r: dict, eps_ttm, eps_5y, bvps, roe_5y, nc, cfg):
     return r
 
 
+def eps_today_basis(eps, net_income, shares_then, shares_now, splits):
+    """A past year's diluted EPS on today's share basis. The SEC data restates some years for later splits and not
+    others – and with two splits, sometimes for the first only. The share count behind that EPS figure (net income ÷ EPS,
+    else the year's reported shares) shows which: of 'no split', 'the latest split', 'the latest two', ... the factor
+    that brings it closest to today's count is the part not yet applied. Without either count, all the splits apply."""
+    if not splits or eps is None:
+        return eps
+    basis = net_income / eps if net_income and eps and (net_income > 0) == (eps > 0) else shares_then
+    candidates = [1.0]
+    for ratio in reversed(splits):   # restated filings include the earlier splits first
+        candidates.append(candidates[-1] * ratio)
+    if not basis or not shares_now or basis <= 0:
+        return eps / candidates[-1]
+    best = min(candidates, key=lambda f: abs(math.log(shares_now / (basis * f))))
+    return eps / best
+
+
 def split_multiplier(shares_then, shares_now, factor):
     """The SEC data sometimes restates old per-share figures for a later split and sometimes not. If multiplying the old
     share count by the split factor brings it closer to today's count, the old figure is pre-split: return the factor
@@ -133,6 +150,13 @@ def evaluate_sec(entry: dict, s: dict, px: dict, cfg: dict) -> dict:
            sum(roes) / len(roes) if roes else None, nc, cfg)
     # profit vs price: diluted EPS about three years back (split-adjusted) against the last twelve months
     eps_y = {y: annual[y]["eps"] for y in years if annual[y].get("eps") is not None}
+    # the growth screen: up to 10 years of diluted EPS, each year split-adjusted to today's share count
+    hist = sorted(eps_y)[-10:]
+    splits_after = px.get("splits_since") or (lambda day: [])
+    r["eps_annual"] = [eps_today_basis(eps_y[y], annual[y].get("net_income"), annual[y].get("shares"), shares, splits_after(y.isoformat()))
+                       for y in hist]
+    r["eps_years"] = [y.isoformat() for y in hist]
+    r["cyclical"] = r["sector"] in CYCLICAL
     base = [y for y in eps_y if s["ttm_end"] and (s["ttm_end"] - y).days >= 1.5 * 365]
     if base and eps_ttm is not None:
         target = min(base, key=lambda y: abs((s["ttm_end"] - y).days - 3 * 365.25))
@@ -247,11 +271,13 @@ def _pct(x, nd=0):
     return "–" if x is None else S.pct(x, nd)
 
 
-def _row(r, in_files):
+def _row(r, in_files, pages=frozenset()):
     star = ' <span class="tag">in your files</span>' if r["ticker"] in in_files else ""
     flags = " ".join(f"[{_e(f)}]" for f in r["flags"])
     edgar = (f' · <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={r["cik"]}&type=10-Q" target="_blank" '
              f'rel="noopener">filings</a>' if r.get("cik") else "")
+    if r["ticker"] in pages:   # an interesting company: its own page with the screen's working and the charts
+        edgar += f' · <a href="us-screen/{_e(r["ticker"])}.html"><b>page</b></a>'
     text = f"{r['ticker']} {r['name']} {r['sector']} {r.get('industry') or ''}".lower()
     g = r.get("implied_growth")
     grade = r.get("grade", "n/m")
@@ -299,7 +325,18 @@ def sector_table(rows):
             f"{body}</table>")
 
 
-def build(rows, path: Path, as_of: dt.date, in_files: set, notes: list[str], cfg: dict):
+US_SCREEN_TAIL = ("Insider ownership is shown (US companies have no promoter group), not flagged. EPS from SEC filings, "
+                  "diluted and put on today's share basis. The shortlist, the near misses and every green signal have a page "
+                  "with the working and up to 20 years of prices.")
+
+
+def build(rows, path: Path, as_of: dt.date, in_files: set, notes: list[str], cfg: dict, screen_rows=None, pages=frozenset()):
+    """The screen page. With `screen_rows` (growth_screen.rows_us) it opens with the growth-at-a-value-price screen;
+    `pages` are the tickers that have a page in us-screen/ (us_pages.py)."""
+    from .html_report import growth_screen_html  # noqa: PLC0415
+    screen_html = growth_screen_html(screen_rows or [], cfg, key="us_growth_screen", owners="Insiders", tail=US_SCREEN_TAIL,
+                                     href=lambda t: f"us-screen/{t}.html" if t in pages else None)
+    screen_block = screen_html + "\n" if screen_html else ""
     counts = {s: sum(1 for r in rows if r.get("signal") == s) for s in ("green", "blue", "red", "grey")}
     short = shortlist(rows)
     short_html = ", ".join(f'<b>{_e(r["ticker"])}</b> ({S.pct(r["implied_growth"], 1)}, {r["grade"]})' for r in short) or "none"
@@ -321,12 +358,12 @@ Lenders: book value less nonaccrual loans the allowance doesn't cover; nonaccrua
 them, or net charge-offs (NCO) up by half on a year earlier cap at blue.
 Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … D = rose a third+). A filter, not a verdict.</p>
 <div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution, one-off or bad-loan flags): {short_html}</div>
-<h3>By sector</h3>{sector_table(rows)}
+{screen_block}<h3>By sector</h3>{sector_table(rows)}
 <div class="controls"><span class="lab">Signal</span>{buttons('signal', [('green', 'Cheap'), ('blue', 'Watch / hold'), ('red', 'Expensive'), ('grey', 'Not valued')])}
 <span class="lab">Index</span>{buttons('index', [('S&P 500', 'S&P 500'), ('Nasdaq-100', 'Nasdaq-100')])}
 <span class="lab">Sector</span>{buttons('sector', [(s, s) for s in sectors])}
 <input id="q" type="search" placeholder="Search ticker, name, industry"><span class="lab" id="count"></span></div>
-<div class="wrap"><table class="sum" id="sum"><thead>{HEAD}</thead><tbody>{''.join(_row(r, in_files) for r in rows)}</tbody></table></div>
+<div class="wrap"><table class="sum" id="sum"><thead>{HEAD}</thead><tbody>{''.join(_row(r, in_files, pages) for r in rows)}</tbody></table></div>
 <ul class="small">{''.join(f'<li>{_e(n)}</li>' for n in notes)}</ul>
 <footer>Prices in US$ from Yahoo; fundamentals from SEC EDGAR company facts. Educational framework, not investment advice.</footer>
 """

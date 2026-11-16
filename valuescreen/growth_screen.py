@@ -62,30 +62,32 @@ def promoter_flags(shareholding, s):
     return p[-1], flags
 
 
-def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
-    s = cfg["growth_screen"]
-    v = c.get("v2") or {}
-    c5, c3, positive = eps_growth(v.get("eps_annual"), s["years"])
+def judge(x: dict, s: dict) -> dict:
+    """The screen's verdict from plain inputs, the same for every market. `x` holds: ticker, name, price, price_ccy,
+    eps (the EPS the valuation uses), nc (net cash per share), pe (price minus net cash ÷ eps), eps_ttm (reported),
+    eps_annual (yearly EPS, oldest first, comparable across splits), growth_needed, cash_conversion, stale, bad_loans,
+    history_break, cyclical, signal, action, owners (promoters or insiders, a fraction, or None), flags (already found).
+    `s`: the thresholds (config growth_screen / us_growth_screen)."""
+    c5, c3, positive = eps_growth(x.get("eps_annual"), s["years"])
     growth = min(c5, c3) if c5 is not None and c3 is not None else None
-    price, quarters = r["price"], [x for x in (v.get("eps_quarters") or [])[-4:] if x is not None]
-    ttm = sum(quarters) if len(quarters) == 4 else (r.get("v2") or {}).get("ttm")   # reported, before one-offs are removed
-    ret, assumed = expected_return(r.get("oe"), r.get("nc"), price, growth, s)
-    promoters, flags = promoter_flags(v.get("shareholding"), s)
+    price, ttm = x["price"], x.get("eps_ttm")
+    ret, assumed = expected_return(x.get("eps"), x.get("nc"), price, growth, s)
+    flags = list(x.get("flags") or [])
 
     guards = []
-    cc = r.get("cash_conversion")
+    cc = x.get("cash_conversion")
     if cc is not None and cc < s["min_cash_conversion"]:
         guards.append(f"cash conversion {cc*100:.0f}%")
-    if v.get("history_not_comparable"):
+    if x.get("history_break"):
         guards.append("history not comparable")
-    if r.get("stale"):
+    if x.get("stale"):
         guards.append("stale results")
-    if (r.get("asset_quality") or {}).get("flags"):
+    if x.get("bad_loans"):
         guards.append("bad-loan warning")
     if not positive:
         guards.append("a loss year in the window" if c5 is not None or c3 is not None else "not enough history")
 
-    pe = r.get("pe")
+    pe = x.get("pe")
     checks = {"pe": pe is not None and pe <= s["max_pe"],
               "growth": positive and growth is not None and growth >= s["min_eps_cagr"],
               "return": ret is not None and ret >= s["min_return"]}
@@ -100,17 +102,56 @@ def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
         tier = "near miss"
     else:
         tier = ""
-    if (r.get("v2") or {}).get("kind") == "cyclical" or r.get("cyclical"):
+    if x.get("cyclical"):
         flags.append("cyclical")
-    if r["ticker"] in set(s.get("state_owned") or []):
+    if x["ticker"] in set(s.get("state_owned") or []):
         flags.append("state-owned")
-    if extra:
-        flags.append(extra)
-    return {"ticker": r["ticker"], "name": r["name"], "tier": tier, "missed": missed, "guards": guards, "flags": flags,
+    return {"ticker": x["ticker"], "name": x["name"], "tier": tier, "missed": missed, "guards": guards, "flags": flags,
             "pe": pe, "pe_trailing": price / ttm if ttm and ttm > 0 else None, "eps_cagr_5y": c5, "eps_cagr_3y": c3,
-            "every_year_positive": positive, "growth_needed": r.get("implied_growth"), "assumed_growth": assumed,
-            "expected_return": ret, "promoters": promoters, "signal": r["signal"], "action": r["action"],
-            "price": price, "price_ccy": r["price_ccy"], "checks": checks}
+            "every_year_positive": positive, "growth_needed": x.get("growth_needed"), "assumed_growth": assumed,
+            "expected_return": ret, "promoters": x.get("owners"), "signal": x["signal"], "action": x["action"],
+            "price": price, "price_ccy": x["price_ccy"], "checks": checks}
+
+
+def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
+    """One Indian company: its valuation result `r` (engine.run) and company file `c` (the Screener figures)."""
+    s = cfg["growth_screen"]
+    v = c.get("v2") or {}
+    quarters = [q for q in (v.get("eps_quarters") or [])[-4:] if q is not None]
+    promoters, flags = promoter_flags(v.get("shareholding"), s)
+    x = {"ticker": r["ticker"], "name": r["name"], "price": r["price"], "price_ccy": r["price_ccy"], "eps": r.get("oe"),
+         "nc": r.get("nc"), "pe": r.get("pe"),
+         "eps_ttm": sum(quarters) if len(quarters) == 4 else (r.get("v2") or {}).get("ttm"),   # reported, before one-offs are removed
+         "eps_annual": v.get("eps_annual"), "growth_needed": r.get("implied_growth"), "cash_conversion": r.get("cash_conversion"),
+         "stale": r.get("stale"), "bad_loans": bool((r.get("asset_quality") or {}).get("flags")),
+         "history_break": v.get("history_not_comparable"),
+         "cyclical": (r.get("v2") or {}).get("kind") == "cyclical" or bool(r.get("cyclical")),
+         "signal": r["signal"], "action": r["action"], "owners": promoters, "flags": flags}
+    row = judge(x, s)
+    if extra:
+        row["flags"].append(extra)
+    return row
+
+
+def evaluate_us(r: dict, cfg: dict) -> dict:
+    """One US company from the US screen (us_screen.py): SEC figures, the EPS history split-adjusted. Insider
+    ownership, when known, is shown in the owners column but never flagged – US companies have no promoter group."""
+    s = cfg["us_growth_screen"]
+    eps, nc = r.get("eps"), r.get("nc") or 0.0
+    x = {"ticker": r["ticker"], "name": r["name"], "price": r["price"], "price_ccy": "USD", "eps": eps, "nc": nc,
+         "pe": (r["price"] - nc) / eps if eps and eps > 0 else None,
+         "eps_ttm": r["price"] / r["pe"] if r.get("pe") else None,
+         "eps_annual": r.get("eps_annual"), "growth_needed": r.get("implied_growth"), "cash_conversion": r.get("cash_conversion"),
+         "stale": False, "bad_loans": bool((r.get("asset_quality") or {}).get("flags")), "history_break": None,
+         "cyclical": bool(r.get("cyclical")), "signal": r["signal"], "action": r["action"],
+         "owners": r.get("insiders"), "flags": []}
+    return judge(x, s)
+
+
+def rows_us(us_rows: list[dict], cfg: dict) -> list[dict]:
+    """Screen rows for the US screen's valued companies (not the grey 'not valued' or 'data check' ones), best first."""
+    return sorted((evaluate_us(r, cfg) for r in us_rows if r.get("signal") in ("green", "blue", "red") and r.get("eps") is not None),
+                  key=sort_key)
 
 
 def sort_key(row):

@@ -93,6 +93,11 @@ def closes(con, ticker: str) -> list[tuple[str, float]]:
     return con.execute("SELECT date, close FROM prices WHERE ticker = ? ORDER BY date", (ticker,)).fetchall()
 
 
+def splits_since(con, ticker: str, day: str) -> list[float]:
+    """The ratios of the splits after `day`, oldest first."""
+    return [r for (r,) in con.execute("SELECT ratio FROM splits WHERE ticker = ? AND date > ? ORDER BY date", (ticker, day))]
+
+
 def split_factor_since(con, ticker: str, day: str) -> float:
     """How many of today's shares one share on `day` became (product of later splits)."""
     factor = 1.0
@@ -114,7 +119,8 @@ def price_info(con, ticker: str) -> dict | None:
         return earlier[-1] if earlier else None
     year_ago = on((dt.date.fromisoformat(last_day) - dt.timedelta(days=365)).isoformat())
     return {"price": last, "date": last_day, "change_1y": last / year_ago - 1 if year_ago else None, "on": on,
-            "split_since": lambda day: split_factor_since(con, ticker, day), "closes": rows}
+            "split_since": lambda day: split_factor_since(con, ticker, day),
+            "splits_since": lambda day: splits_since(con, ticker, day), "closes": rows}
 
 
 def companies(con) -> list[dict]:

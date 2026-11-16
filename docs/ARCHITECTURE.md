@@ -113,7 +113,8 @@ flowchart LR
 | `types.py` | the shape of a valuation result as typed dicts – for editors and type checkers; a test fails if the engine produces an undeclared key |
 | `models.py`, `leases.py` | the valuation models (producer / streamer / royalty, oil cash-flow, developer NAV, physical NAV, growth reverse DCF at 10% US / 12% India, contracted leases, liquid assets) |
 | `rules.py`, `v2.py` | zones (a band plus details; the text is written from them), signals (green / blue / red), buy and add levels, flags, stale-data check; Nifty v2 earnings data |
-| `growth_screen.py` | the Midcap 150 growth screen: P/E ≤ 15, EPS growth ≥ 20% over 5 and 3 years, expected return of a 5-year hold ≥ 12%, guards, promoter flags; shortlist and near misses at the top of the list's report |
+| `growth_screen.py` | the growth screen, one set of rules (`judge`) with an adapter per market: India (Midcap 150, Nifty 50 – P/E ≤ 15, EPS growth ≥ 20% over 5 and 3 years, 5-year return ≥ 12%, promoter flags) and the US (a little more liberal – P/E ≤ 18, growth ≥ 15%, return ≥ 10%, insiders shown); shortlist and near misses at the top of the report |
+| `us_pages.py` | pages for the interesting US companies (shortlist, near misses, green signals): the screen's working, SEC figures, a 10-year EPS chart and a 20-year price chart with our value lines |
 | `screening.py` | the screening rules, one copy for the full valuation and the US / miners screens: earnings basis (cyclical, financial, history break), growth and multiple bands, blue caps, colours |
 | `asset_quality.py` | bad loans at banks and other lenders: adjusted book value, warning signs that cap at blue (India and US) |
 | `profit_vs_price.py`, `growth_data.py`, `screener.py` | profit growth vs price growth and its A–D grade; Yahoo and Screener.in fetching |

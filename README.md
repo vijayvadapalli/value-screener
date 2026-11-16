@@ -369,6 +369,29 @@ open reports/us-screen.html
   cheap or stretched); a shortlist (green, grade A or B, cash conversion ≥ 70%, no debt or dilution flags); each ticker
   links to its Yahoo page and its SEC filings.
 
+### The growth screen for US companies
+
+The US screen page opens with the same growth-at-a-value-price screen as the Midcap 150, a little more liberal
+(`us_growth_screen:` in `config.yaml` – the US discount rate is 10%, so a P/E of 16 already means 5% growth a year):
+
+| | India (Midcap 150, Nifty 50) | US (S&P 500 + Nasdaq-100) |
+|---|---|---|
+| P/E | ≤ 15 | ≤ 18 |
+| EPS growth over 5 **and** 3 years | ≥ 20% | ≥ 15% |
+| Expected return a year over a 5-year hold | ≥ 12% | ≥ 10% |
+| Near miss | P/E to 20, growth 15–20% | P/E to 22, growth 12–15% |
+| Ownership | promoters, flagged below 60% | insiders, shown only |
+
+EPS comes from the SEC filings, diluted, for up to 10 years. The SEC data restates some past years for later stock
+splits and not others (with two splits, sometimes for the first only), so each year is put on today's share basis by
+the share count behind it: net income ÷ EPS shows which splits it already includes (`us_screen.eps_today_basis`).
+
+**Pages for the interesting companies only** – the shortlist, the near misses and every green signal (about 85) –
+at `reports/us-screen/<ticker>.html`: the screen's verdict and working, the key SEC figures, a 10-year EPS chart and
+an interactive price chart with up to **20 years** of history (a *Max* range button) and our value lines. Their
+insider ownership comes from Yahoo. The rest of the 518 companies stay rows in the table, as before. About 6 MB of
+pages; the screen page itself is under 1 MB. `python tools/screen_us.py` (and `/weekly`) builds them.
+
 ## Price history (for charts and technical analysis)
 
 ```bash
@@ -672,7 +695,8 @@ valuescreen/models.py      the valuation models; leases.py (Hut 8) and v2.py (Ni
 valuescreen/rules.py       zones (band + details, written as text by zone_text), signals, buy levels, flags, stale checks
 valuescreen/screening.py   the screening rules shared by the full valuation and the US / miners screens: earnings basis,
                            growth and multiple bands, blue caps, colours – one copy
-valuescreen/growth_screen.py  the Midcap 150 growth screen: P/E, 5- and 3-year EPS growth, 5-year return, guards, promoter flags
+valuescreen/growth_screen.py  the growth screen (Midcap 150, Nifty 50, US): P/E, 5- and 3-year EPS growth, 5-year return, guards, owner flags
+valuescreen/us_pages.py   pages for the interesting US companies: the screen's working, SEC figures, EPS and 20-year price charts
 valuescreen/kinds/        one class per valuation model (producer, developer, physical, growth, leases, liquid): its zone,
                            headline, steps, worked example, key figures, cards, chart, heatmap and price-chart lines.
                            A new model is one new file here, registered in kinds/__init__.py
