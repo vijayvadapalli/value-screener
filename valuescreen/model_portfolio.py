@@ -385,7 +385,7 @@ holding's signal turns red.</p>
 <h3>Left out</h3><p class="small">{excluded}</p>
 <ul class="small">{''.join(f'<li>{_e(n)}</li>' for n in notes)}</ul>
 <footer>Volatility and worst fall use the past year's daily closes and describe what today's mix would have done – not a forecast.
-Prices in each listing's currency. Educational framework, not investment advice.</footer>
+Prices in each listing's currency.</footer>
 """
     html_page = page.document(_e(p['title'].split(' – ')[0] + ' ' + result['profile']), page.report_css() + page.asset("portfolio.css"), body)
     path.parent.mkdir(parents=True, exist_ok=True)

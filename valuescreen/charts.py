@@ -144,3 +144,41 @@ def extra(r, path):
 def bridge(r, path):
     """Lease model: where the base-case value per share comes from."""
     return kinds.of("leases").extra_chart(r, path)
+
+
+def backtest_curve(cv: dict, index_name: str, dividends: bool, path):
+    """The backtest's growth of 1 since its earliest start with picks: the picks and all screened (equal-weighted,
+    buy and hold) and the index (dashed, a reference). Each line labelled at its end."""
+    import datetime as dt  # noqa: PLC0415
+    if not cv or len(cv["days"]) < 2:
+        return None
+    days = [dt.date.fromisoformat(d) for d in cv["days"]]
+    fig, ax = new_figure((180, 62))
+    ret = "with dividends" if dividends else "price only"
+    lines = [(f"Picks ({cv['n_picks']})", cv["picks"], S.SIGNAL["green"], "-", 1.8),
+             (f"All screened ({cv['n_all']})", cv["all"], S.SIGNAL["blue"], "-", 1.2),
+             (index_name, cv["index"], S.INK, (0, (4, 2)), 1.1)]
+    ends = []
+    for label, ys, color, ls, lw in lines:
+        pts = [(d, y) for d, y in zip(days, ys) if y is not None]
+        if not pts or label.startswith("Picks (0)"):
+            continue
+        ax.plot([d for d, _ in pts], [y for _, y in pts], color=color, ls=ls, lw=lw, label=label)
+        ends.append([pts[-1][1], f"{(pts[-1][1] - 1) * 100:+.0f}%", color, pts[-1][1]])
+    ax.axhline(1, color=S.LINE, lw=0.8)
+    lo, hi = ax.get_ylim()
+    gap = (hi - lo) * 0.07
+    ends.sort(key=lambda x: x[0])
+    for i in range(1, len(ends)):   # keep the end labels apart
+        ends[i][0] = max(ends[i][0], ends[i - 1][0] + gap)
+    for y, label, color, actual in ends:
+        ax.plot([days[-1]], [actual], marker="o", ms=3, color=color, clip_on=False)
+        ax.annotate(label, (days[-1], y), xytext=(5, 0), textcoords="offset points", va="center", fontsize=6.5,
+                    color=S.INK2, annotation_clip=False)
+    ax.set_ylabel(f"Growth of 1 ({ret})")
+    ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=len(ends), fontsize=6.5, borderaxespad=0.2)   # above the lines
+    ax.margins(x=0.01)
+    ax.spines["right"].set_visible(False)
+    _title(ax, f"Since {days[0]:%d %b %Y}: " + ("picks against all screened" if cv["n_picks"] else "all screened (no picks)")
+           + f" and the {index_name}", pad=18)
+    return save(fig, path)

@@ -20,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from valuescreen import factsdb, growth_screen, loader, pricedb, sec, us_pages, us_universe  # noqa: E402
+from valuescreen import backtest, factsdb, growth_screen, loader, pricedb, sec, us_pages, us_universe  # noqa: E402
 from valuescreen import miner_screen  # noqa: E402
 from valuescreen import us_screen as us  # noqa: E402
 from valuescreen.us_fundamentals import wanted_tags  # noqa: E402
@@ -76,6 +76,29 @@ def load_prices(con, entries, log=print):
     con.commit()
 
 
+def load_splits(con, entries, log=print):
+    """Every split since listing, once per ticker (the daily download covers six years only): the 10-year EPS history and
+    the backtest (backtest.run_us) put old per-share figures on today's share basis with them."""
+    import yfinance as yf  # noqa: PLC0415
+    logging.getLogger("yfinance").setLevel(logging.CRITICAL)
+    done = set((factsdb.get_meta(con, "splits_full") or "").split(","))
+    todo = [e["yahoo"] for e in entries if e["yahoo"] not in done]
+    for i, sym in enumerate(todo, 1):
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                s = yf.Ticker(sym).splits
+        except Exception:  # noqa: BLE001 - one missing history must not stop the run
+            continue
+        factsdb.save_prices(con, sym, [], [(d.date().isoformat(), float(v)) for d, v in s.items() if v and v > 0])
+        done.add(sym)
+        if i % 100 == 0 or i == len(todo):
+            log(f"split history: {i} of {len(todo)}")
+            factsdb.set_meta(con, "splits_full", ",".join(sorted(done - {""})))
+            con.commit()
+        time.sleep(0.2)
+
+
 def pages_for(rows: list[dict], screen_rows: list[dict], cfg: dict, today: dt.date) -> tuple[list[str], list]:
     """The interesting companies' pages: insider ownership, up to 20 years of prices (output/prices.sqlite), the pages."""
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -108,6 +131,7 @@ def main():
     loaded = load_facts(con, entries, refreshed)
     print(f"SEC figures: {'loaded for ' + str(loaded) + ' companies' if loaded else 'up to date'}")
     load_prices(con, entries)
+    load_splits(con, entries)
 
     rows, notes = us.rows_from_db(con, entries, cfg, today, OUT / "screen_cache")
     factsdb.save_run(con, today.isoformat(), rows)
@@ -118,7 +142,10 @@ def main():
     tickers, written = pages_for(rows, screen_rows, cfg, today)
     print(f"Growth screen: {sum(r['tier'] == 'shortlist' for r in screen_rows)} shortlisted, "
           f"{sum(r['tier'] == 'near miss' for r in screen_rows)} near misses · {len(written)} company pages")
-    path = us.build(rows, OUT / f"US_Screen_{today:%d%b%Y}.html", today, in_files, notes, cfg, screen_rows, set(tickers))
+    years = cfg["us_growth_screen"].get("backtest", [5, 4, 3, 2])
+    bt = backtest.run_us(entries, con, cfg, backtest.INDEX_SYMBOL["us"], years=tuple(years)) if pricedb.DB.exists() else []
+    print("Backtest: " + " · ".join(f"since {b['start']:%b %Y} {len(b['picks'])} picks" for b in bt))
+    path = us.build(rows, OUT / f"US_Screen_{today:%d%b%Y}.html", today, in_files, notes, cfg, screen_rows, set(tickers), bt)
     published = loader.publish(path, "us", "-screen.html")
     loader.publish_dir(OUT / us_pages.FOLDER, us_pages.FOLDER)
     loader.publish_dir(OUT / "assets", "assets")

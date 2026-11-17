@@ -85,6 +85,10 @@ class ProducerFields(TypedDict, total=False):
     cost_ratio: float              # AISC ÷ spot
     terms: List[dict]              # per metal: realised, spot, delta, sens
     stress: List[Tuple[float, float, float]]
+    price_cases: List[dict]        # lists with `price_cases: true`: value at fixed metal prices (price_cases.py)
+    forward: List[dict]            # owner earnings for coming years from the company's own estimates (forward.py)
+    forward_checks: List[str]      # how those inputs compare with reported results and consensus
+    consensus: List[dict]          # analyst consensus EPS from the file – reference only
     projects: List[dict]
     fcf_ps: Optional[float]
 

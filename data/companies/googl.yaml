@@ -19,7 +19,7 @@ balance:
   cash: 265098
   debt: 125102
 price:
-  value: 284.76
+  value: 283.72
   currency: USD
   date: '2026-11-16'
   source: yfinance GOOGL

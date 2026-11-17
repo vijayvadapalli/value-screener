@@ -10,18 +10,184 @@ period:
   reported: '2026-10-30'
 earnings:
   adj_net_income: 279.0
+  addbacks: 150.5
+  da: 203.0
+  sustaining_capex: 242.0
 shares_m: 435.53
 balance:
   cash: 860
   debt: 1000
+price_sensitivity:
+  metal: uranium
+  year: 2028
+  spot:
+  - 40
+  - 60
+  - 80
+  - 100
+  - 120
+  - 140
+  - 160
+  realised:
+    2026:
+    - 63
+    - 65
+    - 67
+    - 68
+    - 68
+    - 69
+    - 69
+    2027:
+    - 47
+    - 58
+    - 68
+    - 73
+    - 74
+    - 76
+    - 77
+    2028:
+    - 50
+    - 60
+    - 72
+    - 80
+    - 83
+    - 87
+    - 90
+    2029:
+    - 53
+    - 62
+    - 75
+    - 85
+    - 90
+    - 94
+    - 98
+    2030:
+    - 54
+    - 63
+    - 76
+    - 88
+    - 94
+    - 99
+    - 104
+  sales_mlb: 28
+  purchases_mlb: 3
+  royalty: 0.077
+  tax_rate: 0.25
+forward:
+  tax_rate: 0.25
+  usdcad: 1.35
+  years:
+  - year: 2026
+    basis: full-year 2026 outlook (Q3-2026 MD&A), midpoints
+    pre_tax:
+    - name: 'Uranium gross profit: revenue 2,700–2,910 − 29.5–30.5m lb × unit cost 67.00–70.00 (2026 outlook midpoints)'
+      amount: 750.0
+    - &id001
+      name: 'Fuel services gross profit: revenue 610–650 − 13–14m kgU × unit cost 33.50–35.80 (2026 outlook midpoints)'
+      amount: 162.0
+    - &id002
+      name: Direct administration 260–280 (2026 outlook)
+      amount: -270.0
+    - &id003
+      name: Share-based compensation (9M-2026 59 × 4/3; not in the outlook)
+      amount: -79.0
+    - &id004
+      name: Exploration 30–35 (2026 outlook)
+      amount: -32.5
+    - &id005
+      name: Research and development 50–55 (2026 outlook)
+      amount: -52.5
+    - &id006
+      name: Net finance costs (9M-2026 finance costs 89 − finance income 25, × 4/3)
+      amount: -85.0
+    after_tax:
+    - &id007
+      name: JV Inkai share of earnings, last 12 months (Q4-2025 45 + 9M-2026 153)
+      amount: 198.0
+    - &id008
+      name: D&A added back – it is inside the unit costs (9M-2026 203 × 4/3)
+      amount: 271.0
+    - name: 'Sustaining + capacity replacement capex: 2026 plan 370–405 (2025 annual MD&A), scaled to the Q3 total of 440–490 (was 490–540)'
+      amount: -350.0
+    - &id009
+      name: 'Westinghouse owner earnings, 49%: 2026 outlook US$ adjusted EBITDA 400 − other expenses incl. incentive plan 30 − finance costs 127.5
+        + finance income 1.5 − sustaining capex 100, tax about nil (outlook +20 to −20), × 1.35'
+      amount: 194.0
+  - year: 2028
+    basis: Cameco's 2028 contract table and capital plan; other lines held at the 2026 outlook
+    contract_sales:
+      sales_mlb: 28
+      unit_cost: 68.5
+      base_realised: 93.5
+      royalty: 0.077
+    pre_tax:
+    - *id001
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - *id006
+    after_tax:
+    - *id007
+    - *id008
+    - name: 'Sustaining + capacity replacement capex: 2028 plan 175–190 + 160–180 (2025 annual MD&A)'
+      amount: -352.5
+    - *id009
+  checks:
+  - '2026 on Cameco''s adjusted-earnings basis (share-based compensation added back, Westinghouse at its 9M IFRS result annualised): about C$1.09
+    a share; analyst consensus C$1.08 (15 analysts). Reported 9M-2026: C$0.64.'
+  - '2028 on the same basis at spot US$92: about C$1.45 a share; analyst consensus for 2027 is C$2.41 (18 analysts, range 1.48–4.10). Consensus
+    sits well above what Cameco''s own contract table and outlook support – the difference would have to come from new contracts at higher prices,
+    Westinghouse growth (Cameco publishes AP1000 per-project economics but no order forecast) or cheaper purchases.'
+  - 'Spot +/− US$5/lb with the 2026 contract row: earnings move the same way and by about the same amount as Cameco''s own sensitivity (MD&A p.
+    23) – see the price_sensitivity assumptions.'
+  consensus:
+  - year: 2026
+    eps: 1.08
+    low: 0.9
+    high: 1.51
+    analysts: 15
+    currency: CAD
+    source: Yahoo Finance, CCO.TO earnings estimate
+    date: '2026-11-17'
+  - year: 2027
+    eps: 2.41
+    low: 1.48
+    high: 4.1
+    analysts: 18
+    currency: CAD
+    source: Yahoo Finance, CCO.TO earnings estimate
+    date: '2026-11-17'
 price:
-  value: 66.59
+  value: 65.2
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-17'
   source: yfinance CCJ
 sources:
 - Cameco Q3-2026 results, 30 Oct 2026
 - Value vs Price – main report (Q3 results), 4 Nov 2026
+- 'Cameco Q3-2026 MD&A, 30 Oct 2026: expected realized uranium price sensitivity table at 30 Sep 2026 (p. 24), 2026 outlook (pp. 20-21), revenue
+  / ANE sensitivity (p. 23), royalties (p. 49), income taxes (p. 9)'
+- 'Cameco 2025 annual MD&A: capital spending by type and outlook for investing activities 2026–2028'
+- Yahoo Finance CCO.TO earnings estimates (analyst consensus), 17 Nov 2026 – reference only
 assumptions:
-- Nine-month adjusted net earnings annualised (× 4/3); cash-flow lines not fully retrievable – earnings proxy
-- Westinghouse (49%) counted only through reported earnings
+- 'Price cases only (headline value unchanged): realised price from Cameco''s table of expected realized price at each spot price, 2028 row (Q3-2026
+  MD&A, 30 Sep 2026) - the table is Cameco''s, not a forecast; it covers only contracts finalised at 30 Sep 2026'
+- 'Price cases: 28m lb a year sold (average committed deliveries 2026-2030, MD&A p. 24); 3m lb a year bought at spot (2026 outlook: market purchases
+  up to 3m lb). JV Inkai purchases (4.2m lb) left out - their higher cost comes back as Cameco''s share of Inkai earnings'
+- 'Price cases: royalty 7.7% = royalties / uranium revenue, 9M-2026 (145.4 / 1,888); the Saskatchewan profit royalty makes the rate on extra revenue
+  higher, so the upside cases are a little generous. Tax 25% = income tax / earnings before tax, 9M-2026 (65 / 263)'
+- 'Check (MD&A p. 23): with the 2026 row, 30m lb sold, spot US$89.50 and 1.35 USDCAD, these inputs give revenue +$10m / -$10m and adjusted net
+  earnings -$8m / +$8m for spot +/- US$5/lb; Cameco reports +$6m / -$11m and -$7m / +$4m. Right direction; the fall is overstated (floors and
+  inventory accounting are not modelled)'
+- 'Owner earnings, 9M-2026 (Q3-2026 MD&A): adjusted net earnings 279 + addbacks 150.5 + D&A 203 − sustaining and capacity-replacement capex 242,
+  × 4/3'
+- Capex 242 = 9M additions to property, plant and equipment 321.5 × 75% – the sustaining + capacity replacement share of the 2026 plan (387.5
+  of 515, 2025 annual MD&A); growth capex left out
+- 'Addbacks 150.5 = Westinghouse restated +197, less share-based compensation −46.5. Westinghouse sits in adjusted net earnings at about −59 (IFRS
+  net loss −80, mostly amortisation of the purchase price, plus Cameco''s adjustments +21); its owner earnings are adjusted EBITDA 427 − incentive
+  plan 50 − other expenses 23 − net finance costs 135 − sustaining capex 81 (9M capex 146 × the 2026 plan''s sustaining share 100 / 180) = 138,
+  tax about nil. Share-based compensation 62 (added back in adjusted net earnings) is a real cost: −62 × (1 − 25%)'
+- 'Forward 2028: uranium unit cost held at the 2026 guidance (C$67–70/lb, with purchases at about C$110/lb – more if spot stays near US$92); fuel
+  services, administration, exploration, R&D, finance costs, Inkai and Westinghouse held at 2026 levels – Cameco gives no 2028 outlook for them.
+  28m lb = average committed deliveries 2026–2030'

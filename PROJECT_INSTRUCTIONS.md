@@ -47,6 +47,17 @@ Educational framework, not investment advice.
   - Cash conversion = operating cash flow ÷ net profit over 5 years. Below 70% caps the signal at blue.
   - Flag conglomerates and finance arms (L&T, M&M, Bajaj Auto, Grasim). Insurers: earnings are a weak guide.
 
+- **Growth screen – Dr. Amit Gupta's filter and rules** (Nifty Midcap 150, Nifty 50; `growth_screen` in config.yaml),
+  on top of the valuation:
+  - P/E ≤ 15: price minus net cash ÷ the EPS the valuation uses (one-offs removed, cyclicals averaged).
+  - EPS growth ≥ 20% a year over **both** 5 and 3 years, EPS positive in every year of the window.
+  - 5-year hold: growth at half the past rate (at most 15%), sold at 15x after 5 years; needs ≥ 12% a year.
+  - Guards: cash conversion ≥ 70%, no demerger or one-off history, no bad-loan warning signs, current results.
+  - Flags: promoters below 60% or down more than 2 points in a year; state-owned; cyclical.
+  - Shortlist = passes everything. Near miss = one thing short: P/E 15–20 (growth met), growth 15–20% (P/E met),
+    or only the return bar.
+  - US screen and tech: P/E ≤ 18, growth ≥ 15%, return ≥ 10%; insiders shown, never a rule.
+
 ## 3. Zones, signals and tiers
 - Producers: BUY if MoS at 12x ≥ 20% and AISC ≤ 60% of spot; WATCH 0–20%; SELL at or above 25x; HOLD in between.
 - Developers: BUY ≤ 0.8× NAV, WATCH ≤ 1.0×, HOLD ≤ 1.5×, SELL above. Physical: BUY ≤ 0.85× NAV.

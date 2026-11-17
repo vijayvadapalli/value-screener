@@ -1,4 +1,4 @@
-# Core list, from the Valuation Playbook, Nov 2026: 21 companies, then markets shown price-only.
+# Core list, from the Valuation Playbook, Nov 2026: 21 companies (+ DNN, added 17 Nov), then markets shown price-only.
 # Optional: add a share quantity, e.g. {ticker: FNV, quantity: 35}. The profit-vs-price report then shows
 # each position's value in the share's own currency. Quantities are never used in the valuations.
 # Tier A = large low-cost producers / royalties with strong balance sheets: start at or below 15x, add at or below 12x.
@@ -7,7 +7,9 @@
 # Tiers live in config.yaml (tiers:). IVPAF (Ivanhoe's US OTC line) is valued from the TSX file, IVN.
 name: Core
 screen: resource        # resource_screen.py: value, metal −20%, volume growth, 5-year return
+price_cases: true   # company pages show the value at the metal prices in config.yaml `price_cases:`
 history_years: 20   # price history for the charts (tools/update_history.py loads it once; Max button on the charts)
+buy_zone: true      # buy-zone and review lists with the decision log at the top (buy_zone.py; thresholds in config.yaml)
 tickers:
   # Royalties
   - {ticker: FNV}
@@ -28,9 +30,12 @@ tickers:
   - {ticker: IVN}     # held as IVPAF
   # Uranium: producer, developer, physical holders (UEC and UUUU moved to the tech list, Nov 2026)
   - {ticker: CCJ}
+  - {ticker: DNN}
   - {ticker: NXE}
   - {ticker: YCA}
-  - {ticker: SPUT}
+  - {ticker: SPUT}    # also trades as SRUUF (US OTC)
+  - {ticker: MYRUF}   # Myriad Uranium, explorer (not valued)
+  - {ticker: CVVUF}   # CanAlaska Uranium, explorer (not valued)
   # Silver developer
   - {ticker: ABRA}
   # Oil (HUT moved to the tech list, Nov 2026)

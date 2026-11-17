@@ -17,9 +17,9 @@ nav_ref:
   value: 6.65
   spot: 89.85
 price:
-  value: 5.155
+  value: 5.15
   currency: GBP
-  date: '2026-11-16'
+  date: '2026-11-17'
   source: yfinance YCA.L
 sources:
 - Yellow Cake NAV update, 27 Oct 2026 (£6.65/share at $89.85/lb)

@@ -292,7 +292,7 @@ def build_html(week: dict, rows: list[dict], changed: dict, charts: dict, links:
 <div class="grid2"><div><h3>Themes</h3><ul class="small">{themes}</ul></div><div><h3>Macro</h3><ul class="small">{macro}</ul></div></div>
 <nav class="toc">Assets: {toc}</nav>
 {''.join(sections)}
-<footer>Private research notes next to our own valuation. Educational, not investment advice.</footer>
+<footer>Private research notes next to our own valuation.</footer>
 """
     html_page = page.document(f"Research – {week['date']:%d %b %Y} (private)", page.report_css() + page.asset("research.css"), body,
                               scripts=scripts, head='<meta name="robots" content="noindex">', main_attrs=' id="top"')

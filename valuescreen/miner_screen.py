@@ -227,7 +227,7 @@ a full company file (metal sold, realised prices, AISC) before any decision. Cli
 <div class="wrap"><table class="sum" id="sum"><thead>{HEAD}</thead><tbody>{''.join(_row(r, in_files) for r in rows)}</tbody></table></div>
 <p class="small">No figures from Yahoo for: {_e(', '.join(missing)) or 'none'}.</p>
 <footer>Prices in each exchange's currency; values converted from the statements' currency where it differs (flagged). Market value in
-US$. Educational framework, not investment advice.</footer>
+US$.</footer>
 """
     html_page = page.document(f"{_e(title)} – quick screen", page.report_css() + page.asset("screen-miners.css"), body,
                               scripts=f"<script>{page.asset('screen-miners.js')}</script>")

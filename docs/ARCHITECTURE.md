@@ -41,6 +41,7 @@ flowchart LR
     CACHE["Screen caches · runs.json · signals_log.csv"]:::done
     PDB["output/prices.sqlite<br/>10–20y daily OHLCV · splits · dividends"]:::done
     RES["data/private/research/*.yaml<br/>levels · stance · notes"]:::priv
+    DEC["data/private/decisions/*.yaml<br/>decision log"]:::priv
   end
 
   subgraph ENG["Engine (pure Python)"]
@@ -58,7 +59,7 @@ flowchart LR
     SCR["Screen reports<br/>miners · US · Nifty"]:::done
     MPR["Model portfolio reports"]:::done
     CH["Interactive charts<br/>in the HTML reports"]:::done
-    PRIV["output/private/research.html<br/>+ weekly brief"]:::priv
+    PRIV["output/private/research.html<br/>+ weekly brief · core-decisions.html"]:::priv
   end
 
   subgraph PUB["Published"]
@@ -113,15 +114,18 @@ flowchart LR
 | `types.py` | the shape of a valuation result as typed dicts – for editors and type checkers; a test fails if the engine produces an undeclared key |
 | `models.py`, `leases.py` | the valuation models (producer / streamer / royalty, oil cash-flow, developer NAV, physical NAV, growth reverse DCF at 10% US / 12% India, contracted leases, liquid assets) |
 | `rules.py`, `v2.py` | zones (a band plus details; the text is written from them), signals (green / blue / red), buy and add levels, flags, stale-data check; Nifty v2 earnings data |
-| `growth_screen.py` | the growth screen, one set of rules (`judge`) with an adapter per market: India (Midcap 150, Nifty 50 – P/E ≤ 15, EPS growth ≥ 20% over 5 and 3 years, 5-year return ≥ 12%, promoter flags) and the US (a little more liberal – P/E ≤ 18, growth ≥ 15%, return ≥ 10%, insiders shown); shortlist and near misses at the top of the report |
+| `growth_screen.py` | the growth screen – Dr. Amit Gupta's filter and rules – one set of rules (`judge`) with an adapter per market: India (Midcap 150, Nifty 50 – P/E ≤ 15, EPS growth ≥ 20% over 5 and 3 years, 5-year return ≥ 12%, promoter flags) and the US (a little more liberal – P/E ≤ 18, growth ≥ 15%, return ≥ 10%, insiders shown); shortlist and near misses at the top of the report |
+| `buy_zone.py` | core's buy-zone and review lists: valuation green, price ≤ 5% above the nearest support (auto or watched), 14-day RSI < 30 – all three = buy zone, two = review – from the chart data; the private decision log (`data/private/decisions/<list>.yaml`, public entries only on the report) |
 | `resource_screen.py` | the resource screen for core, oil and miners: price ≤ fair value (15x owner earnings at spot), still ≤ it with the metal 20% lower, volume growth ≥ 5% (revenue growth less the metal-price change), ≥ 10% a year over a 5-year hold; NAV models on their NAV rules |
-| `backtest.py` | how the growth screen's rules did: picks 5, 4, 3 and 2 years ago with only the data known then, returns since (with dividends) against all screened and the index; `python -m valuescreen backtest` and a report section |
+| `price_cases.py` | price cases for lists with `price_cases: true` (core): the value at the fixed metal prices in `config.yaml` `price_cases:` – the company's own model re-run with one metal moved, the others at spot. 12x / 15x / 25x for producers and royalties (each metal ≥ 15% of metal revenue), NAV for developers and physical holders. A company whose realised price lags spot (Cameco) carries a `price_sensitivity:` block – its own MD&A table of realised price at each spot price, pounds sold and bought, royalty, tax – used by `models.curve_delta_ps`, which is zero at today's spot. Nothing for companies without a sensitivity in their file (Ivanhoe, oil). Shown on the company page as "assumption, not reported"; the trailing value stays the headline |
+| `forward.py` | forward estimates for companies whose file has a `forward:` block (Cameco first): owner earnings for coming years built line by line from the company's own outlook, capital plan and contract table (pre-tax lines, tax, after-tax lines; uranium gross profit from its contract table at today's spot), value at 12x / 15x / 25x, the `checks:` against reported figures and consensus, and analyst consensus EPS as a reference row. Run in `engine.run`; shown on the company page (`html_report._forward`); never changes the headline value, signal or screen |
+| `backtest.py` | how the growth screen's rules did: picks 5, 4, 3 and 2 years ago with only the data known then, returns since against all screened and the index, and the growth-of-1 curve for the chart. India (`run`): the company files, returns with dividends, Nifty 50 / Midcap 150. US (`run_us`): each company rebuilt from the SEC figures filed by the start date, the price on the share basis of then, price-only returns against the S&P 500 (US screen page) or the Nasdaq-100 (tech). `python -m valuescreen backtest --list X` and a section after the screen (`html_report.backtest_html`, chart `charts.backtest_curve`) |
 | `us_pages.py` | pages for the interesting US companies (shortlist, near misses, green signals): the screen's working, SEC figures, a 10-year EPS chart and a 20-year price chart with our value lines |
 | `screening.py` | the screening rules, one copy for the full valuation and the US / miners screens: earnings basis (cyclical, financial, history break), growth and multiple bands, blue caps, colours |
 | `asset_quality.py` | bad loans at banks and other lenders: adjusted book value, warning signs that cap at blue (India and US) |
 | `profit_vs_price.py`, `growth_data.py`, `screener.py` | profit growth vs price growth and its A–D grade; Yahoo and Screener.in fetching, or (`profit: local`, Midcap 150) the company files' EPS and the stored prices with no downloads |
 | `miner_screen.py`, `etf_holdings.py` | miners quick screen from ETF holdings |
-| `us_screen.py`, `us_fundamentals.py`, `us_universe.py`, `sec.py`, `factsdb.py` | S&P 500 / Nasdaq-100 screen from SEC figures, with its database |
+| `us_screen.py`, `us_fundamentals.py`, `us_universe.py`, `sec.py`, `factsdb.py` | S&P 500 / Nasdaq-100 screen from SEC figures, with its database (facts keep their `filed` date for the backtest; every split since listing, loaded once per ticker by `tools/screen_us.py`) |
 | `model_portfolio.py` | candidates from every screen, value / quality / momentum scores, sleeves, sizing, report |
 | `technicals.py`, `prices.py`, `history.py` | 200-day average, RSI, MACD; live prices; previous-run figures |
 | `pricedb.py` | the price-history database: bars, splits and dividends, weekly / monthly resampling |
@@ -133,8 +137,8 @@ flowchart LR
 | Module | Output |
 |---|---|
 | `html_report.py` | the full report per list: summary table, markets (price only), company sections, profit vs price, links; optional parts passed as one `ReportExtras`. Big lists (`layout: pages`: Nifty 50, Midcap 150) are multi-page – a summary page plus `<list>/<ticker>.html` per company and shared files in `assets/`, published with `loader.publish_dir` |
-| `page.py`, `assets/` | the page shell every report shares (value report, screens, model portfolios, research) and all their CSS and JavaScript as files |
-| `assets/screen.js` | the Midcap 150 screen's settings panel: recomputes the growth screen in the browser exactly as `growth_screen.py` does, keeps the settings in the address, draws the funnel (tested against Python in Node) |
+| `page.py`, `assets/` | the page shell every report shares (value report, screens, model portfolios, research) and all their CSS and JavaScript as files; every page ends with the disclaimer and copyright line (`page.legal_footer`) |
+| `assets/screen.js` | the growth screen's settings panel (Nifty 50, Midcap 150, tech, US screen page – sliders): recomputes the screen in the browser exactly as `growth_screen.py` does, keeps the settings in the address, writes the funnel sentence, the five rules, the near-miss line and the answer at the top for the settings set, and re-picks the backtest from the figures then (`html_report.backtest_data`) – both tested against Python in Node |
 | `kinds/` | one class per valuation model – producer (and cash-flow), developer, physical, growth, leases, liquid – owning its zone, headline, calculation steps, worked example, key figures, cards, main chart, heatmap grid and price-chart lines; the reports ask the model instead of checking which one it is |
 | `charts.py`, `plot.py`, `fmt.py`, `style.py`, `wording.py` | the shared charts (band, heatmap, EPS history) and chart basics; text formatting; one look (Inter, palette); the shared words and notes |
 | `report.py` | ranked CSV, signal log, heatmaps |
@@ -149,6 +153,7 @@ flowchart LR
 | `model_portfolio.py` | the two model portfolios |
 | `update_history.py` | load and update the price history |
 | `research.py` | build the private research report (`output/private/research.html`) |
+| `decide.py` | add an entry to a list's private decision log (`--public` to show it in the report) |
 | `weekly.py` · `/weekly` | the whole routine and the weekly brief; the Claude Code skill adds results updates, the news check and the research capture |
 
 ## 4. Banks and other lenders
@@ -191,6 +196,8 @@ flowchart LR
 - On public charts only plain support and resistance prices appear, as dashed "watched levels" with no source named.
   Targets, stops, stance, trade ideas, thesis and the source stay private. A level can be forced either way with
   `public: true / false` in the weekly file.
+- The decision log (`data/private/decisions/`) is private; only entries marked `public: true` appear in the core
+  report. The full log goes to `output/private/<list>-decisions.html`.
 - Holdings quantities and cost basis, if ever added, are private too.
 
 ## 6. The weekly routine (`tools/weekly.py`, `/weekly`)
@@ -217,11 +224,15 @@ flowchart TD
 | Miners quick screen from seven ETFs (~270) | built |
 | S&P 500 / Nasdaq-100 screen from SEC figures, with database | built |
 | Model portfolios: balanced, resources value-first (≤ 15 names, market value) | built |
+| Growth screen – Dr. Amit Gupta's filter and rules: Nifty Midcap 150 and Nifty 50 (India), S&P 500 / Nasdaq-100 and tech (US, more liberal); settings panel, backtest 5–2 years back, profit vs price from stored data | built |
+| Screen pages answer first: who passes, near misses on one line, five rules and the funnel in plain words, backtest below the results, sliders and method folded; disclaimer and copyright on every page | built |
+| Core buy-zone and review lists (green + near support + RSI < 30) with a private decision log | built |
 | Publishing: latest reports at fixed names on GitHub Pages, README links and screenshots | built |
 | **Stage 1** – price history for core, tech, oil and promoted miners (49 symbols, 10 years daily) | built |
 | **Stage 2** – charts in the public reports: candles, SMA 20/50/200, RSI, volume, auto trend lines and levels, value / buy / add / sell lines, E / D / S markers (watched levels follow with stage 3) | built |
 | **Stage 3** – private research: weekly capture, private report (rules near / triggered, agree / conflict with our valuation, charts with their levels), plain watched levels on public charts | built |
 | **Stage 4** – weekly routine: `tools/weekly.py` (all steps + brief) and the `/weekly` skill (results, news, capture) | built |
+| Price cases on core (gold, silver, uranium; Cameco on its own contract table) and forward estimates from the company's own guidance (Cameco first; more producers next, then decide) | built |
 | Later – capital ratios for lenders (CAR / CET1: not in Screener.in or the SEC bulk facts), US tangible book (less goodwill) | ideas |
 | To do – gaps against paid services: mine life, fully diluted shares, cash runway, sensitivity, alerts, insiders, portfolio tracking (see [section 10](#10-to-do--gaps-against-paid-services)) | to do |
 | Later – Markets page (ratios such as SILJ/GDXJ, URNM/GLD, gold/silver; weekly and YTD change), "after a sell-off" forward returns, signal scorecard, thesis tracker, price history for Nifty 50 and the S&P 500 | ideas |
@@ -229,6 +240,10 @@ flowchart TD
 ## 8. Principles
 
 - **Reported numbers only.** Every figure in a company file has a source; anything not in the source is marked ASSUMED.
+- **Forecasts sit beside, never in, the headline.** Price cases and forward years use only the company's own published
+  estimates (outlook, capital plan, contract table), each line sourced; they are labelled "assumption, not reported",
+  must reproduce the company's reported figures first, and are compared with analyst consensus – which is shown for
+  reference and never used in a value.
 - **Quick screens filter, full files decide.** A quick-screen green means "make a full company file", never "buy".
 - **The same rules every time.** Thresholds live in `config.yaml`, not in judgement on the day.
 - **Rebuildable data stays out of git.** Databases and caches can be downloaded again; only inputs and published

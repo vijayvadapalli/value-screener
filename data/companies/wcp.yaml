@@ -22,7 +22,7 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 17.02
+  value: 17.04
   currency: CAD
   date: '2026-11-16'
   source: yfinance WCP.TO

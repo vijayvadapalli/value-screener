@@ -13,9 +13,9 @@ earnings:
   adj_net_income: 50.641
 shares_m: 1430
 price:
-  value: 7.23
+  value: 7.27
   currency: CAD
-  date: '2026-11-16'
+  date: '2026-11-17'
   source: yfinance IVN.TO
 sources:
 - Ivanhoe Q3-2026 results, 3 Nov 2026

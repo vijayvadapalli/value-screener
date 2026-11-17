@@ -1,0 +1,30 @@
+ticker: MYRUF
+yahoo: MYRUF
+name: Myriad Uranium
+sector: uranium
+model: liquid
+currency: CAD
+period:
+  label: Q (31 Jul 2026)
+  end: '2026-07-31'
+  per_year: 4
+shares_m: 141.05
+liquid_assets:
+- label: Cash (31 Jul 2026)
+  amount: 11.54
+debt: 0
+price:
+  value: 0.2097
+  currency: USD
+  date: '2026-11-16'
+  source: yfinance MYRUF
+comment: Explorer – no resource study, no earnings. The price pays for exploration upside.
+sources:
+- Yahoo Finance balance sheet for MYRUF / M.CN, quarter to 31 Jul 2026 (draft, 17 Nov 2026)
+assumptions:
+- DRAFT from Yahoo data, not yet checked against Myriad's own filings (SEDAR+)
+- Not valued – explorer with no feasibility study and no revenue
+- Shares 141.05m are Yahoo's current count; the 31 Jul balance sheet shows 113.9m, so shares were issued after the
+  quarter. Any cash raised then is not counted here, which understates liquid assets
+- No debt; current liabilities C$0.8m not deducted
+- Main listing CSE (M.CN); MYRUF is the US OTC line

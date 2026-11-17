@@ -16,7 +16,7 @@ balance:
   cash: 23975
   debt: 59419
 price:
-  value: 333.9
+  value: 333.4
   currency: USD
   date: '2026-11-16'
   source: yfinance AVGO

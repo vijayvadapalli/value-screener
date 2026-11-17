@@ -115,6 +115,23 @@ def fcf_ps(c, cfg):
     return (e["cfo"] - e["capex_total"]) * per_year / c["shares_m"] * fx(cfg, c["currency"], _pc(c))
 
 
+def curve_delta_ps(c, cfg, spot) -> float:
+    """Owner-earnings change per share (price currency) from a `price_sensitivity:` block when `spot` differs from
+    today's spot (cfg["spot"]) – 0 at today's spot, so the headline value never moves. For companies whose realised
+    price lags spot through long-term contracts (Cameco): the company's own table of expected realised price at each
+    spot price, for one year. Change a year, US$m = (sales × Δrealised × (1 − royalty) − purchases at spot × Δspot)
+    × (1 − tax)."""
+    s = c.get("price_sensitivity")
+    if not s or spot[s["metal"]] == cfg["spot"][s["metal"]]:
+        return 0.0
+    curve = list(zip(s["spot"], s["realised"][s["year"]]))
+    now, case = cfg["spot"][s["metal"]], spot[s["metal"]]
+    d_realised = interp(curve, case)[0] - interp(curve, now)[0]
+    usd_m = (s["sales_mlb"] * d_realised * (1 - s.get("royalty", 0.0)) - s.get("purchases_mlb", 0.0) * (case - now)) \
+        * (1 - s.get("tax_rate", c.get("tax_rate", 0.0)))
+    return usd_m / c["shares_m"] * fx(cfg, "USD", _pc(c))
+
+
 # ---------------------------------------------------------------- models
 def value_producer(c, cfg, spot):
     """Producer, streamer, royalty and cash-flow (oil) models."""
@@ -125,7 +142,7 @@ def value_producer(c, cfg, spot):
     oe_rep = owner_earnings_ps(c, cfg, block)
     terms = list(_metal_terms(c, cfg, spot)) if block == "earnings" else []
     delta = sum(s * (spot[m] - r) for m, s, r, _ in terms)
-    oe = oe_rep + delta
+    oe = oe_rep + delta + (curve_delta_ps(c, cfg, spot) if block == "earnings" else 0.0)
     exp = sum(s * spot[m] for m, s, _, inc in terms if inc)          # value of a 100% move in scenario metals
     nc = net_cash_ps(c, cfg)
     price = c["price"]["value"]

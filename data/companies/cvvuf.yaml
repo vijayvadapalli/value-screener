@@ -1,0 +1,31 @@
+ticker: CVVUF
+yahoo: CVVUF
+name: CanAlaska Uranium
+sector: uranium
+model: liquid
+currency: CAD
+period:
+  label: Q1 FY2027 (31 Jul 2026)
+  end: '2026-07-31'
+  per_year: 4
+shares_m: 221.26
+liquid_assets:
+- label: Cash (31 Jul 2026)
+  amount: 4.33
+- label: Short-term investments (31 Jul 2026)
+  amount: 25.08
+debt: 0.55
+price:
+  value: 0.152
+  currency: USD
+  date: '2026-11-17'
+  source: yfinance CVVUF
+comment: Explorer / project generator – no resource study, no earnings. The price pays for exploration upside.
+sources:
+- Yahoo Finance balance sheet for CVVUF / CVV.V, quarter to 31 Jul 2026 (draft, 17 Nov 2026)
+assumptions:
+- DRAFT from Yahoo data, not yet checked against CanAlaska's own filings (SEDAR+)
+- Not valued – explorer with no feasibility study and no revenue
+- Fiscal year ends 30 April, so 31 Jul 2026 is taken as Q1 FY2027
+- Debt C$0.55m is lease liabilities
+- Main listing TSX Venture (CVV.V); CVVUF is the US OTC line (CVVVF is not a ticker on Yahoo)

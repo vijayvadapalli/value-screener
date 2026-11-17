@@ -1,6 +1,7 @@
 """Runs the models and rules over a set of companies."""
 from __future__ import annotations
 
+from . import forward
 from .models import value_company, etf_lookthrough
 from .rules import stale_check, zone
 from .types import Result
@@ -14,6 +15,10 @@ def run(companies: dict, tickers: list[str], cfg: dict) -> dict[str, Result]:
         r.update(stale_check(c, cfg))
         r.update(zone(r, c, cfg))
         r["assumptions"], r["notes"], r["sources"] = c.get("assumptions", []), c.get("notes", []), c.get("sources", [])
+        if c.get("forward") and r["model"] == "producer" and r.get("mult_lo"):
+            r["forward"] = forward.years(c, r, cfg)
+            r["forward_checks"] = list(c["forward"].get("checks", []))
+            r["consensus"] = forward.consensus_rows(c, r, cfg)
         results[t] = r
     return results
 

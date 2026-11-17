@@ -35,18 +35,18 @@ COLUMNS = [
     ("STORES", PURPLE, [
         ("Company files (YAML)", ["core, tech, oil, miners,", "nifty50 – in git"], BUILT),
         ("config.yaml + lists", ["spot, FX, tiers, zones"], BUILT),
-        ("us_facts.sqlite", ["SEC facts, 6y closes, runs"], BUILT),
+        ("us_facts.sqlite", ["SEC facts with filed dates,", "6y closes, all splits, runs"], BUILT),
         ("Caches & history", ["screen caches, runs.json,", "signals_log.csv"], BUILT),
         ("prices.sqlite", ["10–20y daily OHLCV, splits,", "dividends"], BUILT),
-        ("Research files", ["data/private/research,", "per stock, weekly"], PRIVATE),
+        ("Research files", ["data/private research,", "decision log"], PRIVATE),
     ]),
     ("ENGINE", AMBER, [
-        ("Valuation models", ["producer, cash-flow, NAV,", "growth DCF, leases"], BUILT),
+        ("Valuation models", ["producer, cash-flow, NAV, growth", "DCF, leases; price cases, forward"], BUILT),
         ("Rules", ["zones, signals, tiers, caps,", "flags, Nifty v2, bad loans"], BUILT),
         ("Profit vs price", ["grades A–D"], BUILT),
-        ("Screens", ["growth (India, US, tech),", "resource (core, oil, miners)"], BUILT),
+        ("Screens & backtests", ["growth (India, US, tech) and", "its backtest; resource screen"], BUILT),
         ("Model portfolios", ["balanced, resources", "value-first, ≤ 15 names"], BUILT),
-        ("Chart analytics", ["SMA, RSI, trend lines,", "levels; markets (price only)"], BUILT),
+        ("Chart analytics", ["SMA, RSI, levels; core", "buy zone (green+support+RSI)"], BUILT),
         ("Research merge", ["their levels vs our value"], PRIVATE),
     ]),
     ("OUTPUTS", GREEN, [

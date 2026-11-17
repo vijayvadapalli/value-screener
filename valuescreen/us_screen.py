@@ -330,13 +330,21 @@ US_SCREEN_TAIL = ("Insider ownership is shown (US companies have no promoter gro
                   "with the working and up to 20 years of prices.")
 
 
-def build(rows, path: Path, as_of: dt.date, in_files: set, notes: list[str], cfg: dict, screen_rows=None, pages=frozenset()):
+def build(rows, path: Path, as_of: dt.date, in_files: set, notes: list[str], cfg: dict, screen_rows=None, pages=frozenset(),
+          backtest=None):
     """The screen page. With `screen_rows` (growth_screen.rows_us) it opens with the growth-at-a-value-price screen;
-    `pages` are the tickers that have a page in us-screen/ (us_pages.py)."""
-    from .html_report import growth_screen_html  # noqa: PLC0415
+    `pages` are the tickers that have a page in us-screen/ (us_pages.py); `backtest` (backtest.run_us results) goes
+    below the screen."""
+    from .html_report import answer_html, backtest_html, growth_screen_html  # noqa: PLC0415
+    href = lambda t: f"us-screen/{t}.html" if t in pages else None  # noqa: E731
     screen_html = growth_screen_html(screen_rows or [], cfg, key="us_growth_screen", owners="Insiders", tail=US_SCREEN_TAIL,
-                                     href=lambda t: f"us-screen/{t}.html" if t in pages else None)
-    screen_block = screen_html + "\n" if screen_html else ""
+                                     href=href, panel=True)   # the settings panel (assets/screen.js)
+    bt_html = backtest_html(backtest or [], cfg, "S&P 500", href=href, panel=bool(screen_html)) if screen_html else ""
+    answer = answer_html(screen_rows or [], backtest or [], "S&P 500", href=href)
+    bt_link = ' · <a href="#backtest">Backtest</a>' if bt_html else ""
+    toc = (f'<nav class="toc">Contents: <a href="#screen">Screen</a> · <a href="#sum">All companies</a>{bt_link}</nav>\n'
+           if screen_html else "")
+    screen_block = toc + screen_html + "\n" if screen_html else ""
     counts = {s: sum(1 for r in rows if r.get("signal") == s) for s in ("green", "blue", "red", "grey")}
     short = shortlist(rows)
     short_html = ", ".join(f'<b>{_e(r["ticker"])}</b> ({S.pct(r["implied_growth"], 1)}, {r["grade"]})' for r in short) or "none"
@@ -349,23 +357,25 @@ def build(rows, path: Path, as_of: dt.date, in_files: set, notes: list[str], cfg
 <h1>S&amp;P 500 and Nasdaq-100 – quick screen</h1>
 <p class="sub">{len(rows)} companies · run {as_of:%d %b %Y} · <span class="pos">{counts['green']} cheap</span>, {counts['blue']} watch / hold,
 <span class="neg">{counts['red']} expensive or loss-making</span>, {counts['grey']} not valued</p>
-<p class="method"><b>How it works.</b> Official figures from each company's SEC filings (Yahoo for the few foreign filers): the last
+{answer}
+<details class="method"><summary>How the values are worked out</summary><p class="method"><b>How it works.</b> Official figures from each company's SEC filings (Yahoo for the few foreign filers): the last
 twelve months' net income ÷ shares, plus net cash. Value with no growth = EPS × {dcf_factor(0.0, cfg, RATE):.1f} + net cash;
 <b>growth needed</b> = the yearly growth for 5 years (15x exit, 10% return) that makes the value equal the price.
 Green ≤ 5% a year, blue 5–25%, red ≥ 25% or no earnings. Financials use book value × 5-year ROE (no net cash), energy and materials
 average the 12-month and 5-year EPS and are capped at blue, real estate is not valued, and cash conversion below 70% caps at blue.
 Lenders: book value less nonaccrual loans the allowance doesn't cover; nonaccrual loans above 2% of loans, an allowance below
 them, or net charge-offs (NCO) up by half on a year earlier cap at blue.
-Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … D = rose a third+). A filter, not a verdict.</p>
-<div class="short"><b>Shortlist</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution, one-off or bad-loan flags): {short_html}</div>
-{screen_block}<h3>By sector</h3>{sector_table(rows)}
+Grade = profit growth vs price growth over about 3 years (A = P/E fell 25%+ … D = rose a third+). A filter, not a verdict.</p></details>
+{screen_block}<div class="short"><b>Cheapest on value alone</b> (green, grade A or B, cash conversion ≥ 70%, no debt, dilution, one-off or bad-loan flags): {short_html}</div>
+<h3>By sector</h3>{sector_table(rows)}
 <div class="controls"><span class="lab">Signal</span>{buttons('signal', [('green', 'Cheap'), ('blue', 'Watch / hold'), ('red', 'Expensive'), ('grey', 'Not valued')])}
 <span class="lab">Index</span>{buttons('index', [('S&P 500', 'S&P 500'), ('Nasdaq-100', 'Nasdaq-100')])}
 <span class="lab">Sector</span>{buttons('sector', [(s, s) for s in sectors])}
 <input id="q" type="search" placeholder="Search ticker, name, industry"><span class="lab" id="count"></span></div>
 <div class="wrap"><table class="sum" id="sum"><thead>{HEAD}</thead><tbody>{''.join(_row(r, in_files, pages) for r in rows)}</tbody></table></div>
 <ul class="small">{''.join(f'<li>{_e(n)}</li>' for n in notes)}</ul>
-<footer>Prices in US$ from Yahoo; fundamentals from SEC EDGAR company facts. Educational framework, not investment advice.</footer>
+{bt_html}
+<footer>Prices in US$ from Yahoo; fundamentals from SEC EDGAR company facts.</footer>
 """
     html_page = page.document("US large caps – quick screen", page.report_css() + page.asset("screen-us.css"), body,
                               scripts=f"<script>{page.asset('screen-us.js')}</script>")

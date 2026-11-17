@@ -46,8 +46,10 @@ The other reports are single files you can send as one attachment.
 - **STALE.** The results or the price are too old to trust. A stale company never shows as green.
 - **[flags]** in the comments point at things to check yourself: one-off quarters, cyclicals, high costs, conglomerates.
 
-Start with the summary table: click a column to sort, filter by signal or grade, and click a ticker to jump to that
-company's section.
+Every report opens with the answer: the screen's pages (Nifty 50, Midcap 150, tech, US) say who passes all five
+rules today, who misses by one, and what the same rules returned in the backtest; the core report says what is in the
+buy zone. The method sits folded under *How the values are worked out*. Then the summary table: click a column to
+sort, filter by signal or grade, and click a ticker to jump to that company's section.
 
 ### Words used in the reports
 
@@ -79,7 +81,7 @@ figures.
 
 The rules follow the Valuation Playbook (Nov 2026); `PROJECT_INSTRUCTIONS.md` has them in full, ready to paste into a
 Claude Project. New to valuing companies? Start with [docs/Valuation_Overview.pdf](docs/Valuation_Overview.pdf) (4 pages, no
-formulas), then [docs/Valuation_Guide.pdf](docs/Valuation_Guide.pdf) (21 pages: Part A tech and DCF, Part B miners, technical analysis – every term, model and formula with worked
+formulas), then [docs/Valuation_Guide.pdf](docs/Valuation_Guide.pdf) (25 pages: Part A tech, DCF and Dr. Amit Gupta's growth screen with a Screener.in comparison, Part B miners, technical analysis – every term, model and formula with worked
 examples; rebuild with `python docs/build_valuation_guide.py`). [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) shows how everything fits together – what is built, what is
 next, and what stays private.
 
@@ -250,7 +252,10 @@ them each quarter. NSE / BSE results filings remain the authority – check the 
 ## Nifty Midcap 150 – the growth screen
 
 Every company in the Nifty Midcap 150 (plus any you add by hand) gets the full Nifty v2 valuation, and on top of it a
-**growth-at-a-value-price screen** (`valuescreen/growth_screen.py`, thresholds under `growth_screen:` in `config.yaml`):
+**growth-at-a-value-price screen** (`valuescreen/growth_screen.py`, thresholds under `growth_screen:` in `config.yaml`).
+The filter and its rules are **Dr. Amit Gupta's** – the defaults below, which the settings panel's *Reset to Dr. Gupta's
+rules* returns to. The US screen and the tech report use the same rules, a little more liberal (P/E ≤ 18, growth ≥ 15%,
+return ≥ 10%); the resource screen translates them for miners and oil.
 
 | Condition | Rule |
 |---|---|
@@ -293,35 +298,62 @@ its chart images are drawn lighter (`chart_dpi: 100` in the list file), and it i
 summary page is under half a MB and each company page about 100 KB. Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. Its profit-vs-price figures come from the Screener EPS already in
 the company files and the stored daily prices, so they cost no extra Screener requests.
 
-**Settings panel** (`screen_panel: true` in the Midcap 150 and Nifty 50 list files): above the screen, change the rules and the
-table re-sorts at once – max P/E, min EPS growth, min 5-year return, holding years, exit multiple, min promoter holding,
-and switches for a promoter rule, excluding government-owned companies, Midcap 150 only (leaving out the stocks you
-added), excluding cyclicals and showing every company. A funnel shows how many companies survive each step (start →
-after guards → + growth → + P/E → + 5-yr return → + promoters → + government-owned rule). The settings are kept in the
+**How the screen page reads** (Nifty 50, Midcap 150, tech and the US screen page): the answer first (who passes,
+who misses by one rule, the backtest in one sentence), then the five rules in plain words, the funnel as a sentence
+("Of 142 companies, 97 have clean books and a profit every year, 22 of those grew fast enough, …"), the shortlist
+table, the near misses on one line with what each falls short on, and everyone else folded away. The backtest sits
+below the results table; the sliders and the method notes are folded until you open them.
+
+**Settings panel** (`screen_panel: true` in the Midcap 150, Nifty 50 and tech list files; always on the US screen page):
+under *Change the rules* (folded; a link with settings opens it), move the sliders and the table re-sorts at once – max P/E (5–40), min EPS growth (0–40%), min 5-year
+return (0–25%), holding years (1–10), exit multiple (5–30x), min promoter holding, and switches for a promoter rule, excluding government-owned companies, Midcap 150 only (leaving out the stocks you
+added), excluding cyclicals and showing every company. The funnel sentence shows how many companies survive each step (start →
+after guards → + growth → + P/E → + 5-yr return, then the promoter and government-owned rules when they are switched
+on), and the five rules, the answer at the top and the near-miss line follow the sliders. The settings are kept in the
 address, so a link opens with them, e.g. `midcap150.html?pe=20&growth=15&promoters=50&prule=1&psu=1#screen`;
 **Reset to Dr. Gupta's rules** goes back to the defaults in `config.yaml`. The browser recomputes exactly as
 `growth_screen.py` does (`valuescreen/assets/screen.js`; `tests/test_screen_panel.py` runs it in Node against Python for
 many settings). *Holding years* change only the return of the hold – the growth figures stay 5 and 3 years. Without
-JavaScript, or at the default rules, the page shows the table the server wrote. Both headers leave out the metal
+JavaScript, or at the default rules, the page shows the table the server wrote. A setting typed into the address is
+kept within the slider's range. On the US screen page and in the tech report the panel has the US rules and no promoter,
+government-owned or Midcap 150 switches (insiders are shown, never a rule), and the funnel ends at the 5-year return. Both headers leave out the metal
 spot prices (`hide_spot: true`) – they are India-only lists. The Midcap 150 only switch appears when the list has stocks
 you added.
 
-**How these rules did** (`backtest: [5, 4, 3, 2]` in the Nifty 50 and Midcap 150 list files; `valuescreen/backtest.py`):
-the screen's rules applied 5, 4, 3 and 2 years ago with only what was known then – the yearly EPS of the years whose
-results were out (60 days after March), the price that day, the promoter holding where the data reaches back – then each
-pick's return to today with dividends, the equal-weighted average, the same for every stock screened (mean and median),
-and the index's price return. On the command line:
+**How these rules did** (`backtest: [5, 4, 3, 2]` in the Nifty 50, Midcap 150 and tech list files, and
+`us_growth_screen.backtest` in `config.yaml` for the US screen page; `valuescreen/backtest.py`): the screen's rules
+applied 5, 4, 3 and 2 years ago with only what was known then, then each pick's return to today, the equal-weighted
+average, the same for every stock screened (mean and median), and the index's price return. It sits below the results table,
+with a *Backtest* link in the contents line and one chart – the growth of 1 since the earliest start with picks:
+picks, all screened and the index. **It follows the settings panel:** move a slider and every start date is re-picked
+in the browser (the page carries each stock's figures then and its return since – the stocks that could pass anywhere
+within the sliders' ranges); the picks, their averages, best and worst are redone, while all screened (less the
+cyclicals if excluded) and the index stay. The chart always shows the default rules. The promoter rule applies only
+where the holding then is in the data (the files keep the last 8 quarters). `tests/test_screen_panel.py` checks the
+browser's re-pick against `backtest.run_start` with the same rules.
+
+| | India (Nifty 50, Midcap 150) | US screen page and tech |
+|---|---|---|
+| Known then | yearly EPS of the years whose results were out (60 days after March), the price, promoter holding where the data reaches back | every SEC figure **filed** on or before the date (later restatements ignored), the share count and price of then, on the share basis of then (splits both ways) |
+| Returns | with dividends (Yahoo's adjusted close) | price only – the stored US prices have no dividends (about 1.5% a year) |
+| Index | Nifty 50 / Nifty Midcap 150, price only | S&P 500 for the US screen, Nasdaq-100 for tech |
+| Left out | stocks listed later, stocks you added | stocks listed later, foreign filers (Yahoo figures are today's), gaps in the SEC data then |
+
+On the command line:
 
 ```bash
 python -m valuescreen backtest --list midcap150 --years 5     # starts 5, 4, 3 and 2 years ago
+python -m valuescreen backtest --list tech                    # the tech list, against the Nasdaq-100
+python -m valuescreen backtest --list us                      # the whole S&P 500 + Nasdaq-100 screen (~8 seconds)
 ```
 
 Read it with care: it uses **today's** index members (the index of five years ago is not in the data), so every average
-is flattered – compare the picks with *all screened*, not with the index; the latest yearly EPS stands in for the last
-twelve months; there is no net cash, cash conversion or bad-loan check then; the index is price only (no total-return
-index on Yahoo); demergers are not adjusted in the prices. The EPS history in the files starts at FY2017, so the 5-year
-start measures growth and the hold over 4 years (labelled); `fetch_screener.py` now keeps 12 years, so after the next
-quarterly fetch it is exact. Past performance only.
+is flattered – compare the picks with *all screened*, not with the index. India: the latest yearly EPS stands in for
+the last twelve months; there is no net cash, cash conversion or bad-loan check then; demergers are not adjusted in the
+prices. The EPS history in the files starts at FY2017, so the 5-year start measures growth and the hold over 4 years
+(labelled); `fetch_screener.py` now keeps 12 years, so after the next quarterly fetch it is exact. The tech list's
+dozen SEC filers rarely meet a P/E of 18 – on all four dates it had no picks, so its chart shows all screened against
+the Nasdaq-100. Past performance only.
 
 **Screener.in throttles heavy use**: after about 170 pages it sends pages with the figures left blank.
 `fetch_screener.py` refuses those pages and lists them as failed – re-run just those later with `--tickers`.
@@ -419,6 +451,43 @@ dilution is not checked yet (the yearly share counts are not in the data). The t
 the US growth screen below, on its own valuation (owner earnings – so Alphabet's heavy capex shows) with the EPS history
 from the SEC filings; TSMC and ASML file abroad and have no SEC history.
 
+**Price cases (core):** each core company page has a *Price cases – assumption, not reported* table: the value
+at 12x / 15x / 25x (NAV for developers and physical holders) with the metal at each price under `price_cases:` in
+`config.yaml` (gold 3,500 / 4,000 / 5,000; silver, uranium and copper are placeholders), plus today's spot. One
+metal moves at a time, the others stay at spot; a by-product under 15% of metal revenue gets no table. The trailing
+value is unchanged. Companies with no metal sensitivity in their file (Ivanhoe, Freehold, oil, SLB) show none yet.
+Turn it on for another list with `price_cases: true` in its list file.
+
+Cameco sells mostly under long-term contracts, so pounds × spot would be wrong. Its file has a `price_sensitivity:`
+block instead: Cameco's own MD&A table of expected realised price at each spot price (one year's row is used, 2028),
+pounds sold, pounds bought at spot, royalty and tax, each sourced in the file's assumptions. A case changes earnings by
+(sold × Δrealised × (1 − royalty) − bought × Δspot) × (1 − tax), and nothing at today's spot. The 2026 row reproduces
+the direction and rough size of Cameco's reported ±US$5/lb earnings sensitivity (see the assumptions in `ccj.yaml`).
+Update the block each quarter, when the MD&A table changes.
+
+**Forward – the company's own estimates:** a company file can carry a `forward:` block (`valuescreen/forward.py`):
+owner earnings for coming years, built line by line from the company's own outlook, capital plan and contract table,
+each line with its source. The company page shows a table beside the trailing value – *Forward – the company's own
+estimates, assumption, not reported* – with the value at 12x / 15x / 25x per year, every line behind it, and analyst
+consensus EPS as a reference row (never used in a value). The headline value, signal and screen stay on reported
+results. Before a forward block is trusted, two checks go in its `checks:`: the same inputs reproduce the company's
+reported figures, and the result is compared with consensus.
+
+Cameco is the first (Q3-2026 MD&A and the 2025 annual MD&A):
+
+| | Owner earnings / share | 12x | 15x | 25x |
+|---|---|---|---|---|
+| Trailing, 9M-2026 restated | US$0.86 | $10.04 | $12.61 | $21.17 |
+| 2026 – full-year outlook | US$1.00 | $11.76 | $14.75 | $24.74 |
+| 2028 – contract table at spot US$92, capital plan | US$1.26 | $14.86 | $18.63 | $31.21 |
+
+Its trailing owner earnings were restated from the reported figures: adjusted net earnings + D&A − sustaining and
+capacity-replacement capex, with Westinghouse moved from its IFRS net loss (mostly amortisation of the purchase price)
+to owner earnings (adjusted EBITDA less incentive plan, finance costs and sustaining capex), and share-based
+compensation counted as a cost. Checks: the 2026 inputs give about C$1.09 a share on Cameco's adjusted-earnings basis
+against a consensus of C$1.08; for 2027 consensus is C$2.41, well above the about C$1.45 that Cameco's own contract
+table supports for 2028. The share price (US$66) is above even the 25x value on Cameco's own estimates.
+
 **20 years of prices:** core, tech, oil, miners and watchlist have `history_years: 20` in their list files.
 `update_history.py` loads the deeper history once per company (it remembers how far back it went, and leaves alone
 symbols that already go further – gold from 2000, the dollar index from 1971); their charts show it with a *Max* button.
@@ -504,6 +573,32 @@ signal. The core list holds gold, silver, uranium, WTI crude, the US dollar inde
 Uranium has no daily series on Yahoo, so it uses Cameco's month-end spot price from 1988
 (`python -m valuescreen.longterm` refreshes it; the weekly routine does this). `tools/update_history.py` downloads the
 history for every `yahoo` market in the lists.
+
+## Buy zone, review and the decision log (core)
+
+The core report opens with two lists (`buy_zone: true` in `data/lists/core.yaml`; `valuescreen/buy_zone.py`,
+thresholds under `buy_zone:` in `config.yaml`):
+
+| List | When a company is on it |
+|---|---|
+| **Buy zone** | all three: the valuation is **green**, the price is at most **5% above the nearest support** (found on the chart, or a watched level from your research), and the **14-day RSI is below 30** |
+| **Review** | two of the three – the missing one is named |
+
+Support and RSI come from the stored price history (`tools/update_history.py`), the same figures the chart shows;
+a company without price history is left out. A list is a prompt to look, not a trade: check the news and the latest
+results first.
+
+**Decision log**, beside the lists: what you decided and why. It is private – `data/private/decisions/core.yaml`, never
+committed. Add an entry with
+
+```bash
+python tools/decide.py AEM wait "RSI 34, not oversold yet; support 152 holds"
+python tools/decide.py FNV buy "first third at support" --price 181.40 --public
+```
+
+Decisions: buy, add, hold, wait, skip, trim, sell, review. Only entries with `--public` (`public: true` in the file)
+appear in the published report; each run also writes the whole log with both lists to
+`output/private/core-decisions.html`. A company's latest decision shows under its name in the lists.
 
 ## Private research (your weekly report – never committed)
 
@@ -751,6 +846,9 @@ valuescreen/screening.py   the screening rules shared by the full valuation and 
                            growth and multiple bands, blue caps, colours – one copy
 valuescreen/growth_screen.py  the growth screen (Midcap 150, Nifty 50, US): P/E, 5- and 3-year EPS growth, 5-year return, guards, owner flags
 valuescreen/resource_screen.py  the resource screen (core, oil, miners): fair value, metal −20%, volume growth, 5-year return
+valuescreen/buy_zone.py    buy-zone and review lists for core (green + near support + RSI < 30) and the private decision log
+valuescreen/price_cases.py  value at fixed metal prices (config price_cases:), on the pages of lists with price_cases: true
+valuescreen/forward.py     owner earnings for coming years from the company's own estimates (forward: in a company file)
 valuescreen/us_pages.py   pages for the interesting US companies: the screen's working, SEC figures, EPS and 20-year price charts
 valuescreen/kinds/        one class per valuation model (producer, developer, physical, growth, leases, liquid): its zone,
                            headline, steps, worked example, key figures, cards, chart, heatmap and price-chart lines.
@@ -776,7 +874,14 @@ valuescreen/model_portfolio.py   the model portfolios: candidates from every scr
 valuescreen/us_screen.py, us_universe.py, us_fundamentals.py, sec.py, factsdb.py   the S&P 500 / Nasdaq-100 screen:
                            index lists, SEC download, figures from filings, the SQLite database
 tools/                     update_prices, update_results (AI), fetch_screener, profit_vs_price, make_etf_list, screen_miners, screen_us, model_portfolio, update_history, research, weekly,
-                           screen_universe, make_nse_list, fill_net_cash
+                           screen_universe, make_nse_list, fill_net_cash, decide
 ```
 
-Educational framework, not investment advice.
+## Disclaimer
+
+For education and research only – not investment advice, a recommendation, or an offer to buy or sell any security.
+Figures come from company filings and public data providers and may be wrong, late or incomplete; values come from a
+mechanical model and are not forecasts. Past results, backtests included, do not predict future returns. Do your own
+research, and talk to a licensed adviser before you invest. The author may hold positions in companies shown.
+
+© 2026 Vijay Vadapalli. All rights reserved.

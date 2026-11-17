@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 from . import growth_data, growth_screen, history, html_report, loader, longterm, markets, price_chart, pricedb, prices, report
-from . import research, resource_screen, technicals
+from . import buy_zone, price_cases, research, resource_screen, technicals
 from . import profit_vs_price as pvp
 from .wording import list_title
 from .engine import etf_lookthrough, ranked, run
@@ -52,7 +52,7 @@ def _parser():
     r.add_argument("--no-profit", action="store_true", help="skip the profit-vs-price figures (no Yahoo / Screener.in calls)")
     sub.add_parser("validate", help="check every company file")
     b = sub.add_parser("backtest", help="how the growth screen's rules did: picks on a past date, returns since")
-    b.add_argument("--list", required=True, help="a list with the growth screen, e.g. midcap150 or nifty50")
+    b.add_argument("--list", required=True, help="a list with the growth screen (midcap150, nifty50, tech) or us (the S&P 500 + Nasdaq-100 screen)")
     b.add_argument("--years", type=int, default=5, help="the earliest start, in years before today (default 5; then every year to 2)")
     return ap
 
@@ -163,7 +163,17 @@ def _backtest(list_name, companies, cfg, settings, log):
     if not years or not pricedb.DB.exists():
         return []
     from . import backtest  # noqa: PLC0415
-    results = backtest.run(list_name, loader.load_list_entries(list_name), companies, cfg, years=tuple(years))
+    if settings.get("screen") == "us-growth":   # US companies: rebuilt from the SEC figures filed by each start date
+        from . import factsdb  # noqa: PLC0415
+        db = loader.output_folder("us") / "us_facts.sqlite"
+        if not db.exists():
+            return []
+        con = factsdb.connect(db)
+        wanted = {x["ticker"] for x in loader.load_list_entries(list_name)}
+        entries = [x for x in factsdb.companies(con) if x["ticker"] in wanted]
+        results = backtest.run_us(entries, con, cfg, backtest.INDEX_SYMBOL.get(list_name, "^GSPC"), years=tuple(years))
+    else:
+        results = backtest.run(list_name, loader.load_list_entries(list_name), companies, cfg, years=tuple(years))
     log.append("backtest: " + " · ".join(f"since {b['start']:%b %Y} {len(b['picks'])} picks" for b in results))
     return results
 
@@ -239,11 +249,16 @@ def main(argv=None):
     if a.cmd == "backtest":
         from . import backtest  # noqa: PLC0415
         cfg = loader.load_config()
-        companies = loader.load_companies(loader.companies_folder(loader.list_folder(a.list)))
-        results = backtest.run(a.list, loader.load_list_entries(a.list), companies, cfg, years=tuple(range(a.years, 1, -1)))
+        years = tuple(range(a.years, 1, -1))
+        if a.list == "us":   # the whole S&P 500 + Nasdaq-100 screen
+            from . import factsdb  # noqa: PLC0415
+            con = factsdb.connect(loader.output_folder("us") / "us_facts.sqlite")
+            results = backtest.run_us(factsdb.companies(con), con, cfg, backtest.INDEX_SYMBOL["us"], years=years)
+        else:
+            companies = loader.load_companies(loader.companies_folder(loader.list_folder(a.list)))
+            results = _backtest(a.list, companies, cfg, dict(loader.list_settings(a.list), backtest=list(years)), [])
         print("\n".join(backtest.summary_lines(results)))
-        print("\nToday's members only (survivorship bias); the latest yearly EPS for the last twelve months; no net cash. "
-              "Past performance only.")
+        print("\nToday's members only (survivorship bias). Past performance only.")
         return 0
     cfg = loader.load_config(Path(a.config) if a.config else None)
     folder = a.folder or (loader.list_folder(a.list) if a.list else None)
@@ -261,6 +276,8 @@ def main(argv=None):
     cfg["spot"].update(_parse_spot(a.spot))
 
     results = run(companies, tickers, cfg)
+    if a.list and loader.list_settings(a.list).get("price_cases"):
+        price_cases.attach(results, companies, cfg)
     vals, grow = ranked(results)
     out = Path(a.out) if a.out else loader.output_folder(folder)
     out.mkdir(parents=True, exist_ok=True)
@@ -284,6 +301,8 @@ def main(argv=None):
                 screen_style["href"] = lambda t, d=a.list: f"{d}/{t}.html"
     elif screen == "us-growth":
         screen_rows, screen_style = _us_growth_rows(results, companies, cfg, a.live, log)
+        if screen_rows and loader.list_settings(a.list).get("screen_panel"):
+            screen_style["panel"] = True
     market_rows = markets.rows([x for x in loader.load_list_entries(a.list) if markets.is_market(x)], log.append) if a.list else []
     profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
     resource_rows = (resource_screen.rows(results, {p["ticker"]: p for p in profit_rows}, _metal_growth, cfg)
@@ -299,6 +318,17 @@ def main(argv=None):
     title = list_title(name)
     settings = loader.list_settings(a.list) if a.list else {}
     files = []
+    bz_rows, decisions, private_page = None, [], None
+    if settings.get("buy_zone") and results:   # buy-zone and review lists with the decision log (buy_zone.py)
+        bz_rows = buy_zone.rows(results, pcharts, cfg)
+        decisions = buy_zone.load_decisions(name)
+        buy, review = buy_zone.split(bz_rows)
+        log.append(f"buy zone: {len(buy)} now ({', '.join(r['ticker'] for r in buy) or 'none'}), {len(review)} to review; "
+                   f"{len(decisions)} decisions in the log, {sum(d['public'] for d in decisions)} public")
+        if not pcharts:
+            log.append("buy zone: no price charts, so no support or RSI – run python tools/update_history.py")
+        private_page = buy_zone.write_private(bz_rows, decisions, cfg, title, name,   # never published
+                                              out=Path(a.out) / "private" if a.out else None)
     if results:
         extras = html_report.ReportExtras(previous=previous or {}, tech=tech, lookthroughs=lookthroughs,
                                           heatmaps=report.make_heatmaps(vals, grow, cfg, out), log_lines=log,
@@ -306,9 +336,10 @@ def main(argv=None):
                                           screen_style=screen_style, resource_rows=resource_rows,
                                           hide_spot=bool(settings.get("hide_spot")),
                                           backtest=_backtest(a.list, companies, cfg, settings, log),
-                                          index_name={"nifty50": "Nifty 50", "midcap150": "Nifty Midcap 150"}.get(a.list or "", "Index"),
+                                          index_name={"nifty50": "Nifty 50", "midcap150": "Nifty Midcap 150", "tech": "Nasdaq-100"}.get(a.list or "", "Index"),
                                           chart_dpi=settings.get("chart_dpi"),
-                                          pages=name if settings.get("layout") == "pages" else None)
+                                          pages=name if settings.get("layout") == "pages" else None,
+                                          buy_zone=bz_rows, decisions=decisions)
         files.append(html_report.build(results, companies, cfg, profit_rows, out / html_report.file_name(name, cfg["as_of"]), title,
                                        extras))
     if not a.out:   # the latest report, under a fixed name, for git and GitHub Pages
@@ -318,6 +349,8 @@ def main(argv=None):
             files.append(loader.publish_dir(out / name, name))
             files.append(loader.publish_dir(out / "assets", "assets"))
     files.append(out / "ranked.csv")
+    if private_page:
+        files.append(private_page)
     history.save(runs, cfg["as_of"], results)
     _print_summary(cfg, vals, grow, lookthroughs, log, files)
     return 0

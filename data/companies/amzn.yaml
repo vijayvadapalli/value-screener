@@ -15,7 +15,7 @@ balance:
   cash: 114200
   debt: 180300
 price:
-  value: 258.175
+  value: 257.75
   currency: USD
   date: '2026-11-16'
   source: yfinance AMZN

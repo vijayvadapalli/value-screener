@@ -10,6 +10,7 @@ assets/report.css uses $NAME placeholders for the colours in style.py (CSS itsel
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 from functools import lru_cache
 from pathlib import Path
@@ -76,7 +77,22 @@ def shared_scripts(prefix: str, charts: bool = True, table: bool = False) -> str
     return out
 
 
+COPYRIGHT_HOLDER = "Vijay Vadapalli"
+DISCLAIMER = ("<b>Disclaimer.</b> For education and research only – not investment advice, a recommendation, or an offer to buy "
+              "or sell any security. Figures come from company filings and public data providers and may be wrong, late or "
+              "incomplete; values come from a mechanical model and are not forecasts. Past results, backtests included, do not "
+              "predict future returns. Do your own research, and talk to a licensed adviser before you invest. The author may "
+              "hold positions in companies shown.")
+
+
+def legal_footer() -> str:
+    """The disclaimer and copyright line that closes every page (the README carries the same text)."""
+    return (f'<footer class="legal"><p>{DISCLAIMER}</p>'
+            f'<p>© {dt.date.today().year} {COPYRIGHT_HOLDER}. All rights reserved.</p></footer>')
+
+
 def document(title: str, css: str, body: str, scripts: str = "", head: str = "", main_attrs: str = "") -> str:
-    """A whole page: `title` is already escaped HTML, `head` goes before the title (e.g. a robots tag)."""
-    return (f"{HEAD}{head}<title>{title}</title><style>{css}</style></head><body><main{main_attrs}>{body}</main>"
-            f"{scripts}</body></html>")
+    """A whole page: `title` is already escaped HTML, `head` goes before the title (e.g. a robots tag). Every page
+    ends with the disclaimer and copyright line (legal_footer)."""
+    return (f"{HEAD}{head}<title>{title}</title><style>{css}</style></head><body><main{main_attrs}>{body}"
+            f"{legal_footer()}</main>{scripts}</body></html>")

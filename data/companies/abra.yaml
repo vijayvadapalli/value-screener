@@ -28,9 +28,9 @@ balance:
   amount: 75.563
   currency: CAD
 price:
-  value: 10.29
+  value: 10.19
   currency: CAD
-  date: '2026-11-16'
+  date: '2026-11-17'
   source: yfinance ABRA.TO
 sources:
 - Diablillos Definitive Feasibility Study, 22 Jun 2026 (after-tax NPV 8%)

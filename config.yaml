@@ -67,13 +67,23 @@ price_stale_days: 7              # a share price older than this gets a [price N
 # margin of safety at 12x (or at or below 0.8x NAV). A company file can also set `tier:` itself.
 tiers:
   A: [AEM, AGI, CCJ, FNV, NEM, PAAS, RGLD, WPM]
-  B: [CDE, FRHLF, FSM, IAG, IVN, IVPAF]
-  C: [ABRA, HUT, MTA, NXE, UEC, UUUU, YCA]
+  B: [CDE, FSM, IAG, IVN, IVPAF]
+  C: [ABRA, CVVUF, DNN, FRHLF, HUT, MTA, MYRUF, NXE, SRUUF, UEC, UUUU, YCA]
 
 # Shade for growth stocks (tech, Nifty 50) = market value in US$ bn: darkest / medium / light, lightest below.
 market_cap_shades_usd_bn: {darkest: 100, medium: 30, light: 10, tech_mega: 200}
 
 stress_gold: [3000, 3500]        # producers: value at 12x if gold falls to these prices (US$/oz)
+
+# Price cases (valuescreen/price_cases.py), shown on the company pages of lists with `price_cases: true` (core): the
+# value at 12x / 15x / 25x (NAV for developers and physical holders) at each of these prices, one metal at a time,
+# the others at spot. Today's spot is always added as a row. An assumption, not a reported figure.
+# US$/oz (gold, silver) or US$/lb (uranium, copper). Silver, uranium and copper are placeholders until chosen.
+price_cases:
+  gold: [3500, 4000, 5000]
+  silver: [40, 50, 65]
+  uranium: [70, 90, 120]
+  copper: [4.50, 5.50, 7.00]
 
 nifty_v2:                        # per-share rules for Indian companies valued from Screener.in (tools/fetch_screener.py)
   one_off_median_x: 2.0          # a quarter is a one-off if > 2x the median of the other 7 quarters ...
@@ -130,6 +140,14 @@ us_growth_screen:
   near_min_eps_cagr: 0.12
   min_cash_conversion: 0.70
   page_years: 20               # price history on the pages of the interesting companies (shortlist, near miss, green)
+  backtest: [5, 4, 3, 2]       # the US screen page's backtest: these rules on dates this many years ago (backtest.run_us)
+
+# Buy-zone and review lists (valuescreen/buy_zone.py) for lists with `buy_zone: true` – the core list. Buy zone =
+# valuation green, the price near support and the RSI oversold, all three; review = two of the three. The decision log
+# is private: data/private/decisions/<list>.yaml (tools/decide.py); entries with `public: true` show in the report.
+buy_zone:
+  near_support: 0.05           # the price at most 5% above the nearest support (auto on the chart, or a watched level)
+  max_rsi: 30                  # 14-day RSI below this
 
 # The resource screen (valuescreen/resource_screen.py) for lists with `screen: resource` – core, oil, miners: the
 # growth screen translated for companies whose profit follows a metal or oil price.

@@ -14,6 +14,7 @@ import base64
 import html
 import json
 import re
+import statistics
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -174,6 +175,84 @@ def _key_figures(r):
     return f'<table class="kv">{rows}</table>'
 
 
+def _price_cases(r):
+    """The value at the metal prices in config `price_cases:` (price_cases.py) – one table per metal; empty if none."""
+    tables = r.get("price_cases") or []
+    if not tables:
+        return ""
+    ccy, price = r["price_ccy"], r["price"]
+    out = []
+    for t in tables:
+        unit = "lb" if t["metal"] in ("uranium", "copper") else "oz"
+        if t["kind"] == "multiples":
+            heads = [f"{r['mult_lo']}x", f"{r['mult_hi']}x", f"{r['sell_multiple']}x sell"]
+        else:
+            heads = ["NAV / share", "Price ÷ NAV"]
+        head = f'<tr><th>{e(t["metal"].title())} (US$/{unit})</th>' + "".join(f"<th>{h}</th>" for h in heads) + "</tr>"
+        body = []
+        for row in t["rows"]:
+            p = f"{row['price']:,.0f}" if row["price"] >= 100 else f"{row['price']:,.2f}"
+            label = f"{p} <small class=\"muted\">today's spot</small>" if row["spot"] else p
+            cells = [f'<td class="{"pos" if v >= price else ""}">{money(v, ccy)}</td>' for v in row["values"]]
+            if t["kind"] == "nav":
+                nav = row["values"][0]
+                cells.append(f"<td>{price / nav:.2f}x</td>" if nav > 0 else "<td>–</td>")
+            body.append(f'<tr class="{"b" if row["spot"] else ""}"><td>{label}</td>{"".join(cells)}</tr>')
+        out.append(f'<table class="mk pcase">{head}{"".join(body)}</table>')
+        if t.get("note"):
+            out.append(f'<p class="muted small">{e(t["note"])}</p>')
+    return ('<h3>Price cases <small class="muted">– assumption, not reported</small></h3>' + "".join(out)
+            + f'<p class="muted small">Value per share if the metal price held at each case, the company\'s own model re-run '
+              f'with that one metal moved and everything else at spot. Green: at or above today\'s price '
+              f'({money(price, ccy)}). Not a forecast: it shows what you would have to believe about the metal price.</p>')
+
+
+def _times(x):
+    return "–" if x is None else f"{x:.1f}x"
+
+
+def _forward(r):
+    """Owner earnings for coming years from the company's own estimates (forward.py), with every line, the checks
+    against reported results and consensus, and analyst consensus as a reference row. Empty if the file has none."""
+    years, cons = r.get("forward") or [], r.get("consensus") or []
+    if not years:
+        return ""
+    ccy, price = r["price_ccy"], r["price"]
+    lo, hi, sell = r["mult_lo"], r["mult_hi"], r["sell_multiple"]
+    head = (f"<tr><th>Year</th><th>Owner earnings / share</th><th>{lo}x</th><th>{hi}x</th><th>{sell}x sell</th>"
+            f"<th>Price ÷ earnings</th></tr>")
+    rows = [f'<tr class="b"><td>Trailing (reported)</td><td>{money(r["oe"], ccy)}</td>'
+            + "".join(f"<td>{money(v, ccy)}</td>" for v in (r["v_low"], r["v_high"], r["v_sell"]))
+            + f'<td>{_times(r.get("pe"))}</td></tr>']
+    for y in years:
+        cells = "".join(f'<td class="{"pos" if v >= price else ""}">{money(v, ccy)}</td>' for v in y["values"])
+        rows.append(f'<tr><td>{y["year"]} <small class="muted">company estimates</small></td><td>{money(y["oe_ps"], ccy)}</td>'
+                    f'{cells}<td>{_times(y["pe"])}</td></tr>')
+    for x in cons:
+        rng = f", range {x['low']:,.2f}–{x['high']:,.2f}" if x.get("low") is not None else ""
+        rows.append(f'<tr><td>{x["year"]} <small class="muted">analyst consensus EPS</small></td>'
+                    f'<td>{money(x["eps_pc"], ccy)}</td><td colspan="3"><small class="muted">{x.get("currency", "")} '
+                    f'{x["eps"]:,.2f} a share, {x.get("analysts", "?")} analysts{rng} – {e(x.get("source", ""))}, '
+                    f'{e(str(x.get("date", "")))}. Adjusted EPS, not owner earnings: reference only</small></td>'
+                    f'<td>{_times(x["pe"])}</td></tr>')
+    detail = []
+    for y in years:
+        items = "".join(f'<tr><td>{e(x["name"])}{"" if x["taxed"] else " <small class=muted>(after tax)</small>"}</td>'
+                        f'<td>{x["amount"]:,.0f}</td></tr>' for x in y["lines"])
+        items += (f'<tr class="b"><td>Pre-tax total</td><td>{y["pre_tax"]:,.0f}</td></tr>'
+                  f'<tr><td>Tax on the pre-tax total</td><td>{y["tax"]:,.0f}</td></tr>')
+        detail.append(f'<details><summary>{y["year"]}: owner earnings {y["oe_m"]:,.0f}m ({e(r.get("currency", ""))}) – '
+                      f'{e(y["basis"])}</summary><table class="kv">{items}<tr class="b"><td>Owner earnings</td>'
+                      f'<td>{y["oe_m"]:,.0f}</td></tr></table></details>')
+    checks = "".join(f"<li>{e(x)}</li>" for x in r.get("forward_checks", []))
+    return (f'<h3>Forward – the company\'s own estimates <small class="muted">– assumption, not reported</small></h3>'
+            f'<table class="mk pcase fwd">{head}{"".join(rows)}</table>{"".join(detail)}'
+            + (f'<p class="muted small"><b>Checks</b></p><ul class="small">{checks}</ul>' if checks else "")
+            + '<p class="muted small">Built line by line from the company\'s outlook, capital plan and contract table '
+              '(sources in the assumptions below). The headline value stays on reported results. Green: at or above '
+              'today\'s price.</p>')
+
+
 def _pvp_block(p):
     if not p:
         return '<p class="muted">No profit-vs-price figures for this company (none fetched, or the list was run with --no-profit).</p>'
@@ -252,7 +331,8 @@ def company_section(r, c, cfg, p, neighbours, chart_dir, tech, pchart=None):
 <div class="callout" style="border-left-color:{S.SIGNAL[r['signal']]}">{markup(headline(r, cfg))}</div>
 {chart_block(t, pchart)}
 {img(band, 'valuation band')}
-<div class="grid2"><div>{img(curve, 'curve')}</div><div><h3>Key figures</h3>{_key_figures(r)}</div></div>
+<div class="grid2"><div>{img(curve, 'curve')}</div><div><h3>Key figures</h3>{_key_figures(r)}{_price_cases(r)}</div></div>
+{_forward(r)}
 <div class="grid2"><div>{img(heat, 'heatmap')}{img(extra, 'history')}</div>
 <div><h3>How the value is calculated</h3><ol>{steps}</ol>{example_html}{tech_html}</div></div>
 <h3>Profit growth vs price growth</h3>{_pvp_block(p)}
@@ -400,35 +480,63 @@ def screen_pills(r: dict) -> str:
     return "".join(f'<br><span class="pill" style="{PILL_STYLE[f]};font-size:11px;padding:1px 8px">{f}</span>' for f in on)
 
 
-def screen_panel(rows: list[dict], s: dict, href) -> str:
-    """The settings panel, the funnel and the data assets/screen.js needs: every row's figures and the default rules.
-    The panel stays hidden without JavaScript, and the table the server wrote stays as it is."""
+SLIDERS = [   # (setting, label, step, min, max) – the panel's sliders; percentages in %
+    ("pe", "Max P/E", 0.5, 5, 40), ("growth", "Min EPS growth", 1, 0, 40), ("ret", "Min 5-yr return", 0.5, 0, 25),
+    ("years", "Holding years", 1, 1, 10), ("exit", "Exit multiple", 1, 5, 30), ("promoters", "Min promoters", 1, 0, 90)]
+PCT_SETTINGS = ("growth", "ret", "promoters")
+
+
+def screen_panel(rows: list[dict], s: dict, href, market: str = "india") -> str:
+    """The settings panel, folded under 'Change the rules', and the data assets/screen.js needs: every row's figures
+    and the default rules. The panel stays hidden without JavaScript, and the table the server wrote stays as it is. `market` "us" leaves out
+    the India-only rules (promoters, government-owned, Midcap 150 only) – insiders are shown, never a rule."""
+    india = market == "india"
     rules = {"pe": s["max_pe"], "growth": s["min_eps_cagr"], "ret": s["min_return"], "years": s["years"], "exit": s["exit_multiple"],
-             "haircut": s["growth_haircut"], "cap": s["max_assumed_growth"], "promoters": s["min_promoter"],
+             "haircut": s["growth_haircut"], "cap": s["max_assumed_growth"], "promoters": s.get("min_promoter", 0.0),
              "pe0": s["max_pe"], "growth0": s["min_eps_cagr"], "near_pe": s["near_max_pe"], "near_growth": s["near_min_eps_cagr"],
-             "prule": False, "psu": False, "mid": False, "cyc": False, "all": False}
+             "prule": False, "psu": False, "mid": False, "cyc": False, "all": False,
+             "bounds": {k: [lo / 100, hi / 100] if k in PCT_SETTINGS else [lo, hi] for k, _, _, lo, hi in SLIDERS}}
+    if not india:
+        rules["market"] = market
     data = [{"ticker": r["ticker"], "name": r["name"], "link": href(r["ticker"]), "price": r["price"], "eps": r["eps"], "nc": r["nc"],
              "pe": r["pe"], "pe_trailing": r["pe_trailing"], "c5": r["eps_cagr_5y"], "c3": r["eps_cagr_3y"],
              "pos": r["every_year_positive"], "guards": r["guards"], "promoters": r["promoters"], "pledged": r.get("pledged"),
              "state_owned": r.get("state_owned", False), "cyclical": r.get("cyclical", False), "extra": r.get("extra"),
              "signal": r["signal"], "action": r["action"], "growth_needed": r["growth_needed"], "flags": r["flags"],
              "quality": screen_quality(r)} for r in rows]
-    js = lambda x: json.dumps(x, separators=(",", ":")).replace("</", "<\\/")  # noqa: E731
-    num = lambda k, label, step, lo, hi: (f'<label>{label}<input type="number" data-k="{k}" step="{step}" min="{lo}" max="{hi}"></label>')  # noqa: E731
+    slider = lambda k, label, step, lo, hi: (f'<label>{label} <b data-out="{k}"></b>'  # noqa: E731
+                                            f'<input type="range" data-k="{k}" step="{step}" min="{lo}" max="{hi}"></label>')
     box = lambda k, label: f'<label class="cb"><input type="checkbox" data-k="{k}">{label}</label>'  # noqa: E731
     has_extra = any(r.get("extra") for r in rows)
-    return (f'''<style>#screen .panel{{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:end;background:var(--soft);border:1px solid var(--line);
+    sliders = "".join(slider(*x) for x in SLIDERS if india or x[0] != "promoters")
+    boxes = ((box("prule", "Promoter rule") + box("psu", "Exclude government-owned") + (box("mid", "Midcap 150 only") if has_extra else ""))
+             if india else "") + box("cyc", "Exclude cyclicals") + box("all", "Show all")
+    reset = "Reset to Dr. Gupta's rules" if india else "Reset to the default rules"
+    return (f'''<style>#screen .panel{{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--soft);border:1px solid var(--line);
 border-radius:8px;padding:10px 12px;margin:8px 0}} #screen .panel label{{display:flex;flex-direction:column;font-size:12px;color:var(--ink2)}}
-#screen .panel input[type=number]{{width:78px;font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:5px;background:var(--card);color:var(--ink)}}
+#screen .panel label b{{color:var(--ink);font-variant-numeric:tabular-nums}} #screen .panel input[type=range]{{width:130px;margin:4px 0 0;accent-color:#2F64CF}}
 #screen .panel label.cb{{flex-direction:row;align-items:center;gap:5px}} #screen .panel button{{font:inherit;padding:5px 10px;border-radius:6px;
-border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}} #screen .funnel{{display:flex;flex-wrap:wrap;gap:4px 8px;
-align-items:center;font-size:12.5px;color:var(--ink2);margin:4px 0 10px}} #screen .funnel span{{background:var(--soft);border-radius:12px;padding:2px 9px}}
-#screen .funnel i{{font-style:normal;color:var(--muted)}}</style>
-<div class="panel" hidden>{num("pe", "Max P/E", 0.5, 1, 100)}{num("growth", "Min EPS growth %", 1, -50, 100)}{num("ret", "Min 5-yr return %", 0.5, -50, 100)}{num("years", "Holding years", 1, 1, 15)}{num("exit", "Exit multiple", 1, 1, 60)}{num("promoters", "Min promoters %", 1, 0, 100)}
-{box("prule", "Promoter rule")}{box("psu", "Exclude government-owned")}{box("mid", "Midcap 150 only") if has_extra else ""}{box("cyc", "Exclude cyclicals")}{box("all", "Show all")}
-<button type="button" data-reset>Reset to Dr. Gupta's rules</button><small>Pledged shares: not in the data yet.</small></div>
-<div class="funnel"></div>
-<script type="application/json" id="screen-data">{js(data)}</script><script type="application/json" id="screen-rules">{js(rules)}</script>''')
+border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}}</style>
+<details class="tweak" hidden><summary>Change the rules</summary><div class="panel">{sliders}
+{boxes}
+<button type="button" data-reset>{reset}</button>{"<small>Pledged shares: not in the data yet.</small>" if india else ""}</div></details>
+<script type="application/json" id="screen-data">{_js(data)}</script><script type="application/json" id="screen-rules">{_js(rules)}</script>''')
+
+
+def _compact(x):
+    """Numbers to 9 significant digits – far finer than any threshold or anything shown, half the size."""
+    if isinstance(x, float):
+        return float(f"{x:.9g}")
+    if isinstance(x, dict):
+        return {k: _compact(v) for k, v in x.items()}
+    if isinstance(x, list):
+        return [_compact(v) for v in x]
+    return x
+
+
+def _js(x) -> str:
+    """JSON safe inside a <script> element, numbers compacted."""
+    return json.dumps(_compact(x), separators=(",", ":")).replace("</", "<\\/")
 
 
 def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", owners: str = "Promoters",
@@ -467,26 +575,136 @@ def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", 
 
     head = ("<thead><tr><th>Company</th><th>Screen</th><th>P/E</th><th>Quality</th><th>EPS growth 5 / 3 yrs</th><th>Price needs</th>"
             f"<th>5-yr return a year</th><th>{e(owners)}</th><th>Signal</th><th>Why not</th></tr></thead>")
-    top = [r for r in rows if r["tier"]]
-    rest = [r for r in rows if not r["tier"]]
-    n_short = sum(1 for r in rows if r["tier"] == "shortlist")
-    rule = (f"<b>Growth at a value price.</b> Shortlist: P/E ≤ {s['max_pe']:g} (price minus net cash ÷ the EPS the "
-            f"valuation uses), EPS growth ≥ {s['min_eps_cagr']*100:.0f}% a year over both 5 and 3 years with every year "
-            f"profitable, and at least {s['min_return']*100:.0f}% a year expected over a {s['years']}-year hold (growth at "
-            f"half the past rate, at most {s['max_assumed_growth']*100:.0f}%, sold at {s['exit_multiple']:g}x). Guards: cash "
-            f"conversion ≥ {s['min_cash_conversion']*100:.0f}%, no demerger or one-off history, no bad-loan warning, current "
-            f"results. Near miss: one thing short – a P/E of {s['max_pe']:g}–{s['near_max_pe']:g} (growth met), growth of "
-            f"{s['near_min_eps_cagr']*100:.0f}–{s['min_eps_cagr']*100:.0f}% (P/E met), or only the return bar. {tail} "
-            "Dividends are not counted.")
+    short = [r for r in rows if r["tier"] == "shortlist"]
+    near = [r for r in rows if r["tier"] == "near miss"]
+    others = [r for r in rows if r["tier"] != "shortlist"]   # near misses first, then the rest, best first
     table = lambda rs: f'<div class="wrap"><table class="sum">{head}<tbody>{"".join(row(r) for r in rs)}</tbody></table></div>'  # noqa: E731
-    tables = ((table(top) if top else '<p class="notes">No company passes, or nearly passes, today.</p>')
-              + f'<details><summary>All {len(rest)} others</summary>{table(rest)}</details>')
-    if panel:   # the settings panel, its funnel and assets/screen.js
-        return (f'<section class="company" id="screen"><h2>Screen – {n_short} shortlisted, {len(top) - n_short} near misses '
-                f'of {len(rows)}</h2><p class="notes">{rule}</p>{screen_panel(rows, s, href)}<div class="screen-tables">{tables}</div>'
+    tables = ((table(short) if short else '<p class="notes">No company passes all five rules today.</p>')
+              + near_line_html(near, href)
+              + (f'<details><summary>Near misses and the other {len(others) - len(near)}, in full</summary>{table(others)}</details>'
+                 if others else ""))
+    market = "us" if key == "us_growth_screen" else "india"
+    heading = f'<h2>Screen – {len(short)} shortlisted, {len(near)} near misses of {len(rows)}</h2>'
+    funnel = f'<p class="funnel">{funnel_text(funnel_steps(rows))}</p>'
+    if panel:   # the settings panel (folded away), the funnel and assets/screen.js
+        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{screen_panel(rows, s, href, market)}{funnel}'
+                f'<div class="screen-tables">{tables}</div>'
                 f'<script>{page.asset("screen.js")}</script></section>')
-    return (f'<section class="company" id="screen"><h2>Screen – {n_short} shortlisted, {len(top) - n_short} near misses '
-            f'of {len(rows)}</h2><p class="notes">{rule}</p>' + tables + '</section>')
+    return f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{funnel}{tables}</section>'
+
+
+def rules_html(s: dict, tail: str) -> str:
+    """The growth screen's five rules in plain words. The numbers carry data-r so assets/screen.js can show the
+    panel's settings in place of the defaults."""
+    v = {k: f'<b data-r="{k}">{text}</b>' for k, text in (
+        ("pe", f"{s['max_pe']:g}"), ("growth", f"{s['min_eps_cagr']*100:.0f}%"), ("ret", f"{s['min_return']*100:.0f}%"),
+        ("years", f"{s['years']}"), ("exit", f"{s['exit_multiple']:g}x"), ("near_pe", f"{s['near_max_pe']:g}"),
+        ("near_growth", f"{s['near_min_eps_cagr']*100:.0f}%"))}
+    return (
+        '<h3>The five rules</h3><ol class="rules">'
+        f'<li><b>Cheap.</b> The P/E is {v["pe"]} or less (the price less net cash, divided by the earnings per share '
+        'the valuation uses).</li>'
+        f'<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
+        'last 3.</li>'
+        '<li><b>Profitable every year.</b> No loss year in that window.</li>'
+        f'<li><b>Worth holding.</b> At least {v["ret"]} a year expected over a {v["years"]}-year hold, if growth slows to '
+        f'half its past rate (at most {s["max_assumed_growth"]*100:.0f}%) and the shares are sold at {v["exit"]} earnings. '
+        'Dividends are not counted.</li>'
+        f'<li><b>Clean books.</b> At least {s["min_cash_conversion"]*100:.0f}% of profit arrives as cash, no demerger or '
+        'one-off history, no bad-loan warning, and up-to-date results.</li></ol>'
+        f'<p class="notes"><b>Near miss</b> = one rule short: a P/E up to {v["near_pe"]} with growth met, growth down to '
+        f'{v["near_growth"]} with the P/E met, or only the return short. {tail}</p>')
+
+
+FUNNEL_WORDS = {"after guards": "have clean books and a profit every year", "+ growth": "grew fast enough",
+                "+ P/E": "are cheap enough", "+ 5-yr return": "promise enough return",
+                "+ promoters": "have enough promoter holding", "+ government-owned rule": "are not government-owned"}
+
+
+def funnel_steps(rows: list[dict]) -> list[tuple[str, int]]:
+    """How many companies survive each rule at the default settings – the same steps as funnel() in screen.js."""
+    left, steps = list(rows), [("Start", len(rows))]
+    for label, test in (("after guards", lambda r: not r["guards"]), ("+ growth", lambda r: "growth" not in r["missed"]),
+                        ("+ P/E", lambda r: "pe" not in r["missed"]), ("+ 5-yr return", lambda r: "return" not in r["missed"])):
+        left = [r for r in left if test(r)]
+        steps.append((label, len(left)))
+    return steps
+
+
+def funnel_text(steps) -> str:
+    """The funnel as one sentence: 'Of 142 companies, 120 have clean books …, 30 of those grew fast enough, …'.
+    screen.js has the same wording (funnelText)."""
+    (_, n0), rest = steps[0], steps[1:]
+    parts = [f"<b>{n}</b> {'of those ' if i else ''}{FUNNEL_WORDS[label]}" for i, (label, n) in enumerate(rest)]
+    body = ", ".join(parts[:-1]) + (", and " if len(parts) > 1 else "") + parts[-1]
+    return f"Of <b>{n0}</b> companies, {body} – the shortlist."
+
+
+def _short_of(r: dict) -> str:
+    """What a near miss falls short on, with its figure: 'P/E 17.2', 'growth 18%', 'return 9% a year'."""
+    out = []
+    for m in r["missed"]:
+        if m == "pe":
+            out.append("no P/E" if r["pe"] is None else f"P/E {r['pe']:.1f}")
+        elif m == "growth":
+            g = None if r["eps_cagr_5y"] is None or r["eps_cagr_3y"] is None else min(r["eps_cagr_5y"], r["eps_cagr_3y"])
+            out.append("growth unknown" if g is None else f"growth {g*100:.0f}%")
+        elif m == "return":
+            ret = r["expected_return"]
+            out.append("no return" if ret is None else f"return {ret*100:.0f}% a year")
+    return ", ".join(out)
+
+
+def _ticker_link(ticker: str, link) -> str:
+    return f'<a href="{e(link)}"><b>{e(ticker)}</b></a>' if link else f"<b>{e(ticker)}</b>"
+
+
+def near_line_html(near: list[dict], href) -> str:
+    """The near misses on one line, each with what it falls short on (screen.js nearLine writes the same)."""
+    if not near:
+        return '<p class="near"><b>Near misses:</b> none.</p>'
+    items = " · ".join(f'{_ticker_link(r["ticker"], href(r["ticker"]))} <small>({e(_short_of(r))})</small>' for r in near)
+    return f'<p class="near"><b>Near misses:</b> {items}</p>'
+
+
+def _and_list(items: list[str]) -> str:
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _bt_picks_ret(b: dict):
+    return b.get("picks_ret", b.get("picks_total"))
+
+
+def answer_html(rows: list[dict], results: list[dict], index_name: str, href=None) -> str:
+    """The answer first, above everything: how many pass today and which, the near misses, and what the same rules
+    returned since the earliest backtest date with picks. screen.js rewrites it when the panel's settings differ."""
+    if not rows:
+        return ""
+    href = href or (lambda t: f"#c-{t}")
+    short = [r for r in rows if r["tier"] == "shortlist"]
+    near = [r for r in rows if r["tier"] == "near miss"]
+    names = lambda rs: _and_list([_ticker_link(r["ticker"], href(r["ticker"])) for r in rs])  # noqa: E731
+    if short:
+        today = (f'<b>Today {len(short)} {"stock passes" if len(short) == 1 else "stocks pass"} all five rules:</b> '
+                 f'{names(short)}.')
+    else:
+        today = "<b>Today no stock passes all five rules.</b>"
+    if near:
+        today += f' {len(near)} more {"misses" if len(near) == 1 else "miss"} by one rule: {names(near)}.'
+    bt = ""
+    b = next((b for b in results if b["picks"]), None)
+    if results:
+        if b is None:
+            bt = "<b>Backtest:</b> no stock passed these rules on any of the past dates tested."
+        else:
+            what = "price only" if not b.get("dividends", True) else "with dividends"
+            pr, n = _bt_picks_ret(b), len(b["picks"])
+            a_year = (f" ({((1 + pr) ** (1 / b['years']) - 1)*100:+.1f}% a year)" if pr is not None and pr > -1 and b["years"] > 0 else "")
+            bt = (f'<b>Backtest:</b> the {n} pick{"s" if n > 1 else ""} of {day(b["start"])} are up {S.pct(pr, 0) if pr is not None else "–"}'
+                  f'{a_year} {what}, against {S.pct(b.get("all_ret", b.get("all_total")), 0)} for every stock screened and '
+                  f'{S.pct(b["index_price"], 0)} for the {e(index_name)} (price only). <a href="#backtest">Details below</a>.')
+    return (f'<div class="answer" id="answer"><p data-ans="today">{today}</p>'
+            + (f'<p data-ans="bt">{bt}</p>' if bt else "") + "</div>")
 
 
 def resource_screen_html(rows: list[dict], cfg: dict) -> str:
@@ -542,11 +760,64 @@ def resource_screen_html(rows: list[dict], cfg: dict) -> str:
             + (f'<details><summary>All {len(rest)} others</summary>{table(rest)}</details>' if rest else "") + '</section>')
 
 
-def backtest_html(results: list[dict], cfg: dict, index_name: str) -> str:
-    """'How these rules did': the growth screen applied on past dates with only what was known then (backtest.py)."""
+def backtest_data(results: list[dict], cfg: dict, href) -> dict:
+    """What assets/screen.js needs to re-pick the backtest with the panel's settings: on each start date every stock
+    that could pass (no guard, a P/E, growth over 5 and 3 years, every year profitable) with its figures then and its
+    return since; all screened as averages (with and without the cyclicals) – they do not depend on the rules."""
+    first = results[0]
+    years = cfg[first.get("rules", "growth_screen")]["years"]
+    names, links, starts = {}, {}, []
+    r5 = lambda x: None if x is None else round(x, 5)  # noqa: E731
+    max_pe, min_growth = next(x[4] for x in SLIDERS if x[0] == "pe"), next(x[3] for x in SLIDERS if x[0] == "growth") / 100
+    for b in results:
+        ret, rows = b["ret"], []
+        for r in b["all_rows"]:   # what can pass somewhere within the sliders' ranges
+            if (r["guards"] or r["pe"] is None or r["pe"] > max_pe or r["eps_cagr_5y"] is None or r["eps_cagr_3y"] is None
+                    or not r["every_year_positive"] or min(r["eps_cagr_5y"], r["eps_cagr_3y"]) < min_growth):
+                continue
+            names[r["ticker"]], links[r["ticker"]] = r["name"], href(r["ticker"])
+            row = {"t": r["ticker"], "price": r["price"], "eps": r["eps"], "pe": r["pe"], "c5": r["eps_cagr_5y"],
+                   "c3": r["eps_cagr_3y"], "ret": r5(r[ret]), "lfy": r["last_fy"]}
+            if r["nc"]:
+                row["nc"] = r["nc"]
+            if r["promoters"] is not None:
+                row["prom"] = r["promoters"]
+            if b["dividends"]:
+                row["pr"] = r5(r["price_return"])
+            row.update({k: True for k, on in (("so", r.get("state_owned")), ("cyc", r.get("cyclical")),
+                                              ("short", r["growth_years"] < years)) if on})
+            rows.append(row)
+        nocyc = [r[ret] for r in b["all_rows"] if not r.get("cyclical") and r[ret] is not None]
+        starts.append({"label": day(b["start"]), "years": b["years"], "n": b["screened"], "all": b["all_ret"],
+                       "median": b["all_ret_median"], "n_nocyc": sum(1 for r in b["all_rows"] if not r.get("cyclical")),
+                       "all_nocyc": sum(nocyc) / len(nocyc) if nocyc else None,
+                       "median_nocyc": statistics.median(nocyc) if nocyc else None, "index": b["index_price"],
+                       "note": _skipped_note(b), "rows": rows})
+    return {"us": not first["dividends"], "years": years, "names": names, "links": links, "starts": starts}
+
+
+def _skipped_note(b: dict) -> str:
+    """Who was left out on a start date, as plain text."""
+    if not b.get("dividends", True):
+        left = [f'{len(v)} {k}' for k, v in b["skipped"].items() if v]
+        return f'Of today\'s members, left out: {", ".join(left)}.'
+    short = (f' {b["short_history"]} stocks had one year too few of EPS then for 5-year growth (the data starts at FY2017): '
+             f'growth and the hold were measured over 4 years.' if b["short_history"] else "")
+    return f'{len(b["skipped"]["not listed then"])} of today\'s members were not listed then and are left out.{short}'
+
+
+def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, panel: bool = False) -> str:
+    """'How these rules did': the growth screen applied on past dates with only what was known then (backtest.py), with
+    a chart of the earliest start with picks. India: returns with dividends (Yahoo's adjusted close); US: price only.
+    `href(ticker)` links a pick to its page (None: no link); default the company's section."""
     if not results:
         return ""
-    s = cfg["growth_screen"]
+    href = href or (lambda t: f"#c-{t}")
+    first = results[0]
+    us = not first.get("dividends", True)
+    s = cfg[first.get("rules", "growth_screen")]
+    ret = first.get("ret", "total_return")
+    with_what = "price only" if us else "with dividends"
 
     def p(x, nd=0):
         return "–" if x is None else f'<span class="{"pos" if x >= 0 else "neg"}">{x*100:+.{nd}f}%</span>'
@@ -554,44 +825,84 @@ def backtest_html(results: list[dict], cfg: dict, index_name: str) -> str:
     def a_year(x, years):
         return "" if x is None or years <= 0 or x <= -1 else f"<br><small>{((1 + x) ** (1 / years) - 1)*100:+.1f}% a year</small>"
 
+    def name(r):
+        link = href(r["ticker"])
+        t = f'<b>{e(r["ticker"])}</b>'
+        return (f'<a href="{e(link)}">{t}</a>' if link else t) + f'<br><small>{e(r["name"])}</small>'
+
+    def picks_ret(b):
+        return b.get("picks_ret", b.get("picks_total"))
+
     rows = []
     for b in results:
-        best = f'{e(b["best"]["ticker"])} {p(b["best"]["total_return"])}' if b["best"] else "–"
-        worst = f'{e(b["worst"]["ticker"])} {p(b["worst"]["total_return"])}' if b["worst"] and len(b["picks"]) > 1 else "–"
+        best = f'{e(b["best"]["ticker"])} {p(b["best"][ret])}' if b["best"] else "–"
+        worst = f'{e(b["worst"]["ticker"])} {p(b["worst"][ret])}' if b["worst"] and len(b["picks"]) > 1 else "–"
         rows.append(f'<tr><td><b>{day(b["start"])}</b><br><small>{b["years"]:.0f} years</small></td>'
-                    f'<td>{len(b["picks"])} of {b["screened"]}</td><td>{p(b["picks_total"])}{a_year(b["picks_total"], b["years"])}</td>'
-                    f'<td>{p(b["all_total"])} · median {p(b["all_total_median"])}</td><td>{p(b["index_price"])}</td>'
-                    f'<td>{best}</td><td>{worst}</td></tr>')
-    summary = (f'<div class="wrap"><table class="sum"><thead><tr><th>Since</th><th>Picks</th><th>Picks, with dividends</th>'
-               f'<th>All screened, with dividends (mean · median)</th><th>{e(index_name)} (price only)</th><th>Best</th><th>Worst</th>'
+                    f'<td>{len(b["picks"])} of {b["screened"]}</td><td>{p(picks_ret(b))}{a_year(picks_ret(b), b["years"])}</td>'
+                    f'<td>{p(b.get("all_ret", b.get("all_total")))} · median {p(b.get("all_ret_median", b.get("all_total_median")))}</td>'
+                    f'<td>{p(b["index_price"])}</td><td>{best}</td><td>{worst}</td></tr>')
+    summary = (f'<div class="wrap"><table class="sum"><thead><tr><th>Since</th><th>Picks</th><th>Picks, {with_what}</th>'
+               f'<th>All screened, {with_what} (mean · median)</th><th>{e(index_name)} (price only)</th><th>Best</th><th>Worst</th>'
                f'</tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
     details = ""
     for b in results:
-        body = "".join(
-            f'<tr><td><a href="#c-{e(r["ticker"])}"><b>{e(r["ticker"])}</b></a><br><small>{e(r["name"])}</small></td>'
-            f'<td>{r["pe"]:.1f}<br><small>FY to {e(r["last_fy"])}</small></td>'
-            f'<td>{p(r["eps_cagr_5y"])} / {p(r["eps_cagr_3y"])}<br><small>{r["growth_years"]} and 3 years</small></td>'
-            f'<td>{p(r["expected_return"], 1)}</td><td>{p(r["total_return"])}{a_year(r["total_return"], b["years"])}</td>'
-            f'<td>{p(r["price_return"])}</td></tr>' for r in b["picks"])
-        table = (f'<div class="wrap"><table class="sum"><thead><tr><th>Pick</th><th>P/E then</th><th>EPS growth then</th>'
-                 f'<th>Expected then</th><th>Return, with dividends</th><th>Price only</th></tr></thead><tbody>{body}</tbody></table></div>'
+        if us:
+            body = "".join(
+                f'<tr><td>{name(r)}</td><td>{r["pe"]:.1f}<br><small>figures to {e(r["last_fy"])}</small></td>'
+                f'<td>{p(r["eps_cagr_5y"])} / {p(r["eps_cagr_3y"])}</td><td>{p(r["expected_return"], 1)}</td>'
+                f'<td>{p(r["price_return"])}{a_year(r["price_return"], b["years"])}</td></tr>' for r in b["picks"])
+            head = '<th>Pick</th><th>P/E then</th><th>EPS growth then (5 / 3 years)</th><th>Expected then</th><th>Return, price only</th>'
+        else:
+            body = "".join(
+                f'<tr><td>{name(r)}</td><td>{r["pe"]:.1f}<br><small>FY to {e(r["last_fy"])}</small></td>'
+                f'<td>{p(r["eps_cagr_5y"])} / {p(r["eps_cagr_3y"])}<br><small>{r["growth_years"]} and 3 years</small></td>'
+                f'<td>{p(r["expected_return"], 1)}</td><td>{p(r["total_return"])}{a_year(r["total_return"], b["years"])}</td>'
+                f'<td>{p(r["price_return"])}</td></tr>' for r in b["picks"])
+            head = ('<th>Pick</th><th>P/E then</th><th>EPS growth then</th><th>Expected then</th><th>Return, with dividends</th>'
+                    '<th>Price only</th>')
+        table = (f'<div class="wrap"><table class="sum"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
                  if b["picks"] else '<p class="notes">No stock passed the rules on this date.</p>')
-        short = (f' {b["short_history"]} stocks had one year too few of EPS then for 5-year growth (the data starts at FY2017): '
-                 f'growth and the hold were measured over 4 years.' if b["short_history"] else "")
-        details += (f'<details><summary>Since {day(b["start"])}: {len(b["picks"])} picks, {p(b["picks_total"])} with dividends</summary>'
-                    f'<p class="small">{len(b["skipped"]["not listed then"])} of today\'s members were not listed then and are left out.{short}</p>'
-                    f'{table}</details>')
-    note = ("<b>How it was done.</b> On each date: today's members of the list (the index then is not in the data), the "
-            "yearly EPS of the years whose results were out (60 days after March), the price that day, and the same rules as the "
-            f"screen above – P/E ≤ {s['max_pe']:g}, EPS growth ≥ {s['min_eps_cagr']*100:.0f}% over 5 and 3 years, every year profitable, "
-            f"≥ {s['min_return']*100:.0f}% expected over the hold. The latest yearly EPS stands in for the last twelve months, there is no "
-            "net cash, and cash conversion and bad loans are not checked (not in the data then). Returns to today: the picks equal-"
-            "weighted with dividends reinvested; the index is its price only (Yahoo has no total-return index; dividends add about "
-            "1–1.5% a year). <b>Survivorship bias:</b> today's members are the ones that did well enough to be in the index now, so "
+        got = (f'{len(b["picks"])} pick{"s" if len(b["picks"]) > 1 else ""}, {p(picks_ret(b))} {with_what}' if b["picks"]
+               else "no picks")
+        details += (f'<details><summary>Since {day(b["start"])}: {got}</summary>'
+                    f'<p class="small">{_skipped_note(b)}</p>{table}</details>')
+    rules = (f"P/E ≤ {s['max_pe']:g}, EPS growth ≥ {s['min_eps_cagr']*100:.0f}% over 5 and 3 years, every year profitable, "
+             f"≥ {s['min_return']*100:.0f}% expected over the hold")
+    if us:
+        note = ("<b>How it was done.</b> On each date: today's members (the index then is not in the data), each rebuilt "
+                "exactly as filed by that day – only the SEC figures filed on or before it (later restatements ignored), the share "
+                "count then, and the price then on the share basis of then (splits both ways) – and the same rules as the screen "
+                f"above: {rules}. Foreign filers are left out (their figures are today's). Returns to today: the picks equal-"
+                "weighted, price only on both sides – the stored US prices carry no dividends (about 1.5% a year for the "
+                f"{e(index_name)}). ")
+    else:
+        note = ("<b>How it was done.</b> On each date: today's members of the list (the index then is not in the data), the "
+                "yearly EPS of the years whose results were out (60 days after March), the price that day, and the same rules as the "
+                f"screen above – {rules}. The latest yearly EPS stands in for the last twelve months, there is no "
+                "net cash, and cash conversion and bad loans are not checked (not in the data then). Returns to today: the picks equal-"
+                "weighted with dividends reinvested; the index is its price only (Yahoo has no total-return index; dividends add about "
+                "1–1.5% a year). Demergers are not adjusted in the prices (e.g. Tata Motors). ")
+    bias = ("<b>Survivorship bias:</b> today's members are the ones that did well enough to be in the index now, so "
             "every average here – picks and all screened alike – flatters; compare the picks with all screened rather than with "
-            "the index. Demergers are not adjusted in the prices (e.g. Tata Motors). Past performance only, and a handful of picks "
-            "is a small sample.")
-    return (f'<section class="company" id="backtest"><h2>How these rules did</h2><p class="notes">{note}</p>{summary}{details}</section>')
+            "the index. Past performance only, and a handful of picks is a small sample.")
+    default = ('<p class="notes"><b>The five rules above, at their defaults,</b> applied on each past date'
+               + (' – change them under <i>Change the rules</i> and every date is re-picked' if panel else '') + '.</p>')
+    custom = ('<p class="notes bt-custom" hidden><b>With your settings from the panel above:</b> the picks, their averages, '
+              'best and worst are redone; all screened and the index stay as they are.'
+              + ('' if us else ' The promoter rule applies only where the holding then is in the data (the files keep the last '
+                 '8 quarters).') + ' The chart shows the default rules.</p>'
+              if panel else "")
+    chart = ""
+    cv = next((b["curve"] for b in results if b.get("curve")), None)
+    if cv:
+        with tempfile.TemporaryDirectory() as tmp, charts.resolution(110):
+            chart = img(charts.backtest_curve(cv, index_name, not us, Path(tmp) / "backtest.png"),
+                        f"Growth of 1 since {day(cv['start'])}: {'picks, ' if cv['n_picks'] else ''}all screened and the {index_name}")
+    data = (f'<script type="application/json" id="bt-data">{_js(dict(backtest_data(results, cfg, href), index=index_name))}</script>'
+            if panel else "")
+    return (f'<section class="company" id="backtest"><h2>How these rules did</h2>{default}{custom}<div class="bt-summary">{summary}</div>'
+            f'{chart}<p class="notes">{bias}</p><details class="how"><summary>How the backtest was done</summary>'
+            f'<p class="notes">{note}</p></details><div class="bt-details">{details}</div>{data}</section>')
 
 
 @dataclass
@@ -613,6 +924,8 @@ class ReportExtras:
     index_name: str = ""
     chart_dpi: int | None = None                      # lower for big lists (list setting `chart_dpi`) to keep the page light
     pages: str | None = None                          # multi-page: a summary page plus <pages>/<ticker>.html per company
+    buy_zone: list | None = None                      # buy_zone.rows (list setting `buy_zone: true`); None = no section
+    decisions: list = field(default_factory=list)     # buy_zone.load_decisions – only `public: true` entries are shown
 
 
 def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], path: Path, title: str,
@@ -621,8 +934,15 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     previous, tech, lookthroughs, heatmaps, log_lines, price_charts, market_rows = (
         x.previous, x.tech, x.lookthroughs, x.heatmaps, x.log_lines, x.price_charts, x.market_rows)
     screen_html = growth_screen_html(x.screen_rows, cfg, **x.screen_style) + resource_screen_html(x.resource_rows, cfg)
-    screen_html += backtest_html(x.backtest, cfg, x.index_name)
     screen_block = screen_html + "\n" if screen_html else ""   # nothing at all for lists without a screen
+    bt_html = backtest_html(x.backtest, cfg, x.index_name, href=x.screen_style.get("href"),
+                            panel=bool(x.screen_style.get("panel")))   # under the results table
+    answer = answer_html(x.screen_rows, x.backtest, x.index_name, href=x.screen_style.get("href"))
+    bz_html = ""
+    if x.buy_zone is not None:
+        from . import buy_zone  # noqa: PLC0415
+        answer = buy_zone.answer_line(x.buy_zone) + answer
+        bz_html = buy_zone.section_html(x.buy_zone, x.decisions, cfg)
     profit = {p["ticker"]: p for p in profit_rows}
     market_html = markets_html(market_rows or [])
     ordered = sorted(results.values(), key=lambda r: r["display_ticker"])
@@ -659,12 +979,13 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
 <h1 id="summary">{e(title)} – value vs price</h1>
 <p class="sub">{len(ordered)} companies · run {day(cfg['as_of'])} · {spot_text}<span class="pos">{counts['green']} green</span>, {counts['blue']} blue, <span class="neg">{counts['red']} red</span>
 · grades {' · '.join(f'{g} {n}' for g, n in grades.items() if n)}</p>
-<p class="method"><b>Value vs price.</b> Value comes from the latest reported numbers only (no targets, no forecasts) and is compared
+{answer}
+<details class="method"><summary>How the values are worked out</summary><p class="method"><b>Value vs price.</b> Value comes from the latest reported numbers only (no targets, no forecasts) and is compared
 with today's price: owner earnings at today's metal prices × 12 / 15 / 25 + net cash for producers and royalties, NAV for developers
 and physical holders, and for growth companies the yearly growth the price needs (5 years, 15x exit, 10% US / 12% India).
 <b>Profit vs price.</b> Growth in profit and in the share price over about three years; the grade says whether the P/E fell
-(A ≤ −25%, B ≤ 0) or rose (C ≤ +33%, D above). Click a ticker for the full working; click a column to sort.</p>
-{screen_block}<nav class="toc">Companies: {toc}{' · <a href="#screen">Screen</a>' if screen_html else ''}{' · <a href="#markets">Markets</a>' if market_html else ''}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
+(A ≤ −25%, B ≤ 0) or rose (C ≤ +33%, D above). Click a ticker for the full working; click a column to sort.</p></details>
+{bz_html}{screen_block}<nav class="toc">Companies: {toc}{' · <a href="#buyzone">Buy zone</a>' if bz_html else ''}{' · <a href="#screen">Screen</a>' if screen_html else ''}{' · <a href="#backtest">Backtest</a>' if bt_html else ''}{' · <a href="#markets">Markets</a>' if market_html else ''}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
 <div class="controls">
 <span class="lab">Signal</span><button class="on" data-sig="all">All</button><button data-sig="green">Green</button>
 <button data-sig="blue">Blue</button><button data-sig="red">Red</button>
@@ -674,11 +995,12 @@ and physical holders, and for growth companies the yearly growth the price needs
 <div class="wrap"><table class="sum" id="sum"><thead>{SUMMARY_HEAD}</thead><tbody>
 {''.join(summary_row(r, profit.get(r['ticker']), previous, cfg) for r in ordered)}</tbody></table></div>
 <p class="notes">{RULES_NOTE}</p>
+{bt_html}
 {pvp_html}
 {growth_html}
 {market_html}{'' if x.pages else ''.join(sections)}{etf_html}{'' if x.pages else heat_html}
 <section class="company"><h2>Run log</h2><ul class="small">{log}</ul></section>
-<footer>Educational framework, not investment advice. Previous run's figures in (brackets). Prices in each exchange's currency;
+<footer>Previous run's figures in (brackets). Prices in each exchange's currency;
 sales and profits as the company reports them.</footer>
 """
     if x.pages:
@@ -690,7 +1012,7 @@ sales and profits as the company reports them.</footer>
 
 
 COMPANY_LINK = re.compile(r'href="#c-([^"]+)"')
-PAGE_FOOTER = "<footer>Educational framework, not investment advice. Prices in each exchange's currency; sales and profits as the company reports them.</footer>"
+PAGE_FOOTER = "<footer>Prices in each exchange's currency; sales and profits as the company reports them.</footer>"
 
 
 def write_pages(path: Path, pages: str, title: str, body: str, sections: list[str], ordered: list[dict], charts_on: bool,

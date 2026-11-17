@@ -107,7 +107,7 @@ def company_page(r: dict, sr: dict, chart: dict | None, eps_png, cfg: dict) -> s
 shows our value lines: the value with no growth, the buy level (the price at {cfg['zones']['growth_buy']*100:.0f}% growth a year) and
 the sell zone (25%). Sources: {links}.</p>
 </section>
-<footer>Educational framework, not investment advice. Prices in US dollars.</footer>
+<footer>Prices in US dollars.</footer>
 """
 
 

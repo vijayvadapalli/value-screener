@@ -14,7 +14,7 @@ liquid_assets:
 - label: Cash + marketable securities (30 Sep 2026)
   amount: 855.9
 price:
-  value: 6.082
+  value: 6.04
   currency: USD
   date: '2026-11-16'
   source: yfinance UUUU
