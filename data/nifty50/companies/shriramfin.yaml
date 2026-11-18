@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 978.4
+  value: 970.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance SHRIRAMFIN.NS
-shares_m: 2354.959
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 2350.34
 v2:
   eps_quarters:
   - 17.27
@@ -25,6 +25,8 @@ v2:
   - 14.67
   - 15.66
   eps_annual:
+  - 8.83
+  - 10.17
   - 10.87
   - 21.89
   - 22.12
@@ -36,6 +38,8 @@ v2:
   - 50.81
   - 53.28
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,98 @@ v2:
   - -13281.0
   book_value_ps: 474.0
   roe_5y: 0.16
+  profit_growth_5y: 0.32
+  sales_growth_5y: 0.23
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.254
+    - 0.2539
+    - 0.2539
+    - 0.2539
+    - 0.2538
+    - 0.2538
+    - 0.203
+    - 0.203
+    fii:
+    - 0.5308
+    - 0.5358
+    - 0.5261
+    - 0.4961
+    - 0.4721
+    - 0.4515
+    - 0.5475
+    - 0.5565
+    dii:
+    - 0.1593
+    - 0.1534
+    - 0.1632
+    - 0.1865
+    - 0.2129
+    - 0.2329
+    - 0.199
+    - 0.1901
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 9266.0
+    - 10176.0
+    - 11332.0
+    - 13690.0
+    - 15963.0
+    - 18142.0
+    - 21717.0
+    - 26095.0
+    - 43512.0
+    - 48947.0
+    - 56470.0
+    - 65918.0
+    borrowings:
+    - 46695.0
+    - 49790.0
+    - 53080.0
+    - 82131.0
+    - 87914.0
+    - 94735.0
+    - 106546.0
+    - 114846.0
+    - 164202.0
+    - 195496.0
+    - 234197.0
+    - 250692.0
+    net_profit:
+    - 1028.0
+    - 1184.0
+    - 1266.0
+    - 2549.0
+    - 2576.0
+    - 2512.0
+    - 2499.0
+    - 2721.0
+    - 6020.0
+    - 7399.0
+    - 9576.0
+    - 10024.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +190,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/SHRIRAMFIN/consolidated/; NPA figures from the standalone
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/SHRIRAMFIN/consolidated/; NPA figures from the standalone
   page: https://www.screener.in/company/SHRIRAMFIN/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)

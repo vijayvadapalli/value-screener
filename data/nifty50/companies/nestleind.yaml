@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1297.0
+  value: 1282.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance NESTLEIND.NS
-shares_m: 1928.16
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 1926.669
 v2:
   eps_quarters:
   - 3.57
@@ -25,31 +25,133 @@ v2:
   - 4.97
   - 5.24
   eps_annual:
+  - 2.92
+  - 5.19
+  - 6.35
+  - 8.33
+  - 10.21
+  - 10.8
+  - 10.99
+  - 12.4
   - 15.55
   - 20.4
   - 16.63
   - 18.15
   years:
+  - "Dec 2015\n            \n            (S)"
+  - "Dec 2016\n            \n            (S)"
+  - "Dec 2017\n            \n            (S)"
+  - "Dec 2018\n            \n            (S)"
+  - "Dec 2019\n            \n            (S)"
+  - "Dec 2020\n            \n            (S)"
+  - "Dec 2021\n            \n            (S)"
+  - "Dec 2022\n            \n            (S)"
   - Dec 2023
   - Mar 202415m
   - Mar 2025
   - Mar 2026
   profit_annual:
-  - 2999.0
-  - 3933.0
+  - 2082.0
+  - 2118.0
+  - 2391.0
   - 3208.0
   - 3499.0
   cfo_annual:
+  - 2454.0
+  - 2236.0
+  - 2737.0
   - 2936.0
   - 5048.0
   book_value_ps: 30.0
   roe_5y: null
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6276
+    - 0.6276
+    - 0.6276
+    - 0.6276
+    - 0.6276
+    - 0.6276
+    - 0.6276
+    - 0.6276
+    fii:
+    - 0.1027
+    - 0.1002
+    - 0.1028
+    - 0.0982
+    - 0.0981
+    - 0.0974
+    - 0.103
+    - 0.117
+    dii:
+    - 0.108
+    - 0.113
+    - 0.1118
+    - 0.1175
+    - 0.121
+    - 0.124
+    - 0.1189
+    - 0.1066
+  balance_annual:
+    years:
+    - Dec 2015
+    - Dec 2016
+    - Dec 2017
+    - Dec 2018
+    - Dec 2019
+    - Dec 2020
+    - Dec 2021
+    - Dec 2022
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 2817.0
+    - 3282.0
+    - 3420.0
+    - 3673.0
+    - 1918.0
+    - 2019.0
+    - 1946.0
+    - 2459.0
+    - 4010.0
+    - 5157.0
+    borrowings:
+    - 18.0
+    - 33.0
+    - 35.0
+    - 35.0
+    - 189.0
+    - 147.0
+    - 266.0
+    - 271.0
+    - 1167.0
+    - 444.0
+    net_profit:
+    - 563.0
+    - 1001.0
+    - 1225.0
+    - 1607.0
+    - 1968.0
+    - 2082.0
+    - 2118.0
+    - 2391.0
+    - 3208.0
+    - 3499.0
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/NESTLEIND/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/NESTLEIND/consolidated/'
 assumptions:
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 notes: []

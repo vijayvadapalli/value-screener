@@ -5,27 +5,26 @@ sector: Construction Materials
 model: growth
 currency: INR
 period:
-  label: TTM to Jun 2026
-  end: '2026-06-30'
+  label: TTM to Sep 2026
+  end: '2026-09-30'
   per_year: 4
-shares_m: 680.517
+shares_m: 679.915
 balance:
   cash: 317535.5
   debt: 2278420.5
 price:
-  value: 3084.3999
+  value: 3062.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance GRASIM.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/GRASIM/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/GRASIM/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
 notes: []
 v2:
   eps_quarters:
-  - 4.78
   - 12.45
   - 21.98
   - 20.87
@@ -33,7 +32,10 @@ v2:
   - 15.23
   - 27.86
   - 31.53
+  - -3.44
   eps_annual:
+  - 37.83
+  - 52.68
   - 67.58
   - 40.58
   - 25.64
@@ -45,6 +47,8 @@ v2:
   - 54.46
   - 72.98
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -67,5 +71,97 @@ v2:
   - -10719.0
   - -17170.0
   - -17810.0
-  book_value_ps: 1520.0
+  book_value_ps: 1573.0
   roe_5y: 0.07
+  profit_growth_5y: 0.02
+  sales_growth_5y: 0.18
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4311
+    - 0.4311
+    - 0.4311
+    - 0.4311
+    - 0.4321
+    - 0.4373
+    - 0.4373
+    - 0.452
+    fii:
+    - 0.135
+    - 0.1345
+    - 0.1379
+    - 0.1437
+    - 0.1449
+    - 0.1491
+    - 0.1463
+    - 0.145
+    dii:
+    - 0.179
+    - 0.1824
+    - 0.1791
+    - 0.1727
+    - 0.1699
+    - 0.1628
+    - 0.1613
+    - 0.1525
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 23140.0
+    - 27429.0
+    - 31387.0
+    - 57361.0
+    - 58020.0
+    - 56633.0
+    - 65494.0
+    - 75699.0
+    - 78742.0
+    - 88653.0
+    - 97509.0
+    - 103470.0
+    borrowings:
+    - 11930.0
+    - 12505.0
+    - 9213.0
+    - 67070.0
+    - 84487.0
+    - 84777.0
+    - 79078.0
+    - 74744.0
+    - 103039.0
+    - 137155.0
+    - 186326.0
+    - 227853.0
+    net_profit:
+    - 2582.0
+    - 3455.0
+    - 4246.0
+    - 3688.0
+    - 2745.0
+    - 6639.0
+    - 6987.0
+    - 11206.0
+    - 11078.0
+    - 9926.0
+    - 7756.0
+    - 10300.0

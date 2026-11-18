@@ -57,6 +57,12 @@ def known_eps(v2: dict, start: dt.date) -> list[tuple[str, float]]:
     return out
 
 
+def known_year(label: str, start: dt.date) -> bool:
+    """Whether a fiscal year's results were out on `start` (the same lag as known_eps)."""
+    end = fiscal_end(label)
+    return bool(end) and end + dt.timedelta(days=RESULTS_LAG_DAYS) <= start
+
+
 def promoters_then(v2: dict, start: dt.date) -> float | None:
     sh = v2.get("shareholding") or {}
     pairs = [(fiscal_end(q), p) for q, p in zip(sh.get("quarters") or [], sh.get("promoters") or [])]
@@ -110,7 +116,8 @@ def run_start(entries: list[dict], companies: dict, cfg: dict, con, start: dt.da
              "pe": price / eps if eps > 0 else None, "eps_ttm": eps, "eps_annual": [v for _, v in eps_known],
              "growth_needed": None, "cash_conversion": None, "stale": False, "bad_loans": False, "history_break": None,
              "cyclical": kind_of(c, cfg) == "cyclical", "signal": "", "action": "", "owners": promoters_then(c.get("v2") or {}, start),
-             "flags": []}
+             "flags": [], "financial": growth_screen.is_financial(c, cfg),
+             **growth_screen.quality_figures((c.get("v2") or {}).get("balance_annual"), known=lambda y: known_year(y, start))}
         row = growth_screen.judge(x, s)
         price_ret = now[0] / then[0] - 1
         total_ret = now[1] / then[1] - 1 if then[1] and now[1] else None
@@ -157,15 +164,22 @@ def with_filters(b: dict, s: dict, f: dict) -> dict:
     backtestAll does: cyclicals out of the picks and of all screened, government-owned and low promoter holding out of
     the picks (a holding not known then is not held against a stock). `all_rows` keeps everyone – the page's panel
     re-picks from them when a switch is turned off."""
-    if not any(f.values()):
+    q = growth_screen.quality(s)
+    if not any(f.values()) and not growth_screen.quality_on(q):
         return b
     keep = lambda r: not (f["cyc"] and r.get("cyclical")) and not growth_screen.filter_guards(  # noqa: E731
         r, f, s.get("min_promoter", 0.0), known_only=True)
+    good = lambda r: not growth_screen.quality_guards(r, q)  # noqa: E731
     screened = [r for r in b["all_rows"] if not (f["cyc"] and r.get("cyclical"))]
-    out = _result(b["start"], b["today"], screened, [r for r in b["picks"] if keep(r)], [r for r in b["near"] if keep(r)],
-                  b["skipped"], b["short_history"], b["index_price"], b["dividends"], b["rules"], b["index"])
+    out = _result(b["start"], b["today"], screened, [r for r in b["picks"] if keep(r) and good(r)],
+                  [r for r in b["near"] if keep(r) and good(r)], b["skipped"], b["short_history"], b["index_price"],
+                  b["dividends"], b["rules"], b["index"])
     out["all_rows"] = b["all_rows"]
     out["screened_rows"] = screened
+    if growth_screen.quality_on(q):   # the same rules without the quality check, to show what it changes
+        noq = sorted((r for r in b["picks"] if keep(r)), key=lambda r: -(r[out["ret"]] if r[out["ret"]] is not None else -9))
+        out["without_quality"] = {"picks": noq, "ret": _avg(noq, out["ret"])}
+        out["no_statements"] = [r["ticker"] for r in screened if r.get("quality_year") is None]   # no yearly balance sheet then
     return out
 
 

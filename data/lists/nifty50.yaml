@@ -15,6 +15,11 @@ screen_rules:        # over config.yaml growth_screen for this list (loader.with
   near_max_pe: 30             # near miss: the same 5-point P/E band above the bar as the Midcap 150 ...
   near_min_eps_cagr: 0.07     # ... and the same 5-point growth band below it
   default_filters: {prule: false, psu: false, mid: false, cyc: false}
+  min_roe: 0.15               # the quality check, from the latest yearly statements (on past dates: those known then)
+  min_roe_financials: 0.12    # banks, NBFCs and insurers ...
+  max_debt_equity: 1.0        # ... and borrowings at most 1.0x equity, not for financials
+  financials_separate: true
+  min_promoter: 0             # no promoter rule here: not listed, counted or offered in the panel
 tickers:
 - ticker: ADANIENT
   yahoo: ADANIENT.NS

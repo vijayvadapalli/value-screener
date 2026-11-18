@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 973.636
+shares_m: 974.086
 balance:
   cash: 6684.3
   debt: 34783.6
 price:
-  value: 1009.9
+  value: 1023.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance MAXHEALTH.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/MAXHEALTH/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/MAXHEALTH/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 3.31
   - 4.26
   eps_annual:
+  - -0.78
+  - -0.44
   - 0.29
   - -0.47
   - -0.06
@@ -45,6 +47,8 @@ v2:
   - 11.07
   - 14.82
   years:
+  - "Mar 2015\n            \n            (S)"
+  - "Mar 2016\n            \n            (S)"
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 1633.0
   book_value_ps: 116.0
   roe_5y: 0.14
+  profit_growth_5y: 0.6
+  sales_growth_5y: 0.27
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.2374
+    - 0.2374
+    - 0.2374
+    - 0.2374
+    - 0.2372
+    - 0.2371
+    - 0.2371
+    - 0.2371
+    fii:
+    - 0.5693
+    - 0.5474
+    - 0.5476
+    - 0.518
+    - 0.5055
+    - 0.4539
+    - 0.4178
+    - 0.4052
+    dii:
+    - 0.1555
+    - 0.1759
+    - 0.1741
+    - 0.2003
+    - 0.212
+    - 0.2632
+    - 0.2995
+    - 0.3101
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 1012.0
+    - 1295.0
+    - 1192.0
+    - 1164.0
+    - 963.0
+    - 2553.0
+    - 5639.0
+    - 6283.0
+    - 7410.0
+    - 8408.0
+    - 9381.0
+    - 10747.0
+    borrowings:
+    - 296.0
+    - 273.0
+    - 874.0
+    - 981.0
+    - 1003.0
+    - 875.0
+    - 1101.0
+    - 913.0
+    - 689.0
+    - 1299.0
+    - 3010.0
+    - 3478.0
+    net_profit:
+    - -38.0
+    - -24.0
+    - 16.0
+    - -25.0
+    - -0.0
+    - 59.0
+    - -138.0
+    - 605.0
+    - 1104.0
+    - 1058.0
+    - 1076.0
+    - 1442.0

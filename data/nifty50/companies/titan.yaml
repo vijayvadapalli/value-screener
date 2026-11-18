@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 887.767
+shares_m: 889.963
 balance:
   cash: 38950.0
   debt: 306210.0
 price:
-  value: 4910.0
+  value: 4648.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance TITAN.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TITAN/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/TITAN/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 20.02
   - 26.95
   eps_annual:
+  - 9.19
+  - 7.6
   - 8.01
   - 12.73
   - 15.82
@@ -45,6 +47,8 @@ v2:
   - 37.59
   - 57.14
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 5590.0
   book_value_ps: 206.0
   roe_5y: 0.32
+  profit_growth_5y: 0.4
+  sales_growth_5y: 0.32
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.529
+    - 0.529
+    - 0.529
+    - 0.529
+    - 0.529
+    - 0.529
+    - 0.529
+    - 0.529
+    fii:
+    - 0.1811
+    - 0.1782
+    - 0.1754
+    - 0.1611
+    - 0.1555
+    - 0.1565
+    - 0.1539
+    - 0.1637
+    dii:
+    - 0.1137
+    - 0.1201
+    - 0.1259
+    - 0.1399
+    - 0.1483
+    - 0.1484
+    - 0.1515
+    - 0.1442
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 3084.0
+    - 3507.0
+    - 4233.0
+    - 5090.0
+    - 6070.0
+    - 6669.0
+    - 7497.0
+    - 9303.0
+    - 11851.0
+    - 9393.0
+    - 11624.0
+    - 15703.0
+    borrowings:
+    - 100.0
+    - 113.0
+    - 1882.0
+    - 1691.0
+    - 2393.0
+    - 3562.0
+    - 5638.0
+    - 7275.0
+    - 9367.0
+    - 15528.0
+    - 20777.0
+    - 30621.0
+    net_profit:
+    - 816.0
+    - 675.0
+    - 697.0
+    - 1102.0
+    - 1389.0
+    - 1493.0
+    - 974.0
+    - 2198.0
+    - 3274.0
+    - 3496.0
+    - 3337.0
+    - 5073.0

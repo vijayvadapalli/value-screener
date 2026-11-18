@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 816.5
+  value: 808.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance HDFCBANK.NS
-shares_m: 15440.97
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 15451.386
 v2:
   eps_quarters:
   - 11.54
@@ -25,6 +25,8 @@ v2:
   - 12.5
   - 13.43
   eps_annual:
+  - 10.66
+  - 12.66
   - 14.91
   - 17.83
   - 20.5
@@ -36,6 +38,8 @@ v2:
   - 46.26
   - 49.39
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,90 @@ v2:
   - 113506.0
   book_value_ps: 391.0
   roe_5y: 0.15
+  profit_growth_5y: 0.19
+  sales_growth_5y: 0.22
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.4921
+    - 0.483
+    - 0.4884
+    - 0.4838
+    - 0.4767
+    - 0.4405
+    - 0.4182
+    - 0.3939
+    dii:
+    - 0.3437
+    - 0.3568
+    - 0.3577
+    - 0.3607
+    - 0.37
+    - 0.4014
+    - 0.4175
+    - 0.4344
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 63154.0
+    - 74304.0
+    - 91794.0
+    - 109599.0
+    - 153673.0
+    - 176358.0
+    - 209810.0
+    - 247327.0
+    - 289438.0
+    - 456396.0
+    - 521789.0
+    - 586059.0
+    borrowings:
+    - 59478.0
+    - 103714.0
+    - 98416.0
+    - 156442.0
+    - 157733.0
+    - 186834.0
+    - 177697.0
+    - 226966.0
+    - 256549.0
+    - 730615.0
+    - 634606.0
+    - 588485.0
+    net_profit:
+    - 10703.0
+    - 12821.0
+    - 15317.0
+    - 18561.0
+    - 22446.0
+    - 27296.0
+    - 31857.0
+    - 38151.0
+    - 46149.0
+    - 65446.0
+    - 73440.0
+    - 79219.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +182,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/HDFCBANK/consolidated/; NPA figures from the standalone
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/HDFCBANK/consolidated/; NPA figures from the standalone
   page: https://www.screener.in/company/HDFCBANK/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)

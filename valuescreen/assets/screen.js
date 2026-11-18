@@ -6,9 +6,28 @@
 // redoes the averages (backtestAll). What the server wrote stays untouched until a setting differs from the defaults,
 // so the page reads the same without JavaScript.
 
-const SCREEN_KEYS = ['pe', 'growth', 'ret', 'years', 'exit', 'promoters', 'prule', 'psu', 'mid', 'cyc', 'all'];
-const SCREEN_PCT = new Set(['growth', 'ret', 'promoters']);   // shown and typed as %, stored as fractions
-const SCREEN_BOOL = new Set(['prule', 'psu', 'mid', 'cyc', 'all']);
+const SCREEN_KEYS = ['pe', 'growth', 'ret', 'years', 'exit', 'promoters', 'roe', 'roe_fin', 'de', 'prule', 'fin', 'psu', 'mid', 'cyc', 'all'];
+const SCREEN_PCT = new Set(['growth', 'ret', 'promoters', 'roe', 'roe_fin']);   // shown and typed as %, stored as fractions
+const SCREEN_BOOL = new Set(['prule', 'fin', 'psu', 'mid', 'cyc', 'all']);
+
+function qualityOn(s) {   // growth_screen.quality_on
+  return (s.roe || 0) > 0 || (s.roe_fin || 0) > 0 || (s.de !== null && s.de !== undefined);
+}
+
+function qualityGuards(r, s) {
+  // growth_screen.quality_guards: ROE (financials their own bar when treated separately) and debt to equity
+  if (!qualityOn(s)) return [];
+  const fin = s.fin && r.fin, need = fin ? (s.roe_fin || 0) : (s.roe || 0), out = [];
+  const roe = r.roe === undefined ? null : r.roe, de = r.de === undefined ? null : r.de;
+  if (need > 0 && (roe === null || roe < need))
+    out.push(roe === null ? 'no ROE figures' : `ROE ${(roe * 100).toFixed(0)}% (< ${(need * 100).toFixed(0)}%)`);
+  if (s.de !== null && s.de !== undefined && !fin) {
+    if (de === null) out.push('no debt figures');
+    else if (de > s.de) out.push(`debt/equity ${de.toFixed(1)} (> ${(+s.de).toFixed(1)})`);
+  }
+  return out;
+}
+const NO_QUALITY = {roe: 0, roe_fin: 0, de: null};
 
 function expectedReturn(eps, nc, price, growth, s) {
   // growth_screen.expected_return
@@ -22,7 +41,7 @@ function judgeRow(r, s) {
   // growth_screen.judge, plus the panel's own rules (promoters, government-owned, Midcap 150 only, cyclicals)
   const growth = (r.c5 !== null && r.c3 !== null) ? Math.min(r.c5, r.c3) : null;
   const [ret, assumed] = expectedReturn(r.eps, r.nc, r.price, growth, s);
-  const guards = r.guards.slice();
+  const guards = r.guards.concat(qualityGuards(r, s));
   if (s.prule && (r.promoters === null || r.promoters < s.promoters))
     guards.push(r.promoters === null ? 'no promoter holding' : `promoters ${(r.promoters * 100).toFixed(0)}% (< ${(s.promoters * 100).toFixed(0)}%)`);
   if (s.psu && r.state_owned) guards.push('government-owned');
@@ -60,11 +79,12 @@ function funnel(rows, s) {
   let left = rows.filter(r => inUniverse(r, s));
   const steps = [['Start', left.length]];
   const keep = (label, test) => { left = left.filter(test); steps.push([label, left.length]); };
-  const j = new Map(left.map(r => [r.ticker, judgeRow(r, Object.assign({}, s, {prule: false, psu: false}))]));
+  const j = new Map(left.map(r => [r.ticker, judgeRow(r, Object.assign({}, s, {prule: false, psu: false}, NO_QUALITY))]));
   keep('after guards', r => !j.get(r.ticker).guards.length);
   keep('+ growth', r => j.get(r.ticker).checks.growth);
   keep('+ P/E', r => j.get(r.ticker).checks.pe);
   keep('+ 5-yr return', r => j.get(r.ticker).checks.return);
+  if (qualityOn(s)) keep('+ quality', r => !qualityGuards(r, s).length);
   // India only, and only when switched on: US companies have no promoter group or government-owned rule
   if (s.market !== 'us' && s.prule) keep('+ promoters', r => r.promoters !== null && r.promoters >= s.promoters);
   if (s.market !== 'us' && s.psu) keep('+ government-owned rule', r => !r.state_owned);
@@ -73,7 +93,7 @@ function funnel(rows, s) {
 
 const FUNNEL_WORDS = {   // html_report.FUNNEL_WORDS
   'after guards': 'have clean books and a profit every year', '+ growth': 'grew fast enough', '+ P/E': 'are cheap enough',
-  '+ 5-yr return': 'promise enough return', '+ promoters': 'have enough promoter holding',
+  '+ 5-yr return': 'promise enough return', '+ quality': 'pass the quality check', '+ promoters': 'have enough promoter holding',
   '+ government-owned rule': 'are not government-owned',
 };
 
@@ -107,15 +127,20 @@ function backtestAll(bt, s) {
   // – and the picks' average, best and worst redone; all screened (less the cyclicals if excluded) and the index stay.
   // The promoter rule applies where the holding then is known (the files keep 8 quarters): an unknown holding is not
   // a reason to leave a stock out years ago.
+  // The quality check uses each stock's statements then (roe, de); with it on, the picks without it come too
+  // (backtest.with_filters "without_quality"), so the page can show what it changes.
   const order = (a, b) => (b.ret === null ? -9 : b.ret) - (a.ret === null ? -9 : a.ret);
+  const pick = (b, st) => b.rows.filter(r => !(st.cyc && r.cyc)).map(r => {
+    const j = judgeRow({pe: r.pe, c5: r.c5, c3: r.c3, pos: true, guards: [], promoters: r.prom === undefined ? null : r.prom,
+                        state_owned: !!r.so, eps: r.eps, nc: r.nc || 0, price: r.price, roe: r.roe, de: r.de, fin: !!r.fin},
+                       Object.assign({}, st, {prule: st.prule && r.prom !== undefined}, r.short ? {years: st.years - 1} : {}));
+    return Object.assign({}, r, {tier: j.tier, er: j.ret});
+  }).filter(r => r.tier === 'shortlist').sort(order);
   return bt.starts.map(b => {
-    const picks = b.rows.filter(r => !(s.cyc && r.cyc)).map(r => {
-      const j = judgeRow({pe: r.pe, c5: r.c5, c3: r.c3, pos: true, guards: [], promoters: r.prom === undefined ? null : r.prom,
-                          state_owned: !!r.so, eps: r.eps, nc: r.nc || 0, price: r.price},
-                         Object.assign({}, s, {prule: s.prule && r.prom !== undefined}, r.short ? {years: s.years - 1} : {}));
-      return Object.assign({}, r, {tier: j.tier, er: j.ret});
-    }).filter(r => r.tier === 'shortlist').sort(order);
+    const picks = pick(b, s);
+    const noq = qualityOn(s) ? pick(b, Object.assign({}, s, NO_QUALITY)) : null;
     return {label: b.label, years: b.years, picks, picks_ret: mean(picks.map(r => r.ret)),
+            without: noq ? {picks: noq, ret: mean(noq.map(r => r.ret))} : null,
             screened: s.cyc ? b.n_nocyc : b.n, all: s.cyc ? b.all_nocyc : b.all, median: s.cyc ? b.median_nocyc : b.median,
             index: b.index, best: picks[0] || null, worst: picks.length > 1 ? picks[picks.length - 1] : null,
             note: b.note};
@@ -163,6 +188,8 @@ function screenPage() {
   const bt = btEl && btSection ? JSON.parse(btEl.textContent) : null;
   const btServer = bt ? {sum: btSection.querySelector('.bt-summary').innerHTML, det: btSection.querySelector('.bt-details').innerHTML} : null;
   let s = readSettings(location.search, defaults);
+  if (defaults.no_promoters) s.prule = false;   // no holding in the files: a link's prule=1 would leave out every company
+  const word = defaults.rules_word || 'five';   // four where the list has no promoter holding (html_report.rule_word)
   const esc = x => String(x).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
   const pct = (x, nd) => x === null ? '–' : `<span class="${x >= 0 ? 'pos' : 'neg'}">${x >= 0 ? '+' : '-'}${Math.abs(x * 100).toFixed(nd || 0)}%</span>`;
   const short = a => a.replace(/ – .*/, '');
@@ -196,10 +223,13 @@ function screenPage() {
     const nearPe = s.pe === s.pe0 ? s.near_pe : s.pe + (s.near_pe - s.pe0);
     const nearGrowth = s.growth === s.growth0 ? s.near_growth : s.growth - (s.growth0 - s.near_growth);
     const v = {pe: `${+s.pe.toFixed(2)}`, growth: `${+(s.growth * 100).toFixed(1)}%`, ret: `${+(s.ret * 100).toFixed(1)}%`,
-               years: `${s.years}`, exit: `${s.exit}x`, promoters: `${+(s.promoters * 100).toFixed(1)}%`, near_pe: `${+nearPe.toFixed(2)}`, near_growth: `${+(nearGrowth * 100).toFixed(1)}%`};
+               years: `${s.years}`, exit: `${s.exit}x`, promoters: `${+(s.promoters * 100).toFixed(1)}%`,
+               roe: `${+((s.roe || 0) * 100).toFixed(1)}%`, roe_fin: `${+((s.roe_fin || 0) * 100).toFixed(1)}%`,
+               de: `${(+(s.de || 0)).toFixed(1)}`, near_pe: `${+nearPe.toFixed(2)}`, near_growth: `${+(nearGrowth * 100).toFixed(1)}%`};
     const same = sameAsDefaults();   // looked up afresh: the tables, with their headers, are rewritten on every change
     section.querySelectorAll('[data-r]').forEach(el => { el.textContent = same ? ruleServer[el.dataset.r] : v[el.dataset.r]; });
     section.querySelectorAll('[data-off]').forEach(el => { el.hidden = !!s[el.dataset.off]; });   // a rule switched off says so
+    section.querySelectorAll('[data-on]').forEach(el => { el.hidden = !s[el.dataset.on]; });     // words that hold while it is on
   }
 
   function renderAnswer(judged, same) {   // html_report.answer_html, for the settings set here
@@ -207,8 +237,8 @@ function screenPage() {
     if (same) { answerEl.innerHTML = answerServer; answerEl.hidden = !answerServer; return; }
     const passed = judged.filter(r => r.tier === 'shortlist'), near = judged.filter(r => r.tier === 'near miss');
     const names = rs => andList(rs.map(r => linked(r.link, r.ticker)));
-    let today = passed.length ? `<b>With your settings, ${passed.length} ${passed.length === 1 ? 'stock passes' : 'stocks pass'} all five rules:</b> ${names(passed)}.`
-      : '<b>With your settings, no stock passes all five rules.</b>';
+    let today = passed.length ? `<b>With your settings, ${passed.length} ${passed.length === 1 ? 'stock passes' : 'stocks pass'} all ${word} rules:</b> ${names(passed)}.`
+      : `<b>With your settings, no stock passes all ${word} rules.</b>`;
     if (near.length) today += ` ${near.length} more ${near.length === 1 ? 'misses' : 'miss'} by one rule: ${names(near)}.`;
     let html = answerBelow && !passed.length ? '' : `<p data-ans="today">${today}</p>`;
     if (bt) {
@@ -241,7 +271,9 @@ function screenPage() {
     const sumRows = res.map(b => `<tr><td><b>${esc(b.label)}</b><br><small>${b.years.toFixed(0)} years</small></td>` +
       `<td>${b.picks.length} of ${b.screened}</td><td>${pct(b.picks_ret)}${aYear(b.picks_ret, b.years)}</td>` +
       `<td>${pct(b.all)} · median ${pct(b.median)}</td><td>${pct(b.index)}</td>` +
-      `<td>${b.best ? esc(b.best.t) + ' ' + pct(b.best.ret) : '–'}</td><td>${b.worst ? esc(b.worst.t) + ' ' + pct(b.worst.ret) : '–'}</td></tr>`).join('');
+      `<td>${b.best ? esc(b.best.t) + ' ' + pct(b.best.ret) : '–'}</td><td>${b.worst ? esc(b.worst.t) + ' ' + pct(b.worst.ret) : '–'}</td></tr>` +
+      (b.without ? `<tr class="noq"><td><small>without the quality check</small></td><td><small>${b.without.picks.length} of ${b.screened}</small></td>` +
+        `<td><small>${pct(b.without.ret)}</small></td><td colspan="4"></td></tr>` : '')).join('');
     const sum = btSection.querySelector('.bt-summary');
     sum.querySelector('tbody').innerHTML = sumRows;
     const det = res.map(b => {
@@ -272,7 +304,7 @@ function screenPage() {
     const tables = section.querySelector('.screen-tables'), same = sameAsDefaults();
     if (same) tables.innerHTML = serverHtml;   // exactly what the server wrote
     else tables.innerHTML = s.all ? table(judged)
-      : (passed.length ? table(passed) : '<p class="nopass">No company passes all five rules with these settings.</p>') + nearLine(near) +
+      : (passed.length ? table(passed) : `<p class="nopass">No company passes all ${word} rules with these settings.</p>`) + nearLine(near) +
         (others.length ? `<details><summary>Near misses and the other ${others.length - near.length}, in full</summary>${table(others)}</details>` : '');
     fun.innerHTML = funnelText(funnel(rows, s));
     renderRules();
@@ -283,7 +315,7 @@ function screenPage() {
     else if (location.search) history.replaceState(null, '', location.pathname + location.hash);
   }
 
-  const shown = (k, v) => SCREEN_PCT.has(k) ? `${+(v * 100).toFixed(2)}%` : k === 'exit' ? `${v}x` : `${v}`;
+  const shown = (k, v) => SCREEN_PCT.has(k) ? `${+(v * 100).toFixed(2)}%` : k === 'exit' ? `${v}x` : k === 'de' ? (+v).toFixed(1) : `${v}`;
   function out(k) { const o = panel.querySelector(`[data-out="${k}"]`); if (o) o.textContent = shown(k, s[k]); }
   function sync() {   // the panel's sliders and boxes ← the settings
     panel.querySelectorAll('[data-k]').forEach(el => {

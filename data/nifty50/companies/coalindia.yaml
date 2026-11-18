@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 6167.302
+shares_m: 6162.732
 balance:
   cash: 601489.4
   debt: 140721.8
 price:
-  value: 397.5
+  value: 388.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance COALINDIA.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/COALINDIA/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/COALINDIA/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 14.36
   - 10.57
   eps_annual:
+  - 21.73
+  - 22.59
   - 14.95
   - 11.34
   - 28.34
@@ -45,6 +47,8 @@ v2:
   - 57.61
   - 50.46
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 43215.0
   book_value_ps: 207.0
   roe_5y: 0.42
+  profit_growth_5y: 0.2
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6313
+    - 0.6313
+    - 0.6313
+    - 0.6313
+    - 0.6313
+    - 0.6313
+    - 0.6113
+    - 0.6113
+    fii:
+    - 0.0858
+    - 0.0774
+    - 0.0816
+    - 0.0796
+    - 0.0822
+    - 0.0838
+    - 0.1037
+    - 0.0959
+    dii:
+    - 0.2259
+    - 0.2335
+    - 0.2266
+    - 0.228
+    - 0.2253
+    - 0.2276
+    - 0.222
+    - 0.2344
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 40353.0
+    - 34833.0
+    - 24518.0
+    - 20178.0
+    - 26455.0
+    - 32157.0
+    - 36518.0
+    - 43143.0
+    - 60843.0
+    - 82730.0
+    - 101721.0
+    - 119102.0
+    borrowings:
+    - 408.0
+    - 1199.0
+    - 3014.0
+    - 1538.0
+    - 2210.0
+    - 6434.0
+    - 5884.0
+    - 3514.0
+    - 4331.0
+    - 6523.0
+    - 9146.0
+    - 14072.0
+    net_profit:
+    - 13727.0
+    - 14267.0
+    - 9280.0
+    - 7038.0
+    - 17464.0
+    - 16700.0
+    - 12702.0
+    - 17378.0
+    - 31723.0
+    - 37369.0
+    - 35450.0
+    - 31071.0

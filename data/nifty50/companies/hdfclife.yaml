@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 604.5
+  value: 576.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance HDFCLIFE.NS
-shares_m: 2171.856
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 2176.372
 v2:
   eps_quarters:
   - 1.96
@@ -25,7 +25,9 @@ v2:
   - 2.81
   - 2.4
   eps_annual:
-  - 4.44
+  - 3.91
+  - 4.07
+  - 4.41
   - 5.5
   - 6.33
   - 6.43
@@ -36,6 +38,8 @@ v2:
   - 8.41
   - 8.86
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,12 +64,104 @@ v2:
   - 22625.0
   book_value_ps: 89.6
   roe_5y: 0.11
+  profit_growth_5y: 0.07
+  sales_growth_5y: 0.07
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5032
+    - 0.5032
+    - 0.5028
+    - 0.5025
+    - 0.5021
+    - 0.5021
+    - 0.5054
+    - 0.5053
+    fii:
+    - 0.2514
+    - 0.2496
+    - 0.2475
+    - 0.2482
+    - 0.2427
+    - 0.2252
+    - 0.1927
+    - 0.1875
+    dii:
+    - 0.1372
+    - 0.141
+    - 0.1457
+    - 0.1459
+    - 0.1523
+    - 0.1725
+    - 0.2019
+    - 0.2053
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 2541.0
+    - 3103.0
+    - 3826.0
+    - 4705.0
+    - 5642.0
+    - 6807.0
+    - 8640.0
+    - 15614.0
+    - 12993.0
+    - 14666.0
+    - 16155.0
+    - 17750.0
+    borrowings:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 600.0
+    - 600.0
+    - 950.0
+    - 950.0
+    - 2950.0
+    - 3099.0
+    net_profit:
+    - 786.0
+    - 817.0
+    - 887.0
+    - 1107.0
+    - 1278.0
+    - 1297.0
+    - 1361.0
+    - 1327.0
+    - 1368.0
+    - 1574.0
+    - 1811.0
+    - 1912.0
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HDFCLIFE/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/HDFCLIFE/consolidated/'
 assumptions:
+- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
-- Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 notes: []

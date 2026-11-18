@@ -5,27 +5,26 @@ sector: Automobile and Auto Components
 model: growth
 currency: INR
 period:
-  label: TTM to Jun 2026
-  end: '2026-06-30'
+  label: TTM to Sep 2026
+  end: '2026-09-30'
   per_year: 4
-shares_m: 274.521
+shares_m: 275.861
 balance:
   cash: 60797.5
   debt: 5139.5
 price:
-  value: 7599.0
+  value: 7700.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance EICHERMOT.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/EICHERMOT/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/EICHERMOT/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
 notes: []
 v2:
   eps_quarters:
-  - 40.15
   - 42.7
   - 49.68
   - 43.95
@@ -33,7 +32,10 @@ v2:
   - 51.79
   - 55.41
   - 53.28
+  - 57.31
   eps_annual:
+  - 22.71
+  - 49.27
   - 61.27
   - 71.89
   - 80.75
@@ -45,6 +47,8 @@ v2:
   - 172.69
   - 201.06
   years:
+  - Dec 2014
+  - Mar 201615m
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -67,5 +71,93 @@ v2:
   - 3724.0
   - 3980.0
   - 4805.0
-  book_value_ps: 915.0
+  book_value_ps: 945.0
   roe_5y: 0.22
+  profit_growth_5y: 0.33
+  sales_growth_5y: 0.22
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4909
+    - 0.4908
+    - 0.4907
+    - 0.4906
+    - 0.4906
+    - 0.4906
+    - 0.4903
+    - 0.4902
+    fii:
+    - 0.2542
+    - 0.2502
+    - 0.2582
+    - 0.2698
+    - 0.2701
+    - 0.2677
+    - 0.2552
+    - 0.2403
+    dii:
+    - 0.1611
+    - 0.1655
+    - 0.1567
+    - 0.1462
+    - 0.1464
+    - 0.1473
+    - 0.1597
+    - 0.1761
+  balance_annual:
+    years:
+    - Dec 2014
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 2516.0
+    - 5345.0
+    - 7030.0
+    - 8918.0
+    - 9981.0
+    - 11438.0
+    - 12608.0
+    - 14990.0
+    - 18045.0
+    - 21296.0
+    - 25100.0
+    borrowings:
+    - 58.0
+    - 112.0
+    - 151.0
+    - 187.0
+    - 249.0
+    - 219.0
+    - 108.0
+    - 288.0
+    - 419.0
+    - 458.0
+    - 514.0
+    net_profit:
+    - 702.0
+    - 1667.0
+    - 1960.0
+    - 2203.0
+    - 1827.0
+    - 1347.0
+    - 1677.0
+    - 2914.0
+    - 4001.0
+    - 4734.0
+    - 5515.0

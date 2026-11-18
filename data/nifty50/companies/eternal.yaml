@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 9659.643
+shares_m: 9654.208
 balance:
   cash: 85860.0
   debt: 45920.0
 price:
-  value: 371.1
+  value: 366.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance ETERNAL.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ETERNAL/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ETERNAL/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,16 +34,22 @@ v2:
   - 0.1
   - 0.13
   eps_annual:
-  - -0.46
-  - -4.26
-  - -10.46
-  - -3.45
+  - -0.11
+  - -0.42
+  - -0.88
+  - -0.16
+  - -1.45
+  - -3.55
+  - -1.22
   - -1.54
   - -1.14
   - 0.4
   - 0.55
   - 0.38
   years:
+  - "Mar 2015\n            \n            (S)"
+  - "Mar 2016\n            \n            (S)"
+  - "Mar 2017\n            \n            (S)"
   - Mar 2018
   - Mar 2019
   - Mar 2020
@@ -67,3 +73,87 @@ v2:
   - 632.0
   book_value_ps: 32.4
   roe_5y: -0.02
+  profit_growth_5y: 0.2
+  sales_growth_5y: 0.94
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.4731
+    - 0.4436
+    - 0.4234
+    - 0.3904
+    - 0.3624
+    - 0.3261
+    - 0.2909
+    - 0.3301
+    dii:
+    - 0.2051
+    - 0.2347
+    - 0.2649
+    - 0.3004
+    - 0.3261
+    - 0.3588
+    - 0.3921
+    - 0.3622
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 662.03
+    - 558.03
+    - 384.03
+    - 1036.03
+    - 2356.03
+    - 457.03
+    - 7644.0
+    - 16505.0
+    - 19460.0
+    - 20413.0
+    - 30317.0
+    - 30980.0
+    borrowings:
+    - 0.0
+    - 304.0
+    - 0.0
+    - 186.0
+    - 348.0
+    - 326.0
+    - 527.0
+    - 70.0
+    - 507.0
+    - 749.0
+    - 2045.0
+    - 4592.0
+    net_profit:
+    - -72.0
+    - -281.0
+    - -585.0
+    - -107.0
+    - -1010.0
+    - -2386.0
+    - -816.0
+    - -1222.0
+    - -971.0
+    - 351.0
+    - 527.0
+    - 366.0

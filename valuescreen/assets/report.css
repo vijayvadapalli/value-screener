@@ -99,3 +99,4 @@ padding:0 8px;border:1px solid currentColor;border-radius:10px;font-size:11px;fo
 #screen details>summary:hover,#backtest details>summary:hover,.tabpane details>summary:hover{text-decoration:underline}
 details.rules>summary{color:var(--blue)} details.rules>summary small{color:var(--ink2)}
 #screen details.rules>summary{font-size:14px;font-weight:700}
+table.sum tr.noq td{padding-top:0;color:var(--ink2)} table.sum tr.noq td small{color:var(--ink2)}

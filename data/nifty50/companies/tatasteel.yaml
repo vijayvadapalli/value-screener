@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 12483.511
+shares_m: 12480.112
 balance:
   cash: 120721.4
   debt: 923816.8
 price:
-  value: 182.26
+  value: 179.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance TATASTEEL.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/TATASTEEL/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/TATASTEEL/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 1.86
   - 2.94
   eps_annual:
+  - -3.85
+  - -0.38
   - -4.16
   - 11.93
   - 9.07
@@ -45,6 +47,8 @@ v2:
   - 2.74
   - 8.65
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 35064.0
   book_value_ps: 83.1
   roe_5y: 0.14
+  profit_growth_5y: 0.08
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.3319
+    - 0.3319
+    - 0.3319
+    - 0.3319
+    - 0.3319
+    - 0.3319
+    - 0.3294
+    - 0.3294
+    fii:
+    - 0.1853
+    - 0.1829
+    - 0.1722
+    - 0.1729
+    - 0.1749
+    - 0.1858
+    - 0.189
+    - 0.1772
+    dii:
+    - 0.2352
+    - 0.2448
+    - 0.2607
+    - 0.2692
+    - 0.2698
+    - 0.2667
+    - 0.2644
+    - 0.2751
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 31349.0
+    - 43732.0
+    - 37819.0
+    - 60871.0
+    - 68925.0
+    - 73576.0
+    - 74239.0
+    - 114443.0
+    - 103082.0
+    - 92035.0
+    - 91169.0
+    - 102167.0
+    borrowings:
+    - 80701.0
+    - 81987.0
+    - 83014.0
+    - 92147.0
+    - 100816.0
+    - 116328.0
+    - 88501.0
+    - 75561.0
+    - 84893.0
+    - 87082.0
+    - 94801.0
+    - 92382.0
+    net_profit:
+    - -3939.0
+    - -497.0
+    - -4169.0
+    - 17743.0
+    - 9122.0
+    - 1174.0
+    - 8190.0
+    - 41749.0
+    - 8075.0
+    - -4910.0
+    - 3174.0
+    - 10886.0

@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 808.061
+shares_m: 810.812
 balance:
   cash: 100281.2
   debt: 6137.7
 price:
-  value: 1394.5
+  value: 1417.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance CIPLA.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/CIPLA/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/CIPLA/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 9.77
   - 10.86
   eps_annual:
+  - 14.71
+  - 16.93
   - 12.51
   - 17.52
   - 18.96
@@ -45,6 +47,8 @@ v2:
   - 65.28
   - 48.02
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 3940.0
   book_value_ps: 438.0
   roe_5y: 0.14
+  profit_growth_5y: 0.1
+  sales_growth_5y: 0.08
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.2919
+    - 0.292
+    - 0.2919
+    - 0.2922
+    - 0.2922
+    - 0.2922
+    - 0.2922
+    - 0.292
+    fii:
+    - 0.2665
+    - 0.2628
+    - 0.2524
+    - 0.2454
+    - 0.2393
+    - 0.2255
+    - 0.202
+    - 0.2024
+    dii:
+    - 0.2749
+    - 0.2789
+    - 0.2898
+    - 0.2998
+    - 0.3045
+    - 0.3171
+    - 0.3435
+    - 0.3461
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 10802.0
+    - 11517.0
+    - 12544.0
+    - 14229.0
+    - 15012.0
+    - 15763.0
+    - 18326.0
+    - 20841.0
+    - 23407.0
+    - 26706.0
+    - 31194.0
+    - 34432.0
+    borrowings:
+    - 1703.0
+    - 5202.0
+    - 4113.0
+    - 4098.0
+    - 4316.0
+    - 2816.0
+    - 2014.0
+    - 1056.0
+    - 803.0
+    - 559.0
+    - 438.0
+    - 614.0
+    net_profit:
+    - 1229.0
+    - 1383.0
+    - 1035.0
+    - 1417.0
+    - 1492.0
+    - 1500.0
+    - 2389.0
+    - 2547.0
+    - 2833.0
+    - 4154.0
+    - 5269.0
+    - 3862.0

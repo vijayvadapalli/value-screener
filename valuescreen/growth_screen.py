@@ -117,7 +117,8 @@ def judge(x: dict, s: dict) -> dict:
             "price": price, "price_ccy": x["price_ccy"], "checks": checks,
             # for the report's settings panel (assets/screen.js recomputes the tiers in the browser)
             "eps": x.get("eps"), "nc": x.get("nc"), "state_owned": state_owned, "cyclical": bool(x.get("cyclical")),
-            "pledged": x.get("pledged"), "extra": None}
+            "pledged": x.get("pledged"), "extra": None,
+            "roe": x.get("roe"), "de": x.get("de"), "financial": bool(x.get("financial")), "quality_year": x.get("quality_year")}
 
 
 def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
@@ -133,7 +134,8 @@ def evaluate(r: dict, c: dict, cfg: dict, extra: str | None = None) -> dict:
          "stale": r.get("stale"), "bad_loans": bool((r.get("asset_quality") or {}).get("flags")),
          "history_break": v.get("history_not_comparable"),
          "cyclical": (r.get("v2") or {}).get("kind") == "cyclical" or bool(r.get("cyclical")),
-         "signal": r["signal"], "action": r["action"], "owners": promoters, "flags": flags}
+         "signal": r["signal"], "action": r["action"], "owners": promoters, "flags": flags,
+         "financial": is_financial(c, cfg), **quality_figures(v.get("balance_annual"))}
     row = judge(x, s)
     src = r
     row["quality_src"] = {k: src.get(k) for k in ("pb", "fair_pb", "asset_quality", "cash_conversion", "fcf_ps", "price", "no_growth_multiple")}   # the Quality column (html_report)
@@ -200,6 +202,64 @@ def rows(results: dict, companies: dict, cfg: dict, extras: dict | None = None) 
                   key=sort_key)
 
 
+def is_financial(c: dict, cfg: dict) -> bool:
+    """Banks, NBFCs and insurers (config nifty_v2.financial_industries) – the quality check treats them separately."""
+    return c.get("sector", "") in (cfg.get("nifty_v2") or {}).get("financial_industries", [])
+
+
+def quality_figures(ba: dict | None, known=lambda label: True) -> dict:
+    """ROE and debt to equity from the yearly balance sheet (Screener's balance_annual): the latest year `known(label)`
+    allows – every year for today, the years whose results were out on a past date for the backtest. ROE = that year's
+    net profit ÷ the average of the opening and closing equity (the closing alone for the first year); debt to equity
+    = borrowings ÷ closing equity. None where a figure is missing or equity is not positive."""
+    none = {"roe": None, "de": None, "quality_year": None}
+    if not ba or not ba.get("years"):
+        return none
+    idx = [i for i, y in enumerate(ba["years"]) if known(y)]
+    if not idx:
+        return none
+    i = idx[-1]
+    eq, prev = ba["equity"][i], ba["equity"][i - 1] if i else None
+    profit, borrow = ba["net_profit"][i], ba["borrowings"][i]
+    avg = (eq + prev) / 2 if eq is not None and prev is not None and prev > 0 else eq
+    return {"roe": profit / avg if profit is not None and avg and avg > 0 else None,
+            "de": borrow / eq if borrow is not None and eq and eq > 0 else None, "quality_year": ba["years"][i]}
+
+
+def quality(s: dict) -> dict:
+    """The quality check's settings: min ROE, min ROE for financials, max debt to equity (None: no limit) and whether
+    financials are treated separately (their own ROE bar, no debt limit – a lender's borrowings are its business).
+    Off at the Midcap 150 defaults (0, 0, None), so Dr. Gupta's screen stays his five rules."""
+    return {"roe": s.get("min_roe") or 0.0, "roe_fin": s.get("min_roe_financials") or 0.0, "de": s.get("max_debt_equity"),
+            "fin": bool(s.get("financials_separate", True))}
+
+
+def quality_on(q: dict) -> bool:
+    return q["roe"] > 0 or q["roe_fin"] > 0 or q["de"] is not None
+
+
+def quality_guards(row: dict, q: dict) -> list[str]:
+    """What the quality check holds against a row (screen.js qualityGuards writes the same)."""
+    if not quality_on(q):
+        return []
+    fin = q["fin"] and row.get("financial")
+    need, roe, de, out = (q["roe_fin"] if fin else q["roe"]), row.get("roe"), row.get("de"), []
+    if need > 0 and (roe is None or roe < need):
+        out.append("no ROE figures" if roe is None else f"ROE {roe*100:.0f}% (< {need*100:.0f}%)")
+    if q["de"] is not None and not fin:
+        if de is None:
+            out.append("no debt figures")
+        elif de > q["de"]:
+            out.append(f"debt/equity {de:.1f} (> {q['de']:.1f})")
+    return out
+
+
+def promoter_rule(s: dict, rows_: list[dict] | None = None) -> bool:
+    """Whether the list has a promoter rule at all: a minimum above 0 (the Nifty 50 sets 0) and, given the screen's rows,
+    a holding in its files. Without one the rule is not listed, counted or offered in the panel."""
+    return s.get("min_promoter", 0) > 0 and (not rows_ or any(r.get("promoters") is not None for r in rows_))
+
+
 FILTERS = ("prule", "psu", "mid", "cyc")   # promoter rule, no government-owned, the list only (no extras), no cyclicals
 
 
@@ -209,7 +269,7 @@ def filters(s: dict, rows_: list[dict] | None = None) -> dict:
     promoter rule off – it would otherwise leave out every company."""
     d = s.get("default_filters") or {}
     f = {k: bool(d.get(k)) for k in FILTERS}
-    if rows_ and not any(r.get("promoters") is not None for r in rows_):
+    if not promoter_rule(s, rows_):
         f["prule"] = False
     return f
 
@@ -235,10 +295,10 @@ def apply_filters(rows_: list[dict], s: dict, f: dict | None = None) -> list[dic
     government-owned rule holds back loses its tier (the reason joins its guards), best first again. The rows
     themselves are not changed – the page's panel still needs them as they were."""
     f = f or filters(s, rows_)
-    out = []
+    out = []   # the quality check (quality()) applies here too: off unless the list sets it
     for r in rows_:
         if not in_universe(r, f):
             continue
-        extra = filter_guards(r, f, s.get("min_promoter", 0.0))
+        extra = quality_guards(r, quality(s)) + filter_guards(r, f, s.get("min_promoter", 0.0))
         out.append(dict(r, guards=r["guards"] + extra, tier="") if extra else r)
     return sorted(out, key=sort_key)

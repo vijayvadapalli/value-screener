@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 294.679
+shares_m: 295.376
 balance:
   cash: 52338.0
   debt: 237550.9
 price:
-  value: 12270.0
+  value: 12428.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance ULTRACEMCO.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/ULTRACEMCO/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ULTRACEMCO/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 88.21
   - 50.69
   eps_annual:
+  - 76.47
+  - 90.3
   - 98.9
   - 80.92
   - 87.51
@@ -45,6 +47,8 @@ v2:
   - 204.94
   - 277.1
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 15316.0
   book_value_ps: 2497.0
   roe_5y: 0.11
+  profit_growth_5y: 0.08
+  sales_growth_5y: 0.15
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6
+    - 0.5923
+    - 0.5923
+    - 0.5923
+    - 0.5928
+    - 0.5933
+    - 0.5933
+    - 0.5848
+    fii:
+    - 0.1698
+    - 0.1517
+    - 0.1523
+    - 0.1533
+    - 0.1444
+    - 0.1361
+    - 0.1236
+    - 0.122
+    dii:
+    - 0.1515
+    - 0.1679
+    - 0.1685
+    - 0.1665
+    - 0.1745
+    - 0.1842
+    - 0.1969
+    - 0.2086
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 19041.0
+    - 21945.0
+    - 24392.0
+    - 26382.0
+    - 33751.0
+    - 39044.0
+    - 44175.0
+    - 50436.0
+    - 54325.0
+    - 60228.0
+    - 70707.0
+    - 76624.0
+    borrowings:
+    - 9829.0
+    - 10616.0
+    - 8474.0
+    - 19480.0
+    - 25337.0
+    - 23019.0
+    - 21719.0
+    - 11299.0
+    - 11058.0
+    - 11403.0
+    - 24102.0
+    - 23755.0
+    net_profit:
+    - 2102.0
+    - 2480.0
+    - 2714.0
+    - 2224.0
+    - 2400.0
+    - 5751.0
+    - 5462.0
+    - 7334.0
+    - 5073.0
+    - 7004.0
+    - 6040.0
+    - 8188.0

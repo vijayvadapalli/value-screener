@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 494.2
+  value: 495.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance KOTAKBANK.NS
-shares_m: 9973.763
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 9957.354
 v2:
   eps_quarters:
   - 4.73
@@ -25,6 +25,8 @@ v2:
   - 5.51
   - 5.67
   eps_annual:
+  - 3.94
+  - 3.77
   - 5.37
   - 6.51
   - 7.55
@@ -36,6 +38,8 @@ v2:
   - 22.26
   - 19.39
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,98 @@ v2:
   - 41727.0
   book_value_ps: 196.0
   roe_5y: 0.14
+  profit_growth_5y: 0.14
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.2588
+    - 0.2588
+    - 0.2588
+    - 0.2587
+    - 0.2587
+    - 0.2587
+    - 0.2587
+    - 0.2586
+    fii:
+    - 0.3248
+    - 0.3265
+    - 0.3234
+    - 0.2975
+    - 0.2936
+    - 0.264
+    - 0.2521
+    - 0.2465
+    dii:
+    - 0.2879
+    - 0.2913
+    - 0.2961
+    - 0.3202
+    - 0.3288
+    - 0.3619
+    - 0.3771
+    - 0.3854
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 22156.0
+    - 33364.0
+    - 38492.0
+    - 50488.0
+    - 57781.0
+    - 66637.0
+    - 84339.0
+    - 96665.0
+    - 111814.0
+    - 129972.0
+    - 157489.0
+    - 181226.0
+    borrowings:
+    - 31415.0
+    - 43730.0
+    - 49690.0
+    - 58604.0
+    - 66939.0
+    - 66077.0
+    - 48239.0
+    - 55648.0
+    - 57534.0
+    - 75106.0
+    - 97622.0
+    - 95394.0
+    net_profit:
+    - 3105.0
+    - 3524.0
+    - 5019.0
+    - 6258.0
+    - 7204.0
+    - 8593.0
+    - 9990.0
+    - 12089.0
+    - 14925.0
+    - 18213.0
+    - 22126.0
+    - 19288.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +190,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/KOTAKBANK/consolidated/; NPA figures from the standalone
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/KOTAKBANK/consolidated/; NPA figures from the standalone
   page: https://www.screener.in/company/KOTAKBANK/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
