@@ -154,3 +154,17 @@ def test_market_rows_from_daily_history_and_a_monthly_series(tmp_path, monkeypat
 def test_no_value_lines_for_a_symbol_we_do_not_value():
     """Research and Markets charts (gold, oil, ETFs) have no model: no value lines, no error."""
     assert PC.value_lines({"model": None, "price_ccy": "USD"}) == []
+
+
+def test_ratio_bars_and_a_ratio_chart(tmp_path):
+    db = pricedb.connect(tmp_path / "p.sqlite")
+    pricedb.save_bars(db, "AAA", [(b["date"], b["open"], b["high"], b["low"], b["close"], b["adj_close"], b["volume"])
+                                  for b in make_bars([100 + i for i in range(60)])])
+    pricedb.save_bars(db, "BBB", [(b["date"], b["open"], b["high"], b["low"], b["close"], b["adj_close"], b["volume"])
+                                  for b in make_bars([50.0] * 59)])   # one day short: that day has no ratio
+    bars = PC.ratio_bars(db, "AAA", "BBB")
+    assert len(bars) == 59 and bars[0]["close"] == pytest.approx(2.0) and bars[-1]["close"] == pytest.approx(158 / 50)
+    assert all(b["low"] <= min(b["open"], b["close"]) and b["high"] >= max(b["open"], b["close"]) for b in bars)
+    p = PC.payload(db, "AAA ÷ BBB", {"model": None, "price_ccy": "ratio"}, {"period": {}}, mode="research", bars=bars)
+    assert p["currency"] == "ratio" and p["markers"] == [] and p["D"][-1][4] == pytest.approx(3.16)
+    assert PC.monthly_closes(db, "AAA")[0][0].endswith("-01")

@@ -125,7 +125,7 @@ def changes(week: dict, previous: dict | None) -> dict:
 
 
 def fmt(lo: float, hi: float | None = None) -> str:
-    f = lambda v: f"{v:,.2f}" if v < 1000 else f"{v:,.0f}"  # noqa: E731
+    f = lambda v: f"{v:.3g}" if abs(v) < 1 else f"{v:,.2f}" if v < 1000 else f"{v:,.0f}"  # noqa: E731   ratios: 0.0213
     return f(lo) if hi is None or abs(hi - lo) < 1e-9 else f"{f(lo)}–{f(hi)}"
 
 
@@ -307,6 +307,12 @@ def _month(s) -> tuple[int, int]:
     return int(s[:4]), int(s[5:7])
 
 
+def _day(s) -> str:
+    """YYYY-MM or YYYY-MM-DD → YYYY-MM-DD (a month means its first day)."""
+    s = str(s)
+    return s if len(s) >= 10 else f"{s[:7]}-01"
+
+
 def _months_between(a, b):
     (y0, m0), (y1, m1) = _month(a), _month(b)
     out, y, m = [], y0, m0
@@ -348,6 +354,9 @@ def pattern_lines(item: dict) -> list[dict]:
             out.append({"tf": tf, "kind": "cup", "label": pat.get("label", "cup"), "points": _arc(pat["left"], pat["bottom"], pat["right"])})
         if pat.get("type") == "cup_handle" and pat.get("handle_low") and pat.get("breakout"):
             out.append({"tf": tf, "kind": "handle", "label": "handle", "points": _arc(pat["right"], pat["handle_low"], pat["breakout"])})
+        if pat.get("type") == "line":   # a trend line: two points, drawn on to the latest bar
+            out.append({"tf": tf, "kind": "line", "side": pat.get("side", "support"), "label": pat.get("label", "trend line"),
+                        "points": [[_day(pat["from"][0]), float(pat["from"][1])], [_day(pat["to"][0]), float(pat["to"][1])]]})
         rim = pat.get("rim")
         if rim is not None:
             lo, hi = _band(rim)

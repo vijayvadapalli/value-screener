@@ -272,24 +272,87 @@ process.stdout.write(JSON.stringify({{steps, text: S.funnelText(steps),
   near: judged.filter(r => r.tier === 'near miss').map(r => [r.ticker, S.shortOf(r)])}}));"""
     res = json.loads(subprocess.run([NODE, "-e", prog], input=json.dumps({"rows": data, "rules": rules}),
                                     capture_output=True, text=True, check=True).stdout)
-    steps = html_report.funnel_steps(rows)
+    steps = html_report.funnel_steps(rows, cfg["growth_screen"])
     assert [list(x) for x in steps] == res["steps"]
+    assert [label for label, _ in steps][-1] == "+ promoters"   # the promoter rule is on by default, government-owned off
     assert html_report.funnel_text(steps) == res["text"]
-    assert res["text"].startswith(f"Of <b>{len(rows)}</b> companies") and res["text"].endswith("– the shortlist.")
-    py_near = {r["ticker"]: html_report._short_of(r) for r in rows if r["tier"] == "near miss"}
+    assert res["text"].startswith(f"Of <b>{len(G.apply_filters(rows, cfg['growth_screen']))}</b> companies") and res["text"].endswith("– the shortlist.")
+    py_near = {r["ticker"]: html_report._short_of(r) for r in G.apply_filters(rows, cfg["growth_screen"]) if r["tier"] == "near miss"}
     assert py_near and dict(res["near"]) == py_near
 
 
 def test_screen_section_reads_answer_first():
-    """The five rules, the funnel sentence, the shortlist table, near misses on one line, the panel folded away."""
+    """The five rules folded under a summary, the panel open, the funnel sentence, the shortlist table, near misses on
+    one line, then the answer box."""
     cfg = loader.load_config()
     rows = sorted(py_rows(companies(60), {"growth_screen": cfg["growth_screen"]}), key=G.sort_key)
-    html = html_report.growth_screen_html(rows, cfg, panel=True)
-    assert html.count("<li><b>") == 5 and "The five rules" in html
-    assert '<p class="funnel">Of <b>60</b> companies' in html
+    shown = G.apply_filters(rows, cfg["growth_screen"])
+    answer = html_report.answer_html(shown, [], "Index", below=True)
+    html = html_report.growth_screen_html(rows, cfg, panel=True, after=answer)
+    assert html.count("<li><b>") == 5 and '<details class="rules"><summary>The five rules <small>· P/E ≤ <b data-r="pe">15</b>' in html
+    assert f'<p class="funnel">Of <b>{len(shown)}</b> companies' in html
     assert '<p class="near"><b>Near misses:</b>' in html
-    assert '<details class="tweak" hidden><summary>Change the rules</summary>' in html
-    assert html.index('class="funnel"') < html.index('class="screen-tables"')
-    answer = html_report.answer_html(rows, [], "Index")
-    n = sum(1 for r in rows if r["tier"] == "shortlist")
-    assert 'id="answer"' in answer and (f"Today {n} stock" in answer if n else "no stock passes" in answer)
+    assert '<details class="tweak" hidden open><summary>Change the rules</summary>' in html
+    assert html.index('class="funnel"') < html.index('class="screen-tables"') < html.index('id="answer"')
+    n = sum(1 for r in shown if r["tier"] == "shortlist")
+    assert (f"Today {n} stock" in answer) if n else ('class="nopass"' in html and "data-ans=\"today\"" not in answer)
+    near = sum(1 for r in shown if r["tier"] == "near miss")
+    assert f'{near} near miss{"" if near == 1 else "es"} of {len(shown)}</h2>' in html
+
+
+def test_default_switches_hold_back_from_the_shortlist():
+    """The panel's default switches (config default_filters: the promoter rule and the list only) apply on the server
+    too: no hand-added or low-promoter company on the shortlist; government-owned companies and cyclicals stay in; the
+    panel still gets every row with its own guards. A list with no promoter data starts with the promoter rule off."""
+    cfg = loader.load_config()
+    s = cfg["growth_screen"]
+    assert G.filters(s) == {"prule": True, "psu": False, "mid": True, "cyc": False}
+    rows = sorted(py_rows(companies(), {"growth_screen": s}), key=G.sort_key)
+    shown = G.apply_filters(rows, s)
+    assert len(shown) < len(rows) and not any(r["extra"] for r in shown) and any(r["cyclical"] for r in shown)
+    for r in shown:
+        if r["tier"]:
+            assert r["promoters"] is not None and r["promoters"] >= s["min_promoter"]
+    held = [r for r in shown if any(g.startswith(("promoters", "no promoter")) for g in r["guards"])]
+    assert held and all(r["tier"] == "" for r in held)
+    data, rules = embedded(rows, {"growth_screen": s})
+    assert len(data) == len(rows) and not any(g.startswith("promoters") for d in data for g in d["guards"])
+    assert rules["prule"] and rules["mid"] and not rules["psu"] and not rules["cyc"] and rules["all"] is False
+    no_data = [dict(r, promoters=None) for r in rows]   # the Nifty 50 files carry no promoter holding
+    assert G.filters(s, no_data)["prule"] is False and len(G.apply_filters(no_data, s)) == len(shown)
+    assert G.filters({}) == {k: False for k in G.FILTERS} and G.apply_filters(rows, {}) == rows   # the US screen: no switches
+
+
+def test_backtest_at_the_default_switches_matches_the_browser(tmp_path):
+    """backtest.run applies the panel's default switches (with_filters): its picks and all-screened averages are what
+    the browser's backtestAll gives at the defaults, and bt-data still carries every stock for when a switch goes off."""
+    from valuescreen import backtest
+    con, cos, entries, starts, today, state = backtest_world(tmp_path)
+    base = loader.load_config()
+    base["growth_screen"]["state_owned"] = state
+    s, f = base["growth_screen"], G.filters(base["growth_screen"])
+    results = [backtest.with_filters(backtest.run_start(entries, cos, base, con, st, today, "^NSEI"), s, f) for st in starts]
+    html = html_report.backtest_html(results, base, "Nifty 50", panel=True, promoter_note=True)
+    assert "Promoter rule not applied before 2025: data not available." in html
+    so = sum(1 for b in results for r in b["picks"] if r["state_owned"])
+    assert (f'{so} of the {sum(len(b["picks"]) for b in results)} picks were government-owned' in html) if so else "bt-default" not in html
+    bt = json.loads(re.search(r'<script type="application/json" id="bt-data">(.*?)</script>', html, re.S).group(1))
+    rules = json.loads(re.search(r'id="screen-rules">(.*?)</script>', html_report.screen_panel([], s, lambda t: None), re.S).group(1))
+    prog = f"""const S = require({json.dumps(str(SCRIPT))});
+const input = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+process.stdout.write(JSON.stringify([S.backtestAll(input.bt, input.rules), S.backtestAll(input.bt, Object.assign({{}}, input.rules, {{cyc: false}}))]));"""
+    js, js_all = json.loads(subprocess.run([NODE, "-e", prog], input=json.dumps({"bt": bt, "rules": rules}),
+                                           capture_output=True, text=True, check=True).stdout)
+    for b, j, j_all in zip(results, js, js_all):
+        assert [r["t"] for r in j["picks"]] == [r["ticker"] for r in b["picks"]]
+        assert j["screened"] == b["screened"] and abs(j["all"] - b["all_ret"]) < 1e-7
+        assert j_all["screened"] == len(b["all_rows"])
+    # every switch on: cyclicals and government-owned out of the picks, cyclicals out of all screened too
+    on = {k: True for k in G.FILTERS}
+    strict = [backtest.with_filters(backtest.run_start(entries, cos, base, con, st, today, "^NSEI"), s, on) for st in starts]
+    js_on = json.loads(subprocess.run([NODE, "-e", prog.replace("input.rules)", "Object.assign({}, input.rules, {psu: true, cyc: true}))", 1)],
+                                      input=json.dumps({"bt": bt, "rules": rules}), capture_output=True, text=True, check=True).stdout)[0]
+    for b, j in zip(strict, js_on):
+        assert not any(r["cyclical"] or r["state_owned"] for r in b["picks"])
+        assert [r["t"] for r in j["picks"]] == [r["ticker"] for r in b["picks"]]
+        assert j["screened"] == b["screened"] == sum(1 for r in b["all_rows"] if not r["cyclical"])

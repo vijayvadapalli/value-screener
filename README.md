@@ -46,10 +46,16 @@ The other reports are single files you can send as one attachment.
 - **STALE.** The results or the price are too old to trust. A stale company never shows as green.
 - **[flags]** in the comments point at things to check yourself: one-off quarters, cyclicals, high costs, conglomerates.
 
-Every report opens with the answer: the screen's pages (Nifty 50, Midcap 150, tech, US) say who passes all five
-rules today, who misses by one, and what the same rules returned in the backtest; the core report says what is in the
-buy zone. The method sits folded under *How the values are worked out*. Then the summary table: click a column to
-sort, filter by signal or grade, and click a ticker to jump to that company's section.
+Every report opens with the answer: the screen's pages (tech, US) say who passes all five rules today, who misses by
+one, and what the same rules returned in the backtest; the core report says what is in the buy zone. The method sits
+folded under *How the values are worked out*. Then the summary table: click a column to sort, filter by signal or
+grade, and click a ticker to jump to that company's section.
+
+The Nifty 50 and Midcap 150 pages open in **three tabs** (the open tab is kept in the address, e.g. `midcap150.html#values`):
+**Dr. Gupta's screen · N** – his screen (N = how many pass, following the panel), the answer and the backtest; **Value vs price** – our summary table,
+signals, grades and profit vs price, with the companies list folded; **Growth priced in** – our reverse-DCF table: how much growth
+today's price already assumes. Markets and the run log sit below all three. Anything folded (the five rules, the full
+screen table, each backtest date, the companies list) carries a **Show / Hide** button.
 
 ### Words used in the reports
 
@@ -267,8 +273,8 @@ return ≥ 10%); the resource screen translates them for miners and oil.
 | **Quality** (a column) | banks and NBFCs: 5-year ROE over P/B – or P/ABV, book less bad loans not provided for – against the fair multiple, and their NPA; the rest: 5-year cash conversion. Cyclicals and state-owned companies show as pills on shortlist and near-miss rows |
 
 **Shortlist** = passes everything. **Near miss** = one thing short: a P/E of 15–20 with growth met, growth of 15–20%
-with the P/E met, or only the return bar. The screen sits at the top of `reports/midcap150.html`; every company's full
-working follows. The usual green / blue / red signal is unchanged and shown beside it.
+with the P/E met, or only the return bar. The screen is the first tab of `reports/midcap150.html`; every company's full
+working is on its own page. The usual green / blue / red signal is unchanged and shown beside it.
 
 ```bash
 python tools/make_nse_list.py niftymidcap150 --name midcap150   # the constituents (keeps the stocks you added)
@@ -298,20 +304,29 @@ its chart images are drawn lighter (`chart_dpi: 100` in the list file), and it i
 summary page is under half a MB and each company page about 100 KB. Every chart is stored with a 256-colour palette, about 60% smaller with no visible change. Its profit-vs-price figures come from the Screener EPS already in
 the company files and the stored daily prices, so they cost no extra Screener requests.
 
-**How the screen page reads** (Nifty 50, Midcap 150, tech and the US screen page): the answer first (who passes,
-who misses by one rule, the backtest in one sentence), then the five rules in plain words, the funnel as a sentence
-("Of 142 companies, 97 have clean books and a profit every year, 22 of those grew fast enough, …"), the shortlist
-table, the near misses on one line with what each falls short on, and everyone else folded away. The backtest sits
-below the results table; the sliders and the method notes are folded until you open them.
+**How the screen page reads** (Nifty 50, Midcap 150, tech and the US screen page): the five rules folded under one
+summary line (P/E ≤ 15 · EPS growth ≥ 20% · …, following the sliders), the settings panel, the funnel as a sentence
+("Of 99 companies, 65 have clean books and a profit every year, 17 of those grew fast enough, …") with a line on
+what is dropped before the rules apply (weak cash conversion, one-off or demerger profits, bad-loan warnings), the
+shortlist table (its return column says how the return is worked out – past growth halved, sold at 15x – and follows
+the sliders) – or, when nothing passes, a highlighted *No company passes all five rules* – the near misses on one line with
+what each falls short on, and everyone else folded away. On the Nifty 50 and Midcap 150 pages the answer (who passes,
+the backtest in one sentence) sits under the results and *How these rules did* follows straight after; on the tech
+and US pages the answer comes first.
 
 **Settings panel** (`screen_panel: true` in the Midcap 150, Nifty 50 and tech list files; always on the US screen page):
-under *Change the rules* (folded; a link with settings opens it), move the sliders and the table re-sorts at once – max P/E (5–40), min EPS growth (0–40%), min 5-year
-return (0–25%), holding years (1–10), exit multiple (5–30x), min promoter holding, and switches for a promoter rule, excluding government-owned companies, Midcap 150 only (leaving out the stocks you
+under *Change the rules* (open; click to fold it), move the sliders and the table re-sorts at once – max P/E (5–40), min EPS growth (0–40%), min 5-year
+return (0–25%), holding years (1–10), exit multiple (5–30x), min promoter holding, and switches for a promoter rule, excluding government-owned companies, the list only (*Midcap 150 only* / *Nifty 50 only*, leaving out the stocks you
 added), excluding cyclicals and showing every company. The funnel sentence shows how many companies survive each step (start →
 after guards → + growth → + P/E → + 5-yr return, then the promoter and government-owned rules when they are switched
 on), and the five rules, the answer at the top and the near-miss line follow the sliders. The settings are kept in the
 address, so a link opens with them, e.g. `midcap150.html?pe=20&growth=15&promoters=50&prule=1&psu=1#screen`;
-**Reset to Dr. Gupta's rules** goes back to the defaults in `config.yaml`. The browser recomputes exactly as
+**Reset to Dr. Gupta's rules** goes back to the defaults in `config.yaml`. On the India pages the promoter rule
+and *Midcap 150 only* start on, *Exclude government-owned*, *Exclude cyclicals* and *Show all* off
+(`growth_screen.default_filters`). The table, the funnel, the answer and the backtest the server writes use the same
+defaults (`growth_screen.apply_filters`, `backtest.with_filters`), so the page reads the same with or without
+JavaScript. A list with no promoter holding in its files (the Nifty 50) starts with the promoter rule off – it would
+leave out every company. Turn the switches off (`?prule=0&mid=0`) to see the five rules alone. The browser recomputes exactly as
 `growth_screen.py` does (`valuescreen/assets/screen.js`; `tests/test_screen_panel.py` runs it in Node against Python for
 many settings). *Holding years* change only the return of the hold – the growth figures stay 5 and 3 years. Without
 JavaScript, or at the default rules, the page shows the table the server wrote. A setting typed into the address is
@@ -328,7 +343,10 @@ with a *Backtest* link in the contents line and one chart – the growth of 1 si
 picks, all screened and the index. **It follows the settings panel:** move a slider and every start date is re-picked
 in the browser (the page carries each stock's figures then and its return since – the stocks that could pass anywhere
 within the sliders' ranges); the picks, their averages, best and worst are redone, while all screened (less the
-cyclicals if excluded) and the index stay. The chart always shows the default rules. The promoter rule applies only
+cyclicals if excluded) and the index stay. The chart always shows the default rules, switches included (cyclicals out of all screened too when excluded). Under
+the table: *Promoter rule not applied before 2025: data not available* (the files' promoter holdings start in December
+2024, after every start date), and how the state-owned picks did – how many picks were government-owned and on which
+dates the best pick was one (RVNL and NATIONALUM in the Midcap 150 backtest). The promoter rule applies only
 where the holding then is in the data (the files keep the last 8 quarters). `tests/test_screen_panel.py` checks the
 browser's re-pick against `backtest.run_start` with the same rules.
 
@@ -624,6 +642,14 @@ open output/private/research.html
   so its levels are drawn too, with the IMF's monthly series as a fallback – see `data/longterm/`). Chart patterns he draws (cup and
   handle, rounding bottoms) are captured as points under `patterns:` and drawn on their timeframe (*Patterns* button).
   Averages and trend lines, our value lines, automatic levels and volume sit behind buttons.
+- **Every chart in his report:** his trend lines are captured as `type: line` patterns (two points, `from` → `to`;
+  drawn on to the latest bar, straight on the log monthly chart) and show only on their own timeframe – daily lines on
+  D / W, monthly ones on M – behind the *Patterns* button. A ratio chart is an asset with `ratio: [A, B]` (A ÷ B: two
+  Yahoo symbols give daily bars; `gold`, `silver` or `uranium_spot` on either side gives a monthly chart; `long:
+  [gold, silver]` adds the World Bank months before the daily data); missing legs are downloaded with their full
+  history. A past stretch, like silver 1971–1980, is `history: {series: silver, from: 1970-06, to: 1981-06}`. A chart
+  whose levels are all monthly opens on the monthly view. Lines carry only their price on the axis – colour says
+  support (dark green) or resistance (dark red).
 - **Public charts:** only the plain support / resistance prices – no source, stance, notes, targets or positions –
   appear on the public charts behind a *Watched levels* button. Mark a level `{price: 90, public: false}` to keep it off.
 

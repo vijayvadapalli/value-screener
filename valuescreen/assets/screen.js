@@ -156,7 +156,9 @@ function screenPage() {
   const panel = section.querySelector('.panel'), fun = section.querySelector('.funnel'), tweak = panel.closest('details');
   const heading = section.querySelector('h2'), serverHtml = section.querySelector('.screen-tables').innerHTML;
   const answerEl = document.getElementById('answer'), answerServer = answerEl ? answerEl.innerHTML : '';
-  const ruleEls = section.querySelectorAll('[data-r]'), ruleServer = Array.from(ruleEls, el => el.textContent);
+  const answerBelow = !!answerEl && answerEl.hasAttribute('data-below');   // under the results: an empty shortlist is said there
+  const ruleServer = {};   // each setting's number as the server wrote it (the rules, their summary, the return column)
+  section.querySelectorAll('[data-r]').forEach(el => { if (!(el.dataset.r in ruleServer)) ruleServer[el.dataset.r] = el.textContent; });
   const btEl = document.getElementById('bt-data'), btSection = document.getElementById('backtest');
   const bt = btEl && btSection ? JSON.parse(btEl.textContent) : null;
   const btServer = bt ? {sum: btSection.querySelector('.bt-summary').innerHTML, det: btSection.querySelector('.bt-details').innerHTML} : null;
@@ -195,18 +197,19 @@ function screenPage() {
     const nearGrowth = s.growth === s.growth0 ? s.near_growth : s.growth - (s.growth0 - s.near_growth);
     const v = {pe: `${+s.pe.toFixed(2)}`, growth: `${+(s.growth * 100).toFixed(1)}%`, ret: `${+(s.ret * 100).toFixed(1)}%`,
                years: `${s.years}`, exit: `${s.exit}x`, near_pe: `${+nearPe.toFixed(2)}`, near_growth: `${+(nearGrowth * 100).toFixed(1)}%`};
-    ruleEls.forEach((el, i) => { el.textContent = sameAsDefaults() ? ruleServer[i] : v[el.dataset.r]; });
+    const same = sameAsDefaults();   // looked up afresh: the tables, with their headers, are rewritten on every change
+    section.querySelectorAll('[data-r]').forEach(el => { el.textContent = same ? ruleServer[el.dataset.r] : v[el.dataset.r]; });
   }
 
   function renderAnswer(judged, same) {   // html_report.answer_html, for the settings set here
     if (!answerEl) return;
-    if (same) { answerEl.innerHTML = answerServer; return; }
+    if (same) { answerEl.innerHTML = answerServer; answerEl.hidden = !answerServer; return; }
     const passed = judged.filter(r => r.tier === 'shortlist'), near = judged.filter(r => r.tier === 'near miss');
     const names = rs => andList(rs.map(r => linked(r.link, r.ticker)));
     let today = passed.length ? `<b>With your settings, ${passed.length} ${passed.length === 1 ? 'stock passes' : 'stocks pass'} all five rules:</b> ${names(passed)}.`
       : '<b>With your settings, no stock passes all five rules.</b>';
     if (near.length) today += ` ${near.length} more ${near.length === 1 ? 'misses' : 'miss'} by one rule: ${names(near)}.`;
-    let html = `<p data-ans="today">${today}</p>`;
+    let html = answerBelow && !passed.length ? '' : `<p data-ans="today">${today}</p>`;
     if (bt) {
       const res = backtestAll(bt, s), b = res.find(x => x.picks.length), what = bt.us ? 'price only' : 'with dividends';
       const aYear = x => x === null || b.years <= 0 || x <= -1 ? '' : ` (${pct(Math.pow(1 + x, 1 / b.years) - 1, 1)} a year)`;
@@ -216,6 +219,8 @@ function screenPage() {
         : '<b>Backtest:</b> no stock passed these settings on any of the past dates tested.') + '</p>';
     }
     answerEl.innerHTML = html;
+    answerEl.className = html ? 'answer' : '';
+    answerEl.hidden = !html;
   }
 
   function sameAsDefaults() { return SCREEN_KEYS.every(k => s[k] === defaults[k]); }
@@ -224,6 +229,7 @@ function screenPage() {
     // html_report.backtest_html, for the settings set here
     if (!bt) return;
     btSection.querySelector('.bt-custom').hidden = same;
+    btSection.querySelectorAll('.bt-default').forEach(el => { el.hidden = !same; });   // about the default picks only
     if (same) {
       btSection.querySelector('.bt-summary').innerHTML = btServer.sum;
       btSection.querySelector('.bt-details').innerHTML = btServer.det;
@@ -256,18 +262,19 @@ function screenPage() {
     const judged = screenAll(rows, s);
     const passed = judged.filter(r => r.tier === 'shortlist'), near = judged.filter(r => r.tier === 'near miss');
     const others = judged.filter(r => r.tier !== 'shortlist');
-    heading.textContent = `Screen – ${passed.length} shortlisted, ${near.length} near misses of ${judged.length}`;
+    document.querySelectorAll('[data-tab-count]').forEach(el => { el.textContent = passed.length; });   // the tab's count
+    heading.textContent = `Screen – ${passed.length} shortlisted, ${near.length} near miss${near.length === 1 ? '' : 'es'} of ${judged.length}`;
     const tables = section.querySelector('.screen-tables'), same = sameAsDefaults();
     if (same) tables.innerHTML = serverHtml;   // exactly what the server wrote
     else tables.innerHTML = s.all ? table(judged)
-      : (passed.length ? table(passed) : '<p class="notes">No company passes all five rules with these settings.</p>') + nearLine(near) +
+      : (passed.length ? table(passed) : '<p class="nopass">No company passes all five rules with these settings.</p>') + nearLine(near) +
         (others.length ? `<details><summary>Near misses and the other ${others.length - near.length}, in full</summary>${table(others)}</details>` : '');
     fun.innerHTML = funnelText(funnel(rows, s));
     renderRules();
     renderAnswer(judged, same);
     renderBacktest(same);
     const q = writeSettings(s, defaults);   // the address carries the settings, so a link opens with them
-    if (q) history.replaceState(null, '', location.pathname + '?' + q + '#screen');
+    if (q) history.replaceState(null, '', location.pathname + '?' + q + (location.hash || '#screen'));
     else if (location.search) history.replaceState(null, '', location.pathname + location.hash);
   }
 

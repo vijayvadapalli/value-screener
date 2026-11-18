@@ -51,7 +51,7 @@ COLUMNS = [
     ]),
     ("OUTPUTS", GREEN, [
         ("Full reports", ["one HTML per list: value,", "profit vs price, markets"], BUILT),
-        ("Screen reports", ["miners, US, Nifty"], BUILT),
+        ("Screen reports", ["miners, US; Nifty 50 and", "Midcap 150 in three tabs"], BUILT),
         ("Model portfolio pages", ["sleeves, entry, risk,", "market value"], BUILT),
         ("Charts in reports", ["interactive, in the", "HTML reports"], BUILT),
         ("Private research", ["research.html +", "weekly brief"], PRIVATE),

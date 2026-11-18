@@ -18,6 +18,7 @@ function pcRsi(c, n = 14) {
   return o;
 }
 const pcDays = s => Date.parse(s) / 864e5;
+const WATCH_TF = {D: ['D', 'W'], W: ['D', 'W'], M: ['M']};   // each chart shows the levels drawn on that timeframe
 function pcInit(box) {
   if (box.dataset.ready) return; box.dataset.ready = 1;
   const d = JSON.parse(document.getElementById(box.dataset.pc).textContent), col = pcColours(), LC = LightweightCharts;
@@ -42,18 +43,25 @@ function pcInit(box) {
   const quiet = {priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false};
   const noScale = {autoscaleInfoProvider: () => null};   // averages and trend lines never stretch the price scale
   const avgLine = main.addLineSeries({color: col.ink, lineWidth: 1, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false});
-  const isAvg = r => r[5] === 0 && r[1] === r[2] && r[2] === r[3];   // a monthly average (long-term series), not a real bar
+  const isAvg = r => iv === 'M' && r[5] === 0 && r[1] === r[2] && r[2] === r[3];   // a monthly average (long-term series), not a real bar
   const smaWidth = {20: 1, 50: 2, 200: 3};
   const smas = {}; for (const n in PC_SMA) smas[n] = main.addLineSeries({color: PC_SMA[n], lineWidth: smaWidth[n] || 1, ...quiet, ...noScale});
   const trends = d.trends.map(t => [t, main.addLineSeries({color: t.kind === 'resistance' ? '#B794F4' : '#4299E1', lineWidth: 2, ...quiet, ...noScale})]);
   const research = d.mode === 'research';
   // chart patterns drawn in the report (cup & handle, rounding bottoms): shown on their own timeframe, Patterns button
   const patCol = {cup: '#2F855A', handle: '#38A169', rim: '#22543D'};
-  const pats = (d.patterns || []).map(p => [p, main.addLineSeries({color: patCol[p.kind] || '#2F855A', lineWidth: p.kind === 'rim' ? 2 : 3,
+  const lineCol = p => p.kind === 'line' ? (p.side === 'resistance' ? '#9B2C2C' : '#1E6B3A') : patCol[p.kind] || '#2F855A';
+  const pats = (d.patterns || []).map(p => [p, main.addLineSeries({color: lineCol(p), lineWidth: p.kind === 'rim' || p.kind === 'line' ? 2 : 3,
     lineStyle: p.kind === 'rim' ? LC.LineStyle.Dashed : LC.LineStyle.Solid, ...quiet, ...noScale})]);
   let showPats = true;
   const drawPatterns = () => pats.forEach(([p, s]) => {
-    if (!showPats || p.tf !== iv) { s.setData([]); return; }
+    if (!showPats || !(WATCH_TF[iv] || []).includes(p.tf)) { s.setData([]); return; }   // only on the timeframe it was drawn on
+    if (p.kind === 'line') {   // a straight trend line through its two points, drawn on to the latest bar
+      const [[d0, v0], [d1, v1]] = p.points, i0 = snap(d0), end = rows[rows.length - 1][0];
+      if (i0 < 0 || rows[i0][0] >= end) { s.setData([]); return; }
+      const f = t => (pcDays(t) - pcDays(d0)) / Math.max(pcDays(d1) - pcDays(d0), 1);   // straight on a log chart (monthly)
+      const at = t => p.tf === 'M' ? Math.exp(Math.log(v0) + (Math.log(v1) - Math.log(v0)) * f(t)) : v0 + (v1 - v0) * f(t);
+      s.setData([{time: rows[i0][0], value: at(rows[i0][0])}, {time: end, value: at(end)}]); return; }
     const seen = new Set(), pts = [];
     p.points.forEach(([date, v]) => { const i = snap(date); if (i < 0 || seen.has(i)) return; seen.add(i); pts.push({time: rows[i][0], value: v}); });
     s.setData(pts); });   // private report: clean by default – their levels on, averages and trend lines behind a button
@@ -77,7 +85,7 @@ function pcInit(box) {
   // value lines: shown on request, thick, and the price scale stretches so every one (25x too) is in view
   const valuePrices = d.values.map(v => v.price);
   candle.applyOptions({autoscaleInfoProvider: original => { const r = original();
-    const tfPrices = (d.watched || []).filter(w => (({D: ['D', 'W'], W: ['D', 'W'], M: ['M']})[iv] || []).includes(w.tf || 'D')).flatMap(w => [w.lo, w.hi]);
+    const tfPrices = (d.watched || []).filter(w => (WATCH_TF[iv] || []).includes(w.tf || 'D')).flatMap(w => [w.lo, w.hi]);
     const extra = [...(showValues ? valuePrices : []), ...(showWatched ? tfPrices : [])];
     if (!r || !extra.length) return r;
     return {...r, priceRange: {minValue: Math.min(r.priceRange.minValue, ...extra) * 0.97,
@@ -89,14 +97,13 @@ function pcInit(box) {
     btn('data-val').classList.toggle('on', showValues); main.timeScale().applyOptions({}); candle.applyOptions({}); };
   if (d.values.length) btn('data-val').onclick = toggleValues; else btn('data-val').style.display = 'none';
   // levels someone else is watching (plain support / resistance, zones as two lines): off at first
-  const WATCH_TF = {D: ['D', 'W'], W: ['D', 'W'], M: ['M']};   // each chart shows the levels drawn on that timeframe
   const drawWatched = () => { watchedLines.forEach(x => candle.removePriceLine(x));
     const shown = (d.watched || []).filter(w => (WATCH_TF[iv] || []).includes(w.tf || 'D'));
     watchedLines = showWatched ? shown.flatMap(w => {
       const c = research ? (w.kind === 'support' ? '#1E6B3A' : '#9B2C2C') : (w.kind === 'support' ? '#2C9C94' : '#DD6B20');
       const t = w.kind === 'support' ? 'support' : 'resistance';
       return (w.hi - w.lo > 1e-9 ? [w.lo, w.hi] : [w.lo]).map(p => candle.createPriceLine({price: p, color: c, lineWidth: research ? 2 : 2,
-        lineStyle: research ? LC.LineStyle.Solid : LC.LineStyle.LargeDashed, axisLabelVisible: true, title: t})); }) : [];
+        lineStyle: research ? LC.LineStyle.Solid : LC.LineStyle.LargeDashed, axisLabelVisible: true, title: research ? '' : t})); }) : [];   // research: colour says which
     candle.applyOptions({}); };
   const toggleWatched = () => { showWatched = !showWatched; btn('data-wl').classList.toggle('on', showWatched); drawWatched(); };
   if (watchedPrices.length) btn('data-wl').onclick = toggleWatched; else btn('data-wl').style.display = 'none';
@@ -120,7 +127,9 @@ function pcInit(box) {
   const snap = date => { const i = rows.findIndex(x => x[0] >= date); return i < 0 ? -1 : i; };
   function setIv(next) {
     iv = next; rows = d[iv]; const c = rows.map(r => r[4]);
-    candle.setData(rows.map(r => isAvg(r) ? {time: r[0]} : {time: r[0], open: r[1], high: r[2], low: r[3], close: r[4]}));
+    const clear = {color: 'rgba(0,0,0,0)', borderColor: 'rgba(0,0,0,0)', wickColor: 'rgba(0,0,0,0)'};   // averages: drawn as a line,
+    candle.setData(rows.map(r => isAvg(r) ? {time: r[0], open: r[4], high: r[4], low: r[4], close: r[4], ...clear}   // but kept as invisible
+                                          : {time: r[0], open: r[1], high: r[2], low: r[3], close: r[4]}));       // bars so levels still draw
     const avg = rows.map((r, i) => isAvg(r) || (i > 0 && isAvg(rows[i - 1])) ? {time: r[0], value: r[4]} : {time: r[0]});
     avgLine.setData(avg);
     for (const n in PC_SMA) { const s = pcSma(c, +n); smas[n].setData(rows.map((r, i) => s[i] == null ? {time: r[0]} : {time: r[0], value: s[i]})); }
@@ -149,14 +158,16 @@ function pcInit(box) {
   }
   box.querySelectorAll('[data-iv]').forEach(b => b.onclick = () => { setIv(b.dataset.iv); setRange(range); });
   box.querySelectorAll('[data-rg]').forEach(b => b.onclick = () => { if (PC_AUTO_IV[b.dataset.rg] !== iv) setIv(PC_AUTO_IV[b.dataset.rg]); setRange(b.dataset.rg); });
-  const vb = box.querySelector('[data-vol]'); if (vb) vb.onclick = toggleVol;
+  const vb = box.querySelector('[data-vol]');
+  if (vb) { if ([...d.D, ...d.M].some(r => r[5] > 0)) vb.onclick = toggleVol; else vb.style.display = 'none'; }   // ratios: no volume
   const mab = btn('data-ma'); if (mab) mab.onclick = () => setOverlays(!mab.classList.contains('on'));
   const pb = btn('data-pat');
   if (pb) { if (!pats.length) pb.style.display = 'none'; else { pb.classList.add('on');
     pb.onclick = () => { showPats = !showPats; pb.classList.toggle('on', showPats); drawPatterns(); }; } }
   if (!d.D.length) { box.querySelectorAll('[data-iv=D],[data-iv=W],[data-rg="6M"],[data-rg="1Y"],[data-rg="3Y"]').forEach(b => b.style.display = 'none');
-    setIv('M'); setRange('Max'); } else { setIv('D'); setRange('1Y'); }
-  if (research) { setOverlays(false); if (watchedPrices.length) toggleWatched(); } else if (mab) mab.style.display = 'none';
+    setIv('M'); setRange('Max'); } else if (d.open) { setIv(d.open[0]); setRange(d.open[1]); } else { setIv('D'); setRange('1Y'); }
+  if (research) { setOverlays(false); if (watchedPrices.length) toggleWatched();
+    const k = box.querySelector('.pc-key'); if (k) k.style.display = 'none'; }   // clean, like the report's charts else if (mab) mab.style.display = 'none';
 }
 if (window.LightweightCharts) {
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { pcInit(x.target); io.unobserve(x.target); } }),

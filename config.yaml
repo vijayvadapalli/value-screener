@@ -125,6 +125,11 @@ growth_screen:
                                # government control, not a founder with skin in the game (hand-kept list)
   min_promoter: 0.60           # flag: promoters hold less than this ...
   promoter_drop: 0.02          # ... or their holding fell more than 2 points over four quarters
+  default_filters:             # the report's settings panel starts with these, and the page, its answer and the
+    prule: true                # backtest use them: promoters at least min_promoter (none known: out),
+    psu: false                 # government-owned companies stay in (switch on to leave them out),
+    mid: true                  # the list's own names only (not those added by hand with `extra:`),
+    cyc: false                 # cyclicals stay in (switch on to leave them out)
 
 # The same screen for the S&P 500 / Nasdaq-100 (tools/screen_us.py), a little more liberal: the US discount rate is
 # 10%, so a P/E of 16 already means 5% growth a year. EPS from SEC filings (diluted, split-adjusted).

@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import charts, kinds, page, price_chart
+from . import growth_screen as G
 from . import profit_vs_price as pvp
 from . import style as S
 from .wording import (GROWTH_NOTE, RULES_NOTE, list_title, calc_steps, day, headline, key_figures, kpi_cards, money, npa_summary, price_date,
@@ -396,8 +397,9 @@ def _quality_html(r) -> str:
     return "–"
 
 
-def growth_table_html(rows, previous) -> str:
-    """Growth companies: value with no growth, at 10% and 20% a year, the growth the price needs, and quality."""
+def growth_table_html(rows, previous, heading: bool = True) -> str:
+    """Growth companies: value with no growth, at 10% and 20% a year, the growth the price needs, and quality.
+    `heading` False: the page's tab already names it."""
     head = ["Ticker", "Price", "No growth", "@ 10%/yr", "@ 20%/yr", "Growth needed", "MoS", "P/E", "Quality", "Mkt value", "Signal", "Buy price"]
     body = []
     for r in rows:
@@ -416,7 +418,7 @@ def growth_table_html(rows, previous) -> str:
             f'<td class="nw">{"–" if mv is None else (f"${mv:,.0f}bn" if mv >= 10 else f"${mv:,.1f}bn")}</td>'
             f'<td class="sig"><span class="pill {r["signal"]}">{e(short_action(r["action"]))}</span></td>'
             f'<td class="nw">{money(r.get("buy_level"), ccy) if r.get("buy_level") else "–"}</td></tr>')
-    return (f'<h3 id="growth">Growth companies – reverse DCF</h3><div class="wrap"><table class="sum gt"><thead><tr>'
+    return ((f'<h3 id="growth">Growth companies – reverse DCF</h3>' if heading else "") + '<div class="wrap"><table class="sum gt"><thead><tr>'
             + "".join(f"<th>{e(h)}</th>" for h in head) + f'</tr></thead><tbody>{"".join(body)}</tbody></table></div>'
             f'<p class="small">{GROWTH_NOTE}</p>')
 
@@ -486,7 +488,7 @@ SLIDERS = [   # (setting, label, step, min, max) – the panel's sliders; percen
 PCT_SETTINGS = ("growth", "ret", "promoters")
 
 
-def screen_panel(rows: list[dict], s: dict, href, market: str = "india") -> str:
+def screen_panel(rows: list[dict], s: dict, href, market: str = "india", list_name: str = "Midcap 150") -> str:
     """The settings panel, folded under 'Change the rules', and the data assets/screen.js needs: every row's figures
     and the default rules. The panel stays hidden without JavaScript, and the table the server wrote stays as it is. `market` "us" leaves out
     the India-only rules (promoters, government-owned, Midcap 150 only) – insiders are shown, never a rule."""
@@ -494,7 +496,7 @@ def screen_panel(rows: list[dict], s: dict, href, market: str = "india") -> str:
     rules = {"pe": s["max_pe"], "growth": s["min_eps_cagr"], "ret": s["min_return"], "years": s["years"], "exit": s["exit_multiple"],
              "haircut": s["growth_haircut"], "cap": s["max_assumed_growth"], "promoters": s.get("min_promoter", 0.0),
              "pe0": s["max_pe"], "growth0": s["min_eps_cagr"], "near_pe": s["near_max_pe"], "near_growth": s["near_min_eps_cagr"],
-             "prule": False, "psu": False, "mid": False, "cyc": False, "all": False,
+             **G.filters(s, rows), "all": False,
              "bounds": {k: [lo / 100, hi / 100] if k in PCT_SETTINGS else [lo, hi] for k, _, _, lo, hi in SLIDERS}}
     if not india:
         rules["market"] = market
@@ -509,7 +511,7 @@ def screen_panel(rows: list[dict], s: dict, href, market: str = "india") -> str:
     box = lambda k, label: f'<label class="cb"><input type="checkbox" data-k="{k}">{label}</label>'  # noqa: E731
     has_extra = any(r.get("extra") for r in rows)
     sliders = "".join(slider(*x) for x in SLIDERS if india or x[0] != "promoters")
-    boxes = ((box("prule", "Promoter rule") + box("psu", "Exclude government-owned") + (box("mid", "Midcap 150 only") if has_extra else ""))
+    boxes = ((box("prule", "Promoter rule") + box("psu", "Exclude government-owned") + (box("mid", f"{e(list_name)} only") if has_extra else ""))
              if india else "") + box("cyc", "Exclude cyclicals") + box("all", "Show all")
     reset = "Reset to Dr. Gupta's rules" if india else "Reset to the default rules"
     return (f'''<style>#screen .panel{{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--soft);border:1px solid var(--line);
@@ -517,7 +519,7 @@ border-radius:8px;padding:10px 12px;margin:8px 0}} #screen .panel label{{display
 #screen .panel label b{{color:var(--ink);font-variant-numeric:tabular-nums}} #screen .panel input[type=range]{{width:130px;margin:4px 0 0;accent-color:#2F64CF}}
 #screen .panel label.cb{{flex-direction:row;align-items:center;gap:5px}} #screen .panel button{{font:inherit;padding:5px 10px;border-radius:6px;
 border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}}</style>
-<details class="tweak" hidden><summary>Change the rules</summary><div class="panel">{sliders}
+<details class="tweak" hidden open><summary>Change the rules</summary><div class="panel">{sliders}
 {boxes}
 <button type="button" data-reset>{reset}</button>{"<small>Pledged shares: not in the data yet.</small>" if india else ""}</div></details>
 <script type="application/json" id="screen-data">{_js(data)}</script><script type="application/json" id="screen-rules">{_js(rules)}</script>''')
@@ -540,13 +542,17 @@ def _js(x) -> str:
 
 
 def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", owners: str = "Promoters",
-                       tail: str | None = None, href=None, panel: bool = False) -> str:
+                       tail: str | None = None, href=None, panel: bool = False, after: str = "",
+                       list_name: str = "Midcap 150") -> str:
     """The growth-at-a-value-price screen (growth_screen.py): shortlist and near misses, then everyone else folded away.
     `key` picks the thresholds (growth_screen for India, us_growth_screen for the US), `owners` names the ownership
-    column, `tail` closes the explanation, `href(ticker)` gives a company's link (None: no link)."""
+    column, `tail` closes the explanation, `href(ticker)` gives a company's link (None: no link), `after` goes at the
+    end of the section (the answer box). The tables show the panel's default switches (growth_screen.apply_filters);
+    the panel gets every row."""
     if not rows:
         return ""
     s = cfg[key]
+    every, rows = rows, G.apply_filters(rows, s)
     href = href or (lambda t: f"#c-{t}")
     if tail is None:
         tail = INDIA_SCREEN_TAIL.format(min_promoter=s["min_promoter"] * 100)
@@ -574,34 +580,52 @@ def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", 
                 f'<td><span class="pill {r["signal"]}">{e(short_action(r["action"]))}</span></td><td><small>{e(notes)}</small></td></tr>')
 
     head = ("<thead><tr><th>Company</th><th>Screen</th><th>P/E</th><th>Quality</th><th>EPS growth 5 / 3 yrs</th><th>Price needs</th>"
-            f"<th>5-yr return a year</th><th>{e(owners)}</th><th>Signal</th><th>Why not</th></tr></thead>")
+            f"<th>{return_label(s)}</th><th>{e(owners)}</th><th>Signal</th><th>Why not</th></tr></thead>")
     short = [r for r in rows if r["tier"] == "shortlist"]
     near = [r for r in rows if r["tier"] == "near miss"]
     others = [r for r in rows if r["tier"] != "shortlist"]   # near misses first, then the rest, best first
     table = lambda rs: f'<div class="wrap"><table class="sum">{head}<tbody>{"".join(row(r) for r in rs)}</tbody></table></div>'  # noqa: E731
-    tables = ((table(short) if short else '<p class="notes">No company passes all five rules today.</p>')
+    tables = ((table(short) if short else NO_PASS.format("today"))
               + near_line_html(near, href)
               + (f'<details><summary>Near misses and the other {len(others) - len(near)}, in full</summary>{table(others)}</details>'
                  if others else ""))
     market = "us" if key == "us_growth_screen" else "india"
-    heading = f'<h2>Screen – {len(short)} shortlisted, {len(near)} near misses of {len(rows)}</h2>'
-    funnel = f'<p class="funnel">{funnel_text(funnel_steps(rows))}</p>'
-    if panel:   # the settings panel (folded away), the funnel and assets/screen.js
-        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{screen_panel(rows, s, href, market)}{funnel}'
-                f'<div class="screen-tables">{tables}</div>'
+    heading = f'<h2>Screen – {len(short)} shortlisted, {len(near)} near miss{"" if len(near) == 1 else "es"} of {len(rows)}</h2>'
+    funnel = f'<p class="funnel">{funnel_text(funnel_steps(every, s))}</p>{GUARDS_LINE}'
+    if panel:   # the settings panel (open, can be folded), the funnel and assets/screen.js
+        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{screen_panel(every, s, href, market, list_name)}{funnel}'
+                f'<div class="screen-tables">{tables}</div>{after}'
                 f'<script>{page.asset("screen.js")}</script></section>')
-    return f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{funnel}{tables}</section>'
+    return f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{funnel}{tables}{after}</section>'
+
+
+GROWTH_INTRO = ("<b>How much growth today's price already assumes</b> (a reverse DCF): the value with no growth and at 10% "
+                "and 20% a year, and the yearly growth the price needs – the lower it is, the less has to go right.")
+GUARDS_LINE = ('<p class="notes">Before the rules apply, stocks are dropped for weak cash conversion, one-off or demerger '
+               'profits, or bad-loan warnings.</p>')
+
+
+def return_label(s: dict) -> str:
+    """The return column's header with how the return is worked out; the numbers carry data-r so screen.js keeps them
+    in step with the sliders."""
+    cut = "halved" if s["growth_haircut"] == 0.5 else f"× {s['growth_haircut']:g}"
+    return (f'<span data-r="years">{s["years"]}</span>-yr return a year<br><small>past growth {cut}, sold at '
+            f'<span data-r="exit">{s["exit_multiple"]:g}x</span></small>')
+
+
+NO_PASS = '<p class="nopass">No company passes all five rules {}.</p>'   # screen.js writes the same, "with these settings"
 
 
 def rules_html(s: dict, tail: str) -> str:
-    """The growth screen's five rules in plain words. The numbers carry data-r so assets/screen.js can show the
-    panel's settings in place of the defaults."""
+    """The growth screen's five rules in plain words, folded under a one-line summary. The numbers carry data-r so
+    assets/screen.js can show the panel's settings in place of the defaults – in the summary too."""
     v = {k: f'<b data-r="{k}">{text}</b>' for k, text in (
         ("pe", f"{s['max_pe']:g}"), ("growth", f"{s['min_eps_cagr']*100:.0f}%"), ("ret", f"{s['min_return']*100:.0f}%"),
         ("years", f"{s['years']}"), ("exit", f"{s['exit_multiple']:g}x"), ("near_pe", f"{s['near_max_pe']:g}"),
         ("near_growth", f"{s['near_min_eps_cagr']*100:.0f}%"))}
     return (
-        '<h3>The five rules</h3><ol class="rules">'
+        f'<details class="rules"><summary>The five rules <small>· P/E ≤ {v["pe"]} · EPS growth ≥ {v["growth"]} · a profit '
+        f'every year · ≥ {v["ret"]} a year over {v["years"]} years · clean books</small></summary><ol class="rules">'
         f'<li><b>Cheap.</b> The P/E is {v["pe"]} or less (the price less net cash, divided by the earnings per share '
         'the valuation uses).</li>'
         f'<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
@@ -613,7 +637,7 @@ def rules_html(s: dict, tail: str) -> str:
         f'<li><b>Clean books.</b> At least {s["min_cash_conversion"]*100:.0f}% of profit arrives as cash, no demerger or '
         'one-off history, no bad-loan warning, and up-to-date results.</li></ol>'
         f'<p class="notes"><b>Near miss</b> = one rule short: a P/E up to {v["near_pe"]} with growth met, growth down to '
-        f'{v["near_growth"]} with the P/E met, or only the return short. {tail}</p>')
+        f'{v["near_growth"]} with the P/E met, or only the return short. {tail}</p></details>')
 
 
 FUNNEL_WORDS = {"after guards": "have clean books and a profit every year", "+ growth": "grew fast enough",
@@ -621,11 +645,19 @@ FUNNEL_WORDS = {"after guards": "have clean books and a profit every year", "+ g
                 "+ promoters": "have enough promoter holding", "+ government-owned rule": "are not government-owned"}
 
 
-def funnel_steps(rows: list[dict]) -> list[tuple[str, int]]:
-    """How many companies survive each rule at the default settings – the same steps as funnel() in screen.js."""
-    left, steps = list(rows), [("Start", len(rows))]
-    for label, test in (("after guards", lambda r: not r["guards"]), ("+ growth", lambda r: "growth" not in r["missed"]),
-                        ("+ P/E", lambda r: "pe" not in r["missed"]), ("+ 5-yr return", lambda r: "return" not in r["missed"])):
+def funnel_steps(rows: list[dict], s: dict | None = None) -> list[tuple[str, int]]:
+    """How many companies survive each rule at the default settings – the same steps as funnel() in screen.js. With the
+    screen's config `s`, its default switches (growth_screen.filters) narrow the start and add their own steps."""
+    f = G.filters(s or {}, rows)
+    left = [r for r in rows if G.in_universe(r, f)]
+    steps = [("Start", len(left))]
+    tests = [("after guards", lambda r: not r["guards"]), ("+ growth", lambda r: "growth" not in r["missed"]),
+             ("+ P/E", lambda r: "pe" not in r["missed"]), ("+ 5-yr return", lambda r: "return" not in r["missed"])]
+    if f["prule"]:
+        tests.append(("+ promoters", lambda r: r["promoters"] is not None and r["promoters"] >= (s or {}).get("min_promoter", 0.0)))
+    if f["psu"]:
+        tests.append(("+ government-owned rule", lambda r: not r["state_owned"]))
+    for label, test in tests:
         left = [r for r in left if test(r)]
         steps.append((label, len(left)))
     return steps
@@ -675,9 +707,10 @@ def _bt_picks_ret(b: dict):
     return b.get("picks_ret", b.get("picks_total"))
 
 
-def answer_html(rows: list[dict], results: list[dict], index_name: str, href=None) -> str:
-    """The answer first, above everything: how many pass today and which, the near misses, and what the same rules
-    returned since the earliest backtest date with picks. screen.js rewrites it when the panel's settings differ."""
+def answer_html(rows: list[dict], results: list[dict], index_name: str, href=None, below: bool = False) -> str:
+    """The answer: how many pass today and which, the near misses, and what the same rules returned since the earliest
+    backtest date with picks. screen.js rewrites it when the panel's settings differ. `below`: it sits under the screen's
+    results, where an empty shortlist is already said (NO_PASS) – then only the backtest line."""
     if not rows:
         return ""
     href = href or (lambda t: f"#c-{t}")
@@ -703,7 +736,9 @@ def answer_html(rows: list[dict], results: list[dict], index_name: str, href=Non
             bt = (f'<b>Backtest:</b> the {n} pick{"s" if n > 1 else ""} of {day(b["start"])} are up {S.pct(pr, 0) if pr is not None else "–"}'
                   f'{a_year} {what}, against {S.pct(b.get("all_ret", b.get("all_total")), 0)} for every stock screened and '
                   f'{S.pct(b["index_price"], 0)} for the {e(index_name)} (price only). <a href="#backtest">Details below</a>.')
-    return (f'<div class="answer" id="answer"><p data-ans="today">{today}</p>'
+    if below and not short:
+        return f'<div class="answer" id="answer" data-below><p data-ans="bt">{bt}</p></div>' if bt else '<div id="answer" data-below hidden></div>'
+    return (f'<div class="answer" id="answer"{" data-below" if below else ""}><p data-ans="today">{today}</p>'
             + (f'<p data-ans="bt">{bt}</p>' if bt else "") + "</div>")
 
 
@@ -788,8 +823,10 @@ def backtest_data(results: list[dict], cfg: dict, href) -> dict:
                                               ("short", r["growth_years"] < years)) if on})
             rows.append(row)
         nocyc = [r[ret] for r in b["all_rows"] if not r.get("cyclical") and r[ret] is not None]
-        starts.append({"label": day(b["start"]), "years": b["years"], "n": b["screened"], "all": b["all_ret"],
-                       "median": b["all_ret_median"], "n_nocyc": sum(1 for r in b["all_rows"] if not r.get("cyclical")),
+        every = [r[ret] for r in b["all_rows"] if r[ret] is not None]   # everyone: b's own averages may leave out cyclicals
+        starts.append({"label": day(b["start"]), "years": b["years"], "n": len(b["all_rows"]),
+                       "all": sum(every) / len(every) if every else None, "median": statistics.median(every) if every else None,
+                       "n_nocyc": sum(1 for r in b["all_rows"] if not r.get("cyclical")),
                        "all_nocyc": sum(nocyc) / len(nocyc) if nocyc else None,
                        "median_nocyc": statistics.median(nocyc) if nocyc else None, "index": b["index_price"],
                        "note": _skipped_note(b), "rows": rows})
@@ -806,7 +843,28 @@ def _skipped_note(b: dict) -> str:
     return f'{len(b["skipped"]["not listed then"])} of today\'s members were not listed then and are left out.{short}'
 
 
-def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, panel: bool = False) -> str:
+def state_owned_line(results: list[dict], ret: str) -> str:
+    """How the state-owned picks did, from the results: how many of the picks were government-owned and on which start
+    dates the best pick was one – an empty string when none was."""
+    picks = [r for b in results for r in b["picks"]]
+    so = [r for r in picks if r.get("state_owned")]
+    if not so:
+        return ""
+    best = [(b, b["best"]) for b in results if b["best"] and b["best"].get("state_owned")]
+    n_dates = sum(1 for b in results if b["picks"])
+    head = (f'<b>State-owned companies were {"most of " if len(so) * 2 > len(picks) else ""}the winners:</b> ' if best
+            else "<b>State-owned picks:</b> ")
+    tops = "; ".join(f'{e(r["ticker"])} {S.pct(r[ret], 0)} since {day(b["start"])}' for b, r in best)
+    return (f'<p class="notes bt-default">{head}{len(so)} of the {len(picks)} picks were government-owned'
+            + (f', and the best pick was one on {len(best)} of the {n_dates} start dates with picks ({tops})' if best else "")
+            + '. Tick <i>Exclude government-owned</i> above to see the rules without them.</p>')
+
+
+PROMOTER_NOTE = '<p class="notes">Promoter rule not applied before 2025: data not available.</p>'
+
+
+def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, panel: bool = False,
+                  promoter_note: bool = False) -> str:
     """'How these rules did': the growth screen applied on past dates with only what was known then (backtest.py), with
     a chart of the earliest start with picks. India: returns with dividends (Yahoo's adjusted close); US: price only.
     `href(ticker)` links a pick to its page (None: no link); default the company's section."""
@@ -900,7 +958,8 @@ def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, pa
                         f"Growth of 1 since {day(cv['start'])}: {'picks, ' if cv['n_picks'] else ''}all screened and the {index_name}")
     data = (f'<script type="application/json" id="bt-data">{_js(dict(backtest_data(results, cfg, href), index=index_name))}</script>'
             if panel else "")
-    return (f'<section class="company" id="backtest"><h2>How these rules did</h2>{default}{custom}<div class="bt-summary">{summary}</div>'
+    near_table = (PROMOTER_NOTE if promoter_note else "") + ("" if us else state_owned_line(results, ret))
+    return (f'<section class="company" id="backtest"><h2>How these rules did</h2>{default}{custom}<div class="bt-summary">{summary}</div>{near_table}'
             f'{chart}<p class="notes">{bias}</p><details class="how"><summary>How the backtest was done</summary>'
             f'<p class="notes">{note}</p></details><div class="bt-details">{details}</div>{data}</section>')
 
@@ -933,11 +992,18 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     x = extras or ReportExtras()
     previous, tech, lookthroughs, heatmaps, log_lines, price_charts, market_rows = (
         x.previous, x.tech, x.lookthroughs, x.heatmaps, x.log_lines, x.price_charts, x.market_rows)
-    screen_html = growth_screen_html(x.screen_rows, cfg, **x.screen_style) + resource_screen_html(x.resource_rows, cfg)
+    key = x.screen_style.get("key", "growth_screen")
+    tabbed = bool(x.screen_rows) and key == "growth_screen"   # India growth screen: Dr. Gupta's picks | value vs price | growth
+    shown = G.apply_filters(x.screen_rows, cfg[key]) if x.screen_rows else []   # as the page shows them by default
+    answer = answer_html(shown, x.backtest, x.index_name, href=x.screen_style.get("href"), below=tabbed)
+    style = dict(x.screen_style, after=answer) if tabbed else x.screen_style   # tabbed: the answer under the results
+    screen_html = growth_screen_html(x.screen_rows, cfg, **style) + resource_screen_html(x.resource_rows, cfg)
     screen_block = screen_html + "\n" if screen_html else ""   # nothing at all for lists without a screen
     bt_html = backtest_html(x.backtest, cfg, x.index_name, href=x.screen_style.get("href"),
-                            panel=bool(x.screen_style.get("panel")))   # under the results table
-    answer = answer_html(x.screen_rows, x.backtest, x.index_name, href=x.screen_style.get("href"))
+                            panel=bool(x.screen_style.get("panel")),   # under the results table
+                            promoter_note=tabbed and any(r["promoters"] is not None for r in x.screen_rows))
+    if tabbed:
+        answer = ""
     bz_html = ""
     if x.buy_zone is not None:
         from . import buy_zone  # noqa: PLC0415
@@ -975,18 +1041,18 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     charts_js = page.chart_scripts() if (price_charts or market_rows) else ""
     spot_text = ("" if x.hide_spot else   # an India-only list has no use for the metal prices
                  f"spot gold ${sp['gold']:,.0f}, silver ${sp['silver']:.2f}, copper ${sp['copper']:.2f},\nuranium ${sp['uranium']:.2f} · ")
-    body = f"""
-<h1 id="summary">{e(title)} – value vs price</h1>
-<p class="sub">{len(ordered)} companies · run {day(cfg['as_of'])} · {spot_text}<span class="pos">{counts['green']} green</span>, {counts['blue']} blue, <span class="neg">{counts['red']} red</span>
-· grades {' · '.join(f'{g} {n}' for g, n in grades.items() if n)}</p>
-{answer}
-<details class="method"><summary>How the values are worked out</summary><p class="method"><b>Value vs price.</b> Value comes from the latest reported numbers only (no targets, no forecasts) and is compared
+    method = """<details class="method"><summary>How the values are worked out</summary><p class="method"><b>Value vs price.</b> Value comes from the latest reported numbers only (no targets, no forecasts) and is compared
 with today's price: owner earnings at today's metal prices × 12 / 15 / 25 + net cash for producers and royalties, NAV for developers
 and physical holders, and for growth companies the yearly growth the price needs (5 years, 15x exit, 10% US / 12% India).
 <b>Profit vs price.</b> Growth in profit and in the share price over about three years; the grade says whether the P/E fell
-(A ≤ −25%, B ≤ 0) or rose (C ≤ +33%, D above). Click a ticker for the full working; click a column to sort.</p></details>
-{bz_html}{screen_block}<nav class="toc">Companies: {toc}{' · <a href="#buyzone">Buy zone</a>' if bz_html else ''}{' · <a href="#screen">Screen</a>' if screen_html else ''}{' · <a href="#backtest">Backtest</a>' if bt_html else ''}{' · <a href="#markets">Markets</a>' if market_html else ''}{' · <a href="#heatmaps">Heatmaps</a>' if heat_html else ''}</nav>
-<div class="controls">
+(A ≤ −25%, B ≤ 0) or rose (C ≤ +33%, D above). Click a ticker for the full working; click a column to sort.</p></details>"""
+    links = "".join(f' · <a href="#{k}">{t}</a>' for k, t, on in (("buyzone", "Buy zone", bz_html), ("screen", "Screen", screen_html),
+                                                                  ("backtest", "Backtest", bt_html), ("markets", "Markets", market_html),
+                                                                  ("heatmaps", "Heatmaps", heat_html)) if on)
+    toc_nav = f'<nav class="toc">Companies: {toc}{links}</nav>'
+    signals = (f'<span class="pos">{counts["green"]} green</span>, {counts["blue"]} blue, <span class="neg">{counts["red"]} red</span>'
+               f'\n· grades {" · ".join(f"{g} {n}" for g, n in grades.items() if n)}')
+    table = f"""<div class="controls">
 <span class="lab">Signal</span><button class="on" data-sig="all">All</button><button data-sig="green">Green</button>
 <button data-sig="blue">Blue</button><button data-sig="red">Red</button>
 <span class="lab">Grade</span><button class="on" data-grd="all">All</button>{''.join(f'<button data-grd="{g}">{g}</button>' for g in GRADE_ORDER)}
@@ -994,18 +1060,51 @@ and physical holders, and for growth companies the yearly growth the price needs
 {legend_html(ordered)}
 <div class="wrap"><table class="sum" id="sum"><thead>{SUMMARY_HEAD}</thead><tbody>
 {''.join(summary_row(r, profit.get(r['ticker']), previous, cfg) for r in ordered)}</tbody></table></div>
-<p class="notes">{RULES_NOTE}</p>
+<p class="notes">{RULES_NOTE}</p>"""
+    if tabbed:   # three tabs (report.js shows one; without JavaScript they stack): the screen is Dr. Gupta's, the rest ours
+        growth_tab = growth_table_html(growth_rows, previous, heading=False) if growth_rows else ""
+        n_short = sum(1 for r in shown if r["tier"] == "shortlist")   # screen.js keeps the count in step with the panel
+        tabs = ([("picks", f"Dr. Gupta's screen · <span data-tab-count>{n_short}</span>"), ("values", "Value vs price")]
+                + ([("growth", "Growth priced in")] if growth_tab else []))
+        tab_links = "".join(f'<a href="#{k}"{" class=on" if i == 0 else ""}>{t}</a>' for i, (k, t) in enumerate(tabs))
+        main_part = f"""<nav class="tabs">{tab_links}</nav>
+<div class="tabpane" id="picks">
+{bz_html}{screen_block}{bt_html}
+</div>
+<div class="tabpane" id="values">
+<p class="sub">{signals}</p>
+{method}
+<details class="toc"><summary>Companies ({len(ordered)}) and section links</summary>{toc_nav}</details>
+{table}
+{pvp_html}
+</div>
+{f'<div class="tabpane" id="growth"><p class="sub">{GROWTH_INTRO}</p>{growth_tab}</div>' if growth_tab else ''}"""
+        head = f"""<h1 id="summary">{e(title)}</h1>
+<p class="sub">{len(ordered)} companies · run {day(cfg['as_of'])}{(' · ' + spot_text.rstrip(' ·')) if spot_text else ''}</p>
+{answer}"""
+        doc_title = f"{e(title)} – value screen"
+    else:
+        main_part = f"""{bz_html}{screen_block}{toc_nav}
+{table}
 {bt_html}
 {pvp_html}
-{growth_html}
+{growth_html}"""
+        head = f"""<h1 id="summary">{e(title)} – value vs price</h1>
+<p class="sub">{len(ordered)} companies · run {day(cfg['as_of'])} · {spot_text}{signals}</p>
+{answer}
+{method}"""
+        doc_title = f"{e(title)} – value vs price"
+    body = f"""
+{head}
+{main_part}
 {market_html}{'' if x.pages else ''.join(sections)}{etf_html}{'' if x.pages else heat_html}
 <section class="company"><h2>Run log</h2><ul class="small">{log}</ul></section>
 <footer>Previous run's figures in (brackets). Prices in each exchange's currency;
 sales and profits as the company reports them.</footer>
 """
     if x.pages:
-        return write_pages(path, x.pages, title, body, sections, ordered, bool(price_charts or market_rows), heat_html)
-    html = page.document(f"{e(title)} – value vs price", page.report_css(), body,
+        return write_pages(path, x.pages, title, body, sections, ordered, bool(price_charts or market_rows), heat_html, doc_title)
+    html = page.document(doc_title, page.report_css(), body,
                          scripts=f"<script>{page.asset('report.js')}</script>{charts_js}")
     path.write_text(html, encoding="utf-8")
     return path
@@ -1016,7 +1115,7 @@ PAGE_FOOTER = "<footer>Prices in each exchange's currency; sales and profits as 
 
 
 def write_pages(path: Path, pages: str, title: str, body: str, sections: list[str], ordered: list[dict], charts_on: bool,
-                heat_html: str = "") -> Path:
+                heat_html: str = "", doc_title: str | None = None) -> Path:
     """Multi-page report: `path` is the summary page (no company sections; its company links go to <pages>/<ticker>.html),
     and each company gets its own page with the same section, linking back to the summary and to its neighbours. The
     styles and scripts go to assets/ next to the summary page, loaded once and shared by every page, and the
@@ -1026,7 +1125,7 @@ def write_pages(path: Path, pages: str, title: str, body: str, sections: list[st
     folder = path.parent
     page.write_shared(folder / "assets")
     body = COMPANY_LINK.sub(lambda m: f'href="{pages}/{m.group(1)}.html"', body).replace('href="#heatmaps"', f'href="{pages}/heatmaps.html"')
-    summary = page.document(f"{e(title)} – value vs price", "", body,
+    summary = page.document(doc_title or f"{e(title)} – value vs price", "", body,
                             scripts=page.shared_scripts("assets/", charts=charts_on, table=True), head=page.shared_style("assets/"))
     path.write_text(summary, encoding="utf-8")
     if path.name != f"{pages}.html":

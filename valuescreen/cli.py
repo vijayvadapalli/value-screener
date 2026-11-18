@@ -296,7 +296,7 @@ def main(argv=None):
         screen_rows = growth_screen.rows(results, companies, cfg, extras)
         lst = loader.list_settings(a.list)
         if lst.get("screen_panel"):   # the settings panel; on a multi-page list its links go straight to the company pages
-            screen_style = {"panel": True}
+            screen_style = {"panel": True, "list_name": list_title(a.list)}
             if lst.get("layout") == "pages":
                 screen_style["href"] = lambda t, d=a.list: f"{d}/{t}.html"
     elif screen == "us-growth":
@@ -307,7 +307,9 @@ def main(argv=None):
     profit_rows = [] if a.no_profit else _profit_rows(a, tickers, companies, results, folder, out, log)
     resource_rows = (resource_screen.rows(results, {p["ticker"]: p for p in profit_rows}, _metal_growth, cfg)
                      if screen == "resource" else [])
-    for label, rs in (("growth screen", screen_rows), ("resource screen", resource_rows)):
+    shown = (growth_screen.apply_filters(screen_rows, cfg[screen_style.get("key", "growth_screen")])   # as the page shows it
+             if screen_rows else [])
+    for label, rs in (("growth screen", shown), ("resource screen", resource_rows)):
         if rs:
             n = {t: sum(1 for r in rs if r["tier"] == t) for t in ("shortlist", "near miss")}
             log.append(f"{label}: {n['shortlist']} shortlisted, {n['near miss']} near misses of {len(rs)}")

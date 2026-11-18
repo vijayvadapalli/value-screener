@@ -78,3 +78,24 @@ table.gt th{cursor:default} table.gt th:after{content:none}
 .pc-key i{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:middle;margin-right:4px}
 .pc-cap{font-size:12.5px;color:var(--ink2);margin:2px 2px 4px}
 @media (max-width:640px){.pc-main{height:300px} .pc-legend{margin-left:0;width:100%}}
+nav.tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);margin:20px 0 0}
+nav.tabs a{font-size:19px;font-weight:700;letter-spacing:-.01em;color:var(--ink2);padding:9px 18px;border:1px solid transparent;
+border-bottom:none;border-radius:8px 8px 0 0;margin-bottom:-1px;text-decoration:none}
+nav.tabs a:hover{color:var(--ink);background:var(--soft)} nav.tabs a.on{color:var(--ink);background:var(--bg);border-color:var(--line)}
+.tabpane[hidden]{display:none} .tabpane>.company:first-child{border-top:none;margin-top:14px}
+@media (max-width:640px){nav.tabs a{font-size:15px;padding:8px 10px}}
+details.rules{margin:8px 0} details.rules>summary{cursor:pointer;font-size:14px;font-weight:700;color:var(--ink)}
+details.rules>summary small{font-weight:400;color:var(--ink2);font-size:12.5px;white-space:normal}
+details.toc{margin:10px 0} details.toc>summary{cursor:pointer;color:var(--blue);font-size:13px}
+.nopass{font-size:18px;font-weight:700;color:#7A4B00;background:#FFF1D6;border:1px solid #F0C36A;border-left:5px solid #E09A00;
+border-radius:8px;padding:11px 16px;margin:12px 0;max-width:1100px}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .nopass{color:#FFD58A;background:#3A2C10;border-color:#6B5320}}
+.tabpane>.sub:first-child{margin-top:14px}
+/* folded parts on the screen pages read as something to open: blue, with a Show / Hide button after the text */
+#screen details>summary,#backtest details>summary,.tabpane details>summary{cursor:pointer;color:var(--blue);font-size:13px;list-style-position:outside}
+#screen details>summary::after,#backtest details>summary::after,.tabpane details>summary::after{content:"Show";display:inline-block;margin-left:8px;
+padding:0 8px;border:1px solid currentColor;border-radius:10px;font-size:11px;font-weight:600;line-height:17px;vertical-align:1px;color:var(--blue)}
+#screen details[open]>summary::after,#backtest details[open]>summary::after,.tabpane details[open]>summary::after{content:"Hide"}
+#screen details>summary:hover,#backtest details>summary:hover,.tabpane details>summary:hover{text-decoration:underline}
+details.rules>summary{color:var(--blue)} details.rules>summary small{color:var(--ink2)}
+#screen details.rules>summary{font-size:14px;font-weight:700}

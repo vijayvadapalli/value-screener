@@ -15,6 +15,9 @@ the data yet (not on Screener's public page). State-owned companies are flagged 
 Pure functions: no files, no network.
 
     evaluate(r, c, cfg, extra=None) → one screen row        rows(results, companies, cfg, extras) → rows, best first
+    filters(s) → the settings panel's switches at their defaults (config `default_filters`)
+    apply_filters(rows, s) → the rows the page shows by default: out-of-list names and cyclicals left out, low
+                             promoter holding and government-owned held back from the shortlist (as assets/screen.js)
 """
 from __future__ import annotations
 
@@ -195,3 +198,47 @@ def rows(results: dict, companies: dict, cfg: dict, extras: dict | None = None) 
     extras = extras or {}
     return sorted((evaluate(r, companies[t], cfg, extras.get(t)) for t, r in results.items() if r["model"] == "growth"),
                   key=sort_key)
+
+
+FILTERS = ("prule", "psu", "mid", "cyc")   # promoter rule, no government-owned, the list only (no extras), no cyclicals
+
+
+def filters(s: dict, rows_: list[dict] | None = None) -> dict:
+    """The settings panel's four switches at their defaults (`default_filters` in the screen's config; off when absent).
+    With the screen's `rows_`, a list with no promoter holding at all (the Nifty 50 files have none) starts with the
+    promoter rule off – it would otherwise leave out every company."""
+    d = s.get("default_filters") or {}
+    f = {k: bool(d.get(k)) for k in FILTERS}
+    if rows_ and not any(r.get("promoters") is not None for r in rows_):
+        f["prule"] = False
+    return f
+
+
+def in_universe(row: dict, f: dict) -> bool:
+    """Midcap 150 only leaves out the names added by hand (`extra`); excluding cyclicals leaves them out entirely."""
+    return not (f["mid"] and row.get("extra")) and not (f["cyc"] and row.get("cyclical"))
+
+
+def filter_guards(row: dict, f: dict, min_promoter: float, known_only: bool = False) -> list[str]:
+    """What the promoter and government-owned rules hold against a row – screen.js judgeRow writes the same. With
+    `known_only` (the backtest) an unknown holding is not held against it."""
+    out, p = [], row.get("promoters")
+    if f["prule"] and not (known_only and p is None) and (p is None or p < min_promoter):
+        out.append("no promoter holding" if p is None else f"promoters {p*100:.0f}% (< {min_promoter*100:.0f}%)")
+    if f["psu"] and row.get("state_owned"):
+        out.append("government-owned")
+    return out
+
+
+def apply_filters(rows_: list[dict], s: dict, f: dict | None = None) -> list[dict]:
+    """The rows as the page shows them at the panel's defaults: the universe narrowed, a row the promoter or
+    government-owned rule holds back loses its tier (the reason joins its guards), best first again. The rows
+    themselves are not changed – the page's panel still needs them as they were."""
+    f = f or filters(s, rows_)
+    out = []
+    for r in rows_:
+        if not in_universe(r, f):
+            continue
+        extra = filter_guards(r, f, s.get("min_promoter", 0.0))
+        out.append(dict(r, guards=r["guards"] + extra, tier="") if extra else r)
+    return sorted(out, key=sort_key)

@@ -27,3 +27,28 @@ document.querySelectorAll('#sum th').forEach((th, i) => th.onclick = () => {
     return (x < y ? -1 : x > y ? 1 : 0) * (asc ? 1 : -1); }).forEach(r => body.appendChild(r));
 });
 apply();
+
+// Tabs (India growth-screen lists): one pane at a time, the tab in the address (#picks, #values, #growth). A link to
+// anything inside a pane (#backtest, #pvp, #screen …) opens that pane first. Without JavaScript the panes stack.
+(() => {
+  const bar = document.querySelector('nav.tabs');
+  if (!bar) return;
+  const tabs = [...bar.querySelectorAll('a')], panes = tabs.map(a => document.getElementById(a.hash.slice(1)));
+  const show = id => tabs.forEach((a, i) => { const on = panes[i].id === id; a.classList.toggle('on', on); panes[i].hidden = !on; });
+  const target = () => { try { return location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return null; } };
+  function fromHash() {
+    const el = target(), pane = el && el.closest('.tabpane');
+    if (el && !pane) { show(panes[0].id); return; }   // outside the tabs (#markets, #summary): leave the first open
+    show(pane ? pane.id : panes[0].id);
+    if (el && el !== pane) el.scrollIntoView();
+  }
+  bar.addEventListener('click', ev => {
+    const a = ev.target.closest('a');
+    if (!a) return;
+    ev.preventDefault();
+    history.replaceState(null, '', location.pathname + location.search + a.hash);
+    show(a.hash.slice(1));
+  });
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+})();

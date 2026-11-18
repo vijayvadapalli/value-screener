@@ -39,6 +39,46 @@ def our_companies(cfg):
     return out, lists
 
 
+def _leg(con, name: str) -> dict:
+    """{YYYY-MM-01: price} for one side of a monthly ratio: a long-term series (gold, silver, uranium_spot) or a
+    Yahoo symbol's month-end closes."""
+    return dict(longterm.series(name) if name.lower() in longterm.COLUMNS else price_chart.monthly_closes(con, name))
+
+
+def ratio_chart(con, item, watched, patterns):
+    """(chart, latest ratio) for `ratio: [A, B]` – A ÷ B. Two Yahoo symbols give daily bars (with `long: [a, b]`,
+    the long-term monthly series before the daily data); a long-term series on either side gives a monthly chart."""
+    a, b = item["ratio"]
+    name = item.get("name") or f"{a} ÷ {b}"
+    if a.lower() in longterm.COLUMNS or b.lower() in longterm.COLUMNS:
+        sa, sb = _leg(con, a), _leg(con, b)
+        points = [(d, sa[d] / sb[d]) for d in sorted(sa) if sb.get(d)]
+        chart = price_chart.payload_monthly(name, points, f"{a} ÷ {b}, month-end", watched=watched)
+        if chart:
+            chart.update(patterns=patterns, currency="ratio")
+        return chart, points[-1][1] if points else None
+    long = None
+    if item.get("long"):
+        la, lb = (dict(longterm.series(x)) for x in item["long"])
+        long = [(d, la[d] / lb[d]) for d in sorted(la) if lb.get(d)]
+    bars = price_chart.ratio_bars(con, a, b)
+    chart = price_chart.payload(con, f"{a} ÷ {b}", {"model": None, "price_ccy": "ratio"}, {"period": {}}, watched=watched,
+                                watched_label="Their levels", mode="research", long_years=None, long_monthly=long,
+                                patterns=patterns, bars=bars)
+    return chart, bars[-1]["close"] if bars else None
+
+
+def history_chart(item, watched, patterns):
+    """`history: {series, from, to}` – a past stretch of a long-term monthly series (e.g. silver 1971–1980)."""
+    h = item["history"]
+    points = [(d, v) for d, v in longterm.series(h["series"]) if str(h["from"]) <= d[:7] <= str(h["to"])]
+    chart = price_chart.payload_monthly(item.get("name", h["series"]), points,
+                                        f"{h['series']} monthly average {h['from']} to {h['to']} (World Bank)", watched=watched)
+    if chart:
+        chart["patterns"] = patterns
+    return chart
+
+
 def main():
     ap = argparse.ArgumentParser(description="Private research report from the weekly captures")
     ap.add_argument("--date", help="capture date YYYY-MM-DD (default: the latest)")
@@ -58,14 +98,21 @@ def main():
         if key in ours and not symbols.get(key):
             symbols[key] = ours[key][0].get("yahoo") or key
     missing = {s: ["research"] for s in symbols.values() if pricedb.last_date(con, s) is None}
-    if missing:
-        print(f"downloading history for {', '.join(missing)}")
-        update_history.update(con, missing, 10, False, log=lambda *_: None)
+    legs = {x for item in week["assets"].values() for x in item.get("ratio") or [] if x.lower() not in longterm.COLUMNS}
+    missing_legs = {s: ["research"] for s in legs if pricedb.last_date(con, s) is None and s not in missing}
+    for wanted, years in ((missing, 10), (missing_legs, 0)):   # ratio legs: all the history Yahoo has
+        if wanted:
+            print(f"downloading history for {', '.join(wanted)}")
+            update_history.update(con, wanted, years, False, log=lambda *_: None)
     prices, charts, results, links = {}, {}, {}, {}
     for key, item in week["assets"].items():
         company, result, report = ours.get(key, (None, None, None))
         sym = symbols.get(key)
-        if key == "URANIUM":
+        if item.get("ratio"):
+            charts[key], prices[key] = ratio_chart(con, item, R.levels(item), R.pattern_lines(item))
+        elif item.get("history"):
+            charts[key] = history_chart(item, R.levels(item), R.pattern_lines(item))
+        elif key == "URANIUM":
             prices[key] = cfg["spot"]["uranium"]
             spot = longterm.series("uranium_spot")   # Cameco month-end spot: their spot levels can be drawn on it
             charts[key] = (price_chart.payload_monthly("Uranium spot (Cameco)", spot, longterm.NOTES["uranium_spot"],
@@ -80,6 +127,13 @@ def main():
             charts[key] = price_chart.payload(con, sym, r, company or {"period": {}}, watched=R.levels(item),
                                               watched_label="Their levels", mode="research", long_years=None,
                                               long_monthly=history, patterns=R.pattern_lines(item))
+        if charts.get(key) and not charts[key].get("patterns"):
+            charts[key]["patterns"] = R.pattern_lines(item)
+        lv = R.levels(item)
+        if charts.get(key) and lv and not any(x["tf"] in ("D", "W") for x in lv):
+            charts[key]["open"] = ["M", "Max"]   # drawn on a monthly chart in the report: open there
+        if not charts.get(key):
+            charts.pop(key, None)
         if result:
             results[key] = result
             list_name = report or lists.get(key)

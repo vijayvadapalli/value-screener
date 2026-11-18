@@ -152,6 +152,23 @@ def _result(start, today, screened, picks, near, skipped, short_history, idx, di
             "best": picks[0] if picks else None, "worst": picks[-1] if picks else None}
 
 
+def with_filters(b: dict, s: dict, f: dict) -> dict:
+    """One start date's result with the settings panel's default switches (growth_screen.filters), as screen.js
+    backtestAll does: cyclicals out of the picks and of all screened, government-owned and low promoter holding out of
+    the picks (a holding not known then is not held against a stock). `all_rows` keeps everyone – the page's panel
+    re-picks from them when a switch is turned off."""
+    if not any(f.values()):
+        return b
+    keep = lambda r: not (f["cyc"] and r.get("cyclical")) and not growth_screen.filter_guards(  # noqa: E731
+        r, f, s.get("min_promoter", 0.0), known_only=True)
+    screened = [r for r in b["all_rows"] if not (f["cyc"] and r.get("cyclical"))]
+    out = _result(b["start"], b["today"], screened, [r for r in b["picks"] if keep(r)], [r for r in b["near"] if keep(r)],
+                  b["skipped"], b["short_history"], b["index_price"], b["dividends"], b["rules"], b["index"])
+    out["all_rows"] = b["all_rows"]
+    out["screened_rows"] = screened
+    return out
+
+
 def run(list_name: str, entries: list[dict], companies: dict, cfg: dict, years=(5, 4, 3, 2), today: dt.date | None = None,
         con=None) -> list[dict]:
     """One result per start date, `years` before today (or before the last day with prices)."""
@@ -159,9 +176,11 @@ def run(list_name: str, entries: list[dict], companies: dict, cfg: dict, years=(
     today = today or dt.date.fromisoformat(con.execute("SELECT MAX(date) FROM bars WHERE ticker = ?",
                                                         (INDEX_SYMBOL.get(list_name, "^NSEI"),)).fetchone()[0])
     out = []
+    f = growth_screen.filters(cfg["growth_screen"])
     for y in years:
         start = today.replace(year=today.year - y)
-        out.append(run_start(entries, companies, cfg, con, start, today, INDEX_SYMBOL.get(list_name)))
+        out.append(with_filters(run_start(entries, companies, cfg, con, start, today, INDEX_SYMBOL.get(list_name)),
+                                cfg["growth_screen"], f))
     _add_curve(out, lambda sym, since: con.execute("SELECT date, adj_close FROM bars WHERE ticker = ? AND date >= ? AND adj_close "
                                                    "IS NOT NULL ORDER BY date", (sym, since)).fetchall(), con)
     return out
@@ -212,7 +231,7 @@ def _add_curve(results, series, con):
     first = next((b for b in by_start if b["picks"]), by_start[0] if by_start else None)
     if first:
         first["curve"] = curve(first["start"], first["today"], [r["symbol"] for r in first["picks"]],
-                               [r["symbol"] for r in first["all_rows"]], first["index"], series, con)
+                               [r["symbol"] for r in first.get("screened_rows", first["all_rows"])], first["index"], series, con)
 
 
 # ---- the US screen and the tech list: rebuilt exactly as filed by the start date

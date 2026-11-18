@@ -76,8 +76,10 @@ def _markers(con, symbol, c, factor, start):
 
 def payload(con, symbol: str, r: dict, c: dict, watched: list | None = None, watched_label: str = "Watched levels",
             mode: str = "public", long_years: int | None = LONG_YEARS, long_monthly: list | None = None,
-            patterns: list | None = None) -> dict | None:
-    bars, currency, factor = _scaled(con, symbol)
+            patterns: list | None = None, bars: list | None = None) -> dict | None:
+    """bars: ready-made daily bars (e.g. a ratio from ratio_bars) instead of the symbol's own – no markers then."""
+    own = bars is None
+    bars, currency, factor = _scaled(con, symbol) if own else (bars, r.get("price_ccy"), 1.0)
     if len(bars) < 30:
         return None
     last_day = dt.date.fromisoformat(bars[-1]["date"])
@@ -99,13 +101,35 @@ def payload(con, symbol: str, r: dict, c: dict, watched: list | None = None, wat
                     "tentative": t.get("tentative", False)}
                    for t in L.trend_lines(bars)],
         "values": value_lines(r) if same_ccy else [],
-        "markers": _markers(con, symbol, c, factor, l_start),
+        "markers": _markers(con, symbol, c, factor, l_start) if own else [],
         "summary": {k: (_r(v) if isinstance(v, float) else v) for k, v in L.summary(bars).items()},
         "signal": r.get("signal"), "action": r.get("action"),
         "watched": [{"lo": _r(x["lo"]), "hi": _r(x["hi"]), "kind": x["kind"], "tf": x.get("tf", "D")} for x in (watched or [])],
         "watched_label": watched_label, "mode": mode, "patterns": patterns or [],
     }
     return out
+
+
+def ratio_bars(con, num: str, den: str) -> list[dict]:
+    """Daily bars of one symbol divided by another on the days both traded (open / open, high / high, low / low,
+    close / close – as charting sites draw a ratio), each in its major currency unit."""
+    a, _, _ = _scaled(con, num)
+    b = {x["date"]: x for x in _scaled(con, den)[0]}
+    out = []
+    for x in a:
+        y = b.get(x["date"])
+        if not y or not all(x[k] and y[k] for k in ("open", "high", "low", "close")):
+            continue
+        o, h, l, c = (x[k] / y[k] for k in ("open", "high", "low", "close"))
+        out.append({"date": x["date"], "open": o, "high": max(h, o, c), "low": min(l, o, c), "close": c, "adj_close": c,
+                    "volume": 0})
+    return out
+
+
+def monthly_closes(con, symbol: str) -> list[tuple[str, float]]:
+    """[(YYYY-MM-01, last close of the month)] from the daily history, in the major currency unit."""
+    bars, _, _ = _scaled(con, symbol)
+    return [(b["date"][:7] + "-01", b["close"]) for b in pricedb.resample(bars, "M")] if bars else []
 
 
 def nearest_levels(p: dict) -> list[dict]:

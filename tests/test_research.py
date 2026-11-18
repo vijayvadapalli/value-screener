@@ -121,3 +121,12 @@ def test_longterm_series_and_monthly_chart():
     assert p["D"] == [] and p["M"][0][0] == "1992-01-01" and p["monthly_only"]
     assert PC._with_history([["2000-08-31", 1, 2, 0.5, 1.5, 9]], [("1999-12-01", 1.0), ("2000-08-01", 1.2)]) == [
         ["1999-12-01", 1.0, 1.0, 1.0, 1.0, 0], ["2000-08-31", 1, 2, 0.5, 1.5, 9]]   # history only before the daily data
+
+
+def test_trend_line_pattern_and_small_ratio_format():
+    item = {"patterns": [{"type": "line", "tf": "D", "side": "resistance", "label": "downtrend",
+                          "from": ["2026-08-25", 105.67], "to": ["2026-11", 85.8]}]}
+    (line,) = R.pattern_lines(item)
+    assert line == {"tf": "D", "kind": "line", "side": "resistance", "label": "downtrend",
+                    "points": [["2026-08-25", 105.67], ["2026-11-01", 85.8]]}
+    assert R.fmt(0.0213) == "0.0213" and R.fmt(0.41, 0.65) == "0.41–0.65" and R.fmt(48.41) == "48.41"
