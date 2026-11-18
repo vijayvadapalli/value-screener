@@ -259,17 +259,20 @@ them each quarter. NSE / BSE results filings remain the authority – check the 
 
 Every company in the Nifty Midcap 150 (plus any you add by hand) gets the full Nifty v2 valuation, and on top of it a
 **growth-at-a-value-price screen** (`valuescreen/growth_screen.py`, thresholds under `growth_screen:` in `config.yaml`).
-The filter and its rules are **Dr. Amit Gupta's** – the defaults below, which the settings panel's *Reset to Dr. Gupta's
+The filter and its rules are **Dr. Amit Gupta's** – his five are mid cap, cheap (P/E), growing (EPS), promoters and a
+5-year hold, with clean books and a profit every year checked first – the defaults below, which the settings panel's *Reset to Dr. Gupta's
 rules* returns to. The US screen and the tech report use the same rules, a little more liberal (P/E ≤ 18, growth ≥ 15%,
 return ≥ 10%); the resource screen translates them for miners and oil.
 
 | Condition | Rule |
 |---|---|
+| **Mid cap** | a member of the Nifty Midcap 150 – the stocks you added by hand (`extra:`) are left out (*Midcap 150 only*) |
 | **P/E ≤ 15** | price minus net cash ÷ the EPS the valuation uses (one-off quarters removed, cyclicals averaged); the plain trailing P/E is shown beside it. For Indian stocks P/E 15 is exactly "the price needs 5% growth a year", the green line |
 | **EPS growth ≥ 20% a year** | over **both** 5 and 3 years, and EPS positive in every year of the window – a 5-year window that starts in a bad year (2021) flatters the rate |
 | **5-year hold** | expected return a year if growth runs at **half** the past rate (at most 15%) and the shares are sold at 15x after 5 years; the shortlist needs at least **12% a year** (dividends not counted) |
 | **Guards** | cash conversion ≥ 70%, no demerger or one-off history, no bad-loan warning signs (lenders), current results |
-| **Flags** | promoters below 60% or their holding down more than 2 points in a year; cyclicals; your own additions. Pledged shares are not in the data yet – Screener's public page does not show them |
+| **Promoters ≥ 60%** | promoters hold at least 60% of the shares (the *Promoter rule*; not applied on the Nifty 50, whose files carry no holding) |
+| **Flags** | promoter holding down more than 2 points in a year; cyclicals; your own additions. Pledged shares are not in the data yet – Screener's public page does not show them |
 | **Quality** (a column) | banks and NBFCs: 5-year ROE over P/B – or P/ABV, book less bad loans not provided for – against the fair multiple, and their NPA; the rest: 5-year cash conversion. Cyclicals and state-owned companies show as pills on shortlist and near-miss rows |
 
 **Shortlist** = passes everything. **Near miss** = one thing short: a P/E of 15–20 with growth met, growth of 15–20%

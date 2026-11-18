@@ -289,7 +289,9 @@ def test_screen_section_reads_answer_first():
     shown = G.apply_filters(rows, cfg["growth_screen"])
     answer = html_report.answer_html(shown, [], "Index", below=True)
     html = html_report.growth_screen_html(rows, cfg, panel=True, after=answer)
-    assert html.count("<li><b>") == 5 and '<details class="rules"><summary>The five rules <small>· P/E ≤ <b data-r="pe">15</b>' in html
+    assert html.count("<li><b>") == 5 and '<details class="rules"><summary>The five rules <small>· Midcap 150 · P/E ≤ <b data-r="pe">15</b>' in html
+    assert all(f"<li><b>{k}.</b>" in html for k in ("Mid cap", "Cheap", "Growing", "Promoters", "Worth holding"))   # Dr. Gupta's five
+    assert 'promoters ≥ <b data-r="promoters">60%</b>' in html and "added by hand left out</span></h2>" in html
     assert f'<p class="funnel">Of <b>{len(shown)}</b> companies' in html
     assert '<p class="near"><b>Near misses:</b>' in html
     assert '<details class="tweak" hidden open><summary>Change the rules</summary>' in html
@@ -297,7 +299,7 @@ def test_screen_section_reads_answer_first():
     n = sum(1 for r in shown if r["tier"] == "shortlist")
     assert (f"Today {n} stock" in answer) if n else ('class="nopass"' in html and "data-ans=\"today\"" not in answer)
     near = sum(1 for r in shown if r["tier"] == "near miss")
-    assert f'{near} near miss{"" if near == 1 else "es"} of {len(shown)}</h2>' in html
+    assert f'{near} near miss{"" if near == 1 else "es"} of {len(shown)} <span>' in html
 
 
 def test_default_switches_hold_back_from_the_shortlist():

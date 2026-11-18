@@ -455,7 +455,7 @@ def markets_html(rows: list[dict]) -> str:
             f'<div class="wrap"><table class="mk"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>{charts_}</section>')
 
 
-INDIA_SCREEN_TAIL = "Flags: promoters below {min_promoter:.0f}% or falling; pledged shares are not in the data yet."
+INDIA_SCREEN_TAIL = "Flags: promoter holding falling; pledged shares are not in the data yet."
 
 
 PILL_STYLE = {"cyclical": "background:#B7791F", "state-owned": "background:#5A6474"}
@@ -590,13 +590,14 @@ def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", 
               + (f'<details><summary>Near misses and the other {len(others) - len(near)}, in full</summary>{table(others)}</details>'
                  if others else ""))
     market = "us" if key == "us_growth_screen" else "india"
-    heading = f'<h2>Screen – {len(short)} shortlisted, {len(near)} near miss{"" if len(near) == 1 else "es"} of {len(rows)}</h2>'
+    heading = (f'<h2>Screen – {len(short)} shortlisted, {len(near)} near miss{"" if len(near) == 1 else "es"} of {len(rows)}'
+               f'{left_out_html(every, G.filters(s, every))}</h2>')
     funnel = f'<p class="funnel">{funnel_text(funnel_steps(every, s))}</p>{GUARDS_LINE}'
     if panel:   # the settings panel (open, can be folded), the funnel and assets/screen.js
-        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{screen_panel(every, s, href, market, list_name)}{funnel}'
+        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{screen_panel(every, s, href, market, list_name)}{funnel}'
                 f'<div class="screen-tables">{tables}</div>{after}'
                 f'<script>{page.asset("screen.js")}</script></section>')
-    return f'<section class="company" id="screen">{heading}{rules_html(s, tail)}{funnel}{tables}{after}</section>'
+    return f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{funnel}{tables}{after}</section>'
 
 
 GROWTH_INTRO = ("<b>How much growth today's price already assumes</b> (a reverse DCF): the value with no growth and at 10% "
@@ -616,28 +617,53 @@ def return_label(s: dict) -> str:
 NO_PASS = '<p class="nopass">No company passes all five rules {}.</p>'   # screen.js writes the same, "with these settings"
 
 
-def rules_html(s: dict, tail: str) -> str:
-    """The growth screen's five rules in plain words, folded under a one-line summary. The numbers carry data-r so
-    assets/screen.js can show the panel's settings in place of the defaults – in the summary too."""
+def left_out_html(rows: list[dict], f: dict) -> str:
+    """Why the screen counts fewer companies than the page header: who the switches leave out (screen.js leftOut writes
+    the same), e.g. ' <span>· 2 added by hand left out</span>'."""
+    extra = sum(1 for r in rows if f["mid"] and r.get("extra"))
+    cyc = sum(1 for r in rows if not (f["mid"] and r.get("extra")) and f["cyc"] and r.get("cyclical"))
+    parts = ([f"{extra} added by hand"] if extra else []) + ([f"{cyc} cyclical{'s' if cyc > 1 else ''}"] if cyc else [])
+    return f' <span>· {" and ".join(parts)} left out</span>' if parts else ""
+
+
+def rules_html(s: dict, tail: str, market: str = "us", list_name: str = "Midcap 150", rows: list[dict] | None = None) -> str:
+    """The growth screen's five rules in plain words, folded under a one-line summary. India: Dr. Gupta's five – mid
+    cap (the list's own members), cheap, growing, promoters, a 5-year hold; clean books and current results are the
+    guards before them (GUARDS_LINE). The US has no promoter group: cheap, growing, profitable, worth holding, clean
+    books. The numbers carry data-r so assets/screen.js shows the panel's settings – in the summary too – and a
+    switched-off rule says so (data-off)."""
     v = {k: f'<b data-r="{k}">{text}</b>' for k, text in (
         ("pe", f"{s['max_pe']:g}"), ("growth", f"{s['min_eps_cagr']*100:.0f}%"), ("ret", f"{s['min_return']*100:.0f}%"),
         ("years", f"{s['years']}"), ("exit", f"{s['exit_multiple']:g}x"), ("near_pe", f"{s['near_max_pe']:g}"),
-        ("near_growth", f"{s['near_min_eps_cagr']*100:.0f}%"))}
+        ("near_growth", f"{s['near_min_eps_cagr']*100:.0f}%"), ("promoters", f"{s.get('min_promoter', 0)*100:.0f}%"))}
+    cheap = (f'<li><b>Cheap.</b> The P/E is {v["pe"]} or less (the price less net cash, divided by the earnings per share '
+             'the valuation uses).</li>')
+    hold = (f'<li><b>Worth holding.</b> At least {v["ret"]} a year expected over a {v["years"]}-year hold, if growth slows to '
+            f'half its past rate (at most {s["max_assumed_growth"]*100:.0f}%) and the shares are sold at {v["exit"]} earnings. '
+            'Dividends are not counted.</li>')
+    near = (f'<p class="notes"><b>Near miss</b> = one rule short: a P/E up to {v["near_pe"]} with growth met, growth down to '
+            f'{v["near_growth"]} with the P/E met, or only the return short. {tail}</p></details>')
+    if market == "india":
+        f = G.filters(s, rows)
+        off = lambda k: f'<span data-off="{k}"{" hidden" if f[k] else ""}> – switched off below</span>'  # noqa: E731
+        no_data = rows and not any(r.get("promoters") is not None for r in rows)
+        member = "Mid cap" if "midcap" in list_name.lower().replace(" ", "") else "In the index"
+        return (
+            f'<details class="rules"><summary>The five rules <small>· {e(list_name)} · P/E ≤ {v["pe"]} · EPS growth ≥ '
+            f'{v["growth"]} · promoters ≥ {v["promoters"]} · ≥ {v["ret"]} a year over a {v["years"]}-year hold</small></summary>'
+            f'<ol class="rules"><li><b>{member}.</b> A member of the {e(list_name)} – not one of the stocks added by hand{off("mid")}.</li>'
+            f'{cheap}<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
+            'last 3, with a profit in every one of those years.</li>'
+            f'<li><b>Promoters.</b> Promoters hold at least {v["promoters"]} of the shares'
+            + (' – not applied here: the company files carry no promoter holding' if no_data else off("prule")) + '.</li>'
+            f'{hold}</ol>{near}')
     return (
         f'<details class="rules"><summary>The five rules <small>· P/E ≤ {v["pe"]} · EPS growth ≥ {v["growth"]} · a profit '
         f'every year · ≥ {v["ret"]} a year over {v["years"]} years · clean books</small></summary><ol class="rules">'
-        f'<li><b>Cheap.</b> The P/E is {v["pe"]} or less (the price less net cash, divided by the earnings per share '
-        'the valuation uses).</li>'
-        f'<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
-        'last 3.</li>'
-        '<li><b>Profitable every year.</b> No loss year in that window.</li>'
-        f'<li><b>Worth holding.</b> At least {v["ret"]} a year expected over a {v["years"]}-year hold, if growth slows to '
-        f'half its past rate (at most {s["max_assumed_growth"]*100:.0f}%) and the shares are sold at {v["exit"]} earnings. '
-        'Dividends are not counted.</li>'
-        f'<li><b>Clean books.</b> At least {s["min_cash_conversion"]*100:.0f}% of profit arrives as cash, no demerger or '
-        'one-off history, no bad-loan warning, and up-to-date results.</li></ol>'
-        f'<p class="notes"><b>Near miss</b> = one rule short: a P/E up to {v["near_pe"]} with growth met, growth down to '
-        f'{v["near_growth"]} with the P/E met, or only the return short. {tail}</p></details>')
+        f'{cheap}<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
+        'last 3.</li><li><b>Profitable every year.</b> No loss year in that window.</li>'
+        f'{hold}<li><b>Clean books.</b> At least {s["min_cash_conversion"]*100:.0f}% of profit arrives as cash, no demerger or '
+        f'one-off history, no bad-loan warning, and up-to-date results.</li></ol>{near}')
 
 
 FUNNEL_WORDS = {"after guards": "have clean books and a profit every year", "+ growth": "grew fast enough",

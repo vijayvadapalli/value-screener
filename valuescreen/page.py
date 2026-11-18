@@ -11,6 +11,7 @@ assets/report.css uses $NAME placeholders for the colours in style.py (CSS itsel
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 from functools import lru_cache
 from pathlib import Path
@@ -51,29 +52,41 @@ def chart_scripts() -> str:
 
 # ---- multi-page reports: the styles and scripts as files every page shares (the browser loads them once)
 
-def write_shared(folder: Path) -> Path:
-    """Writes the shared files into `folder` (reports/assets/ when published): the filled-in stylesheet, the table
-    script, the chart script, the charting library and the moving-average colours."""
+@lru_cache(maxsize=1)
+def shared_files() -> dict[str, str]:
+    """The shared files by name: the filled-in stylesheet, the table script, the chart script, the charting library
+    and the moving-average colours."""
     from .price_chart import SMA_COLOURS  # noqa: PLC0415
-    folder.mkdir(parents=True, exist_ok=True)
     files = {"report.css": report_css(), "report.js": asset("report.js"), "charts.js": asset("charts.js"),
              "sma-colours.js": f"window.PC_SMA_COLOURS = {json.dumps({str(k): v for k, v in SMA_COLOURS.items()})};"}
     if VENDOR.exists():
         files["lightweight-charts.js"] = VENDOR.read_text(encoding="utf-8")
-    for name, text in files.items():
+    return files
+
+
+def write_shared(folder: Path) -> Path:
+    """Writes the shared files into `folder` (reports/assets/ when published)."""
+    folder.mkdir(parents=True, exist_ok=True)
+    for name, text in shared_files().items():
         (folder / name).write_text(text, encoding="utf-8")
     return folder
 
 
+def _src(prefix: str, name: str) -> str:
+    """A shared file's address with its content's short hash (`report.css?v=1a2b3c4d`): GitHub Pages lets browsers keep
+    these files for 10 minutes, and a changed file gets a new address, so a new page never runs with an old stylesheet."""
+    return f"{prefix}{name}?v={hashlib.sha1(shared_files()[name].encode()).hexdigest()[:8]}"
+
+
 def shared_style(prefix: str) -> str:
-    return f'<link rel="stylesheet" href="{prefix}report.css">'
+    return f'<link rel="stylesheet" href="{_src(prefix, "report.css")}">'
 
 
 def shared_scripts(prefix: str, charts: bool = True, table: bool = False) -> str:
     """Script tags for the shared files; `prefix` is the path to the assets folder ("assets/" or "../assets/")."""
-    out = f'<script src="{prefix}report.js"></script>' if table else ""
+    out = f'<script src="{_src(prefix, "report.js")}"></script>' if table else ""
     if charts and VENDOR.exists():
-        out += "".join(f'<script src="{prefix}{n}"></script>' for n in ("lightweight-charts.js", "sma-colours.js", "charts.js"))
+        out += "".join(f'<script src="{_src(prefix, n)}"></script>' for n in ("lightweight-charts.js", "sma-colours.js", "charts.js"))
     return out
 
 

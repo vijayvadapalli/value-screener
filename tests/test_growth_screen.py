@@ -131,7 +131,7 @@ def test_multi_page_report_splits_companies_and_shares_assets(tmp_path):
     single = html_report.build(res, COS, cfg, [], tmp_path / "single" / "s.html", "Test")
     path = html_report.build(res, COS, cfg, [], tmp_path / "Test_16Nov2026.html", "Test", html_report.ReportExtras(pages="testlist"))
     summary = path.read_text()
-    assert 'id="c-AEM"' not in summary and 'href="testlist/AEM.html"' in summary and 'href="assets/report.css"' in summary
+    assert 'id="c-AEM"' not in summary and 'href="testlist/AEM.html"' in summary and 'href="assets/report.css?v=' in summary
     assert (tmp_path / "testlist.html").read_text() == summary
     aem = (tmp_path / "testlist" / "AEM.html").read_text()
     assert 'id="c-AEM"' in aem and 'href="../testlist.html#summary"' in aem and 'href="CCJ.html"' in aem

@@ -196,9 +196,10 @@ function screenPage() {
     const nearPe = s.pe === s.pe0 ? s.near_pe : s.pe + (s.near_pe - s.pe0);
     const nearGrowth = s.growth === s.growth0 ? s.near_growth : s.growth - (s.growth0 - s.near_growth);
     const v = {pe: `${+s.pe.toFixed(2)}`, growth: `${+(s.growth * 100).toFixed(1)}%`, ret: `${+(s.ret * 100).toFixed(1)}%`,
-               years: `${s.years}`, exit: `${s.exit}x`, near_pe: `${+nearPe.toFixed(2)}`, near_growth: `${+(nearGrowth * 100).toFixed(1)}%`};
+               years: `${s.years}`, exit: `${s.exit}x`, promoters: `${+(s.promoters * 100).toFixed(1)}%`, near_pe: `${+nearPe.toFixed(2)}`, near_growth: `${+(nearGrowth * 100).toFixed(1)}%`};
     const same = sameAsDefaults();   // looked up afresh: the tables, with their headers, are rewritten on every change
     section.querySelectorAll('[data-r]').forEach(el => { el.textContent = same ? ruleServer[el.dataset.r] : v[el.dataset.r]; });
+    section.querySelectorAll('[data-off]').forEach(el => { el.hidden = !!s[el.dataset.off]; });   // a rule switched off says so
   }
 
   function renderAnswer(judged, same) {   // html_report.answer_html, for the settings set here
@@ -263,7 +264,11 @@ function screenPage() {
     const passed = judged.filter(r => r.tier === 'shortlist'), near = judged.filter(r => r.tier === 'near miss');
     const others = judged.filter(r => r.tier !== 'shortlist');
     document.querySelectorAll('[data-tab-count]').forEach(el => { el.textContent = passed.length; });   // the tab's count
-    heading.textContent = `Screen – ${passed.length} shortlisted, ${near.length} near miss${near.length === 1 ? '' : 'es'} of ${judged.length}`;
+    // html_report.left_out_html: why the screen counts fewer companies than the page header
+    const extra = rows.filter(r => s.mid && r.extra).length, cyc = rows.filter(r => !(s.mid && r.extra) && s.cyc && r.cyclical).length;
+    const parts = (extra ? [`${extra} added by hand`] : []).concat(cyc ? [`${cyc} cyclical${cyc > 1 ? 's' : ''}`] : []);
+    heading.innerHTML = `Screen – ${passed.length} shortlisted, ${near.length} near miss${near.length === 1 ? '' : 'es'} of ${judged.length}` +
+      (parts.length ? ` <span>· ${parts.join(' and ')} left out</span>` : '');
     const tables = section.querySelector('.screen-tables'), same = sameAsDefaults();
     if (same) tables.innerHTML = serverHtml;   // exactly what the server wrote
     else tables.innerHTML = s.all ? table(judged)
