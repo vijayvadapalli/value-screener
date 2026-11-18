@@ -7,6 +7,14 @@ screen_panel: true   # a settings panel above the screen (assets/screen.js): cha
 hide_spot: true      # India-only: no gold / silver / copper / uranium prices in the header
 backtest: [5, 4, 3, 2]   # how the screen's rules did since 5, 4, 3 and 2 years ago (backtest.py)
 layout: pages        # a summary page plus one page per company (reports/nifty50/<ticker>.html)
+screen_title: Quality growth at a fair price   # the screen's tab: these are our large-cap rules, not Dr. Gupta's
+screen_rules:        # over config.yaml growth_screen for this list (loader.with_screen_rules): large caps trade higher
+  max_pe: 25
+  min_eps_cagr: 0.12
+  exit_multiple: 20           # sold at 20x after the hold – 15x is too harsh for large caps
+  near_max_pe: 30             # near miss: the same 5-point P/E band above the bar as the Midcap 150 ...
+  near_min_eps_cagr: 0.07     # ... and the same 5-point growth band below it
+  default_filters: {prule: false, psu: false, mid: false, cyc: false}
 tickers:
 - ticker: ADANIENT
   yahoo: ADANIENT.NS

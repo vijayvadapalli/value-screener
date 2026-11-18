@@ -3,7 +3,7 @@
 <h1 id="summary">Midcap 150</h1>
 <p class="sub">142 companies · run 18 Nov 2026</p>
 
-<nav class="tabs"><a href="#picks" class=on>Dr. Gupta's screen · <span data-tab-count>5</span></a><a href="#values">Value vs price</a><a href="#growth">Growth priced in</a></nav>
+<nav class="tabs"><a href="#picks" class=on>Dr. Gupta&#x27;s screen · <span data-tab-count>5</span></a><a href="#values">Value vs price</a><a href="#growth">Growth priced in</a></nav>
 <div class="tabpane" id="picks">
 <section class="company" id="screen"><h2>Screen – 5 shortlisted, 2 near misses of 140 <span>· 2 added by hand left out</span></h2><details class="rules"><summary>The five rules <small>· Midcap 150 · P/E ≤ <b data-r="pe">15</b> · EPS growth ≥ <b data-r="growth">20%</b> · promoters ≥ <b data-r="promoters">60%</b> · ≥ <b data-r="ret">12%</b> a year over a <b data-r="years">5</b>-year hold</small></summary><ol class="rules"><li><b>Mid cap.</b> A member of the Midcap 150 – not one of the stocks added by hand<span data-off="mid" hidden> – switched off below</span>.</li><li><b>Cheap.</b> The P/E is <b data-r="pe">15</b> or less (the price less net cash, divided by the earnings per share the valuation uses).</li><li><b>Growing.</b> Earnings per share grew at least <b data-r="growth">20%</b> a year over both the last 5 years and the last 3, with a profit in every one of those years.</li><li><b>Promoters.</b> Promoters hold at least <b data-r="promoters">60%</b> of the shares<span data-off="prule" hidden> – switched off below</span>.</li><li><b>Worth holding.</b> At least <b data-r="ret">12%</b> a year expected over a <b data-r="years">5</b>-year hold, if growth slows to half its past rate (at most 15%) and the shares are sold at <b data-r="exit">15x</b> earnings. Dividends are not counted.</li></ol><p class="notes"><b>Near miss</b> = one rule short: a P/E up to <b data-r="near_pe">20</b> with growth met, growth down to <b data-r="near_growth">15%</b> with the P/E met, or only the return short. Flags: promoter holding falling; pledged shares are not in the data yet.</p></details><style>#screen .panel{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--soft);border:1px solid var(--line);
 border-radius:8px;padding:10px 12px;margin:8px 0} #screen .panel label{display:flex;flex-direction:column;font-size:12px;color:var(--ink2)}
@@ -229,7 +229,7 @@ function screenPage() {
     if (bt) {
       const res = backtestAll(bt, s), b = res.find(x => x.picks.length), what = bt.us ? 'price only' : 'with dividends';
       const aYear = x => x === null || b.years <= 0 || x <= -1 ? '' : ` (${pct(Math.pow(1 + x, 1 / b.years) - 1, 1)} a year)`;
-      html += '<p data-ans="bt">' + (b ? `<b>Backtest:</b> the ${b.picks.length} pick${b.picks.length > 1 ? 's' : ''} of ${esc(b.label)} are up ` +
+      html += '<p data-ans="bt">' + (b ? `<b>Backtest:</b> the ${b.picks.length} pick${b.picks.length > 1 ? 's' : ''} of ${esc(b.label)} ${b.picks.length > 1 ? 'are' : 'is'} up ` +
         `${pct(b.picks_ret)}${aYear(b.picks_ret)} ${what}, against ${pct(b.all)} for every stock screened and ${pct(b.index)} for the ` +
         `${esc(bt.index || 'index')} (price only). <a href="#backtest">Details below</a>.`
         : '<b>Backtest:</b> no stock passed these settings on any of the past dates tested.') + '</p>';

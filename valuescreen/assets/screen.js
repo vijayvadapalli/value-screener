@@ -214,7 +214,7 @@ function screenPage() {
     if (bt) {
       const res = backtestAll(bt, s), b = res.find(x => x.picks.length), what = bt.us ? 'price only' : 'with dividends';
       const aYear = x => x === null || b.years <= 0 || x <= -1 ? '' : ` (${pct(Math.pow(1 + x, 1 / b.years) - 1, 1)} a year)`;
-      html += '<p data-ans="bt">' + (b ? `<b>Backtest:</b> the ${b.picks.length} pick${b.picks.length > 1 ? 's' : ''} of ${esc(b.label)} are up ` +
+      html += '<p data-ans="bt">' + (b ? `<b>Backtest:</b> the ${b.picks.length} pick${b.picks.length > 1 ? 's' : ''} of ${esc(b.label)} ${b.picks.length > 1 ? 'are' : 'is'} up ` +
         `${pct(b.picks_ret)}${aYear(b.picks_ret)} ${what}, against ${pct(b.all)} for every stock screened and ${pct(b.index)} for the ` +
         `${esc(bt.index || 'index')} (price only). <a href="#backtest">Details below</a>.`
         : '<b>Backtest:</b> no stock passed these settings on any of the past dates tested.') + '</p>';

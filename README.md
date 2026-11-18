@@ -264,6 +264,12 @@ The filter and its rules are **Dr. Amit Gupta's** – his five are mid cap, chea
 rules* returns to. The US screen and the tech report use the same rules, a little more liberal (P/E ≤ 18, growth ≥ 15%,
 return ≥ 10%); the resource screen translates them for miners and oil.
 
+**The Nifty 50 has its own rules** – *Quality growth at a fair price*, not Dr. Gupta's: large caps trade higher, so
+P/E ≤ 25, EPS growth ≥ 12% over 5 and 3 years, the 5-year return still ≥ 12% a year but sold at 20x, and no switch on
+by default (no promoter rule – its files carry no holding – no Midcap 150 only, no exclusions). They sit in its list
+file (`screen_rules:` over `growth_screen`, and `screen_title:` for the tab; `loader.with_screen_rules`), so the
+screen, the panel's *Reset to the default rules* and the backtest all use them.
+
 | Condition | Rule |
 |---|---|
 | **Mid cap** | a member of the Nifty Midcap 150 – the stocks you added by hand (`extra:`) are left out (*Midcap 150 only*) |

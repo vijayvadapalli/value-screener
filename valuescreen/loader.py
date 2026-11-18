@@ -197,6 +197,13 @@ def load_list_entries(name: str, folder: Path | None = None) -> list[dict]:
     return [{**x, "ticker": x["ticker"].upper()} if isinstance(x, dict) else {"ticker": str(x).upper()} for x in d["tickers"]]
 
 
+def with_screen_rules(cfg: dict, list_name: str | None) -> dict:
+    """`cfg` with the list's own growth-screen rules (list setting `screen_rules:`, e.g. the Nifty 50's large-cap
+    thresholds) laid over `growth_screen` – a copy; without them, `cfg` itself."""
+    rules = list_settings(list_name).get("screen_rules") if list_name else None
+    return dict(cfg, growth_screen={**cfg["growth_screen"], **rules}) if rules else cfg
+
+
 def list_settings(name: str, folder: Path | None = None) -> dict:
     """A list's settings – everything in its file except the tickers (name, folder, screen, ...)."""
     folder = folder or ROOT / "data" / "lists"

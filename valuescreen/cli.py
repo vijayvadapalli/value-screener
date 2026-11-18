@@ -248,7 +248,7 @@ def main(argv=None):
         return _validate()
     if a.cmd == "backtest":
         from . import backtest  # noqa: PLC0415
-        cfg = loader.load_config()
+        cfg = loader.with_screen_rules(loader.load_config(), a.list if a.list != "us" else None)
         years = tuple(range(a.years, 1, -1))
         if a.list == "us":   # the whole S&P 500 + Nasdaq-100 screen
             from . import factsdb  # noqa: PLC0415
@@ -260,7 +260,7 @@ def main(argv=None):
         print("\n".join(backtest.summary_lines(results)))
         print("\nToday's members only (survivorship bias). Past performance only.")
         return 0
-    cfg = loader.load_config(Path(a.config) if a.config else None)
+    cfg = loader.with_screen_rules(loader.load_config(Path(a.config) if a.config else None), a.list)
     folder = a.folder or (loader.list_folder(a.list) if a.list else None)
     companies = loader.load_companies(loader.companies_folder(folder))
     log = []
@@ -296,7 +296,7 @@ def main(argv=None):
         screen_rows = growth_screen.rows(results, companies, cfg, extras)
         lst = loader.list_settings(a.list)
         if lst.get("screen_panel"):   # the settings panel; on a multi-page list its links go straight to the company pages
-            screen_style = {"panel": True, "list_name": list_title(a.list)}
+            screen_style = {"panel": True, "list_name": list_title(a.list), "title": lst.get("screen_title")}
             if lst.get("layout") == "pages":
                 screen_style["href"] = lambda t, d=a.list: f"{d}/{t}.html"
     elif screen == "us-growth":

@@ -488,7 +488,8 @@ SLIDERS = [   # (setting, label, step, min, max) – the panel's sliders; percen
 PCT_SETTINGS = ("growth", "ret", "promoters")
 
 
-def screen_panel(rows: list[dict], s: dict, href, market: str = "india", list_name: str = "Midcap 150") -> str:
+def screen_panel(rows: list[dict], s: dict, href, market: str = "india", list_name: str = "Midcap 150",
+                 title: str | None = None) -> str:
     """The settings panel, folded under 'Change the rules', and the data assets/screen.js needs: every row's figures
     and the default rules. The panel stays hidden without JavaScript, and the table the server wrote stays as it is. `market` "us" leaves out
     the India-only rules (promoters, government-owned, Midcap 150 only) – insiders are shown, never a rule."""
@@ -513,7 +514,7 @@ def screen_panel(rows: list[dict], s: dict, href, market: str = "india", list_na
     sliders = "".join(slider(*x) for x in SLIDERS if india or x[0] != "promoters")
     boxes = ((box("prule", "Promoter rule") + box("psu", "Exclude government-owned") + (box("mid", f"{e(list_name)} only") if has_extra else ""))
              if india else "") + box("cyc", "Exclude cyclicals") + box("all", "Show all")
-    reset = "Reset to Dr. Gupta's rules" if india else "Reset to the default rules"
+    reset = "Reset to Dr. Gupta's rules" if india and not title else "Reset to the default rules"   # a list's own rules: not his
     return (f'''<style>#screen .panel{{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--soft);border:1px solid var(--line);
 border-radius:8px;padding:10px 12px;margin:8px 0}} #screen .panel label{{display:flex;flex-direction:column;font-size:12px;color:var(--ink2)}}
 #screen .panel label b{{color:var(--ink);font-variant-numeric:tabular-nums}} #screen .panel input[type=range]{{width:130px;margin:4px 0 0;accent-color:#2F64CF}}
@@ -543,7 +544,7 @@ def _js(x) -> str:
 
 def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", owners: str = "Promoters",
                        tail: str | None = None, href=None, panel: bool = False, after: str = "",
-                       list_name: str = "Midcap 150") -> str:
+                       list_name: str = "Midcap 150", title: str | None = None) -> str:
     """The growth-at-a-value-price screen (growth_screen.py): shortlist and near misses, then everyone else folded away.
     `key` picks the thresholds (growth_screen for India, us_growth_screen for the US), `owners` names the ownership
     column, `tail` closes the explanation, `href(ticker)` gives a company's link (None: no link), `after` goes at the
@@ -594,7 +595,7 @@ def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", 
                f'{left_out_html(every, G.filters(s, every))}</h2>')
     funnel = f'<p class="funnel">{funnel_text(funnel_steps(every, s))}</p>{GUARDS_LINE}'
     if panel:   # the settings panel (open, can be folded), the funnel and assets/screen.js
-        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{screen_panel(every, s, href, market, list_name)}{funnel}'
+        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{screen_panel(every, s, href, market, list_name, title)}{funnel}'
                 f'<div class="screen-tables">{tables}</div>{after}'
                 f'<script>{page.asset("screen.js")}</script></section>')
     return f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{funnel}{tables}{after}</section>'
@@ -647,11 +648,14 @@ def rules_html(s: dict, tail: str, market: str = "us", list_name: str = "Midcap 
         f = G.filters(s, rows)
         off = lambda k: f'<span data-off="{k}"{" hidden" if f[k] else ""}> – switched off below</span>'  # noqa: E731
         no_data = rows and not any(r.get("promoters") is not None for r in rows)
+        extras = any(r.get("extra") for r in rows or [])   # without stocks added by hand the membership rule has no switch
+        prom = "" if no_data else f' · promoters ≥ {v["promoters"]}'
         member = "Mid cap" if "midcap" in list_name.lower().replace(" ", "") else "In the index"
         return (
             f'<details class="rules"><summary>The five rules <small>· {e(list_name)} · P/E ≤ {v["pe"]} · EPS growth ≥ '
-            f'{v["growth"]} · promoters ≥ {v["promoters"]} · ≥ {v["ret"]} a year over a {v["years"]}-year hold</small></summary>'
-            f'<ol class="rules"><li><b>{member}.</b> A member of the {e(list_name)} – not one of the stocks added by hand{off("mid")}.</li>'
+            f'{v["growth"]}{prom} · ≥ {v["ret"]} a year over a {v["years"]}-year hold</small></summary>'
+            f'<ol class="rules"><li><b>{member}.</b> A member of the {e(list_name)}'
+            + (f' – not one of the stocks added by hand{off("mid")}' if extras else "") + '.</li>'
             f'{cheap}<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
             'last 3, with a profit in every one of those years.</li>'
             f'<li><b>Promoters.</b> Promoters hold at least {v["promoters"]} of the shares'
@@ -759,7 +763,7 @@ def answer_html(rows: list[dict], results: list[dict], index_name: str, href=Non
             what = "price only" if not b.get("dividends", True) else "with dividends"
             pr, n = _bt_picks_ret(b), len(b["picks"])
             a_year = (f" ({((1 + pr) ** (1 / b['years']) - 1)*100:+.1f}% a year)" if pr is not None and pr > -1 and b["years"] > 0 else "")
-            bt = (f'<b>Backtest:</b> the {n} pick{"s" if n > 1 else ""} of {day(b["start"])} are up {S.pct(pr, 0) if pr is not None else "–"}'
+            bt = (f'<b>Backtest:</b> the {n} pick{"s" if n > 1 else ""} of {day(b["start"])} {"are" if n > 1 else "is"} up {S.pct(pr, 0) if pr is not None else "–"}'
                   f'{a_year} {what}, against {S.pct(b.get("all_ret", b.get("all_total")), 0)} for every stock screened and '
                   f'{S.pct(b["index_price"], 0)} for the {e(index_name)} (price only). <a href="#backtest">Details below</a>.')
     if below and not short:
@@ -878,7 +882,8 @@ def state_owned_line(results: list[dict], ret: str) -> str:
         return ""
     best = [(b, b["best"]) for b in results if b["best"] and b["best"].get("state_owned")]
     n_dates = sum(1 for b in results if b["picks"])
-    head = (f'<b>State-owned companies were {"most of " if len(so) * 2 > len(picks) else ""}the winners:</b> ' if best
+    winners = len(best) * 2 >= n_dates   # the best pick was state-owned on at least half the start dates
+    head = (f'<b>State-owned companies were {"most of " if len(so) * 2 > len(picks) else ""}the winners:</b> ' if winners
             else "<b>State-owned picks:</b> ")
     tops = "; ".join(f'{e(r["ticker"])} {S.pct(r[ret], 0)} since {day(b["start"])}' for b, r in best)
     return (f'<p class="notes bt-default">{head}{len(so)} of the {len(picks)} picks were government-owned'
@@ -1090,7 +1095,8 @@ and physical holders, and for growth companies the yearly growth the price needs
     if tabbed:   # three tabs (report.js shows one; without JavaScript they stack): the screen is Dr. Gupta's, the rest ours
         growth_tab = growth_table_html(growth_rows, previous, heading=False) if growth_rows else ""
         n_short = sum(1 for r in shown if r["tier"] == "shortlist")   # screen.js keeps the count in step with the panel
-        tabs = ([("picks", f"Dr. Gupta's screen · <span data-tab-count>{n_short}</span>"), ("values", "Value vs price")]
+        name = e(x.screen_style.get("title") or "Dr. Gupta's screen")   # list setting `screen_title` (Nifty 50: its own rules)
+        tabs = ([("picks", f"{name} · <span data-tab-count>{n_short}</span>"), ("values", "Value vs price")]
                 + ([("growth", "Growth priced in")] if growth_tab else []))
         tab_links = "".join(f'<a href="#{k}"{" class=on" if i == 0 else ""}>{t}</a>' for i, (k, t) in enumerate(tabs))
         main_part = f"""<nav class="tabs">{tab_links}</nav>
