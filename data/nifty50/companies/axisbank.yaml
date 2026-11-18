@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1342.4
+  value: 1360.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance AXISBANK.NS
-shares_m: 3125.883
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 3117.551
 v2:
   eps_quarters:
   - 21.78
@@ -25,6 +25,8 @@ v2:
   - 24.54
   - 24.74
   eps_annual:
+  - 31.42
+  - 35.04
   - 16.51
   - 1.78
   - 19.59
@@ -36,6 +38,8 @@ v2:
   - 90.58
   - 84.89
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,98 @@ v2:
   - -8637.0
   book_value_ps: 738.0
   roe_5y: 0.14
+  profit_growth_5y: 0.3
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.0823
+    - 0.0818
+    - 0.0817
+    - 0.0816
+    - 0.0815
+    - 0.0814
+    - 0.0787
+    - 0.0786
+    fii:
+    - 0.4732
+    - 0.4394
+    - 0.4381
+    - 0.4189
+    - 0.4258
+    - 0.4204
+    - 0.3991
+    - 0.3805
+    dii:
+    - 0.3748
+    - 0.4087
+    - 0.4122
+    - 0.4287
+    - 0.4265
+    - 0.4335
+    - 0.4269
+    - 0.4454
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 44949.0
+    - 53559.0
+    - 56380.0
+    - 64207.0
+    - 67802.0
+    - 86340.0
+    - 103594.0
+    - 118261.0
+    - 129781.0
+    - 157023.0
+    - 187235.0
+    - 215036.0
+    borrowings:
+    - 84394.0
+    - 113848.0
+    - 112455.0
+    - 155767.0
+    - 161250.0
+    - 155180.0
+    - 152249.0
+    - 199778.0
+    - 206214.0
+    - 228200.0
+    - 220687.0
+    - 280511.0
+    net_profit:
+    - 7450.0
+    - 8358.0
+    - 3967.0
+    - 464.0
+    - 5047.0
+    - 1879.0
+    - 7252.0
+    - 14207.0
+    - 10919.0
+    - 26492.0
+    - 28191.0
+    - 26548.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +190,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/AXISBANK/consolidated/; NPA figures from the standalone
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/AXISBANK/consolidated/; NPA figures from the standalone
   page: https://www.screener.in/company/AXISBANK/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)

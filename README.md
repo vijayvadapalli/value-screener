@@ -270,6 +270,16 @@ by default (no promoter rule – its files carry no holding – no Midcap 150 on
 file (`screen_rules:` over `growth_screen`, and `screen_title:` for the tab; `loader.with_screen_rules`), so the
 screen, the panel's *Reset to the default rules* and the backtest all use them.
 
+**The quality check** (Nifty 50 only; off in `config.yaml`, so the Midcap 150 stays Dr. Gupta's five): return on equity
+at least 15% – banks, NBFCs and insurers at least 12% – and borrowings at most 1.0x equity (not for financials, whose
+borrowing is their business). ROE is the year's net profit over the average of the opening and closing equity; debt to
+equity is borrowings over closing equity – both from the yearly balance sheet `tools/fetch_screener.py` now keeps
+(`v2.balance_annual`: equity capital + reserves, borrowings and net profit for each year-end). The panel has *Min ROE*
+(0–30%), *Min ROE, financials* (0–25%), *Max debt-to-equity* (0–3) and *Treat financials separately*; the funnel adds
+"… pass the quality check". The backtest applies it on each past date with the statements known then, shows a second
+row per date *without the quality check* so its effect is visible, and says how many screened stocks had no
+statements for a date (they cannot pass).
+
 | Condition | Rule |
 |---|---|
 | **Mid cap** | a member of the Nifty Midcap 150 – the stocks you added by hand (`extra:`) are left out (*Midcap 150 only*) |
@@ -277,7 +287,7 @@ screen, the panel's *Reset to the default rules* and the backtest all use them.
 | **EPS growth ≥ 20% a year** | over **both** 5 and 3 years, and EPS positive in every year of the window – a 5-year window that starts in a bad year (2021) flatters the rate |
 | **5-year hold** | expected return a year if growth runs at **half** the past rate (at most 15%) and the shares are sold at 15x after 5 years; the shortlist needs at least **12% a year** (dividends not counted) |
 | **Guards** | cash conversion ≥ 70%, no demerger or one-off history, no bad-loan warning signs (lenders), current results |
-| **Promoters ≥ 60%** | promoters hold at least 60% of the shares (the *Promoter rule*; not applied on the Nifty 50, whose files carry no holding) |
+| **Promoters ≥ 60%** | promoters hold at least 60% of the shares (the *Promoter rule*). The Nifty 50 files carry no holding, so its page lists four rules, without this one |
 | **Flags** | promoter holding down more than 2 points in a year; cyclicals; your own additions. Pledged shares are not in the data yet – Screener's public page does not show them |
 | **Quality** (a column) | banks and NBFCs: 5-year ROE over P/B – or P/ABV, book less bad loans not provided for – against the fair multiple, and their NPA; the rest: 5-year cash conversion. Cyclicals and state-owned companies show as pills on shortlist and near-miss rows |
 

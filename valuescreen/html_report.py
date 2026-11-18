@@ -484,20 +484,24 @@ def screen_pills(r: dict) -> str:
 
 SLIDERS = [   # (setting, label, step, min, max) – the panel's sliders; percentages in %
     ("pe", "Max P/E", 0.5, 5, 40), ("growth", "Min EPS growth", 1, 0, 40), ("ret", "Min 5-yr return", 0.5, 0, 25),
-    ("years", "Holding years", 1, 1, 10), ("exit", "Exit multiple", 1, 5, 30), ("promoters", "Min promoters", 1, 0, 90)]
-PCT_SETTINGS = ("growth", "ret", "promoters")
+    ("years", "Holding years", 1, 1, 10), ("exit", "Exit multiple", 1, 5, 30), ("promoters", "Min promoters", 1, 0, 90),
+    ("roe", "Min ROE", 1, 0, 30), ("roe_fin", "Min ROE, financials", 1, 0, 25), ("de", "Max debt-to-equity", 0.1, 0, 3)]
+QUALITY_SLIDERS = ("roe", "roe_fin", "de")   # shown only where the list sets the quality check (Nifty 50)
+PCT_SETTINGS = ("growth", "ret", "promoters", "roe", "roe_fin")
 
 
 def screen_panel(rows: list[dict], s: dict, href, market: str = "india", list_name: str = "Midcap 150",
-                 title: str | None = None) -> str:
+                 title: str | None = None, word: str = "five") -> str:
     """The settings panel, folded under 'Change the rules', and the data assets/screen.js needs: every row's figures
     and the default rules. The panel stays hidden without JavaScript, and the table the server wrote stays as it is. `market` "us" leaves out
     the India-only rules (promoters, government-owned, Midcap 150 only) – insiders are shown, never a rule."""
     india = market == "india"
+    q = G.quality(s)   # the quality check: off (0, 0, no debt limit) unless the list sets it
     rules = {"pe": s["max_pe"], "growth": s["min_eps_cagr"], "ret": s["min_return"], "years": s["years"], "exit": s["exit_multiple"],
              "haircut": s["growth_haircut"], "cap": s["max_assumed_growth"], "promoters": s.get("min_promoter", 0.0),
              "pe0": s["max_pe"], "growth0": s["min_eps_cagr"], "near_pe": s["near_max_pe"], "near_growth": s["near_min_eps_cagr"],
-             **G.filters(s, rows), "all": False,
+             **G.filters(s, rows), "all": False, "rules_word": word,
+             "roe": q["roe"], "roe_fin": q["roe_fin"], "de": q["de"], "fin": q["fin"],
              "bounds": {k: [lo / 100, hi / 100] if k in PCT_SETTINGS else [lo, hi] for k, _, _, lo, hi in SLIDERS}}
     if not india:
         rules["market"] = market
@@ -506,13 +510,18 @@ def screen_panel(rows: list[dict], s: dict, href, market: str = "india", list_na
              "pos": r["every_year_positive"], "guards": r["guards"], "promoters": r["promoters"], "pledged": r.get("pledged"),
              "state_owned": r.get("state_owned", False), "cyclical": r.get("cyclical", False), "extra": r.get("extra"),
              "signal": r["signal"], "action": r["action"], "growth_needed": r["growth_needed"], "flags": r["flags"],
-             "quality": screen_quality(r)} for r in rows]
+             "quality": screen_quality(r), "roe": r.get("roe"), "de": r.get("de"), "fin": bool(r.get("financial"))} for r in rows]
     slider = lambda k, label, step, lo, hi: (f'<label>{label} <b data-out="{k}"></b>'  # noqa: E731
                                             f'<input type="range" data-k="{k}" step="{step}" min="{lo}" max="{hi}"></label>')
     box = lambda k, label: f'<label class="cb"><input type="checkbox" data-k="{k}">{label}</label>'  # noqa: E731
     has_extra = any(r.get("extra") for r in rows)
-    sliders = "".join(slider(*x) for x in SLIDERS if india or x[0] != "promoters")
-    boxes = ((box("prule", "Promoter rule") + box("psu", "Exclude government-owned") + (box("mid", f"{e(list_name)} only") if has_extra else ""))
+    prom = india and G.promoter_rule(s, rows)   # no holding in the files (Nifty 50): no promoter controls
+    if india and rows and not prom:
+        rules["no_promoters"] = True
+    qual = india and G.quality_on(q)   # the quality sliders only where the list sets the check
+    sliders = "".join(slider(*x) for x in SLIDERS if (prom or x[0] != "promoters") and (qual or x[0] not in QUALITY_SLIDERS))
+    boxes = (((box("prule", "Promoter rule") if prom else "") + (box("fin", "Treat financials separately") if qual else "")
+              + box("psu", "Exclude government-owned") + (box("mid", f"{e(list_name)} only") if has_extra else ""))
              if india else "") + box("cyc", "Exclude cyclicals") + box("all", "Show all")
     reset = "Reset to Dr. Gupta's rules" if india and not title else "Reset to the default rules"   # a list's own rules: not his
     return (f'''<style>#screen .panel{{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--soft);border:1px solid var(--line);
@@ -586,16 +595,17 @@ def growth_screen_html(rows: list[dict], cfg: dict, key: str = "growth_screen", 
     near = [r for r in rows if r["tier"] == "near miss"]
     others = [r for r in rows if r["tier"] != "shortlist"]   # near misses first, then the rest, best first
     table = lambda rs: f'<div class="wrap"><table class="sum">{head}<tbody>{"".join(row(r) for r in rs)}</tbody></table></div>'  # noqa: E731
-    tables = ((table(short) if short else NO_PASS.format("today"))
+    market = "us" if key == "us_growth_screen" else "india"
+    word = rule_word(s, market, every)
+    tables = ((table(short) if short else NO_PASS.format(word, "today"))
               + near_line_html(near, href)
               + (f'<details><summary>Near misses and the other {len(others) - len(near)}, in full</summary>{table(others)}</details>'
                  if others else ""))
-    market = "us" if key == "us_growth_screen" else "india"
     heading = (f'<h2>Screen – {len(short)} shortlisted, {len(near)} near miss{"" if len(near) == 1 else "es"} of {len(rows)}'
                f'{left_out_html(every, G.filters(s, every))}</h2>')
     funnel = f'<p class="funnel">{funnel_text(funnel_steps(every, s))}</p>{GUARDS_LINE}'
     if panel:   # the settings panel (open, can be folded), the funnel and assets/screen.js
-        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{screen_panel(every, s, href, market, list_name, title)}{funnel}'
+        return (f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{screen_panel(every, s, href, market, list_name, title, word)}{funnel}'
                 f'<div class="screen-tables">{tables}</div>{after}'
                 f'<script>{page.asset("screen.js")}</script></section>')
     return f'<section class="company" id="screen">{heading}{rules_html(s, tail, market, list_name, every)}{funnel}{tables}{after}</section>'
@@ -615,7 +625,15 @@ def return_label(s: dict) -> str:
             f'<span data-r="exit">{s["exit_multiple"]:g}x</span></small>')
 
 
-NO_PASS = '<p class="nopass">No company passes all five rules {}.</p>'   # screen.js writes the same, "with these settings"
+NO_PASS = '<p class="nopass">No company passes all {} rules {}.</p>'   # screen.js writes the same, "with these settings"
+
+
+def rule_word(s: dict, market: str, rows: list[dict] | None) -> str:
+    """How many rules apply, as a word: five; one fewer on an India list whose files carry no promoter holding (the
+    promoter rule cannot apply, so it is not listed), one more where the list sets the quality check."""
+    no_data = market == "india" and not G.promoter_rule(s, rows)
+    n = 5 - bool(no_data) + (market == "india" and G.quality_on(G.quality(s)))
+    return {4: "four", 5: "five", 6: "six"}[n]
 
 
 def left_out_html(rows: list[dict], f: dict) -> str:
@@ -647,20 +665,32 @@ def rules_html(s: dict, tail: str, market: str = "us", list_name: str = "Midcap 
     if market == "india":
         f = G.filters(s, rows)
         off = lambda k: f'<span data-off="{k}"{" hidden" if f[k] else ""}> – switched off below</span>'  # noqa: E731
-        no_data = rows and not any(r.get("promoters") is not None for r in rows)
+        no_data = not G.promoter_rule(s, rows)
         extras = any(r.get("extra") for r in rows or [])   # without stocks added by hand the membership rule has no switch
         prom = "" if no_data else f' · promoters ≥ {v["promoters"]}'
+        q = G.quality(s)
+        on = lambda k, text: f'<span data-on="{k}"{"" if q[k] else " hidden"}>{text}</span>'  # noqa: E731 - shown while switch k is on
+        qv = {"roe": f'<b data-r="roe">{q["roe"]*100:.0f}%</b>', "roe_fin": f'<b data-r="roe_fin">{q["roe_fin"]*100:.0f}%</b>',
+              "de": f'<b data-r="de">{(q["de"] or 0):.1f}</b>'}
+        qual_on = G.quality_on(q)
+        roe_fin = qv["roe_fin"]
+        qsum = (f' · ROE ≥ {qv["roe"]}{on("fin", f" (financials {roe_fin})")}'
+                + (f' · debt/equity ≤ {qv["de"]}' if q["de"] is not None else "")) if qual_on else ""
+        qli = (f'<li><b>Quality.</b> Return on equity at least {qv["roe"]}'
+               + on("fin", f' – banks, NBFCs and insurers at least {qv["roe_fin"]}')
+               + (f', and borrowings no more than {qv["de"]} times equity' + on("fin", " (not for financials: lending is their business)")
+                  if q["de"] is not None else "")
+               + ' – from the latest yearly statements; ROE is the year\'s net profit over the average equity.</li>') if qual_on else ""
         member = "Mid cap" if "midcap" in list_name.lower().replace(" ", "") else "In the index"
         return (
-            f'<details class="rules"><summary>The five rules <small>· {e(list_name)} · P/E ≤ {v["pe"]} · EPS growth ≥ '
-            f'{v["growth"]}{prom} · ≥ {v["ret"]} a year over a {v["years"]}-year hold</small></summary>'
+            f'<details class="rules"><summary>The {rule_word(s, "india", rows)} rules <small>· {e(list_name)} · P/E ≤ {v["pe"]} · EPS growth ≥ '
+            f'{v["growth"]}{prom}{qsum} · ≥ {v["ret"]} a year over a {v["years"]}-year hold</small></summary>'
             f'<ol class="rules"><li><b>{member}.</b> A member of the {e(list_name)}'
             + (f' – not one of the stocks added by hand{off("mid")}' if extras else "") + '.</li>'
             f'{cheap}<li><b>Growing.</b> Earnings per share grew at least {v["growth"]} a year over both the last 5 years and the '
             'last 3, with a profit in every one of those years.</li>'
-            f'<li><b>Promoters.</b> Promoters hold at least {v["promoters"]} of the shares'
-            + (' – not applied here: the company files carry no promoter holding' if no_data else off("prule")) + '.</li>'
-            f'{hold}</ol>{near}')
+            + ("" if no_data else f'<li><b>Promoters.</b> Promoters hold at least {v["promoters"]} of the shares{off("prule")}.</li>')
+            + qli + f'{hold}</ol>{near}')
     return (
         f'<details class="rules"><summary>The five rules <small>· P/E ≤ {v["pe"]} · EPS growth ≥ {v["growth"]} · a profit '
         f'every year · ≥ {v["ret"]} a year over {v["years"]} years · clean books</small></summary><ol class="rules">'
@@ -672,6 +702,7 @@ def rules_html(s: dict, tail: str, market: str = "us", list_name: str = "Midcap 
 
 FUNNEL_WORDS = {"after guards": "have clean books and a profit every year", "+ growth": "grew fast enough",
                 "+ P/E": "are cheap enough", "+ 5-yr return": "promise enough return",
+                "+ quality": "pass the quality check",
                 "+ promoters": "have enough promoter holding", "+ government-owned rule": "are not government-owned"}
 
 
@@ -683,6 +714,9 @@ def funnel_steps(rows: list[dict], s: dict | None = None) -> list[tuple[str, int
     steps = [("Start", len(left))]
     tests = [("after guards", lambda r: not r["guards"]), ("+ growth", lambda r: "growth" not in r["missed"]),
              ("+ P/E", lambda r: "pe" not in r["missed"]), ("+ 5-yr return", lambda r: "return" not in r["missed"])]
+    q = G.quality(s or {})
+    if G.quality_on(q):
+        tests.append(("+ quality", lambda r: not G.quality_guards(r, q)))
     if f["prule"]:
         tests.append(("+ promoters", lambda r: r["promoters"] is not None and r["promoters"] >= (s or {}).get("min_promoter", 0.0)))
     if f["psu"]:
@@ -737,7 +771,8 @@ def _bt_picks_ret(b: dict):
     return b.get("picks_ret", b.get("picks_total"))
 
 
-def answer_html(rows: list[dict], results: list[dict], index_name: str, href=None, below: bool = False) -> str:
+def answer_html(rows: list[dict], results: list[dict], index_name: str, href=None, below: bool = False,
+                word: str = "five") -> str:
     """The answer: how many pass today and which, the near misses, and what the same rules returned since the earliest
     backtest date with picks. screen.js rewrites it when the panel's settings differ. `below`: it sits under the screen's
     results, where an empty shortlist is already said (NO_PASS) – then only the backtest line."""
@@ -748,10 +783,10 @@ def answer_html(rows: list[dict], results: list[dict], index_name: str, href=Non
     near = [r for r in rows if r["tier"] == "near miss"]
     names = lambda rs: _and_list([_ticker_link(r["ticker"], href(r["ticker"])) for r in rs])  # noqa: E731
     if short:
-        today = (f'<b>Today {len(short)} {"stock passes" if len(short) == 1 else "stocks pass"} all five rules:</b> '
+        today = (f'<b>Today {len(short)} {"stock passes" if len(short) == 1 else "stocks pass"} all {word} rules:</b> '
                  f'{names(short)}.')
     else:
-        today = "<b>Today no stock passes all five rules.</b>"
+        today = f"<b>Today no stock passes all {word} rules.</b>"
     if near:
         today += f' {len(near)} more {"misses" if len(near) == 1 else "miss"} by one rule: {names(near)}.'
     bt = ""
@@ -847,6 +882,11 @@ def backtest_data(results: list[dict], cfg: dict, href) -> dict:
                 row["nc"] = r["nc"]
             if r["promoters"] is not None:
                 row["prom"] = r["promoters"]
+            for k, key in (("roe", "roe"), ("de", "de")):   # the quality check then (from that year's statements)
+                if r.get(key) is not None:
+                    row[k] = r[key]   # unrounded: the browser compares it with the bar exactly as Python does
+            if r.get("financial"):
+                row["fin"] = True
             if b["dividends"]:
                 row["pr"] = r5(r["price_return"])
             row.update({k: True for k, on in (("so", r.get("state_owned")), ("cyc", r.get("cyclical")),
@@ -895,7 +935,7 @@ PROMOTER_NOTE = '<p class="notes">Promoter rule not applied before 2025: data no
 
 
 def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, panel: bool = False,
-                  promoter_note: bool = False) -> str:
+                  promoter_note: bool = False, word: str = "five") -> str:
     """'How these rules did': the growth screen applied on past dates with only what was known then (backtest.py), with
     a chart of the earliest start with picks. India: returns with dividends (Yahoo's adjusted close); US: price only.
     `href(ticker)` links a pick to its page (None: no link); default the company's section."""
@@ -930,6 +970,10 @@ def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, pa
                     f'<td>{len(b["picks"])} of {b["screened"]}</td><td>{p(picks_ret(b))}{a_year(picks_ret(b), b["years"])}</td>'
                     f'<td>{p(b.get("all_ret", b.get("all_total")))} · median {p(b.get("all_ret_median", b.get("all_total_median")))}</td>'
                     f'<td>{p(b["index_price"])}</td><td>{best}</td><td>{worst}</td></tr>')
+        if b.get("without_quality"):   # the same rules without the quality check, so its effect shows
+            w = b["without_quality"]
+            rows.append(f'<tr class="noq"><td><small>without the quality check</small></td><td><small>{len(w["picks"])} of '
+                        f'{b["screened"]}</small></td><td><small>{p(w["ret"])}</small></td><td colspan="4"></td></tr>')
     summary = (f'<div class="wrap"><table class="sum"><thead><tr><th>Since</th><th>Picks</th><th>Picks, {with_what}</th>'
                f'<th>All screened, {with_what} (mean · median)</th><th>{e(index_name)} (price only)</th><th>Best</th><th>Worst</th>'
                f'</tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
@@ -974,7 +1018,7 @@ def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, pa
     bias = ("<b>Survivorship bias:</b> today's members are the ones that did well enough to be in the index now, so "
             "every average here – picks and all screened alike – flatters; compare the picks with all screened rather than with "
             "the index. Past performance only, and a handful of picks is a small sample.")
-    default = ('<p class="notes"><b>The five rules above, at their defaults,</b> applied on each past date'
+    default = (f'<p class="notes"><b>The {word} rules above, at their defaults,</b> applied on each past date'
                + (' – change them under <i>Change the rules</i> and every date is re-picked' if panel else '') + '.</p>')
     custom = ('<p class="notes bt-custom" hidden><b>With your settings from the panel above:</b> the picks, their averages, '
               'best and worst are redone; all screened and the index stay as they are.'
@@ -989,7 +1033,18 @@ def backtest_html(results: list[dict], cfg: dict, index_name: str, href=None, pa
                         f"Growth of 1 since {day(cv['start'])}: {'picks, ' if cv['n_picks'] else ''}all screened and the {index_name}")
     data = (f'<script type="application/json" id="bt-data">{_js(dict(backtest_data(results, cfg, href), index=index_name))}</script>'
             if panel else "")
-    near_table = (PROMOTER_NOTE if promoter_note else "") + ("" if us else state_owned_line(results, ret))
+    missing = [(b, b["no_statements"]) for b in results if b.get("no_statements")]
+    if missing and all(m == missing[0][1] for _, m in missing) and len(missing[0][1]) <= 5:   # the same few stocks every date
+        names = _and_list([e(t) for t in missing[0][1]])
+        quality_note = (f'<p class="notes">The quality check uses the yearly statements known on each date; {names} '
+                        f'{"has" if len(missing[0][1]) == 1 else "have"} none in the data, so cannot pass it.</p>')
+    elif missing:
+        quality_note = ('<p class="notes">The quality check uses the yearly statements known on each date; '
+                        + "; ".join(f'{len(m)} of the {b["screened"]} screened had none for {day(b["start"])}' for b, m in missing)
+                        + ' – they cannot pass it.</p>')
+    else:
+        quality_note = ""
+    near_table = (PROMOTER_NOTE if promoter_note else "") + quality_note + ("" if us else state_owned_line(results, ret))
     return (f'<section class="company" id="backtest"><h2>How these rules did</h2>{default}{custom}<div class="bt-summary">{summary}</div>{near_table}'
             f'{chart}<p class="notes">{bias}</p><details class="how"><summary>How the backtest was done</summary>'
             f'<p class="notes">{note}</p></details><div class="bt-details">{details}</div>{data}</section>')
@@ -1026,13 +1081,14 @@ def build(results: dict, companies: dict, cfg: dict, profit_rows: list[dict], pa
     key = x.screen_style.get("key", "growth_screen")
     tabbed = bool(x.screen_rows) and key == "growth_screen"   # India growth screen: Dr. Gupta's picks | value vs price | growth
     shown = G.apply_filters(x.screen_rows, cfg[key]) if x.screen_rows else []   # as the page shows them by default
-    answer = answer_html(shown, x.backtest, x.index_name, href=x.screen_style.get("href"), below=tabbed)
+    word = rule_word(cfg[key], "india" if key == "growth_screen" else "us", x.screen_rows) if x.screen_rows else "five"
+    answer = answer_html(shown, x.backtest, x.index_name, href=x.screen_style.get("href"), below=tabbed, word=word)
     style = dict(x.screen_style, after=answer) if tabbed else x.screen_style   # tabbed: the answer under the results
     screen_html = growth_screen_html(x.screen_rows, cfg, **style) + resource_screen_html(x.resource_rows, cfg)
     screen_block = screen_html + "\n" if screen_html else ""   # nothing at all for lists without a screen
     bt_html = backtest_html(x.backtest, cfg, x.index_name, href=x.screen_style.get("href"),
                             panel=bool(x.screen_style.get("panel")),   # under the results table
-                            promoter_note=tabbed and any(r["promoters"] is not None for r in x.screen_rows))
+                            promoter_note=tabbed and G.promoter_rule(cfg[key], x.screen_rows), word=word)
     if tabbed:
         answer = ""
     bz_html = ""

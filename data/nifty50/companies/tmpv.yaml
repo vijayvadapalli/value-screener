@@ -8,28 +8,32 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 3688.118
+shares_m: 3671.502
 balance:
   cash: 478280.0
   debt: 813950.0
 price:
-  value: 262.4
+  value: 253.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance TMPV.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
 - 'Q2 FY27 results (13 Nov 2026), loss ₹5,531 cr, exceptional charges ₹6,738 cr, JLR FY27 EBIT guidance cut to 2–3%: https://www.freepressjournal.in/business/tata-motors-pv-swings-to-5531-crore-q2-loss-jlr-restructuring-weighs'
 - 'Business Standard reports the Q2 loss as ₹5,451 cr: https://www.business-standard.com/companies/quarterly-results/tata-motors-pv-q2-net-loss-at-5-531-cr-revenue-misses-estimates-126111301014_1.html'
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/TMPV/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/TMPV/consolidated/'
 assumptions:
-- 'Checked 13 Nov 2026: FY26 EPS 223.7 holds the one-off demerger gain in the Sep 2025 quarter (EPS 206.85, ≈ ₹76,248 cr). Valued on reported 12-month EPS only (v2.history_not_comparable)'
-- 'Net cash (cash ₹4,78,280 cr − debt ₹8,13,950 cr = −₹91/share) is from the earlier balance sheet; JLR guides about £1.25bn cash outflow in FY27, so net debt is likely to rise'
+- 'Checked 13 Nov 2026: FY26 EPS 223.7 holds the one-off demerger gain in the Sep 2025 quarter (EPS 206.85, ≈ ₹76,248 cr). Valued on reported
+  12-month EPS only (v2.history_not_comparable)'
+- Net cash (cash ₹4,78,280 cr − debt ₹8,13,950 cr = −₹91/share) is from the earlier balance sheet; JLR guides about £1.25bn cash outflow in FY27,
+  so net debt is likely to rise
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
 notes:
 - 'Reported 12-month EPS −6.69 (Dec 25 −9.47, Mar 26 15.70, Jun 26 2.10, Sep 26 −15.02): no positive earnings, so not valued (red).'
-- 'Derived, for scale only: adding back the Sep 2026 quarter''s ₹6,738 cr exceptional charge (pre-tax, ≈ ₹18.3/share) gives 12-month EPS ≈ ₹11.6 and a no-growth value ≈ ₹49 (11.6 × 12.1 − 91) against the ₹287 price.'
-- 'The price is a bet on a JLR margin recovery (company target 6–8%, FY27 guidance 2–3%) and on the Indian car business. Both are forecasts and are not in the value.'
+- 'Derived, for scale only: adding back the Sep 2026 quarter''s ₹6,738 cr exceptional charge (pre-tax, ≈ ₹18.3/share) gives 12-month EPS ≈ ₹11.6
+  and a no-growth value ≈ ₹49 (11.6 × 12.1 − 91) against the ₹287 price.'
+- The price is a bet on a JLR margin recovery (company target 6–8%, FY27 guidance 2–3%) and on the Indian car business. Both are forecasts and
+  are not in the value.
 - 'Watch: whether "exceptional" charges keep recurring (cyberattack, restructuring, write-downs), and free cash flow / net debt, not just profit.'
 v2:
   eps_quarters:
@@ -42,6 +46,8 @@ v2:
   - 2.1
   - -15.02
   eps_annual:
+  - 50.57
+  - 40.11
   - 25.82
   - 31.13
   - -99.84
@@ -53,6 +59,8 @@ v2:
   - 75.6
   - 223.74
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -77,4 +85,96 @@ v2:
   - 13041.0
   book_value_ps: 285.0
   roe_5y: 0.37
+  profit_growth_5y: 1.01
+  sales_growth_5y: 0.06
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.4258
+    - 0.4258
+    - 0.4257
+    - 0.4257
+    - 0.4256
+    - 0.4256
+    - 0.4251
+    - 0.425
+    fii:
+    - 0.1866
+    - 0.1784
+    - 0.1717
+    - 0.1713
+    - 0.1788
+    - 0.1729
+    - 0.1711
+    - 0.1532
+    dii:
+    - 0.1654
+    - 0.1688
+    - 0.1693
+    - 0.1703
+    - 0.1508
+    - 0.1679
+    - 0.1697
+    - 0.1793
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 56262.0
+    - 78952.0
+    - 58062.0
+    - 95428.0
+    - 60179.0
+    - 63079.0
+    - 55247.0
+    - 44561.0
+    - 45322.0
+    - 84918.0
+    - 116144.0
+    - 112068.0
+    borrowings:
+    - 73610.0
+    - 69360.0
+    - 78604.0
+    - 88950.0
+    - 106175.0
+    - 124788.0
+    - 142131.0
+    - 146449.0
+    - 134113.0
+    - 107264.0
+    - 71540.0
+    - 79109.0
+    net_profit:
+    - 14073.0
+    - 11678.0
+    - 7557.0
+    - 9091.0
+    - -28724.0
+    - -11975.0
+    - -13395.0
+    - -11309.0
+    - 2690.0
+    - 31807.0
+    - 28149.0
+    - 82645.0
   history_not_comparable: FY22–FY25 are the old combined Tata Motors incl. commercial vehicles, and FY26 holds the ₹76,248 cr demerger gain

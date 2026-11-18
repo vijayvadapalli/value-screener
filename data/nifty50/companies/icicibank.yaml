@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1585.0
+  value: 1601.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance ICICIBANK.NS
-shares_m: 7187.058
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 7184.46
 v2:
   eps_quarters:
   - 18.25
@@ -25,6 +25,8 @@ v2:
   - 21.52
   - 22.75
   eps_annual:
+  - 19.2
+  - 15.92
   - 15.9
   - 12.0
   - 6.6
@@ -36,6 +38,8 @@ v2:
   - 71.65
   - 75.71
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,90 @@ v2:
   - 67325.0
   book_value_ps: 540.0
   roe_5y: 0.17
+  profit_growth_5y: 0.24
+  sales_growth_5y: 0.17
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters: null
+    fii:
+    - 0.457
+    - 0.4583
+    - 0.4677
+    - 0.4556
+    - 0.4387
+    - 0.3448
+    - 0.3379
+    - 0.3468
+    dii:
+    - 0.4495
+    - 0.4477
+    - 0.4391
+    - 0.4506
+    - 0.4674
+    - 0.3994
+    - 0.4232
+    - 0.4177
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 84705.0
+    - 94111.0
+    - 104632.0
+    - 110630.0
+    - 114253.0
+    - 122960.0
+    - 157587.0
+    - 182053.0
+    - 214498.0
+    - 256144.0
+    - 313906.0
+    - 363060.0
+    borrowings:
+    - 119165.0
+    - 189054.0
+    - 170670.0
+    - 229402.0
+    - 210324.0
+    - 213852.0
+    - 143900.0
+    - 161603.0
+    - 189062.0
+    - 207428.0
+    - 218883.0
+    - 220264.0
+    net_profit:
+    - 12942.0
+    - 10927.0
+    - 11340.0
+    - 9100.0
+    - 5689.0
+    - 11225.0
+    - 20364.0
+    - 26538.0
+    - 35461.0
+    - 46081.0
+    - 54569.0
+    - 57936.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +182,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/ICICIBANK/consolidated/; NPA figures from the standalone
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ICICIBANK/consolidated/; NPA figures from the standalone
   page: https://www.screener.in/company/ICICIBANK/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)

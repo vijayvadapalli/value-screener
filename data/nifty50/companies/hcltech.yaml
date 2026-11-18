@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 2713.273
+shares_m: 2713.457
 balance:
   cash: 306150.0
   debt: 52150.0
 price:
-  value: 1384.6
+  value: 1345.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance HCLTECH.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/HCLTECH/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/HCLTECH/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -35,6 +35,8 @@ v2:
   - 17.04
   - 18.91
   eps_annual:
+  - 26.02
+  - 19.86
   - 30.16
   - 31.32
   - 37.31
@@ -46,6 +48,8 @@ v2:
   - 64.08
   - 61.33
   years:
+  - Jun 2015
+  - Mar 20169m
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -70,3 +74,91 @@ v2:
   - 19975.0
   book_value_ps: 280.0
   roe_5y: 0.23
+  profit_growth_5y: 0.09
+  sales_growth_5y: 0.12
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.6082
+    - 0.6082
+    - 0.6082
+    - 0.6082
+    - 0.6082
+    - 0.6086
+    - 0.6088
+    - 0.6088
+    fii:
+    - 0.1938
+    - 0.1915
+    - 0.1856
+    - 0.1664
+    - 0.1621
+    - 0.1551
+    - 0.149
+    - 0.1532
+    dii:
+    - 0.1521
+    - 0.1544
+    - 0.1617
+    - 0.178
+    - 0.1837
+    - 0.1895
+    - 0.1875
+    - 0.1895
+  balance_annual:
+    years:
+    - Jun 2015
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 24224.0
+    - 32949.0
+    - 36386.0
+    - 41366.0
+    - 51267.0
+    - 59913.0
+    - 61914.0
+    - 65405.0
+    - 68263.0
+    - 69655.0
+    - 75165.0
+    borrowings:
+    - 648.0
+    - 582.0
+    - 557.0
+    - 4195.0
+    - 7986.0
+    - 6864.0
+    - 6343.0
+    - 4794.0
+    - 5756.0
+    - 6276.0
+    - 5215.0
+    net_profit:
+    - 7342.0
+    - 8606.0
+    - 8722.0
+    - 10120.0
+    - 11057.0
+    - 11169.0
+    - 13523.0
+    - 14845.0
+    - 15710.0
+    - 17399.0
+    - 16652.0

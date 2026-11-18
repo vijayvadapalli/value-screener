@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 4059.001
+shares_m: 4057.556
 balance:
   cash: 354432.666
   debt: 91347.651
 price:
-  value: 1145.1
+  value: 1109.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance INFY.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/INFY/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/INFY/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 19.15
   - 19.28
   eps_annual:
+  - 26.93
+  - 29.36
   - 31.24
   - 36.69
   - 35.26
@@ -45,6 +47,8 @@ v2:
   - 64.32
   - 72.59
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 33986.0
   book_value_ps: 244.0
   roe_5y: 0.31
+  profit_growth_5y: 0.09
+  sales_growth_5y: 0.12
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.1443
+    - 0.146
+    - 0.1461
+    - 0.143
+    - 0.1452
+    - 0.1438
+    - 0.1382
+    - 0.139
+    fii:
+    - 0.333
+    - 0.3289
+    - 0.3192
+    - 0.3008
+    - 0.3027
+    - 0.2845
+    - 0.2709
+    - 0.2744
+    dii:
+    - 0.3819
+    - 0.3832
+    - 0.3939
+    - 0.4146
+    - 0.4108
+    - 0.4319
+    - 0.4278
+    - 0.4266
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 50736.0
+    - 61744.0
+    - 68982.0
+    - 64923.0
+    - 64948.0
+    - 65450.0
+    - 76351.0
+    - 75350.0
+    - 75407.0
+    - 88116.0
+    - 95818.0
+    - 92852.0
+    borrowings:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 4633.0
+    - 5325.0
+    - 5474.0
+    - 8299.0
+    - 8359.0
+    - 8227.0
+    - 9176.0
+    net_profit:
+    - 12372.0
+    - 13489.0
+    - 14353.0
+    - 16029.0
+    - 15410.0
+    - 16639.0
+    - 19423.0
+    - 22146.0
+    - 24108.0
+    - 26248.0
+    - 26750.0
+    - 29474.0

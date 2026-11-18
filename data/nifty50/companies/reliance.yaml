@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 13529.507
+shares_m: 13513.258
 balance:
   cash: 2772120.0
   debt: 3980000.0
 price:
-  value: 1344.8
+  value: 1363.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance RELIANCE.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/RELIANCE/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/RELIANCE/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 15.48
   - 18.88
   eps_annual:
+  - 18.04
+  - 22.73
   - 22.78
   - 28.21
   - 30.93
@@ -45,6 +47,8 @@ v2:
   - 51.47
   - 59.69
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 192113.0
   book_value_ps: 698.0
   roe_5y: 0.09
+  profit_growth_5y: 0.12
+  sales_growth_5y: 0.18
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5013
+    - 0.501
+    - 0.5007
+    - 0.5001
+    - 0.5
+    - 0.5
+    - 0.5048
+    - 0.5044
+    fii:
+    - 0.1916
+    - 0.1907
+    - 0.1921
+    - 0.1865
+    - 0.1909
+    - 0.1867
+    - 0.1719
+    - 0.1667
+    dii:
+    - 0.1902
+    - 0.1936
+    - 0.1972
+    - 0.2025
+    - 0.201
+    - 0.2046
+    - 0.211
+    - 0.2162
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 218499.0
+    - 231556.0
+    - 263709.0
+    - 293506.0
+    - 387112.0
+    - 449166.0
+    - 700172.0
+    - 779485.0
+    - 715872.0
+    - 793481.0
+    - 843200.0
+    - 904030.0
+    borrowings:
+    - 168251.0
+    - 194714.0
+    - 217475.0
+    - 239843.0
+    - 307714.0
+    - 355133.0
+    - 278962.0
+    - 319158.0
+    - 451664.0
+    - 350719.0
+    - 374313.0
+    - 402962.0
+    net_profit:
+    - 23640.0
+    - 29861.0
+    - 29833.0
+    - 36080.0
+    - 39837.0
+    - 39880.0
+    - 53739.0
+    - 67845.0
+    - 74088.0
+    - 79020.0
+    - 81309.0
+    - 95754.0

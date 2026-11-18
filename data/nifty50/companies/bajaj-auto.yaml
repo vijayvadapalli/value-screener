@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 274.804
+shares_m: 275.56
 balance:
   cash: 110935.8
   debt: 226398.5
 price:
-  value: 10734.0
+  value: 10570.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance BAJAJ-AUTO.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/BAJAJ-AUTO/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/BAJAJ-AUTO/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 115.41
   - 125.04
   eps_annual:
+  - 104.56
+  - 140.35
   - 140.98
   - 145.8
   - 170.29
@@ -45,6 +47,8 @@ v2:
   - 262.29
   - 384.41
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 2597.0
   book_value_ps: 1332.0
   roe_5y: 0.24
+  profit_growth_5y: 0.17
+  sales_growth_5y: 0.18
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5504
+    - 0.5503
+    - 0.5504
+    - 0.5504
+    - 0.5499
+    - 0.5501
+    - 0.5501
+    - 0.5595
+    fii:
+    - 0.1245
+    - 0.1161
+    - 0.103
+    - 0.0966
+    - 0.0884
+    - 0.0882
+    - 0.0901
+    - 0.0887
+    dii:
+    - 0.0998
+    - 0.1092
+    - 0.1201
+    - 0.1278
+    - 0.1407
+    - 0.1435
+    - 0.1342
+    - 0.1319
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 11095.0
+    - 14020.0
+    - 17856.0
+    - 20425.0
+    - 23233.0
+    - 21662.0
+    - 27273.0
+    - 29859.0
+    - 29362.0
+    - 28962.0
+    - 35188.0
+    - 38832.0
+    borrowings:
+    - 112.0
+    - 118.0
+    - 120.0
+    - 121.0
+    - 125.0
+    - 126.0
+    - 121.0
+    - 123.0
+    - 124.0
+    - 1912.0
+    - 9364.0
+    - 22713.0
+    net_profit:
+    - 3026.0
+    - 4061.0
+    - 4079.0
+    - 4219.0
+    - 4928.0
+    - 5212.0
+    - 4857.0
+    - 6166.0
+    - 6060.0
+    - 7708.0
+    - 7325.0
+    - 10574.0

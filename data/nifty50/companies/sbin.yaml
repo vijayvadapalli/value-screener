@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1090.5
+  value: 1135.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance SBIN.NS
-shares_m: 9243.528
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 9227.436
 v2:
   eps_quarters:
   - 21.12
@@ -25,6 +25,8 @@ v2:
   - 26.12
   - 27.47
   eps_annual:
+  - 22.76
+  - 15.75
   - 0.3
   - -5.11
   - 2.58
@@ -36,6 +38,8 @@ v2:
   - 86.91
   - 90.24
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,98 @@ v2:
   - 38097.0
   book_value_ps: 728.0
   roe_5y: 0.16
+  profit_growth_5y: 0.3
+  sales_growth_5y: 0.13
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5743
+    - 0.5743
+    - 0.5742
+    - 0.555
+    - 0.555
+    - 0.5552
+    - 0.5547
+    - 0.5545
+    fii:
+    - 0.1027
+    - 0.0994
+    - 0.0933
+    - 0.0957
+    - 0.1034
+    - 0.1141
+    - 0.1081
+    - 0.1107
+    dii:
+    - 0.2479
+    - 0.2492
+    - 0.2554
+    - 0.2765
+    - 0.2704
+    - 0.2611
+    - 0.2652
+    - 0.2621
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 161388.0
+    - 180592.0
+    - 217192.0
+    - 230321.0
+    - 234495.0
+    - 251060.0
+    - 275561.0
+    - 305588.0
+    - 358931.0
+    - 414939.0
+    - 487036.0
+    - 596131.0
+    borrowings:
+    - 244663.0
+    - 361399.0
+    - 336366.0
+    - 369079.0
+    - 413748.0
+    - 332901.0
+    - 433796.0
+    - 449160.0
+    - 521152.0
+    - 639610.0
+    - 610857.0
+    - 777302.0
+    net_profit:
+    - 17832.0
+    - 13019.0
+    - -97.0
+    - -3749.0
+    - 3351.0
+    - 21140.0
+    - 23888.0
+    - 37183.0
+    - 57750.0
+    - 69543.0
+    - 80523.0
+    - 86666.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +190,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/SBIN/consolidated/; NPA figures from the standalone page:
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/SBIN/consolidated/; NPA figures from the standalone page:
   https://www.screener.in/company/SBIN/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)

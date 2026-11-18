@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 9316.757
+shares_m: 9304.208
 balance:
   cash: 49333.1
   debt: 1515581.0
 price:
-  value: 262.2
+  value: 259.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance POWERGRID.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/POWERGRID/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/POWERGRID/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 3.87
   - 4.16
   eps_annual:
+  - 5.43
+  - 6.41
   - 8.01
   - 8.82
   - 10.79
@@ -45,6 +47,8 @@ v2:
   - 16.69
   - 17.13
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 40935.0
   book_value_ps: 115.0
   roe_5y: 0.18
+  profit_growth_5y: 0.03
+  sales_growth_5y: 0.03
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5134
+    - 0.5134
+    - 0.5134
+    - 0.5134
+    - 0.5134
+    - 0.5134
+    - 0.5134
+    - 0.5134
+    fii:
+    - 0.2811
+    - 0.2679
+    - 0.265
+    - 0.2566
+    - 0.2473
+    - 0.2502
+    - 0.2433
+    - 0.2403
+    dii:
+    - 0.1699
+    - 0.183
+    - 0.1849
+    - 0.1933
+    - 0.2019
+    - 0.2005
+    - 0.2062
+    - 0.2083
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 38439.0
+    - 43970.0
+    - 49866.0
+    - 54426.0
+    - 59089.0
+    - 64696.0
+    - 69936.0
+    - 76247.0
+    - 83014.0
+    - 87146.0
+    - 92663.0
+    - 100494.0
+    borrowings:
+    - 96243.0
+    - 108545.0
+    - 118988.0
+    - 131503.0
+    - 146376.0
+    - 148270.0
+    - 143232.0
+    - 134696.0
+    - 126661.0
+    - 123516.0
+    - 131030.0
+    - 148071.0
+    net_profit:
+    - 5046.0
+    - 5959.0
+    - 7451.0
+    - 8204.0
+    - 10034.0
+    - 11059.0
+    - 12036.0
+    - 16824.0
+    - 15417.0
+    - 15573.0
+    - 15521.0
+    - 15928.0

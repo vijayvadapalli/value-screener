@@ -5,7 +5,8 @@
     python tools/fetch_screener.py nifty50 --dry-run          # show what would change, write nothing
 
 For each company it reads the last 8 quarterly EPS, up to 10 yearly EPS, yearly net profit and cash from operations,
-book value per share, 5-year return on equity, the current price and market value – from the consolidated page, or
+book value per share, 5-year return on equity, each year-end's equity, borrowings and net profit (the quality
+check), the current price and market value – from the consolidated page, or
 the standalone one when that has no quarterly figures. For lenders (financial companies other than insurers) it also
 reads gross and net NPA % for the last 8 quarters – banks fill these on the standalone page only – and the loans they
 apply to (see valuescreen/asset_quality.py). It writes them into the company file's `v2:` block (see
@@ -91,7 +92,8 @@ def update_file(existing: dict | None, entry: dict, data: dict, today: dt.date, 
     c.pop("earnings", None)   # the v2 block replaces the draft's yearly net income
     kept = {k: v for k, v in (c.get("v2") or {}).items() if k in HAND_SET_V2}   # your judgement, not Screener's figures
     c["v2"] = {k: data[k] for k in ("eps_quarters", "eps_annual", "years", "profit_annual", "cfo_annual", "book_value_ps", "roe_5y")}
-    c["v2"].update({k: data[k] for k in ("profit_growth_5y", "sales_growth_5y", "shareholding") if data.get(k) is not None})
+    c["v2"].update({k: data[k] for k in ("profit_growth_5y", "sales_growth_5y", "shareholding", "balance_annual")
+                    if data.get(k) is not None})
     c["v2"].update(kept)
     if data.get("asset_quality"):
         c["v2"]["asset_quality"] = data["asset_quality"]

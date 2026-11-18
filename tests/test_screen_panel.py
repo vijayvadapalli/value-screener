@@ -358,3 +358,129 @@ process.stdout.write(JSON.stringify([S.backtestAll(input.bt, input.rules), S.bac
         assert not any(r["cyclical"] or r["state_owned"] for r in b["picks"])
         assert [r["t"] for r in j["picks"]] == [r["ticker"] for r in b["picks"]]
         assert j["screened"] == b["screened"] == sum(1 for r in b["all_rows"] if not r["cyclical"])
+
+
+def test_a_list_without_promoter_data_has_four_rules():
+    """The Nifty 50 files carry no promoter holding: the promoter rule is not listed, and the page says four rules."""
+    cfg = loader.load_config()
+    rows = [dict(r, promoters=None) for r in sorted(py_rows(companies(60), {"growth_screen": cfg["growth_screen"]}), key=G.sort_key)]
+    html = html_report.growth_screen_html(rows, cfg, panel=True, list_name="Nifty 50")
+    assert '<summary>The four rules <small>· Nifty 50 · P/E' in html and html.count("<li><b>") == 4
+    assert "<li><b>Promoters.</b>" not in html and "promoters ≥" not in html and '"rules_word":"four"' in html
+    assert "all four rules" in html_report.answer_html(rows, [], "Nifty 50", word="four") or not any(r["tier"] == "shortlist" for r in rows)
+    assert "five rules" not in re.sub(r"<script>.*?</script>", "", html, flags=re.S)
+    assert 'data-k="prule"' not in html and 'data-k="promoters"' not in html and '"no_promoters":true' in html   # no promoter controls
+    full = html_report.growth_screen_html(sorted(py_rows(companies(60), {"growth_screen": cfg["growth_screen"]}), key=G.sort_key), cfg, panel=True)
+    assert 'data-k="prule"' in full and 'data-k="promoters"' in full and '"no_promoters"' not in full
+
+
+# ---- the quality check (Nifty 50): ROE and debt to equity from the yearly statements
+
+def with_statements(items, seed=21):
+    """The random companies with a yearly balance sheet (some missing) and a sector (some financial)."""
+    rnd = random.Random(seed)
+    out = []
+    for r, c, extra in items:
+        c = copy.deepcopy(c)
+        c["sector"] = "Financial Services" if rnd.random() < 0.25 else "Capital Goods"
+        if rnd.random() < 0.9:
+            eq = [rnd.uniform(50, 500) * (1.1 ** k) for k in range(10)]
+            c["v2"]["balance_annual"] = {"years": [f"Mar {y}" for y in range(2017, 2027)], "equity": eq,
+                                         "borrowings": [e * rnd.uniform(0, 2.5) for e in eq],
+                                         "net_profit": [e * rnd.uniform(-0.05, 0.35) for e in eq]}
+        out.append((r, c, extra))
+    return out
+
+
+def test_quality_figures_from_the_statements():
+    ba = {"years": ["Mar 2024", "Mar 2025", "Mar 2026"], "equity": [100.0, 120.0, 140.0], "borrowings": [50.0, 60.0, 70.0],
+          "net_profit": [10.0, 22.0, 26.0]}
+    q = G.quality_figures(ba)
+    assert q["quality_year"] == "Mar 2026" and q["roe"] == pytest.approx(26 / 130) and q["de"] == pytest.approx(0.5)
+    then = G.quality_figures(ba, known=lambda y: y != "Mar 2026")
+    assert then["quality_year"] == "Mar 2025" and then["roe"] == pytest.approx(22 / 110)
+    assert G.quality_figures(None)["roe"] is None and G.quality_figures(dict(ba, equity=[100.0, 120.0, -5.0]))["de"] is None
+    off = G.quality(loader.load_config()["growth_screen"])
+    assert not G.quality_on(off) and G.quality_guards({"roe": 0.01, "de": 9}, off) == []   # the Midcap 150: off
+    on = {"roe": 0.15, "roe_fin": 0.12, "de": 1.0, "fin": True}
+    assert G.quality_guards({"roe": 0.13, "de": 3.0, "financial": True}, on) == []          # a bank: its own bar, no debt limit
+    assert G.quality_guards({"roe": 0.13, "de": 1.5}, on) == ["ROE 13% (< 15%)", "debt/equity 1.5 (> 1.0)"]
+    assert G.quality_guards({"roe": 0.13, "de": 3.0, "financial": True}, dict(on, fin=False)) == ["ROE 13% (< 15%)", "debt/equity 3.0 (> 1.0)"]
+
+
+def test_quality_check_in_the_browser_matches_python():
+    cfg = loader.load_config()
+    s = dict(cfg["growth_screen"], min_roe=0.15, min_roe_financials=0.12, max_debt_equity=1.0, financials_separate=True,
+             default_filters={"prule": False, "psu": False, "mid": False, "cyc": False})
+    full = dict(cfg, growth_screen=s)
+    rows = py_rows(with_statements(companies()), full)
+    assert sum(r["roe"] is not None for r in rows) > 200 and any(r["financial"] for r in rows)
+    data, rules = embedded(rows, full)
+    assert rules["roe"] == 0.15 and rules["de"] == 1.0 and rules["fin"] is True
+    rnd = random.Random(8)
+    settings = [{}] + [{"roe": rnd.choice([0, 0.1, 0.15, 0.2]), "roe_fin": rnd.choice([0, 0.08, 0.12]), "de": rnd.choice([0.5, 1.0, 2.0]),
+                        "fin": rnd.random() < 0.6, "pe": rnd.choice([15, 25, 35])} for _ in range(30)]
+    results = node(data, rules, [dict(st) for st in settings])
+    for st, res in zip(settings, results):
+        s2 = dict(s, min_roe=st.get("roe", 0.15), min_roe_financials=st.get("roe_fin", 0.12), max_debt_equity=st.get("de", 1.0),
+                  financials_separate=st.get("fin", True))
+        if "pe" in st:
+            s2.update(max_pe=st["pe"], near_max_pe=st["pe"] + (s["near_max_pe"] - s["max_pe"]))
+        py_cfg = dict(full, growth_screen=s2)
+        py = {r["ticker"]: r["tier"] for r in G.apply_filters(py_rows(with_statements(companies()), py_cfg), s2)}
+        js = {t: tier for t, tier, _, _ in res["rows"]}
+        assert js == py, st
+        assert res["funnel"][-1][1] == sum(1 for v in py.values() if v == "shortlist")
+        assert ("+ quality" in [label for label, _ in res["funnel"]]) == G.quality_on(G.quality(s2))
+    steps = html_report.funnel_steps(rows, s)
+    assert [list(x) for x in steps] == results[0]["funnel"] and steps[-1][0] == "+ quality"
+    assert "pass the quality check" in html_report.funnel_text(steps)
+
+
+def test_backtest_quality_check_matches_the_browser(tmp_path):
+    from valuescreen import backtest
+    con, cos, entries, starts, today, state = backtest_world(tmp_path)
+    rnd = random.Random(12)
+    for t, c in cos.items():
+        c["sector"] = "Financial Services" if rnd.random() < 0.2 else "Capital Goods"
+        if rnd.random() < 0.85:
+            years = c["v2"]["years"]
+            eq = [rnd.uniform(50, 500) * 1.1 ** k for k in range(len(years))]
+            c["v2"]["balance_annual"] = {"years": years, "equity": eq, "borrowings": [e * rnd.uniform(0, 2) for e in eq],
+                                         "net_profit": [e * rnd.uniform(0.0, 0.35) for e in eq]}
+    base = loader.load_config()
+    s = dict(base["growth_screen"], state_owned=state, min_roe=0.15, min_roe_financials=0.12, max_debt_equity=1.0,
+             financials_separate=True, default_filters={"prule": False, "psu": False, "mid": False, "cyc": False})
+    cfg = dict(base, growth_screen=s)
+    results = [backtest.with_filters(backtest.run_start(entries, cos, cfg, con, st, today, "^NSEI"), s, G.filters(s)) for st in starts]
+    assert all("without_quality" in b for b in results)
+    assert sum(len(b["without_quality"]["picks"]) for b in results) > sum(len(b["picks"]) for b in results) > 0
+    html = html_report.backtest_html(results, cfg, "Nifty 50", panel=True)
+    assert "without the quality check" in html
+    bt = json.loads(re.search(r'<script type="application/json" id="bt-data">(.*?)</script>', html, re.S).group(1))
+    rules = json.loads(re.search(r'id="screen-rules">(.*?)</script>', html_report.screen_panel([], s, lambda t: None), re.S).group(1))
+    prog = f"""const S = require({json.dumps(str(SCRIPT))});
+const input = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+process.stdout.write(JSON.stringify(S.backtestAll(input.bt, input.rules)));"""
+    js = json.loads(subprocess.run([NODE, "-e", prog], input=json.dumps({"bt": bt, "rules": rules}), capture_output=True, text=True,
+                                   check=True).stdout)
+    for b, j in zip(results, js):
+        assert [r["t"] for r in j["picks"]] == [r["ticker"] for r in b["picks"]]
+        assert [r["t"] for r in j["without"]["picks"]] == [r["ticker"] for r in b["without_quality"]["picks"]]
+
+
+def test_screener_balance_sheet_is_read_by_year():
+    from valuescreen import screener
+    years = ["Mar 2024", "Mar 2025", "Mar 2026"]
+    head = "".join(f"<th>{y}</th>" for y in years)
+    html = f"""<section id="profit-loss"><table class="data-table"><thead><tr><th></th>{head}<th>TTM</th></tr></thead><tbody>
+      <tr><td>Net Profit +</td><td>10</td><td>12</td><td>14</td><td>15</td></tr></tbody></table></section>
+    <section id="balance-sheet"><table class="data-table"><thead><tr><th></th>{head}<th>Sep 2026</th></tr></thead><tbody>
+      <tr><td>Equity Capital</td><td>5</td><td>5</td><td>5</td><td>5</td></tr>
+      <tr><td>Reserves</td><td>95</td><td>115</td><td>135</td><td>150</td></tr>
+      <tr><td>Borrowing +</td><td>40</td><td>50</td><td>60</td><td>70</td></tr></tbody></table></section>"""
+    soup = screener.soup_of(html)
+    y_head, annual = screener.table(soup, "profit-loss")
+    b_head, bal = screener.table(soup, "balance-sheet")
+    ba = screener.balance_annual(y_head, annual, b_head, bal)
+    assert ba == {"years": years, "equity": [100, 120, 140], "borrowings": [40, 50, 60], "net_profit": [10, 12, 14]}

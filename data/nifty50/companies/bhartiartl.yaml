@@ -8,17 +8,17 @@ period:
   label: TTM to Sep 2026
   end: '2026-09-30'
   per_year: 4
-shares_m: 6241.613
+shares_m: 6236.656
 balance:
   cash: 501982.0
   debt: 1954117.0
 price:
-  value: 2153.5
+  value: 2132.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance BHARTIARTL.NS
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
 sources:
-- 'Screener.in consolidated page, fetched 12 Nov 2026: https://www.screener.in/company/BHARTIARTL/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/BHARTIARTL/consolidated/'
 assumptions:
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'
 - Shares derived from Screener's market value ÷ price
@@ -34,6 +34,8 @@ v2:
   - 13.09
   - 14.24
   eps_annual:
+  - 10.42
+  - 13.7
   - 8.57
   - 2.48
   - 0.92
@@ -45,6 +47,8 @@ v2:
   - 58.85
   - 43.81
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -69,3 +73,95 @@ v2:
   - 122230.0
   book_value_ps: 253.0
   roe_5y: 0.17
+  profit_growth_5y: 0.22
+  sales_growth_5y: 0.16
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.5312
+    - 0.5242
+    - 0.5126
+    - 0.5027
+    - 0.4887
+    - 0.4887
+    - 0.5007
+    - 0.5007
+    fii:
+    - 0.2427
+    - 0.2541
+    - 0.2672
+    - 0.2742
+    - 0.2875
+    - 0.2779
+    - 0.2648
+    - 0.2544
+    dii:
+    - 0.1952
+    - 0.1923
+    - 0.1909
+    - 0.194
+    - 0.1954
+    - 0.2053
+    - 0.2064
+    - 0.2162
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 39777.0
+    - 66770.0
+    - 67457.0
+    - 69535.0
+    - 71423.0
+    - 77145.0
+    - 58953.0
+    - 66554.0
+    - 77563.0
+    - 82019.0
+    - 113672.0
+    - 149057.0
+    borrowings:
+    - 83415.0
+    - 100646.0
+    - 107288.0
+    - 111334.0
+    - 125428.0
+    - 148228.0
+    - 162785.0
+    - 169678.0
+    - 226020.0
+    - 215592.0
+    - 213642.0
+    - 195412.0
+    net_profit:
+    - 5048.0
+    - 6893.0
+    - 4241.0
+    - 2184.0
+    - 1688.0
+    - -30664.0
+    - -12364.0
+    - 8305.0
+    - 12287.0
+    - 8558.0
+    - 37481.0
+    - 33823.0

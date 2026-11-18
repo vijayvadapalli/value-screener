@@ -9,11 +9,11 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1110.0
+  value: 1094.0
   currency: INR
-  date: '2026-11-16'
-  source: yfinance BAJFINANCE.NS
-shares_m: 6250.054
+  date: '2026-11-18'
+  source: Screener.in (18 Nov 2026)
+shares_m: 6343.473
 v2:
   eps_quarters:
   - 6.86
@@ -25,6 +25,8 @@ v2:
   - 9.61
   - 10.06
   eps_annual:
+  - 1.79
+  - 2.37
   - 3.34
   - 4.32
   - 6.91
@@ -36,6 +38,8 @@ v2:
   - 26.77
   - 30.56
   years:
+  - Mar 2015
+  - Mar 2016
   - Mar 2017
   - Mar 2018
   - Mar 2019
@@ -60,6 +64,98 @@ v2:
   - -65790.0
   book_value_ps: 198.0
   roe_5y: 0.2
+  profit_growth_5y: 0.34
+  sales_growth_5y: 0.25
+  shareholding:
+    quarters:
+    - Dec 2024
+    - Mar 2025
+    - Jun 2025
+    - Sep 2025
+    - Dec 2025
+    - Mar 2026
+    - Jun 2026
+    - Sep 2026
+    promoters:
+    - 0.547
+    - 0.5473
+    - 0.5473
+    - 0.5467
+    - 0.547
+    - 0.5471
+    - 0.5468
+    - 0.5467
+    fii:
+    - 0.2079
+    - 0.2145
+    - 0.2171
+    - 0.2197
+    - 0.2149
+    - 0.2133
+    - 0.202
+    - 0.1978
+    dii:
+    - 0.1508
+    - 0.1478
+    - 0.1452
+    - 0.1439
+    - 0.1486
+    - 0.151
+    - 0.163
+    - 0.1696
+  balance_annual:
+    years:
+    - Mar 2015
+    - Mar 2016
+    - Mar 2017
+    - Mar 2018
+    - Mar 2019
+    - Mar 2020
+    - Mar 2021
+    - Mar 2022
+    - Mar 2023
+    - Mar 2024
+    - Mar 2025
+    - Mar 2026
+    equity:
+    - 4800.0
+    - 7427.0
+    - 9600.0
+    - 15848.0
+    - 19697.0
+    - 32328.0
+    - 36918.0
+    - 43713.0
+    - 54372.0
+    - 76696.0
+    - 96693.0
+    - 113999.0
+    borrowings:
+    - 26655.0
+    - 37025.0
+    - 49250.0
+    - 66557.0
+    - 101588.0
+    - 129806.0
+    - 131634.0
+    - 165232.0
+    - 216690.0
+    - 293346.0
+    - 361249.0
+    - 435112.0
+    net_profit:
+    - 898.0
+    - 1279.0
+    - 1836.0
+    - 2496.0
+    - 3995.0
+    - 5264.0
+    - 4420.0
+    - 7028.0
+    - 11508.0
+    - 14451.0
+    - 16779.0
+    - 19332.0
   asset_quality:
     quarters:
     - Dec 2024
@@ -94,7 +190,7 @@ v2:
 balance:
   net_cash: 0.0
 sources:
-- 'Screener.in consolidated page, fetched 13 Nov 2026: https://www.screener.in/company/BAJFINANCE/consolidated/'
+- 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/BAJFINANCE/consolidated/'
 assumptions:
 - Net cash not yet added – set balance from StockAnalysis (cash & short-term investments − total debt incl. leases)
 - 'Nifty v2: EPS (attributable, as Screener reports it), net profit and cash from operations from Screener.in'

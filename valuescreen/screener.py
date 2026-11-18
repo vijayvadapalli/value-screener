@@ -109,6 +109,7 @@ def parse_v2(html: str) -> dict:
     years = [y for y in y_head if y != "TTM" and eps_by_year.get(y) is not None][-12:]   # skip blank years; 12 for the backtest
     both = [y for y in years if profit_by_year.get(y) is not None and cfo_by_year.get(y) is not None][-5:]
     roe = growth_range(soup, "Return on Equity", "5 Years")
+    b_head, bal = table(soup, "balance-sheet")
     pct = lambda title, period: (lambda x: None if x is None else x / 100)(growth_range(soup, title, period))  # noqa: E731
     return {
         "price": top_ratio(soup, "Current Price"), "market_cap_cr": top_ratio(soup, "Market Cap"),
@@ -119,7 +120,31 @@ def parse_v2(html: str) -> dict:
         "profit_annual": [profit_by_year[y] for y in both], "cfo_annual": [cfo_by_year[y] for y in both],
         "profit_growth_5y": pct("Compounded Profit Growth", "5 Years"), "sales_growth_5y": pct("Compounded Sales Growth", "5 Years"),
         "shareholding": parse_shareholding(soup),
+        "balance_annual": balance_annual(y_head, annual, b_head, bal),
     }
+
+
+def balance_annual(y_head: list, annual: dict, b_head: list, bal: dict) -> dict | None:
+    """Each year-end's equity (equity capital + reserves), borrowings and that year's net profit, oldest first – for the
+    quality check (ROE, debt to equity) on today's figures and on past dates. Year-ends only: the balance sheet's
+    latest half-year column is left out. None when the page has no balance sheet."""
+    capital, reserves = bal.get("Equity Capital"), bal.get("Reserves")
+    borrow = bal.get("Borrowings") or bal.get("Borrowing")   # banks: "Borrowing" (deposits are a separate row)
+    if not b_head or capital is None or reserves is None:
+        return None
+    profit = dict(zip(y_head, annual.get("Net Profit", [])))
+    rows = []
+    for i, label in enumerate(b_head):
+        if label not in profit:   # a half-year column, or a year the P&L does not show
+            continue
+        cap, res = capital[i] if i < len(capital) else None, reserves[i] if i < len(reserves) else None
+        equity = None if cap is None or res is None else cap + res
+        rows.append((clean_label(label), equity, borrow[i] if borrow and i < len(borrow) else None, profit[label]))
+    rows = rows[-12:]
+    if not rows:
+        return None
+    return {"years": [r[0] for r in rows], "equity": [r[1] for r in rows], "borrowings": [r[2] for r in rows],
+            "net_profit": [r[3] for r in rows]}
 
 
 def parse_shareholding(soup) -> dict | None:

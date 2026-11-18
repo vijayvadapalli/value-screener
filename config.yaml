@@ -125,6 +125,10 @@ growth_screen:
                                # government control, not a founder with skin in the game (hand-kept list)
   min_promoter: 0.60           # flag: promoters hold less than this ...
   promoter_drop: 0.02          # ... or their holding fell more than 2 points over four quarters
+  min_roe: 0                   # the quality check (growth_screen.quality) – off here, so the Midcap 150 screen stays
+  min_roe_financials: 0        # Dr. Gupta's five rules; a list turns it on in its screen_rules (the Nifty 50)
+  max_debt_equity: null        # null: no debt limit
+  financials_separate: true    # banks, NBFCs and insurers: their own ROE bar, no debt limit
   default_filters:             # the report's settings panel starts with these, and the page, its answer and the
     prule: true                # backtest use them: promoters at least min_promoter (none known: out),
     psu: false                 # government-owned companies stay in (switch on to leave them out),
