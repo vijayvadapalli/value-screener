@@ -15,9 +15,9 @@ shares_m: 1073
 balance:
   net_cash: -7430
 price:
-  value: 168.52
+  value: 163.82
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance QCOM
 sources:
 - Qualcomm Q4 / FY2026 results, 4 Nov 2026 (GAAP net income $13.63bn, EPS $12.70 incl. a $5.7bn tax benefit)

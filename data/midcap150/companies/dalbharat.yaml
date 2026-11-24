@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1515.0
+  value: 1564.4
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance DALBHARAT.NS
 shares_m: 188.277
 v2:
   eps_quarters:

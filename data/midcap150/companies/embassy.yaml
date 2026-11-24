@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 420.0
+  value: 422.01
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-20'
+  source: yfinance EMBASSY.NS
 shares_m: 947.024
 v2:
   eps_quarters:

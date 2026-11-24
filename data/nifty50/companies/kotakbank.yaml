@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 495.0
+  value: 502.85
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance KOTAKBANK.NS
 shares_m: 9957.354
 v2:
   eps_quarters:

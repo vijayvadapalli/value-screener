@@ -16,9 +16,9 @@ liquid_assets:
   amount: 25.08
 debt: 0.55
 price:
-  value: 0.152
+  value: 0.14
   currency: USD
-  date: '2026-11-17'
+  date: '2026-11-20'
   source: yfinance CVVUF
 comment: Explorer / project generator – no resource study, no earnings. The price pays for exploration upside.
 sources:

@@ -24,9 +24,9 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 155.47
+  value: 147.74
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance EOG
 sources:
 - EOG Resources Q3-2026 results, 5 Nov 2026

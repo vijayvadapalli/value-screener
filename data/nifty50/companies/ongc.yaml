@@ -13,10 +13,10 @@ balance:
   cash: 363920.98
   debt: 1742991.33
 price:
-  value: 225.0
+  value: 222.85
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance ONGC.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ONGC/consolidated/'
 assumptions:

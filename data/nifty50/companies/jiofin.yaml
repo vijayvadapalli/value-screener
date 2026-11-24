@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 224.0
+  value: 219.7
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance JIOFIN.NS
 shares_m: 6864.241
 v2:
   eps_quarters:

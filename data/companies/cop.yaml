@@ -22,9 +22,9 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 140.52
+  value: 134.0
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance COP
 sources:
 - Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)

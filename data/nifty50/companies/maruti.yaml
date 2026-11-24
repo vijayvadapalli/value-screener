@@ -13,10 +13,10 @@ balance:
   cash: 173249.0
   debt: 1025.0
 price:
-  value: 12632.0
+  value: 14010.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance MARUTI.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/MARUTI/consolidated/'
 assumptions:

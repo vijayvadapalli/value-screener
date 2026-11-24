@@ -16,9 +16,9 @@ shares_m: 166
 balance:
   net_cash: -251
 price:
-  value: 12.08
+  value: 11.4
   currency: USD
-  date: '2026-11-17'
+  date: '2026-11-23'
   source: yfinance FRHLF
 comment: Oil and gas royalty – reserves deplete, so 10–13x is fairer. Q3 not yet captured.
 sources:

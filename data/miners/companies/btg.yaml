@@ -25,9 +25,9 @@ metals:
   aisc: 2602
 tax_rate: 0.3
 price:
-  value: 4.76
+  value: 4.4
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance BTG
 sources:
 - B2Gold Q3-2026 MD&A and results (6-K exhibit 99.2), 4 Nov 2026

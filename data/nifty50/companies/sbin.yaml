@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 1135.0
+  value: 1132.65
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance SBIN.NS
 shares_m: 9227.436
 v2:
   eps_quarters:

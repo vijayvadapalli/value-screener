@@ -13,10 +13,10 @@ balance:
   cash: 52338.0
   debt: 237550.9
 price:
-  value: 12428.0
+  value: 12650.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance ULTRACEMCO.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ULTRACEMCO/consolidated/'
 assumptions:

@@ -100,6 +100,7 @@ padding:0 8px;border:1px solid currentColor;border-radius:10px;font-size:11px;fo
 #screen details>summary:hover,#backtest details>summary:hover,.tabpane details>summary:hover{text-decoration:underline}
 details.rules>summary{color:var(--blue)} details.rules>summary small{color:var(--ink2)}
 #screen details.rules>summary{font-size:14px;font-weight:700}
+table.sum tr.noq td{padding-top:0;color:var(--ink2)} table.sum tr.noq td small{color:var(--ink2)}
 
 main{max-width:1500px} .r{text-align:right} .flags{font-size:11px;color:var(--muted)}
 table.mp{border-collapse:collapse;width:100%;font-size:13px} table.mp th{text-align:left;background:var(--soft);color:var(--ink2);padding:7px 8px;
@@ -109,8 +110,8 @@ tr[data-sleeve=energy] td:first-child{box-shadow:inset 3px 0 var(--red)} tr[data
 tr[data-sleeve=defensive] td:first-child{box-shadow:inset 3px 0 var(--muted)}
 table.sl{border-collapse:collapse;font-size:13px;margin:6px 0 14px} table.sl td,table.sl th{padding:4px 12px;border-bottom:1px solid var(--line)}</style></head><body><main>
 <h1>Model portfolio – balanced</h1>
-<p class="sub">13 positions across 5 sleeves · built 18 Nov 2026 from today's reports · educational framework, not investment advice</p>
-<div class="cards"><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Positions</div><div class="val">13</div><div class="cap">9 starting with a third</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">In stocks now</div><div class="val">15%</div><div class="cap">of the portfolio, full positions</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Waiting in T-bills</div><div class="val">43.4%</div><div class="cap">for the rest of the &#x27;thirds&#x27;</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Past-year volatility</div><div class="val">7%</div><div class="cap">of today&#x27;s mix, backward-looking</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Worst fall in the past year</div><div class="val">−7%</div><div class="cap">today&#x27;s mix, backward-looking</div></div></div>
+<p class="sub">13 positions across 5 sleeves · built 23 Nov 2026 from today's reports · educational framework, not investment advice</p>
+<div class="cards"><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Positions</div><div class="val">13</div><div class="cap">9 starting with a third</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">In stocks now</div><div class="val">15%</div><div class="cap">of the portfolio, full positions</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Waiting in T-bills</div><div class="val">43.4%</div><div class="cap">for the rest of the &#x27;thirds&#x27;</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Past-year volatility</div><div class="val">8%</div><div class="cap">of today&#x27;s mix, backward-looking</div></div><div class="card" style="border-top-color:#2F64CF"><div class="lbl">Worst fall in the past year</div><div class="val">−8%</div><div class="cap">today&#x27;s mix, backward-looking</div></div></div>
 <p class="method"><b>Five sleeves weighted toward US quality value (45% value, 35% quality, 20% momentum).</b> Sleeves: us quality value 40% · miners &amp; royalties 25% · energy 10% · uranium 5% · defensive 20% (gold, T-bills).</p>
 <p class="method"><b>How it is built.</b> Every holding needs a <b>margin of safety</b> on its own model (producers at least 20% below the
 12x value or tier A at or below 15x; growth stocks needing at most 5–8% a year), <b>quality</b> (no stale or flagged data, AISC ≤ 60% of
@@ -123,74 +124,74 @@ holding's signal turns red.</p>
 <h3>Holdings</h3><div class="wrap"><table class="mp"><tr><th>#</th><th>Holding</th><th>Sleeve</th><th>Market value</th><th>Weight</th><th>Entry</th>
 <th>Why (value · quality)</th><th>Momentum</th><th>Volatility</th><th>Worst fall 1 yr</th><th>Score</th><th>Buy at or below</th><th>Exit</th><th>From</th></tr>
 <tr data-sleeve="us">
-<td>1</td><td><a href="https://finance.yahoo.com/quote/ALL" target="_blank" rel="noopener"><b>ALL</b></a><br><small>Allstate</small></td>
+<td>1</td><td><a href="https://finance.yahoo.com/quote/PDD" target="_blank" rel="noopener"><b>PDD</b></a><br><small>PDD Holdings</small><br><span class="flags">[Yahoo figures – SEC figures end 2025-12-31]</span></td>
+<td>US quality value</td><td class="r">$123bn</td><td class="r"><b>3.3%</b><br><small>target 9.8%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>needs −25.1%/yr · grade A · ROE 21%</td><td>−3% vs 200-day · 6 m −0%</td>
+<td class="r">35%</td><td class="r">−40%</td>
+<td class="r">0.81</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="us">
+<td>2</td><td><a href="https://finance.yahoo.com/quote/ALL" target="_blank" rel="noopener"><b>ALL</b></a><br><small>Allstate</small></td>
 <td>US quality value</td><td class="r">$66bn</td><td class="r"><b>10.0%</b></td>
-<td><span class="pill green">Full</span></td><td>needs −9.0%/yr · grade A · ROE 36% · P/B 2.0</td><td>+14% vs 200-day · 6 m +24%</td>
+<td><span class="pill green">Full</span></td><td>needs −9.0%/yr · grade A · ROE 36% · P/B 2.0</td><td>+14% vs 200-day · 6 m +27%</td>
 <td class="r">26%</td><td class="r">−19%</td>
 <td class="r">0.80</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="us">
-<td>2</td><td><a href="https://finance.yahoo.com/quote/SYF" target="_blank" rel="noopener"><b>SYF</b></a><br><small>Synchrony Financial</small></td>
-<td>US quality value</td><td class="r">$22bn</td><td class="r"><b>3.3%</b><br><small>target 10.0%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>needs −16.1%/yr · grade B · ROE 20% · P/B 1.3</td><td>−3% vs 200-day · 6 m −1%</td>
-<td class="r">31%</td><td class="r">−28%</td>
-<td class="r">0.78</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="us">
 <td>3</td><td><a href="https://finance.yahoo.com/quote/LULU" target="_blank" rel="noopener"><b>LULU</b></a><br><small>Lululemon Athletica</small></td>
-<td>US quality value</td><td class="r">$12bn</td><td class="r"><b>2.4%</b><br><small>target 7.1%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>needs −12.9%/yr · grade A · ROE 30% · cash 126%</td><td>−14% vs 200-day · 6 m −12%</td>
+<td>US quality value</td><td class="r">$12bn</td><td class="r"><b>2.4%</b><br><small>target 7.2%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>needs −12.9%/yr · grade A · ROE 30% · cash 126%</td><td>−18% vs 200-day · 6 m −20%</td>
 <td class="r">47%</td><td class="r">−57%</td>
-<td class="r">0.77</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="us">
-<td>4</td><td><a href="https://finance.yahoo.com/quote/SNDK" target="_blank" rel="noopener"><b>SNDK</b></a><br><small>Sandisk</small></td>
-<td>US quality value</td><td class="r">$109bn</td><td class="r"><b>1.0%</b><br><small>target 2.9%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>needs −19.4%/yr · grade n/m · ROE 107% · cash 154%</td><td>−40% vs 200-day · 6 m −50%</td>
-<td class="r">113%</td><td class="r">−67%</td>
 <td class="r">0.76</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="us">
-<td>5</td><td><a href="https://finance.yahoo.com/quote/PDD" target="_blank" rel="noopener"><b>PDD</b></a><br><small>PDD Holdings</small><br><span class="flags">[Yahoo figures – SEC figures end 2025-12-31]</span></td>
-<td>US quality value</td><td class="r">$110bn</td><td class="r"><b>3.3%</b><br><small>target 10.0%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>needs −30.4%/yr · grade A · ROE 23%</td><td>−13% vs 200-day · 6 m −21%</td>
-<td class="r">33%</td><td class="r">−40%</td>
-<td class="r">0.75</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="mining">
+<td>4</td><td><a href="https://finance.yahoo.com/quote/SYF" target="_blank" rel="noopener"><b>SYF</b></a><br><small>Synchrony Financial</small></td>
+<td>US quality value</td><td class="r">$22bn</td><td class="r"><b>3.3%</b><br><small>target 10.0%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>needs −16.1%/yr · grade B · ROE 20% · P/B 1.3</td><td>−7% vs 200-day · 6 m −5%</td>
+<td class="r">31%</td><td class="r">−28%</td>
+<td class="r">0.76</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="us">
+<td>5</td><td><a href="https://finance.yahoo.com/quote/SNDK" target="_blank" rel="noopener"><b>SNDK</b></a><br><small>Sandisk</small></td>
+<td>US quality value</td><td class="r">$109bn</td><td class="r"><b>1.0%</b><br><small>target 3.0%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>needs −19.4%/yr · grade n/m · ROE 107% · cash 154%</td><td>−43% vs 200-day · 6 m −54%</td>
+<td class="r">113%</td><td class="r">−73%</td>
+<td class="r">0.76</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="mining">
 <td>6</td><td><a href="https://finance.yahoo.com/quote/ERO.TO" target="_blank" rel="noopener"><b>ERO.TO</b></a><br><small>Ero Copper Corp.</small></td>
-<td>Miners &amp; royalties</td><td class="r">$2.9bn</td><td class="r"><b>2.5%</b><br><small>target 7.6%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>margin of safety +49%</td><td>−19% vs 200-day · 6 m −8%</td>
-<td class="r">64%</td><td class="r">−39%</td>
-<td class="r">0.62</td><td>≤ 61.36</td><td>sell zone from 164.93</td><td><a href="miners.html#c-ERO.TO">miners list</a></td></tr><tr data-sleeve="mining">
+<td>Miners &amp; royalties</td><td class="r">$2.5bn</td><td class="r"><b>2.6%</b><br><small>target 7.7%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>margin of safety +56%</td><td>−20% vs 200-day · 6 m −16%</td>
+<td class="r">65%</td><td class="r">−45%</td>
+<td class="r">0.65</td><td>≤ 61.36</td><td>sell zone from 164.93</td><td><a href="miners.html#c-ERO.TO">miners list</a></td></tr><tr data-sleeve="mining">
 <td>7</td><td><a href="https://finance.yahoo.com/quote/OGC" target="_blank" rel="noopener"><b>OGC</b></a><br><small>OceanaGold Corporation</small></td>
-<td>Miners &amp; royalties</td><td class="r">$5.9bn</td><td class="r"><b>2.9%</b><br><small>target 8.7%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>margin of safety +50% · AISC 45% of spot</td><td>−19% vs 200-day · 6 m −18%</td>
+<td>Miners &amp; royalties</td><td class="r">$5.3bn</td><td class="r"><b>3.0%</b><br><small>target 8.9%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>margin of safety +54% · AISC 45% of spot</td><td>−19% vs 200-day · 6 m −19%</td>
 <td class="r">56%</td><td class="r">−48%</td>
-<td class="r">0.60</td><td>≤ 41.90</td><td>sell zone from 105.58</td><td><a href="miners.html#c-OGC">miners list</a></td></tr><tr data-sleeve="mining">
-<td>8</td><td><a href="https://finance.yahoo.com/quote/DPM.TO" target="_blank" rel="noopener"><b>DPM.TO</b></a><br><small>DPM Metals Inc.</small><br><span class="flags">[USD statements converted at 1.433] [quick screen – make a full company file before buying]</span></td>
-<td>Miners &amp; royalties</td><td class="r">$6.6bn</td><td class="r"><b>2.9%</b><br><small>target 8.7%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>margin of safety +27% (quick) · grade A · FCF yield +11.3%</td><td>−17% vs 200-day · 6 m −4%</td>
-<td class="r">56%</td><td class="r">−38%</td>
-<td class="r">0.58</td><td>≤ 47.93</td><td>price above the 25x value</td><td><a href="miners-screen.html">miners screen</a></td></tr><tr data-sleeve="energy">
+<td class="r">0.62</td><td>≤ 41.90</td><td>sell zone from 105.58</td><td><a href="miners.html#c-OGC">miners list</a></td></tr><tr data-sleeve="mining">
+<td>8</td><td><a href="https://finance.yahoo.com/quote/FSM" target="_blank" rel="noopener"><b>FSM</b></a><br><small>Fortuna Mining</small></td>
+<td>Miners &amp; royalties</td><td class="r">$2.4bn</td><td class="r"><b>2.8%</b><br><small>target 8.4%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>margin of safety +38% · tier B</td><td>−23% vs 200-day · 6 m −18%</td>
+<td class="r">60%</td><td class="r">−46%</td>
+<td class="r">0.58</td><td>≤ 10.14</td><td>sell zone from 25.47</td><td><a href="core.html#c-FSM">core list</a></td></tr><tr data-sleeve="energy">
 <td>9</td><td><a href="https://finance.yahoo.com/quote/MPC" target="_blank" rel="noopener"><b>MPC</b></a><br><small>Marathon Petroleum</small></td>
-<td>Energy</td><td class="r">$102bn</td><td class="r"><b>4.8%</b></td>
-<td><span class="pill green">Full</span></td><td>needs −4.8%/yr · grade C · ROE 63% · cash 125%</td><td>+23% vs 200-day · 6 m +51%</td>
-<td class="r">38%</td><td class="r">−23%</td>
-<td class="r">0.74</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="energy">
+<td>Energy</td><td class="r">$102bn</td><td class="r"><b>4.9%</b></td>
+<td><span class="pill green">Full</span></td><td>needs −4.8%/yr · grade C · ROE 63% · cash 125%</td><td>+17% vs 200-day · 6 m +46%</td>
+<td class="r">38%</td><td class="r">−26%</td>
+<td class="r">0.73</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="energy">
 <td>10</td><td><a href="https://finance.yahoo.com/quote/OXY" target="_blank" rel="noopener"><b>OXY</b></a><br><small>Occidental Petroleum</small></td>
-<td>Energy</td><td class="r">$54bn</td><td class="r"><b>1.7%</b><br><small>target 5.2%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>needs −4.7%/yr · grade A · ROE 17% · cash 284%</td><td>−5% vs 200-day · 6 m −8%</td>
+<td>Energy</td><td class="r">$54bn</td><td class="r"><b>1.7%</b><br><small>target 5.1%</small></td>
+<td><span class="pill blue">Start a third</span></td><td>needs −4.7%/yr · grade A · ROE 17% · cash 284%</td><td>−6% vs 200-day · 6 m −6%</td>
 <td class="r">36%</td><td class="r">−28%</td>
-<td class="r">0.61</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="uranium">
+<td class="r">0.60</td><td>–</td><td>growth needed above 25% a year, or grade D</td><td><a href="us-screen.html">US screen</a></td></tr><tr data-sleeve="uranium">
 <td>11</td><td><a href="https://finance.yahoo.com/quote/U-U.TO" target="_blank" rel="noopener"><b>SPUT</b></a><br><small>Sprott Physical Uranium Trust</small></td>
 <td>Uranium</td><td class="r">–</td><td class="r"><b>1.7%</b><br><small>target 5.0%</small></td>
-<td><span class="pill blue">Start a third</span></td><td>margin of safety +17%</td><td>−8% vs 200-day · 6 m −8%</td>
-<td class="r">34%</td><td class="r">−26%</td>
-<td class="r">0.44</td><td>≤ 18.56</td><td>sell zone from 24.02</td><td><a href="core.html#c-SPUT">core list</a></td></tr><tr data-sleeve="defensive">
+<td><span class="pill blue">Start a third</span></td><td>margin of safety +16%</td><td>−6% vs 200-day · 6 m −8%</td>
+<td class="r">34%</td><td class="r">−28%</td>
+<td class="r">0.45</td><td>≤ 18.56</td><td>sell zone from 24.02</td><td><a href="core.html#c-SPUT">core list</a></td></tr><tr data-sleeve="defensive">
 <td>12</td><td><a href="https://finance.yahoo.com/quote/IAU" target="_blank" rel="noopener"><b>IAU</b></a><br><small>iShares Gold Trust</small></td>
 <td>Defensive</td><td class="r">–</td><td class="r"><b>10.0%</b></td>
-<td><span class="pill green">Full</span></td><td>defensive</td><td>−16% vs 200-day · 6 m −18%</td>
-<td class="r">29%</td><td class="r">−31%</td>
+<td><span class="pill green">Full</span></td><td>defensive</td><td>−17% vs 200-day · 6 m −18%</td>
+<td class="r">30%</td><td class="r">−35%</td>
 <td class="r">0.47</td><td>–</td><td>rebalance</td><td>ETF</td></tr><tr data-sleeve="defensive">
 <td>13</td><td><a href="https://finance.yahoo.com/quote/SGOV" target="_blank" rel="noopener"><b>SGOV</b></a><br><small>iShares 0–3 Month Treasury Bond</small></td>
 <td>Defensive</td><td class="r">–</td><td class="r"><b>53.4%</b></td>
-<td><span class="pill green">Full</span></td><td>defensive – includes 43.4% waiting for the rest of the &#x27;thirds&#x27;</td><td>+0% vs 200-day · 6 m +0%</td>
+<td><span class="pill green">Full</span></td><td>defensive – includes 43.4% waiting for the rest of the &#x27;thirds&#x27;</td><td>+0% vs 200-day · 6 m −0%</td>
 <td class="r">1%</td><td class="r">−0%</td>
 <td class="r">0.54</td><td>–</td><td>rebalance</td><td>ETF</td></tr></table></div>
-<h3>Next in line</h3><ul class="small"><li><b>ACGL</b> (US quality value, score 0.73) – needs −10.2%/yr</li><li><b>TSCO</b> (US quality value, score 0.73) – needs −4.1%/yr</li><li><b>CTSH</b> (US quality value, score 0.72) – needs −6.4%/yr</li><li><b>PYPL</b> (US quality value, score 0.71) – needs −3.4%/yr</li><li><b>FSLR</b> (US quality value, score 0.71) – needs −10.5%/yr</li><li><b>TROW</b> (US quality value, score 0.70) – needs −6.3%/yr</li><li><b>CF</b> (US quality value, score 0.70) – needs −7.8%/yr</li><li><b>GL</b> (US quality value, score 0.70) – needs −11.2%/yr</li><li><b>ALNY</b> (US quality value, score 0.69) – needs −15.0%/yr</li><li><b>MU</b> (US quality value, score 0.68) – needs −20.6%/yr</li><li><b>UHS</b> (US quality value, score 0.67) – needs −3.1%/yr</li><li><b>TRV</b> (US quality value, score 0.66) – needs −0.8%/yr</li></ul>
-<h3>Left out</h3><p class="small">no margin of safety: 618 · grade D – price ran ahead of profits: 18 · market value below US$2bn: 13 · free-cash-flow yield below 3%: 11 · no earnings value: 8 · grade D: 6 · diluting shareholders: 5 · debt &gt; 3× EBITDA: 4 · net debt above half the market value: 4 · debt, capex or old figures: 4 · tier C – speculative: 3 · figures need checking: 3 · negative free cash flow: 2 · stale results: 1 · cash conversion below 70%: 1</p>
-<ul class="small"><li>miners screen figures from 2026-11-18</li></ul>
+<h3>Next in line</h3><ul class="small"><li><b>ACGL</b> (US quality value, score 0.74) – needs −10.2%/yr</li><li><b>CTSH</b> (US quality value, score 0.71) – needs −6.4%/yr</li><li><b>TSCO</b> (US quality value, score 0.71) – needs −4.1%/yr</li><li><b>FSLR</b> (US quality value, score 0.71) – needs −10.5%/yr</li><li><b>CF</b> (US quality value, score 0.70) – needs −7.8%/yr</li><li><b>GL</b> (US quality value, score 0.70) – needs −11.2%/yr</li><li><b>ALNY</b> (US quality value, score 0.69) – needs −15.0%/yr</li><li><b>PYPL</b> (US quality value, score 0.68) – needs −3.4%/yr</li><li><b>TROW</b> (US quality value, score 0.68) – needs −6.3%/yr</li><li><b>TRV</b> (US quality value, score 0.67) – needs −0.8%/yr</li><li><b>HIG</b> (US quality value, score 0.67) – needs −7.4%/yr</li><li><b>MU</b> (US quality value, score 0.67) – needs −20.8%/yr</li></ul>
+<h3>Left out</h3><p class="small">no margin of safety: 611 · grade D – price ran ahead of profits: 18 · market value below US$2bn: 16 · free-cash-flow yield below 3%: 12 · no earnings value: 8 · grade D: 7 · diluting shareholders: 5 · debt, capex or old figures: 5 · debt &gt; 3× EBITDA: 4 · net debt above half the market value: 4 · tier C – speculative: 3 · figures need checking: 3 · negative free cash flow: 2 · stale results: 1 · cash conversion below 70%: 1</p>
+<ul class="small"><li>miners screen figures from 2026-11-23</li></ul>
 <footer>Volatility and worst fall use the past year's daily closes and describe what today's mix would have done – not a forecast.
 Prices in each listing's currency.</footer>
 <footer class="legal"><p><b>Disclaimer.</b> For education and research only – not investment advice, a recommendation, or an offer to buy or sell any security. Figures come from company filings and public data providers and may be wrong, late or incomplete; values come from a mechanical model and are not forecasts. Past results, backtests included, do not predict future returns. Do your own research, and talk to a licensed adviser before you invest. The author may hold positions in companies shown.</p><p>© 2026 Vijay Vadapalli. All rights reserved.</p></footer></main></body></html>

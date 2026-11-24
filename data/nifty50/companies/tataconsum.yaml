@@ -13,10 +13,10 @@ balance:
   cash: 43199.2
   debt: 28195.1
 price:
-  value: 1131.0
+  value: 1133.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance TATACONSUM.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/TATACONSUM/consolidated/'
 assumptions:

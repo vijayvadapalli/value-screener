@@ -25,9 +25,9 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 217.1
+  value: 207.442
   currency: USD
-  date: '2026-11-17'
+  date: '2026-11-23'
   source: yfinance CVX
 sources:
 - Chevron Q3-2026 earnings, 30 Oct 2026; Q3-2025 for normal-oil basis

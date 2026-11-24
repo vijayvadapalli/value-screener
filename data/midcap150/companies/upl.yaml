@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 563.0
+  value: 557.7
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance UPL.NS
 shares_m: 851.279
 v2:
   eps_quarters:

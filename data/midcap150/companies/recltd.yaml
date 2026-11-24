@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 298.0
+  value: 292.95
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance RECLTD.NS
 shares_m: 2634.06
 v2:
   eps_quarters:

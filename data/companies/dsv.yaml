@@ -27,9 +27,9 @@ metals:
   aisc: 2293
 tax_rate: 0.4366
 price:
-  value: 9.12
+  value: 8.74
   currency: CAD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance DSV.TO
 projects:
 - name: Cordero silver project (after-tax study NPV)

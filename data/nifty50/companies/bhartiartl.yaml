@@ -13,10 +13,10 @@ balance:
   cash: 501982.0
   debt: 1954117.0
 price:
-  value: 2132.0
+  value: 2128.5
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance BHARTIARTL.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/BHARTIARTL/consolidated/'
 assumptions:

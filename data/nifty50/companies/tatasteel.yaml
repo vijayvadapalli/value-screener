@@ -13,10 +13,10 @@ balance:
   cash: 120721.4
   debt: 923816.8
 price:
-  value: 179.0
+  value: 163.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance TATASTEEL.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/TATASTEEL/consolidated/'
 assumptions:

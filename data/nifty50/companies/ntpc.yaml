@@ -13,10 +13,10 @@ balance:
   cash: 64496.8
   debt: 2710045.8
 price:
-  value: 320.0
+  value: 315.45
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance NTPC.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/NTPC/consolidated/'
 assumptions:

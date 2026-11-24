@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 808.0
+  value: 817.8
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance HDFCBANK.NS
 shares_m: 15451.386
 v2:
   eps_quarters:

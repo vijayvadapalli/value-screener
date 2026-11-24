@@ -13,10 +13,10 @@ balance:
   cash: 354432.666
   debt: 91347.651
 price:
-  value: 1109.0
+  value: 1103.4
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance INFY.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/INFY/consolidated/'
 assumptions:

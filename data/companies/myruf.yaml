@@ -14,9 +14,9 @@ liquid_assets:
   amount: 11.54
 debt: 0
 price:
-  value: 0.2097
+  value: 0.1861
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-20'
   source: yfinance MYRUF
 comment: Explorer – no resource study, no earnings. The price pays for exploration upside.
 sources:

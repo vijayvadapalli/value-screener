@@ -13,10 +13,10 @@ balance:
   cash: 84255.0
   debt: 21862.0
 price:
-  value: 1750.0
+  value: 1777.5
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance TECHM.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/TECHM/consolidated/'
 assumptions:

@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 2404.0
+  value: 2450.0
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance ESCORTS.NS
 shares_m: 111.83
 v2:
   eps_quarters:

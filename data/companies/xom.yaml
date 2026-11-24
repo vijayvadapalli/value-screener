@@ -22,9 +22,9 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 167.915
+  value: 158.26
   currency: USD
-  date: '2026-11-17'
+  date: '2026-11-23'
   source: yfinance XOM
 sources:
 - Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)

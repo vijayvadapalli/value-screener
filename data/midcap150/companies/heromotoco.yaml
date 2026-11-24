@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 5360.0
+  value: 5535.0
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance HEROMOTOCO.NS
 shares_m: 200.328
 v2:
   eps_quarters:

@@ -13,10 +13,10 @@ balance:
   cash: 513403.7
   debt: 1339631.5
 price:
-  value: 3359.0
+  value: 3487.3999
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance M&M.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/M%26M/consolidated/'
 assumptions:

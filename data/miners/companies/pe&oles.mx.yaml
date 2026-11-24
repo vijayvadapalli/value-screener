@@ -17,9 +17,9 @@ balance:
   cash: 4396.3
   debt: 3036.3
 price:
-  value: 758.73
+  value: 680.18
   currency: MXN
-  date: '2026-11-13'
+  date: '2026-11-23'
   source: yfinance PE&OLES.MX
 sources:
 - Peñoles 3Q26 report, 26 Oct 2026 (controlling net income US$331.0m; sales US$2,364.9m; EBITDA US$1,080.6m; cash US$3,608.4m)

@@ -22,9 +22,9 @@ multiples:
 - 13
 cyclical: true
 price:
-  value: 68.96
+  value: 63.23
   currency: CAD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance CNQ.TO
 sources:
 - Yahoo Finance cash-flow statements and balance sheet via yfinance, fetched 2026-11-13 (unverified draft)

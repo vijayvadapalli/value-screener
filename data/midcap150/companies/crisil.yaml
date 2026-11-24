@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 4245.0
+  value: 4034.8
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance CRISIL.NS
 shares_m: 73.194
 v2:
   eps_quarters:

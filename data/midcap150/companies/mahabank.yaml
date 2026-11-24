@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 92.0
+  value: 97.56
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance MAHABANK.NS
 shares_m: 7691.522
 v2:
   eps_quarters:

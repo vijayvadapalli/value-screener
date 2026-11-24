@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 153.0
+  value: 159.01
   currency: INR
-  date: '2026-11-16'
-  source: Screener.in (16 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance BANKINDIA.NS
 shares_m: 4551.765
 v2:
   eps_quarters:

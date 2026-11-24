@@ -13,10 +13,10 @@ balance:
   cash: 496390.0
   debt: 1190790.0
 price:
-  value: 1316.0
+  value: 1311.9
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance JSWSTEEL.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/JSWSTEEL/consolidated/'
 assumptions:

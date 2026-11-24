@@ -16,9 +16,9 @@ balance:
   cash: 23975
   debt: 59419
 price:
-  value: 333.4
+  value: 311.945
   currency: USD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance AVGO
 sources:
 - Broadcom FQ3-2026 release

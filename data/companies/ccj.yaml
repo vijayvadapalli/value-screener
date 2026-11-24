@@ -159,9 +159,9 @@ forward:
     source: Yahoo Finance, CCO.TO earnings estimate
     date: '2026-11-17'
 price:
-  value: 65.2
+  value: 62.11
   currency: USD
-  date: '2026-11-17'
+  date: '2026-11-23'
   source: yfinance CCJ
 sources:
 - Cameco Q3-2026 results, 30 Oct 2026

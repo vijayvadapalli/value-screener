@@ -9,10 +9,10 @@ period:
   end: '2026-09-30'
   per_year: 4
 price:
-  value: 576.0
+  value: 574.95
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance HDFCLIFE.NS
 shares_m: 2176.372
 v2:
   eps_quarters:

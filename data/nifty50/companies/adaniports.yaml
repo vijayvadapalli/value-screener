@@ -13,10 +13,10 @@ balance:
   cash: 73097.6
   debt: 632361.6
 price:
-  value: 1903.0
+  value: 1919.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance ADANIPORTS.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ADANIPORTS/consolidated/'
 assumptions:

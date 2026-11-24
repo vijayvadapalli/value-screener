@@ -13,10 +13,10 @@ balance:
   cash: 49333.1
   debt: 1515581.0
 price:
-  value: 259.0
+  value: 264.85
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance POWERGRID.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/POWERGRID/consolidated/'
 assumptions:

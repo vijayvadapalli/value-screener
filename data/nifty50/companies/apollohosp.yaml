@@ -13,10 +13,10 @@ balance:
   cash: 18559.0
   debt: 84929.0
 price:
-  value: 8821.0
+  value: 9257.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance APOLLOHOSP.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/APOLLOHOSP/consolidated/'
 assumptions:

@@ -13,10 +13,10 @@ balance:
   cash: 234907.7
   debt: 23993.6
 price:
-  value: 297.0
+  value: 301.0
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance ITC.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/ITC/consolidated/'
 assumptions:

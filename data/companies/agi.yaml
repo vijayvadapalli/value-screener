@@ -22,9 +22,9 @@ metals:
   realised: 4258
 tax_rate: 0.361
 price:
-  value: 28.175
+  value: 26.45
   currency: USD
-  date: '2026-11-17'
+  date: '2026-11-23'
   source: yfinance AGI
 sources:
 - AGI Q3-2026 results, 28 Oct 2026

@@ -17,9 +17,9 @@ balance:
   cash: 114.1
   debt: 467.5
 price:
-  value: 39.4
+  value: 33.64
   currency: CAD
-  date: '2026-11-16'
+  date: '2026-11-23'
   source: yfinance ERO.TO
 sources:
 - Ero Copper Q3-2026 results (SEC 6-K), 2 Nov 2026

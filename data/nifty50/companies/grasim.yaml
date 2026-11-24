@@ -13,10 +13,10 @@ balance:
   cash: 317535.5
   debt: 2278420.5
 price:
-  value: 3062.0
+  value: 3075.2
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance GRASIM.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/GRASIM/consolidated/'
 assumptions:

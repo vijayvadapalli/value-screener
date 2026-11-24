@@ -13,10 +13,10 @@ balance:
   cash: 6684.3
   debt: 34783.6
 price:
-  value: 1023.0
+  value: 1089.55
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance MAXHEALTH.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/MAXHEALTH/consolidated/'
 assumptions:

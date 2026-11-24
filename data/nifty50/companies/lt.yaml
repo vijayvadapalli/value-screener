@@ -13,10 +13,10 @@ balance:
   cash: 766249.0
   debt: 1254970.4
 price:
-  value: 4159.0
+  value: 4099.8999
   currency: INR
-  date: '2026-11-18'
-  source: Screener.in (18 Nov 2026)
+  date: '2026-11-23'
+  source: yfinance LT.NS
 sources:
 - 'Screener.in consolidated page, fetched 18 Nov 2026: https://www.screener.in/company/LT/consolidated/'
 assumptions:
